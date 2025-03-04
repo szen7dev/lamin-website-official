@@ -1,25 +1,23 @@
 import axios from "axios"
+import { getEnv } from "@/config/env"
 
-// Create an axios instance with default config
+const API_URL = getEnv("API_URL")
+
 const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || "https://api.elela.vn",
+  baseURL: API_URL,
   headers: {
     "Content-Type": "application/json",
   },
 })
 
-// Add request interceptor for auth
-api.interceptors.request.use(
-  (config) => {
-    // Add auth token if available
-    const token = typeof window !== "undefined" ? localStorage.getItem("auth-token") : null
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`
-    }
-    return config
-  },
-  (error) => Promise.reject(error),
-)
+api.interceptors.request.use((config) => {
+  // Add auth token if available
+  const token = localStorage.getItem("auth-token")
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`
+  }
+  return config
+})
 
 export default api
 

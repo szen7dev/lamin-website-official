@@ -1,205 +1,122 @@
-import {
-  Download,
-  MessageCircle,
-  Phone,
-  Search,
-  ShoppingCart,
-  User
-} from 'lucide-react'
-import Image from 'next/image'
-import Link from 'next/link'
+import Link from "next/link"
+import Image from "next/image"
+import { ShoppingCart, Phone, Download, User } from "lucide-react"
+import { Button } from "@/components/ui/Button"
+import SearchBar from "@/features/homepage/components/SearchBar"
+import MegaMenu from "@/features/homepage/components/MegaMenu"
 
-export default function Header() {
+const popularKeywords = [
+  { label: "Thuốc nhỏ mắt", href: "#" },
+  { label: "Men vi sinh", href: "#" },
+  { label: "Bột hòa tan", href: "#" },
+  { label: "Omega 3", href: "#" },
+  { label: "Siro ho", href: "#" },
+  { label: "Canxi", href: "#" },
+  { label: "Kẽm", href: "#" },
+]
+
+const mainMenu = [
+  { label: "Sản phẩm", href: "/products", hasDropdown: true },
+  { label: "Giải Pháp", href: "/solutions" },
+  { label: "Đo Cao", href: "/height-measurement" },
+  { label: "Kiểm Tra Dinh Dưỡng", href: "/nutrition-check" },
+  { label: "Hệ Thống Cửa Hàng", href: "/trusted-shops" },
+  { label: "Liên Hệ", href: "/contact" },
+]
+
+export function Header() {
   return (
-    <header className='bg-white shadow-sm sticky top-0 z-50'>
-      <div className='container mx-auto px-4'>
-        {/* Top header with contact info */}
-        <div className='py-2 border-b border-gray-100 hidden md:flex justify-between items-center text-sm'>
-          <div className='flex items-center'>
-            <Phone className='h-4 w-4 text-primary-600 mr-2' />
-            <span>
-              Hotline:{' '}
-              <a
-                href='tel:19001234'
-                className='font-medium hover:text-primary-600 transition-colors'
-              >
-                1900 1234
-              </a>
-            </span>
-          </div>
-          <div className='flex items-center space-x-6'>
-            <a
-              href='#'
-              className='flex items-center text-gray-700 hover:text-primary-600 transition-colors'
-            >
-              <Download className='h-4 w-4 mr-1' />
-              <span className='text-sm'>Tải ứng dụng</span>
-            </a>
-            <Link
-              href='/contact'
-              className='hover:text-primary-600 transition-colors'
-            >
-              Liên hệ
-            </Link>
-          </div>
-        </div>
-
-        {/* Main header with logo, search and navigation */}
-        <div className='py-4 flex items-center justify-between gap-4'>
+    <header className="w-full bg-gradient-to-r from-primary-5 to-primary-40">
+      {/* Top Bar */}
+      <div className="container mx-auto px-4">
+        <div className="flex h-16 items-center justify-between">
           {/* Logo */}
-          <Link href='/' className='flex-shrink-0'>
-            <div className='relative h-10 w-32 md:h-12 md:w-36'>
-              <Image
-                src='https://seeklogo.com/images/F/fpt-retail-nha-thuc-long-chau-logo-4D382DA20B-seeklogo.com.png'
-                alt='Elena Pharmacy Logo'
-                fill
-                className='object-contain'
-                priority
-              />
+          <Link href="/" className="flex items-center gap-2">
+            <Image
+              src="https://images.glints.com/unsafe/glints-dashboard.oss-ap-southeast-1.aliyuncs.com/company-logo/fd3ef04e572c6436a8580539e7555fd0.jpg"
+              alt="FPT Retail"
+              width={40}
+              height={40}
+              className="h-10 w-auto"
+            />
+            <div className="text-white">
+              <div className="text-xs font-medium">NHÀ THUỐC</div>
+              <div className="text-lg font-bold leading-none">LONG CHÂU</div>
             </div>
           </Link>
 
-          {/* Search Bar */}
-          <div className='hidden md:block w-full max-w-xl'>
-            <div className='relative'>
-              <input
-                type='text'
-                placeholder='Tìm kiếm sản phẩm, bài viết...'
-                className='w-full pl-4 pr-10 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all'
-              />
-              <button className='absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-primary-600 transition-colors'>
-                <Search className='h-5 w-5' />
-              </button>
+          {/* Contact and Download */}
+          <div className="flex items-center gap-8">
+            <div className="flex items-center gap-2 rounded-full bg-white/10 px-4 py-2">
+              <Phone className="h-5 w-5 text-white" />
+              <div className="text-white">
+                <span className="mr-1 text-sm">Tư vấn ngay:</span>
+                <span className="font-medium">1800 6789</span>
+              </div>
             </div>
-            <div className='mt-1 text-xs text-gray-500'>
-              <span>Từ khóa gần đây: </span>
-              <span className='text-primary-600 hover:underline cursor-pointer'>
-                Vitamin C, Sữa cho trẻ, Thuốc ho
-              </span>
-            </div>
+            <Button
+              variant="ghost"
+              className="flex items-center gap-2 rounded-full border border-white/20 text-white hover:bg-white/10"
+            >
+              <Download className="h-5 w-5" />
+              <span>Tải ứng dụng</span>
+            </Button>
           </div>
 
-          {/* Action buttons */}
-          <div className='flex items-center space-x-1 sm:space-x-4 md:space-x-6'>
-            <button className='md:hidden text-gray-700 hover:text-primary-600 transition-colors'>
-              <Search className='h-6 w-6' />
-            </button>
-
-            <Link
-              href='/contact'
-              className='hidden sm:flex items-center text-gray-700 hover:text-primary-600 transition-colors'
-            >
-              <MessageCircle className='h-5 w-5 md:mr-2' />
-              <span className='hidden lg:inline text-sm'>Tư vấn</span>
-            </Link>
-
-            <Link
-              href='/cart'
-              className='flex items-center text-gray-700 hover:text-primary-600 transition-colors relative'
-            >
-              <div className='relative'>
-                <ShoppingCart className='h-5 w-5' />
-                <span className='absolute -top-2 -right-2 bg-primary-600 text-white text-xs w-4 h-4 flex items-center justify-center rounded-full'>
-                  0
-                </span>
-              </div>
-              <span className='hidden lg:inline ml-2 text-sm'>Giỏ hàng</span>
-            </Link>
-
-            <div className='relative group'>
-              <Link
-                href='/account'
-                className='flex items-center text-gray-700 hover:text-primary-600 transition-colors'
-              >
-                <User className='h-5 w-5' />
-                <span className='hidden lg:inline ml-2 text-sm'>Tài khoản</span>
-              </Link>
-
-              <div className='absolute right-0 top-full mt-1 w-48 bg-white shadow-lg rounded-md py-2 z-50 hidden group-hover:block'>
-                <Link
-                  href='/login'
-                  className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-primary-600'
-                >
-                  Đăng nhập
-                </Link>
-                <Link
-                  href='/register'
-                  className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-primary-600'
-                >
-                  Đăng ký
-                </Link>
-                <hr className='my-1' />
-                <Link
-                  href='/account/profile'
-                  className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-primary-600'
-                >
-                  Thông tin cá nhân
-                </Link>
-                <Link
-                  href='/account/orders'
-                  className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-primary-600'
-                >
-                  Đơn hàng của tôi
-                </Link>
-              </div>
-            </div>
+          {/* Auth and Cart */}
+          <div className="flex items-center gap-4">
+            <Button className="rounded-full bg-white px-6 text-primary-5 hover:bg-white/90">
+              <User className="mr-2 h-5 w-5" />
+              Đăng Nhập
+            </Button>
+            <Button className="rounded-full bg-white px-6 text-primary-5 hover:bg-white/90">
+              <ShoppingCart className="mr-2 h-5 w-5" />
+              Giỏ Hàng
+            </Button>
           </div>
         </div>
 
-        {/* Navigation */}
-        <nav className='py-2 border-t border-gray-100 overflow-x-auto scrollbar-hide'>
-          <ul className='flex space-x-6 md:space-x-8'>
-            <li>
-              <Link
-                href='/'
-                className='font-medium hover:text-primary-600 transition-colors whitespace-nowrap text-sm py-1 inline-block border-b-2 border-transparent hover:border-primary-600'
-              >
-                Trang chủ
-              </Link>
-            </li>
-            <li>
-              <Link
-                href='/products'
-                className='font-medium hover:text-primary-600 transition-colors whitespace-nowrap text-sm py-1 inline-block border-b-2 border-transparent hover:border-primary-600'
-              >
-                Sản phẩm
-              </Link>
-            </li>
-            <li>
-              <Link
-                href='/trusted-shops'
-                className='font-medium hover:text-primary-600 transition-colors whitespace-nowrap text-sm py-1 inline-block border-b-2 border-transparent hover:border-primary-600'
-              >
-                Shop uy tín
-              </Link>
-            </li>
-            <li>
-              <Link
-                href='/height-measurement'
-                className='font-medium hover:text-primary-600 transition-colors whitespace-nowrap text-sm py-1 inline-block border-b-2 border-transparent hover:border-primary-600'
-              >
-                Đo chiều cao
-              </Link>
-            </li>
-            <li>
-              <Link
-                href='/nutrition-check'
-                className='font-medium hover:text-primary-600 transition-colors whitespace-nowrap text-sm py-1 inline-block border-b-2 border-transparent hover:border-primary-600'
-              >
-                Kiểm tra dinh dưỡng
-              </Link>
-            </li>
-            <li>
-              <Link
-                href='/blog'
-                className='font-medium hover:text-primary-600 transition-colors whitespace-nowrap text-sm py-1 inline-block border-b-2 border-transparent hover:border-primary-600'
-              >
-                Tin tức
-              </Link>
-            </li>
-          </ul>
-        </nav>
+        {/* Search Bar and QR Section */}
+        <div className="flex gap-4 py-4">
+          <div className="flex-1">
+            {/* Replace the old search input with the new SearchBar component */}
+            <SearchBar />
+
+            {/* Popular Keywords */}
+            <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1">
+              <span className="text-sm text-white/80">Từ khóa phổ biến:</span>
+              {popularKeywords.map((keyword) => (
+                <Link
+                  key={keyword.label}
+                  href={keyword.href}
+                  className="text-sm text-white decoration-white underline decoration-1 underline-offset-4 hover:text-white/90"
+                >
+                  {keyword.label}
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          {/* QR Code Section */}
+          <div className="flex w-[220px] flex-col items-center justify-center rounded-lg bg-[#FF6634] px-4 py-3">
+            <div className="text-center text-white">
+              <div className="text-sm font-medium">- Quét Mã QR -</div>
+              <div className="text-base font-bold">Tặng Voucher 1tr</div>
+            </div>
+            <Image
+              src="/placeholder.svg?height=100&width=100"
+              alt="QR Code"
+              width={100}
+              height={100}
+              className="mt-2 rounded-lg bg-white p-2"
+            />
+          </div>
+        </div>
+
+        {/* Main Navigation */}
+        <MegaMenu />
       </div>
     </header>
   )
 }
+

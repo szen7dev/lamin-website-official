@@ -2,7 +2,13 @@
 
 import { useState, useEffect } from "react"
 
-export function useFetch<T>(url: string, options?: RequestInit) {
+interface UseFetchOptions {
+  method?: "GET" | "POST" | "PUT" | "DELETE"
+  body?: any
+  headers?: Record<string, string>
+}
+
+export function useFetch<T>(url: string, options?: UseFetchOptions) {
   const [data, setData] = useState<T | null>(null)
   const [error, setError] = useState<Error | null>(null)
   const [loading, setLoading] = useState(true)
@@ -10,21 +16,30 @@ export function useFetch<T>(url: string, options?: RequestInit) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(url, options)
+        const response = await fetch(url, {
+          method: options?.method || "GET",
+          headers: {
+            "Content-Type": "application/json",
+            ...options?.headers,
+          },
+          body: options?.body ? JSON.stringify(options.body) : undefined,
+        })
+
         if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`)
+          throw new Error(`HTTP error! status: ${response.status}`)
         }
+
         const result = await response.json()
         setData(result)
-      } catch (error) {
-        setError(error instanceof Error ? error : new Error(String(error)))
+      } catch (e) {
+        setError(e instanceof Error ? e : new Error(String(e)))
       } finally {
         setLoading(false)
       }
     }
 
     fetchData()
-  }, [url, options])
+  }, [url, options?.method, options?.body, options?.headers])
 
   return { data, error, loading }
 }

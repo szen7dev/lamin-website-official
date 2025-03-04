@@ -9,9 +9,5 @@ export const productService = {
     const response = await api.get(`/products/${slug}`)
     return response.data
   },
-  getProductCategories: async () => {
-    const response = await api.get("/product-categories")
-    return response.data
-  },
 }
 

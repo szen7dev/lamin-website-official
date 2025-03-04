@@ -2,38 +2,39 @@
 
 import { Component, type ErrorInfo, type ReactNode } from "react"
 
-interface ErrorBoundaryProps {
+interface Props {
+  children?: ReactNode
   fallback?: ReactNode
-  children: ReactNode
 }
 
-interface ErrorBoundaryState {
+interface State {
   hasError: boolean
   error?: Error
 }
 
-export default class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
-  constructor(props: ErrorBoundaryProps) {
-    super(props)
-    this.state = { hasError: false }
+class ErrorBoundary extends Component<Props, State> {
+  public state: State = {
+    hasError: false,
   }
 
-  static getDerivedStateFromError(error: Error): ErrorBoundaryState {
+  public static getDerivedStateFromError(error: Error): State {
     return { hasError: true, error }
   }
 
-  componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
-    console.error("ErrorBoundary caught an error:", error, errorInfo)
+  public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    console.error("Uncaught error:", error, errorInfo)
   }
 
-  render(): ReactNode {
+  public render() {
     if (this.state.hasError) {
       return (
         this.props.fallback || (
-          <div>
+          <div className="error-boundary">
             <h2>Something went wrong.</h2>
-            <p>{this.state.error?.message}</p>
-            <button onClick={() => this.setState({ hasError: false })}>Try again</button>
+            <details>
+              <summary>Error details</summary>
+              <pre>{this.state.error?.message}</pre>
+            </details>
           </div>
         )
       )
@@ -42,4 +43,6 @@ export default class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBo
     return this.props.children
   }
 }
+
+export { ErrorBoundary }
 

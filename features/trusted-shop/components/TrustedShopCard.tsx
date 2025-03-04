@@ -1,12 +1,6 @@
 "use client"
 
-export default function TrustedShopCard({ name = "Shop Name", address = "Shop Address", image = "/placeholder.jpg" }) {
-  return (
-    <div>
-      <h3>{name}</h3>
-      <p>{address}</p>
-      <p>Shop image: {image}</p>
-    </div>
-  )
+export default function TrustedShopCard({ shop }: { shop: any }) {
+  return <div className="trusted-shop-card">Trusted Shop Card</div>
 }
 

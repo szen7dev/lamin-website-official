@@ -1,11 +1,6 @@
 "use client"
 
-export default function TrustedShopRating() {
-  return (
-    <div>
-      <h3>Shop Rating</h3>
-      <p>Customer ratings for this shop</p>
-    </div>
-  )
+export default function TrustedShopRating({ shopId }: { shopId: string }) {
+  return <div className="trusted-shop-rating">Trusted Shop Rating</div>
 }
 

@@ -1,17 +1,19 @@
-import { generateMetadata } from "@/components/seo/Metadata";
-import type { ReactNode } from "react";
-import '../styles/globals.css';
+import type React from "react"
+import { Inter } from "next/font/google"
+import "../styles/globals.css"
 
-export { generateMetadata };
+const inter = Inter({ subsets: ["latin"] })
 
-export default function RootLayout({
-  children,
-}: {
-  children: ReactNode
-}) {
+export const metadata = {
+  title: "Elena Pharmacy",
+  description: "Your trusted pharmacy partner",
+    generator: 'v0.dev'
+}
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body className={inter.className}>{children}</body>
     </html>
   )
 }

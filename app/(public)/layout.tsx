@@ -1,10 +1,7 @@
-import PublicLayout from '@/components/layout/PublicLayout'
-import type React from 'react'
+import type React from "react"
+import { PublicLayout } from "@/components/layout/PublicLayout"
 
-export default function PublicLayoutContainer({
-  children
-}: {
-  children: React.ReactNode
-}) {
+export default function PublicRootLayout({ children }: { children: React.ReactNode }) {
   return <PublicLayout>{children}</PublicLayout>
 }
+

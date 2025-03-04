@@ -2,44 +2,73 @@
 
 import type React from "react"
 
-import { useEffect, useRef } from "react"
+import { useEffect, useState } from "react"
+import { createPortal } from "react-dom"
+import { cn } from "@/utils/helpers"
+import { useTheme } from "@/hooks/useTheme"
 
 interface ModalProps {
   isOpen: boolean
   onClose: () => void
-  title?: string
   children: React.ReactNode
+  className?: string
 }
 
-export default function Modal({ isOpen, onClose, title, children }: ModalProps) {
-  const modalRef = useRef<HTMLDivElement>(null)
+export function Modal({ isOpen, onClose, children, className }: ModalProps) {
+  const [mounted, setMounted] = useState(false)
+  const { theme } = useTheme()
 
   useEffect(() => {
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose()
-    }
+    setMounted(true)
+    return () => setMounted(false)
+  }, [])
 
+  useEffect(() => {
     if (isOpen) {
-      document.addEventListener("keydown", handleEscape)
+      document.body.style.overflow = "hidden"
+    } else {
+      document.body.style.overflow = "unset"
     }
-
     return () => {
-      document.removeEventListener("keydown", handleEscape)
+      document.body.style.overflow = "unset"
     }
-  }, [isOpen, onClose])
+  }, [isOpen])
 
-  if (!isOpen) return null
+  if (!mounted || !isOpen) return null
 
-  return (
-    <div className="modal-overlay">
-      <div className="modal" ref={modalRef}>
-        {title && <div className="modal-header">{title}</div>}
-        <div className="modal-content">{children}</div>
-        <button className="modal-close" onClick={onClose}>
-          ×
+  return createPortal(
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+      <div
+        className={cn(
+          "relative max-h-[90vh] w-full max-w-md overflow-auto rounded-lg bg-background p-6 shadow-lg",
+          className,
+        )}
+      >
+        <button
+          onClick={onClose}
+          className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none"
+        >
+          <span className="sr-only">Close</span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="h-4 w-4"
+          >
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
         </button>
+        {children}
       </div>
-    </div>
+    </div>,
+    document.body,
   )
 }
 

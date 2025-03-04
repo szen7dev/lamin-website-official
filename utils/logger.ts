@@ -1,12 +1,8 @@
 type LogLevel = "info" | "warn" | "error" | "debug"
 
-const isProduction = process.env.NODE_ENV === "production"
-
-export const logger = {
+const logger = {
   info: (message: string, ...args: any[]) => {
-    if (!isProduction) {
-      console.info(`[INFO] ${message}`, ...args)
-    }
+    console.info(`[INFO] ${message}`, ...args)
   },
   warn: (message: string, ...args: any[]) => {
     console.warn(`[WARN] ${message}`, ...args)
@@ -15,9 +11,11 @@ export const logger = {
     console.error(`[ERROR] ${message}`, ...args)
   },
   debug: (message: string, ...args: any[]) => {
-    if (!isProduction) {
+    if (process.env.NODE_ENV !== "production") {
       console.debug(`[DEBUG] ${message}`, ...args)
     }
   },
 }
+
+export default logger
 

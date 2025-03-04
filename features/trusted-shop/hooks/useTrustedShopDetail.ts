@@ -1,12 +1,7 @@
 "use server"
 
 export async function useTrustedShopDetail(slug: string) {
-  // Example server action for trusted shop detail
-  return {
-    name: `Shop ${slug}`,
-    description: "Shop description",
-    address: "Shop Address",
-    rating: 4.5,
-  }
+  // Server action to fetch trusted shop detail
+  return { id: "1", name: "Shop", rating: 4.5 }
 }
 

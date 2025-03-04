@@ -1,13 +1,6 @@
 "use client"
 
 export default function NutritionCheckForm() {
-  return (
-    <div>
-      <h3>Nutrition Check Form</h3>
-      <form>
-        <p>Form fields for nutrition check</p>
-      </form>
-    </div>
-  )
+  return <div className="nutrition-check-form">Nutrition Check Form</div>
 }
 

@@ -1,20 +1,17 @@
-import Footer from '@/components/layout/Footer'
-import Header from '@/components/layout/Header'
-import { ThemeProvider } from '@/contexts/ThemeContext'
-import type React from 'react'
+import type React from "react"
+import { Header } from "./Header"
+import { Footer } from "./Footer"
+import { ThemeProvider } from "@/contexts/ThemeContext"
 
-export default function PublicLayout({
-  children
-}: {
-  children: React.ReactNode
-}) {
+export function PublicLayout({ children }: { children: React.ReactNode }) {
   return (
     <ThemeProvider>
-      <div>
+      <div className="flex min-h-screen flex-col">
         <Header />
-        <main>{children}</main>
+        <main className="flex-1">{children}</main>
         <Footer />
       </div>
     </ThemeProvider>
   )
 }
+

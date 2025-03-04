@@ -1,80 +1,65 @@
 import Image from "next/image"
-import Link from "next/link"
+import { Button } from "@/components/ui/Button"
+
+const trustedShops = [
+  {
+    id: 1,
+    image: "/placeholder.svg?height=80&width=160",
+    name: "Nhà thuốc Elena 1",
+  },
+  {
+    id: 2,
+    image: "/placeholder.svg?height=80&width=160",
+    name: "Nhà thuốc Elena 2",
+  },
+  {
+    id: 3,
+    image: "/placeholder.svg?height=80&width=160",
+    name: "Nhà thuốc Elena 3",
+  },
+  {
+    id: 4,
+    image: "/placeholder.svg?height=80&width=160",
+    name: "Nhà thuốc Elena 4",
+  },
+  {
+    id: 5,
+    image: "/placeholder.svg?height=80&width=160",
+    name: "Nhà thuốc Elena 5",
+  },
+  {
+    id: 6,
+    image: "/placeholder.svg?height=80&width=160",
+    name: "Nhà thuốc Elena 6",
+  },
+]
 
 export default function TrustedShopsShowcase() {
-  // Placeholder trusted shops data
-  const shops = [
-    {
-      id: 1,
-      name: "Elena Pharmacy - Cầu Giấy",
-      address: "123 Cầu Giấy, Hà Nội",
-      image: "/placeholder.svg?height=200&width=200",
-      link: "/trusted-shops/elena-cau-giay",
-    },
-    {
-      id: 2,
-      name: "Elena Pharmacy - Đống Đa",
-      address: "45 Đống Đa, Hà Nội",
-      image: "/placeholder.svg?height=200&width=200",
-      link: "/trusted-shops/elena-dong-da",
-    },
-    {
-      id: 3,
-      name: "Elena Pharmacy - Quận 1",
-      address: "78 Nguyễn Huệ, Quận 1, TP.HCM",
-      image: "/placeholder.svg?height=200&width=200",
-      link: "/trusted-shops/elena-quan-1",
-    },
-    {
-      id: 4,
-      name: "Elena Pharmacy - Quận 7",
-      address: "56 Nguyễn Lương Bằng, Quận 7, TP.HCM",
-      image: "/placeholder.svg?height=200&width=200",
-      link: "/trusted-shops/elena-quan-7",
-    },
-    {
-      id: 5,
-      name: "Elena Pharmacy - Đà Nẵng",
-      address: "34 Nguyễn Văn Linh, Đà Nẵng",
-      image: "/placeholder.svg?height=200&width=200",
-      link: "/trusted-shops/elena-da-nang",
-    },
-    {
-      id: 6,
-      name: "Elena Pharmacy - Nha Trang",
-      address: "12 Trần Phú, Nha Trang",
-      image: "/placeholder.svg?height=200&width=200",
-      link: "/trusted-shops/elena-nha-trang",
-    },
-  ]
-
   return (
-    <div>
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-        {shops.map((shop) => (
-          <Link
-            href={shop.link}
+    <section className="py-8">
+      <div className="mb-6 flex items-center justify-between">
+        <h2 className="text-xl font-bold text-primary-5">Hệ thống nhà thuốc uy tín</h2>
+        <Button variant="link" className="text-primary-40">
+          Xem tất cả
+        </Button>
+      </div>
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+        {trustedShops.map((shop) => (
+          <div
             key={shop.id}
-            className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow text-center"
+            className="flex items-center justify-center rounded-lg border border-grayscale-20 bg-white p-4 transition-shadow hover:shadow-sm"
           >
-            <div className="relative h-24 w-24 mx-auto mb-3">
-              <Image src={shop.image || "/placeholder.svg"} alt={shop.name} fill className="object-contain" />
-            </div>
-            <h3 className="font-medium text-sm mb-1 line-clamp-1">{shop.name}</h3>
-            <p className="text-xs text-gray-500 line-clamp-2">{shop.address}</p>
-          </Link>
+            <Image
+              src={shop.image || "/placeholder.svg"}
+              alt={shop.name}
+              width={160}
+              height={80}
+              className="object-contain"
+            />
+          </div>
         ))}
       </div>
-
-      <div className="text-center mt-8">
-        <Link
-          href="/trusted-shops"
-          className="inline-block bg-primary-600 hover:bg-primary-700 text-white font-medium py-2 px-6 rounded-full transition-colors"
-        >
-          Xem tất cả hệ thống shop
-        </Link>
-      </div>
-    </div>
+    </section>
   )
 }
 

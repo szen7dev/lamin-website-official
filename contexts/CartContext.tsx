@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { createContext, useContext, useState, useEffect } from "react"
+import { createContext, useState, useEffect } from "react"
 import { cartService } from "@/services/cartService"
 
 type CartItem = {
@@ -14,78 +14,96 @@ type CartItem = {
   image: string
 }
 
-type Cart = {
+type CartContextType = {
   items: CartItem[]
   totalItems: number
   totalPrice: number
+  isLoading: boolean
+  addItem: (productId: string, quantity: number) => Promise<void>
+  removeItem: (itemId: string) => Promise<void>
+  updateQuantity: (itemId: string, quantity: number) => Promise<void>
+  clearCart: () => Promise<void>
 }
 
-type CartContextType = {
-  cart: Cart
-  loading: boolean
-  addToCart: (productId: string, quantity: number) => Promise<Cart>
-  removeFromCart: (itemId: string) => Promise<Cart>
-  updateQuantity: (itemId: string, quantity: number) => Promise<Cart>
-  clearCart: () => Promise<Cart>
-}
-
-const CartContext = createContext<CartContextType | undefined>(undefined)
+export const CartContext = createContext<CartContextType | undefined>(undefined)
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
-  const [cart, setCart] = useState<Cart>({ items: [], totalItems: 0, totalPrice: 0 })
-  const [loading, setLoading] = useState(true)
+  const [items, setItems] = useState<CartItem[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+
+  const totalItems = items.reduce((total, item) => total + item.quantity, 0)
+  const totalPrice = items.reduce((total, item) => total + item.price * item.quantity, 0)
 
   useEffect(() => {
     const fetchCart = async () => {
       try {
-        const cartData = await cartService.getCart()
-        setCart(cartData)
+        const cart = await cartService.getCart()
+        setItems(cart.items)
       } catch (error) {
-        console.error("Error fetching cart:", error)
+        console.error("Failed to fetch cart:", error)
       } finally {
-        setLoading(false)
+        setIsLoading(false)
       }
     }
 
     fetchCart()
   }, [])
 
-  const addToCart = async (productId: string, quantity: number) => {
-    const updatedCart = await cartService.addToCart(productId, quantity)
-    setCart(updatedCart)
-    return updatedCart
+  const addItem = async (productId: string, quantity: number) => {
+    setIsLoading(true)
+    try {
+      const response = await cartService.addToCart(productId, quantity)
+      setItems(response.items)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
-  const removeFromCart = async (itemId: string) => {
-    const updatedCart = await cartService.removeCartItem(itemId)
-    setCart(updatedCart)
-    return updatedCart
+  const removeItem = async (itemId: string) => {
+    setIsLoading(true)
+    try {
+      const response = await cartService.removeFromCart(itemId)
+      setItems(response.items)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const updateQuantity = async (itemId: string, quantity: number) => {
-    const updatedCart = await cartService.updateCartItem(itemId, quantity)
-    setCart(updatedCart)
-    return updatedCart
+    setIsLoading(true)
+    try {
+      const response = await cartService.updateCartItem(itemId, quantity)
+      setItems(response.items)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const clearCart = async () => {
-    const updatedCart = await cartService.clearCart()
-    setCart(updatedCart)
-    return updatedCart
+    setIsLoading(true)
+    try {
+      const response = await cartService.clearCart()
+      setItems([])
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
-    <CartContext.Provider value={{ cart, loading, addToCart, removeFromCart, updateQuantity, clearCart }}>
+    <CartContext.Provider
+      value={{
+        items,
+        totalItems,
+        totalPrice,
+        isLoading,
+        addItem,
+        removeItem,
+        updateQuantity,
+        clearCart,
+      }}
+    >
       {children}
     </CartContext.Provider>
   )
-}
-
-export function useCartContext() {
-  const context = useContext(CartContext)
-  if (context === undefined) {
-    throw new Error("useCartContext must be used within a CartProvider")
-  }
-  return context
 }
 

@@ -1,5 +1,4 @@
-// Export all utilities
 export * from "./format"
 export * from "./helpers"
-export { logger } from "./logger"
+export { default as logger } from "./logger"
 

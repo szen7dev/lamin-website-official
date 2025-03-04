@@ -1,9 +1,4 @@
-export default function NutritionCheckResult() {
-  return (
-    <div>
-      <h3>Nutrition Check Result</h3>
-      <p>Results of nutrition check</p>
-    </div>
-  )
+export default function NutritionCheckResult({ result }: { result: any }) {
+  return <div className="nutrition-check-result">Nutrition Check Result</div>
 }
 

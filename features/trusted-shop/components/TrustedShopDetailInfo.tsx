@@ -1,14 +1,4 @@
-export default function TrustedShopDetailInfo({
-  name = "Shop Name",
-  description = "Shop description",
-  address = "Shop Address",
-}) {
-  return (
-    <div>
-      <h2>{name}</h2>
-      <p>{description}</p>
-      <p>Address: {address}</p>
-    </div>
-  )
+export default function TrustedShopDetailInfo({ shop }: { shop: any }) {
+  return <div className="trusted-shop-detail-info">Trusted Shop Detail Info</div>
 }
 

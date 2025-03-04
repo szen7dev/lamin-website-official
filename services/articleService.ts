@@ -9,9 +9,5 @@ export const articleService = {
     const response = await api.get(`/articles/${slug}`)
     return response.data
   },
-  getArticleCategories: async () => {
-    const response = await api.get("/article-categories")
-    return response.data
-  },
 }
 

@@ -1,36 +1,20 @@
-"use server"
-
 import type { Metadata } from "next"
+import { siteConfig } from "@/config/siteConfig"
 
-interface SEOProps {
+interface UseSEOProps {
   title?: string
   description?: string
-  keywords?: string
-  ogImage?: string
-  ogType?: string
-  canonical?: string
+  keywords?: string[]
+  image?: string
 }
 
-export function useSEO({
-  title = "Elena Pharmacy",
-  description = "Your trusted health partner",
-  keywords = "pharmacy, health, medicine",
-  ogImage = "/og-image.jpg",
-  ogType = "website",
-  canonical = "https://elela.vn",
-}: SEOProps): Metadata {
+export function useSEO({ title, description, keywords, image }: UseSEOProps): Metadata {
   return {
-    title,
-    description,
-    keywords,
+    title: title ? `${title} | ${siteConfig.name}` : siteConfig.name,
+    description: description || siteConfig.description,
+    keywords: keywords || siteConfig.keywords,
     openGraph: {
-      title,
-      description,
-      images: [{ url: ogImage }],
-      type: ogType,
-    },
-    alternates: {
-      canonical,
+      images: [image || siteConfig.ogImage],
     },
   }
 }

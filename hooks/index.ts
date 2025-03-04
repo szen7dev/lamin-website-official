@@ -1,7 +1,7 @@
-// Export all hooks
-export { useAuth } from "./useAuth"
-export { useCart } from "./useCart"
-export { useFetch } from "./useFetch"
-export { useSEO } from "./useSEO"
-export { useForm } from "./useForm"
+export * from "./useAuth"
+export * from "./useCart"
+export * from "./useFetch"
+export * from "./useSEO"
+export * from "./useForm"
+export * from "./useTheme"
 

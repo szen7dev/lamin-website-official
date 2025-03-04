@@ -1,34 +1,20 @@
 import type { Metadata } from "next"
+import { siteConfig } from "@/config/siteConfig"
 
-interface SEOProps {
+interface MetadataProps {
   title?: string
   description?: string
-  keywords?: string
-  ogImage?: string
-  ogType?: "article" | "website" | "book" | "profile" | "music.song" | "music.album" | "music.playlist" | "music.radio_station" | "video.movie" | "video.episode" | "video.tv_show" | "video.other"
-  canonical?: string
+  keywords?: string[]
+  image?: string
 }
 
-export function generateMetadata({
-  title = "Elena Pharmacy",
-  description = "Your trusted health partner",
-  keywords = "pharmacy, health, medicine",
-  ogImage = "/og-image.jpg",
-  ogType = "website",
-  canonical = "https://elela.vn",
-}: SEOProps): Metadata {
+export function generateMetadata({ title, description, keywords, image }: MetadataProps): Metadata {
   return {
-    title,
-    description,
-    keywords,
+    title: title ? `${title} | ${siteConfig.name}` : siteConfig.name,
+    description: description || siteConfig.description,
+    keywords: keywords || siteConfig.keywords,
     openGraph: {
-      title,
-      description,
-      images: [{ url: ogImage }],
-      type: ogType,
-    },
-    alternates: {
-      canonical,
+      images: [image || siteConfig.ogImage],
     },
   }
 }

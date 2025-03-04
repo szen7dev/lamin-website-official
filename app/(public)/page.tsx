@@ -1,96 +1,68 @@
 import type { Metadata } from "next"
-import {
-  BannerSlider,
-  BestSellingProducts,
-  CoachExperts,
-  CommitmentsSection,
-  DealSlider,
-  FeatureShortcuts,
-  HealthNews,
-  QRCodeSection,
-  TrustedShopsShowcase,
-} from "@/features/homepage"
-import { generateMetadata } from "@/components/seo"
+import SimpleBanner from "@/features/homepage/components/SimpleBanner"
+import GridBanner from "@/features/homepage/components/GridBanner"
+import BestSellingProducts from "@/features/homepage/components/BestSellingProducts"
+import CoachExperts from "@/features/homepage/components/CoachExperts"
+import DealSlider from "@/features/homepage/components/DealSlider"
+import FeatureShortcuts from "@/features/homepage/components/FeatureShortcuts"
+import HealthNews from "@/features/homepage/components/HealthNews"
+import TrustedStores from "@/features/homepage/components/TrustedStores"
 
-export const metadata: Metadata = generateMetadata({
-  title: "Elena - Mua Thuốc Online Chính Hãng, Tư Vấn Sức Khỏe Chuyên Nghiệp",
-  description:
-    "Elena Pharmacy - Hệ thống nhà thuốc uy tín cung cấp dịch vụ mua thuốc online chính hãng, tư vấn sức khỏe chuyên nghiệp và đo chiều cao, kiểm tra dinh dưỡng.",
-  keywords: "nhà thuốc, thuốc online, tư vấn sức khỏe, elena pharmacy, đo chiều cao, kiểm tra dinh dưỡng",
-})
+export const metadata: Metadata = {
+  title: "Elena Pharmacy - Nhà thuốc trực tuyến của bạn",
+  description: "Mua thuốc trực tuyến, nhận tư vấn sức khỏe và nhiều dịch vụ khác tại Elena Pharmacy",
+  keywords: ["nhà thuốc", "thuốc", "sức khỏe", "tư vấn sức khỏe", "mua thuốc online"],
+}
+
+// fix giao diện của HomePage để giống như trong figma
+// Phạm vi chỉnh sửa: HomePage và các component nằm trong features/homepage/components và hooks
+// Không dùng barrel export của index.ts ở thời điểm hiện tại
+// Lấy sử dụng các màu và fonts từ tailwind.config.js và globals.css
 
 export default function HomePage() {
   return (
-    <div className="flex flex-col min-h-screen">
-      <main className="flex-grow">
-        {/* Banner Slider Section */}
-        <section className="w-full">
-          <BannerSlider />
-        </section>
+    <div className="min-h-screen bg-background">
+      {/* Hero Section with Banners */}
+      <SimpleBanner />
 
-        {/* QR Code Section */}
-        <section className="w-full py-8 bg-gray-50">
-          <div className="container mx-auto px-4">
-            <QRCodeSection />
-          </div>
-        </section>
+      <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
+        <div className="space-y-8 py-6">
+          {/* Grid Banner Section */}
+          <section>
+            <GridBanner />
+          </section>
 
-        {/* Feature Shortcuts Section */}
-        <section className="w-full py-10">
-          <div className="container mx-auto px-4">
-            <h2 className="text-2xl font-bold text-center mb-8">Tính Năng Nổi Bật</h2>
+          {/* Feature Shortcuts */}
+          <section>
             <FeatureShortcuts />
-          </div>
-        </section>
+          </section>
 
-        {/* Deal Slider Section */}
-        <section className="w-full py-10 bg-gray-50">
-          <div className="container mx-auto px-4">
-            <h2 className="text-2xl font-bold text-center mb-8">Ưu Đãi Đặc Biệt</h2>
+          {/* Deal Slider Section */}
+          <section>
             <DealSlider />
-          </div>
-        </section>
+          </section>
 
-        {/* Best Selling Products Section */}
-        <section className="w-full py-10">
-          <div className="container mx-auto px-4">
-            <h2 className="text-2xl font-bold text-center mb-8">Sản Phẩm Bán Chạy</h2>
+          {/* Best Selling Products */}
+          <section>
             <BestSellingProducts />
-          </div>
-        </section>
+          </section>
 
-        {/* Coach Experts Section */}
-        <section className="w-full py-10 bg-gray-50">
-          <div className="container mx-auto px-4">
-            <h2 className="text-2xl font-bold text-center mb-8">Chuyên Gia Coach Sức Khỏe</h2>
+          {/* Coach Experts Section */}
+          <section>
             <CoachExperts />
-          </div>
-        </section>
+          </section>
 
-        {/* Health News Section */}
-        <section className="w-full py-10">
-          <div className="container mx-auto px-4">
-            <h2 className="text-2xl font-bold text-center mb-8">Góc Tin Tức Sức Khỏe</h2>
+          {/* Health News Section */}
+          <section>
             <HealthNews />
-          </div>
-        </section>
+          </section>
 
-        {/* Commitments Section */}
-        <section className="w-full py-10 bg-gray-50">
-          <div className="container mx-auto px-4">
-            <h2 className="text-2xl font-bold text-center mb-8">Cam Kết Của Chúng Tôi</h2>
-            <CommitmentsSection />
-          </div>
-        </section>
-
-        {/* Trusted Shops Showcase Section */}
-        <section className="w-full py-10">
-          <div className="container mx-auto px-4">
-            <h2 className="text-2xl font-bold text-center mb-8">Hệ Thống Shop Uy Tín</h2>
-            <TrustedShopsShowcase />
-          </div>
-        </section>
-      </main>
+          {/* Trusted Stores Section */}
+          <section>
+            <TrustedStores />
+          </section>
+        </div>
+      </div>
     </div>
   )
 }

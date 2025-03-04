@@ -1,14 +1,4 @@
-export default function ArticleDetailContent({
-  title = "Article Title",
-  content = "Article content",
-  author = "Author Name",
-}) {
-  return (
-    <div>
-      <h2>{title}</h2>
-      <p>By {author}</p>
-      <div>{content}</div>
-    </div>
-  )
+export default function ArticleDetailContent({ article }: { article: any }) {
+  return <div className="article-detail-content">Article Detail Content</div>
 }
 

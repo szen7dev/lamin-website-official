@@ -1,3 +1,3 @@
-// Export all checkout components and hooks
-export { default as CheckoutForm } from "./components/CheckoutForm"
+export * from "./components"
+export * from "./hooks"
 

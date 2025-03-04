@@ -1,11 +1,3 @@
-// Export all homepage components and hooks
-export { default as BannerSlider } from "@/features/homepage/components/BannerSlider"
-export { default as BestSellingProducts } from "@/features/homepage/components/BestSellingProducts"
-export { default as CoachExperts } from "@/features/homepage/components/CoachExperts"
-export { default as CommitmentsSection } from "@/features/homepage/components/CommitmentsSection"
-export { default as DealSlider } from "@/features/homepage/components/DealSlider"
-export { default as FeatureShortcuts } from "@/features/homepage/components/FeatureShortcuts"
-export { default as HealthNews } from "@/features/homepage/components/HealthNews"
-export { default as QRCodeSection } from "@/features/homepage/components/QRCodeSection"
-export { default as TrustedShopsShowcase } from "@/features/homepage/components/TrustedShopsShowcase"
-export { useHomepageData } from "@/features/homepage/hooks/useHomepageData"
+export * from "./components"
+export * from "./hooks"
+

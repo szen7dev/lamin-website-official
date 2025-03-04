@@ -1,6 +1,8 @@
 "use client"
 
 import { useEffect } from "react"
+import { Button } from "@/components/ui/Button"
+import { ThemeProvider } from "@/contexts/ThemeContext"
 
 export default function Error({
   error,
@@ -14,10 +16,12 @@ export default function Error({
   }, [error])
 
   return (
-    <div>
-      <h2>Something went wrong!</h2>
-      <button onClick={() => reset()}>Try again</button>
-    </div>
+    <ThemeProvider>
+      <div className="error-container">
+        <h2>Something went wrong!</h2>
+        <Button onClick={() => reset()}>Try again</Button>
+      </div>
+    </ThemeProvider>
   )
 }
 
