@@ -26,6 +26,17 @@ module.exports = {
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
+          5: "#1250DC",
+          10: "#1A5BE1",
+          20: "#2368E5",
+          30: "#2C75EA",
+          40: "#3582EE",
+          50: "#4990F1",
+          60: "#5D9DF5",
+          70: "#71ABF8",
+          80: "#85B8FC",
+          90: "#99C6FF",
+          100: "#ADD3FF",
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
@@ -66,22 +77,6 @@ module.exports = {
           90: "#101828",
           100: "#0C111D",
         },
-
-        // Primary Colors
-        primary: {
-          5: "#1250DC",
-          10: "#1A5BE1",
-          20: "#2368E5",
-          30: "#2C75EA",
-          40: "#3582EE",
-          50: "#4990F1",
-          60: "#5D9DF5",
-          70: "#71ABF8",
-          80: "#85B8FC",
-          90: "#99C6FF",
-          100: "#ADD3FF",
-        },
-
         // Error Colors
         error: {
           5: "#FF0000",
@@ -96,7 +91,6 @@ module.exports = {
           90: "#FFE6E6",
           100: "#FFFFFF",
         },
-
         // Info Colors
         info: {
           5: "#2897FF",
@@ -111,7 +105,6 @@ module.exports = {
           90: "#EEF9FF",
           100: "#FFFFFF",
         },
-
         // Success Colors
         success: {
           5: "#38CB1C",
@@ -126,7 +119,6 @@ module.exports = {
           90: "#ECF8EB",
           100: "#FFFFFF",
         },
-
         // Warning Colors
         warning: {
           5: "#FFE200",
@@ -141,7 +133,6 @@ module.exports = {
           90: "#FFFCE6",
           100: "#FFFFFF",
         },
-
         // Link Colors
         link: {
           5: "#0E55FF",
@@ -156,9 +147,6 @@ module.exports = {
           90: "#F2F7FF",
           100: "#FFFFFF",
         },
-
-        // Background
-        background: "#F1F4FD",
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -172,14 +160,12 @@ module.exports = {
         "dark-12": "0 12px 12px 0 #12121233",
         "dark-16": "0 16px 16px 0 #12121242",
         "dark-24": "0 24px 24px 0 #12121266",
-
         // Light Mode Shadows
         "light-00": "0 0 0 0 #00000033",
         "light-08": "0 8px 8px 0 #00000033",
         "light-12": "0 12px 12px 0 #00000033",
         "light-16": "0 16px 16px 0 #00000033",
         "light-24": "0 24px 24px 0 #00000033",
-
         // Effect Shadows
         "01": "0 1px 1px 0 #00000024",
         "02": "0 2px 2px 0 #00000024",
@@ -210,4 +196,3 @@ module.exports = {
   },
   plugins: [require("tailwindcss-animate")],
 }
-
