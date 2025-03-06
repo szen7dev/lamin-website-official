@@ -126,6 +126,7 @@
 .dark {
   --background: #121212;
   /* Add other dark mode specific variables here as needed */
+  --foreground: #ffffff;
 }
 
 /* Base styles - Only for HTML elements */
@@ -134,9 +135,21 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-grayscale-90;
+    @apply bg-background text-foreground;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-semibold text-grayscale-100;
   }
   a {
-    @apply text-link-5 hover:underline;
+    @apply text-link hover:underline;
   }
 }
+
+/* Import fonts if needed */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+

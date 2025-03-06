@@ -14,56 +14,48 @@ export const metadata: Metadata = {
   keywords: ["nhà thuốc", "thuốc", "sức khỏe", "tư vấn sức khỏe", "mua thuốc online"],
 }
 
-// fix giao diện của HomePage để giống như trong figma
-// Phạm vi chỉnh sửa: HomePage và các component nằm trong features/homepage/components và hooks
-// Không dùng barrel export của index.ts ở thời điểm hiện tại
-// Lấy sử dụng các màu và fonts từ tailwind.config.js và globals.css
-
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-background">
+    <main className="flex min-h-screen flex-col bg-background">
       {/* Hero Section with Banners */}
-      <SimpleBanner />
+      <section className="w-full">
+        <SimpleBanner />
+      </section>
+      <section className="container mx-auto px-4 py-6">
+        <GridBanner />
+      </section>
 
-      <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
-        <div className="space-y-8 py-6">
-          {/* Grid Banner Section */}
-          <section>
-            <GridBanner />
-          </section>
+      {/* Feature Shortcuts */}
+      <section className="container mx-auto px-4">
+        <FeatureShortcuts />
+      </section>
 
-          {/* Feature Shortcuts */}
-          <section>
-            <FeatureShortcuts />
-          </section>
+      {/* Deal Slider Section */}
+      <section className="container mx-auto px-4 py-6">
+        <DealSlider />
+      </section>
 
-          {/* Deal Slider Section */}
-          <section>
-            <DealSlider />
-          </section>
+      {/* Best Selling Products */}
+      <section className="container mx-auto px-4 py-8">
+        <BestSellingProducts />
+      </section>
 
-          {/* Best Selling Products */}
-          <section>
-            <BestSellingProducts />
-          </section>
+        {/* Coach Experts Section */}
+      <section className="container mx-auto px-4 py-8">
+        <CoachExperts />
+      </section>
 
-          {/* Coach Experts Section */}
-          <section>
-            <CoachExperts />
-          </section>
+      {/* Health News Section */}
+      <section className="container mx-auto px-4 py-8">
+        <h2 className="mb-6 text-2xl font-bold text-grayscale-90">Góc Sức Khỏe</h2>
+        <HealthNews />
+      </section>
 
-          {/* Health News Section */}
-          <section>
-            <HealthNews />
-          </section>
-
-          {/* Trusted Stores Section */}
-          <section>
-            <TrustedStores />
-          </section>
-        </div>
-      </div>
-    </div>
+      {/* Trusted Stores Section */}
+      <section className="container mx-auto px-4 py-8">
+        <TrustedStores />
+      </section>
+    </main>
   )
 }
 
