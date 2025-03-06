@@ -3,7 +3,7 @@ import Image from "next/image"
 
 export function Footer() {
   return (
-    <footer className="bg-background border-t">
+    <footer className="bg-background">
       <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-8">
           {/* About Us Column */}
@@ -162,8 +162,18 @@ export function Footer() {
             <div>
               <h4 className="font-semibold text-lg mb-4">CHỨNG NHẬN</h4>
               <div className="flex space-x-4">
-                <Image src="/placeholder.svg?height=40&width=40" alt="Certification 1" width={40} height={40} />
-                <Image src="/placeholder.svg?height=40&width=100" alt="DMCA Protected" width={100} height={40} />
+                <Image
+                  src="/placeholder.svg?height=40&width=40"
+                  alt="Certification 1"
+                  width={40}
+                  height={40}
+                />
+                <Image
+                  src="/placeholder.svg?height=40&width=100"
+                  alt="DMCA Protected"
+                  width={100}
+                  height={40}
+                />
               </div>
             </div>
 
@@ -172,10 +182,20 @@ export function Footer() {
               <h4 className="font-semibold text-lg mb-4">KẾT NỐI VỚI CHÚNG TÔI</h4>
               <div className="flex space-x-4">
                 <Link href="#" className="hover:opacity-80">
-                  <Image src="/placeholder.svg?height=32&width=32" alt="Facebook" width={32} height={32} />
+                  <Image
+                    src="/placeholder.svg?height=32&width=32"
+                    alt="Facebook"
+                    width={32}
+                    height={32}
+                  />
                 </Link>
                 <Link href="#" className="hover:opacity-80">
-                  <Image src="/placeholder.svg?height=32&width=32" alt="Zalo" width={32} height={32} />
+                  <Image
+                    src="/placeholder.svg?height=32&width=32"
+                    alt="Zalo"
+                    width={32}
+                    height={32}
+                  />
                 </Link>
               </div>
             </div>
@@ -215,15 +235,17 @@ export function Footer() {
         </div>
 
         {/* Copyright Section */}
-        <div className="mt-8 pt-8 border-t text-sm text-muted-foreground">
-          <p>© 2023 - 2024 Công ty Cổ Phần Elena | Số ĐKKD 000000000 cấp ngày 17/09/2023 tại Sở Kế hoạch Đầu tư TPHN</p>
+        <div className="mt-8 pt-8 border-t border-grayscale-20 text-sm text-muted-foreground">
+          <p>
+            © 2023 - 2024 Công ty Cổ Phần Elena | Số ĐKKD 000000000 cấp ngày 17/09/2023 tại Sở Kế
+            hoạch Đầu tư TPHN
+          </p>
           <p className="mt-2">
-            • Địa chỉ: 30 Vĩnh Phúc, Ba Đình, Hà Nội • Số điện thoại: (084)00000000 • Email: sale@elena.com.vn • Người
-            quản lý nội dung: Elena
+            • Địa chỉ: 30 Vĩnh Phúc, Ba Đình, Hà Nội • Số điện thoại: (084)00000000 • Email:
+            sale@elena.com.vn • Người quản lý nội dung: Elena
           </p>
         </div>
       </div>
     </footer>
   )
 }
-

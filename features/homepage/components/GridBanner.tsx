@@ -12,12 +12,12 @@ import "swiper/css/pagination"
 const leftSlides = [
   {
     id: 1,
-    image: "/placeholder.svg?height=300&width=600",
+    image: "/images/Banner 2 1.png",
     alt: "Pharmaton Kiddi promotion 20% off",
   },
   {
     id: 2,
-    image: "/placeholder.svg?height=300&width=600",
+    image: "/images/Banner 2 1.png",
     alt: "Pharmaton Kiddi promotion special offer",
   },
   // Add more slides as needed
@@ -60,21 +60,25 @@ const promotions = [
 
 export default function GridBanner() {
   return (
-    <div className="grid gap-4 md:grid-cols-2">
+    <div className="flex gap-5 justify-between">
       {/* Left Side - Sliding Banner */}
-      <div className="relative rounded-lg overflow-hidden">
+      <div className="relative rounded-lg overflow-hidden md:w-[60%]">
         <Swiper
           modules={[Navigation, Pagination, Autoplay]}
           navigation
           pagination={{ clickable: true }}
-          autoplay={{ delay: 5000 }}
           loop
-          className="aspect-[2/1]"
+          className="aspect-[2/1] h-full w-full"
         >
           {leftSlides.map((slide) => (
             <SwiperSlide key={slide.id}>
               <div className="relative h-full w-full">
-                <Image src={slide.image || "/placeholder.svg"} alt={slide.alt} fill className="object-cover" />
+                <Image
+                  src={slide.image || "/placeholder.svg"}
+                  alt={slide.alt}
+                  fill
+                  className="object-fit"
+                />
               </div>
             </SwiperSlide>
           ))}
@@ -82,38 +86,29 @@ export default function GridBanner() {
       </div>
 
       {/* Right Side - Static Grid */}
-      <div className="space-y-4">
-        {/* Top Row - Two Boxes */}
-        <div className="grid grid-cols-2 gap-4">
-          <div className="relative aspect-[2/1] rounded-lg overflow-hidden">
-            <Image
-              src="/placeholder.svg?height=150&width=300"
-              alt="XỊT MEN SUYỄN promotion"
-              fill
-              className="object-cover"
-            />
-          </div>
-          <div className="relative aspect-[2/1] rounded-lg overflow-hidden">
-            <Image
-              src="/placeholder.svg?height=150&width=300"
-              alt="BÚT TIÊM TIỂU ĐƯỜNG promotion"
-              fill
-              className="object-cover"
-            />
-          </div>
+      <div className="w-full md:w-[40%] flex flex-col gap-4">
+        {/* Top image */}
+        <div className="relative w-full h-full">
+          <Image
+            src="/images/Banner 4 1.png"
+            alt="Top right image"
+            width={600}
+            height={400}
+            className="w-full h-auto rounded-lg object-cover"
+          />
         </div>
 
-        {/* Bottom - Full Width Banner */}
-        <div className="relative aspect-[2/1] rounded-lg overflow-hidden">
+        {/* Bottom image */}
+        <div className="relative w-full h-full">
           <Image
-            src="/placeholder.svg?height=300&width=600"
-            alt="CALCI EXTRA promotion"
-            fill
-            className="object-cover"
+            src="/images/Banner 3 1.png"
+            alt="Bottom right image"
+            width={600}
+            height={400}
+            className="w-full h-auto rounded-lg object-cover"
           />
         </div>
       </div>
     </div>
   )
 }
-

@@ -18,4 +18,3 @@ export function useSEO({ title, description, keywords, image }: UseSEOProps): Me
     },
   }
 }
-

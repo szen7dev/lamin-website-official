@@ -2,14 +2,12 @@
 
 import * as React from "react"
 import * as ToggleGroupPrimitive from "@radix-ui/react-toggle-group"
-import { type VariantProps } from "class-variance-authority"
+import type { VariantProps } from "class-variance-authority"
 
 import { cn } from "@/lib/utils"
-import { toggleVariants } from "@/components/ui/toggle"
+import type { toggleVariants } from "@/components/ui/toggle"
 
-const ToggleGroupContext = React.createContext<
-  VariantProps<typeof toggleVariants>
->({
+const ToggleGroupContext = React.createContext<VariantProps<typeof toggleVariants>>({
   size: "default",
   variant: "default",
 })
@@ -21,12 +19,10 @@ const ToggleGroup = React.forwardRef<
 >(({ className, variant, size, children, ...props }, ref) => (
   <ToggleGroupPrimitive.Root
     ref={ref}
-    className={cn("flex items-center justify-center gap-1", className)}
+    className={cn("flex items-center justify-center rounded-lg overflow-hidden", className)}
     {...props}
   >
-    <ToggleGroupContext.Provider value={{ variant, size }}>
-      {children}
-    </ToggleGroupContext.Provider>
+    <ToggleGroupContext.Provider value={{ variant, size }}>{children}</ToggleGroupContext.Provider>
   </ToggleGroupPrimitive.Root>
 ))
 
@@ -43,10 +39,9 @@ const ToggleGroupItem = React.forwardRef<
     <ToggleGroupPrimitive.Item
       ref={ref}
       className={cn(
-        toggleVariants({
-          variant: context.variant || variant,
-          size: context.size || size,
-        }),
+        "flex items-center justify-center px-6 py-2 text-sm font-medium transition-all",
+        "data-[state=on]:text-blue-600 data-[state=on]:bg-white data-[state=on]:border-blue-600 data-[state=on]:border-2 data-[state=on]:z-10 data-[state=on]:relative",
+        "data-[state=off]:text-gray-800 data-[state=off]:bg-gray-100",
         className
       )}
       {...props}

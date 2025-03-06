@@ -1,5 +1,8 @@
+"use client"
+
 import Image from "next/image"
 import { Button } from "@/components/ui/Button"
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 
 const products = [
   {
@@ -40,7 +43,7 @@ export default function BestSellingProducts() {
     <div className="py-6">
       {/* Section Title */}
       <div className="mb-6 flex justify-center">
-        <h2 className="inline-block rounded-full bg-primary-5 px-8 py-2 text-lg font-bold text-white">
+        <h2 className="inline-block rounded-t-[8px] rounded-b-[40px] bg-gradient-1 px-14 py-2 text-xl font-semibold text-white">
           Sản Phẩm Bán Chạy
         </h2>
       </div>
@@ -48,50 +51,69 @@ export default function BestSellingProducts() {
       {/* Products Grid */}
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
         {products.map((product) => (
-          <div key={product.id} className="rounded-lg border border-grayscale-20 bg-white p-4 shadow-sm">
+          <div
+            key={product.id}
+            className="relative rounded-xl border border-grayscale-20 bg-white p-4 shadow-sm"
+          >
             {/* Product Image */}
             <div className="relative mb-4 aspect-square">
-              <Image src={product.image || "/placeholder.svg"} alt={product.name} fill className="object-contain" />
-              <span className="absolute left-2 top-2 rounded bg-error-5 px-2 py-1 text-xs font-bold text-white">
-                {product.discount}
-              </span>
+              <Image
+                src={product.image || "/placeholder.svg"}
+                alt={product.name}
+                fill
+                className="object-contain"
+              />
             </div>
+            <span className="absolute top-0 left-0 z-10">
+              <div className="bg-gradient-5 text-white text-xs font-medium px-2 py-1 rounded-tl-xl rounded-br-xl">
+                {product.discount}
+              </div>
+            </span>
 
             {/* Product Info */}
-            <h3 className="mb-3 line-clamp-2 min-h-[2.5rem] text-sm font-medium text-grayscale-90">{product.name}</h3>
+            <h3 className="mb-3 line-clamp-2 min-h-[2.5rem] text-sm font-medium text-grayscale-90">
+              {product.name}
+            </h3>
 
             {/* Unit Selection */}
-            <div className="mb-3 flex gap-2">
-              {product.units.map((unit) => (
-                <span
+            <ToggleGroup type="single" className="w-max">
+              {product.units.map((unit, index) => (
+                <ToggleGroupItem
                   key={unit.value}
-                  className={`rounded-full px-3 py-1 text-sm ${
-                    unit.value === "hop" ? "bg-primary-5 text-white" : "border border-grayscale-30 text-grayscale-60"
+                  value={unit.value}
+                  className={`${
+                    index === 0
+                      ? "rounded-l-lg"
+                      : index === product.units.length - 1
+                      ? "rounded-r-lg"
+                      : ""
                   }`}
                 >
                   {unit.label}
-                </span>
+                </ToggleGroupItem>
               ))}
-            </div>
-
+            </ToggleGroup>
             {/* Price */}
             <div className="mb-2">
               <div className="flex items-baseline gap-2">
                 <span className="text-lg font-bold text-primary-5">{product.price}</span>
                 <span className="text-sm text-grayscale-50">/ {product.unit}</span>
               </div>
-              <span className="text-sm text-grayscale-40 line-through">{product.originalPrice}</span>
+              <span className="text-sm text-grayscale-40 line-through">
+                {product.originalPrice}
+              </span>
             </div>
 
             {/* Package Info */}
             <p className="mb-4 text-sm text-grayscale-50">{product.packageInfo}</p>
 
             {/* Buy Button */}
-            <Button className="w-full bg-primary-5 text-white hover:bg-primary-20">Chọn Mua</Button>
+            <Button className="w-full rounded-full bg-primary-5 text-white hover:bg-primary-20 font-medium text-base">
+              Chọn Mua
+            </Button>
           </div>
         ))}
       </div>
     </div>
   )
 }
-

@@ -30,11 +30,16 @@ const coaches = [
 
 export default function CoachExperts() {
   return (
-    <section className="rounded-2xl bg-gradient-to-br from-primary-40 to-primary-60 p-8">
+    <section className="rounded-2xl bg-gradient-3 p-8">
       <div className="mb-8">
-        <h2 className="mb-2 text-2xl font-bold text-white">Coach tư vấn chăm sóc sức khỏe</h2>
-        <p className="mb-4 text-white/90">Danh sách các Coach tư vấn chăm sóc sức khỏe của Elela</p>
-        <Button variant="secondary" className="flex items-center gap-2">
+        <h2 className="mb-2 text-3xl font-semibold text-white">Coach tư vấn chăm sóc sức khỏe</h2>
+        <p className="mb-4 text-white/90 text-base font-medium">
+          Danh sách các Coach tư vấn chăm sóc sức khỏe của Elela
+        </p>
+        <Button
+          variant="secondary"
+          className="flex !rounded-full items-center gap-2 bg-white text-primary-5 hover:bg-white/90"
+        >
           Tìm hiểu thêm
           <ChevronRight className="h-4 w-4" />
         </Button>
@@ -52,9 +57,9 @@ export default function CoachExperts() {
                 className="rounded-full"
               />
               <div>
-                <span className="text-sm text-grayscale-60">{coach.title}</span>
+                <span className="text-sm text-grayscale-40">{coach.title}</span>
                 <h3 className="text-lg font-semibold text-grayscale-90">{coach.name}</h3>
-                <p className="text-sm text-grayscale-50">{coach.experience}</p>
+                <p className="text-sm text-primary-5">{coach.experience}</p>
               </div>
             </div>
           </div>
@@ -63,4 +68,3 @@ export default function CoachExperts() {
     </section>
   )
 }
-

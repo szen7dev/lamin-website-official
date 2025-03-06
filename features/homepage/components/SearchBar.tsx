@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
-import { Search, X } from "lucide-react"
+import { CircleX, Search, X } from "lucide-react"
 import SearchSuggestions from "./SearchSuggestions"
 
 // Mock data for demonstration
@@ -29,6 +29,24 @@ const mockResults = [
   },
 ]
 
+const CustomCircleX = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <circle cx="12" cy="12" r="10" stroke="#404968" fill="#404968" />
+    <path d="m15 9-6 6" stroke="white" />
+    <path d="m9 9 6 6" stroke="white" />
+  </svg>
+)
+
 export default function SearchBar() {
   const [query, setQuery] = useState("")
   const [isFocused, setIsFocused] = useState(false)
@@ -53,28 +71,28 @@ export default function SearchBar() {
     // In a real application, you would make an API call here
     // For now, we'll just filter the mock results
     if (value.trim()) {
-      setResults(mockResults.filter((item) => item.name.toLowerCase().includes(value.toLowerCase())))
+      setResults(
+        mockResults.filter((item) => item.name.toLowerCase().includes(value.toLowerCase()))
+      )
     }
   }
 
   return (
     <div ref={searchRef} className="relative w-full">
       <div className="relative">
-        <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-grayscale-50" />
         <input
-          type="search"
           value={query}
           onChange={(e) => handleSearch(e.target.value)}
           onFocus={() => setIsFocused(true)}
           placeholder="Tìm kiếm sản phẩm, dịch vụ . . ."
-          className="h-12 w-full rounded-lg border-none bg-white pl-12 pr-10 text-base text-grayscale-90 shadow-sm placeholder:text-grayscale-40 focus:outline-none focus:ring-2 focus:ring-primary-20"
+          className="h-12 w-full rounded-[8px] border-none bg-white pl-5 pr-10 text-base text-grayscale-90 shadow-sm placeholder:text-grayscale-40 focus:outline-none focus:ring-2 focus:ring-primary-20"
         />
         {query && (
           <button
             onClick={() => handleSearch("")}
             className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full p-1 hover:bg-grayscale-10"
           >
-            <X className="h-5 w-5 text-grayscale-50" />
+            <CustomCircleX />
           </button>
         )}
       </div>
@@ -88,4 +106,3 @@ export default function SearchBar() {
     </div>
   )
 }
-

@@ -46,7 +46,7 @@ const benefits = [
     id: 1,
     icon: "shield",
     title: "Thuốc chính hãng",
-    description: "Đã đăng và chuyên sâu",
+    description: "Đa dạng và chuyên sâu",
   },
   {
     id: 2,
@@ -70,18 +70,23 @@ const benefits = [
 
 export default function TrustedStores() {
   return (
-    <div className="space-y-8">
+    <div className="space-y-12">
       {/* Trusted Stores Section */}
-      <section className="rounded-lg bg-primary-5 p-6">
-        <div className="mb-6">
-          <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-xl font-bold text-white">Các cửa hàng uy tín của Elela</h2>
-            <Button variant="link" className="flex items-center gap-1 text-white hover:text-white/90">
-              Xem tất cả
-              <ChevronRight className="h-4 w-4" />
-            </Button>
+      <section className="rounded-2xl bg-gradient-3 p-6">
+        <div className="flex justify-between items-center mb-6">
+          <div className="flex flex-col justify-between gap-3">
+            <h2 className="text-3xl font-semibold text-white">Các cửa hàng uy tín của Elela</h2>
+            <p className="text-base text-grayscale-5">
+              Tổng hợp các cửa hàng được người dùng tin dùng và đánh giá cao
+            </p>
           </div>
-          <p className="text-sm text-white/80">Tổng hợp các cửa hàng được người dùng tin dùng và đánh giá cao</p>
+          <Button
+            variant="link"
+            className="flex rounded-full bg-white items-center gap-1 text-primary-5 hover:text-white/90 text-sm font-normal"
+          >
+            Xem tất cả
+            <ChevronRight className="h-4 w-4" />
+          </Button>
         </div>
 
         <Swiper
@@ -104,20 +109,22 @@ export default function TrustedStores() {
         >
           {stores.map((store) => (
             <SwiperSlide key={store.id}>
-              <div className="flex items-center gap-4 rounded-lg bg-white p-4">
+              <div className="flex items-center gap-4 rounded-xl bg-white p-4">
                 <Image
                   src={store.image || "/placeholder.svg"}
                   alt={store.name}
                   width={48}
                   height={48}
-                  className="rounded-lg"
+                  className="rounded-full"
                 />
                 <div>
-                  <h3 className="font-medium text-grayscale-90">{store.name}</h3>
+                  <h3 className="font-medium text-xl text-grayscale-90">{store.name}</h3>
                   <div className="flex items-center gap-1">
-                    <Star className="h-4 w-4 fill-warning-5 text-warning-5" />
-                    <span className="font-medium text-grayscale-90">{store.rating}</span>
-                    <span className="text-sm text-grayscale-50">({store.reviews} đánh giá)</span>
+                    <Star className="h-4 w-4 fill-[#FFB200] text-[#FFB200]" />
+                    <span className="font-normal text-grayscale-90">{store.rating}</span>
+                    <span className="font-normal text-sm text-grayscale-40">
+                      ({store.reviews} đánh giá)
+                    </span>
                   </div>
                 </div>
               </div>
@@ -129,7 +136,7 @@ export default function TrustedStores() {
       {/* Benefits Section */}
       <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {benefits.map((benefit) => (
-          <div key={benefit.id} className="flex items-center gap-4 rounded-lg bg-primary-5/5 p-4">
+          <div key={benefit.id} className="flex items-center gap-4">
             <div className="rounded-full bg-primary-5/10 p-3">
               <Image
                 src={`/placeholder.svg?height=24&width=24`}
@@ -149,4 +156,3 @@ export default function TrustedStores() {
     </div>
   )
 }
-

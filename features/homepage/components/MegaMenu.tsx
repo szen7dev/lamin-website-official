@@ -4,6 +4,7 @@ import { useState } from "react"
 import MegaMenuItem from "./MegaMenuItem"
 import MegaMenuItemLink from "./MegaMenuItemLink"
 import MegaMenuColumn from "./MegaMenuColumn"
+import { Separator } from "@/components/ui/separator"
 
 const categories = [
   {
@@ -61,29 +62,37 @@ export default function MegaMenu() {
   const activeProducts = categories.find((cat) => cat.id === activeCategory)?.products || []
 
   return (
-    <nav className="border-t border-white/10">
+    <nav className=" bg-white text-black">
       <div className="container mx-auto px-4">
         <ul className="flex space-x-8 py-4">
           <li>
             <MegaMenuItem label="Sản phẩm" href="/products" hasDropdown>
-              <div className="flex gap-6">
+              <div className="flex">
                 {/* Categories */}
-                <div className="w-64 rounded-lg bg-white">
-                  {categories.map((category) => (
-                    <MegaMenuItemLink
-                      key={category.id}
-                      href={`/categories/${category.id}`}
-                      icon={category.icon}
-                      label={category.label}
-                      isActive={category.id === activeCategory}
-                      onMouseEnter={() => setActiveCategory(category.id)}
-                    />
+                <div className="w-64 rounded-lg">
+                  {categories.map((category, index) => (
+                    <div key={category.id}>
+                      <MegaMenuItemLink
+                        href={`/categories/${category.id}`}
+                        icon={category.icon}
+                        label={category.label}
+                        isActive={category.id === activeCategory}
+                        onMouseEnter={() => setActiveCategory(category.id)}
+                      />
+                      {index < categories.length - 1 &&
+                        category.id !== activeCategory &&
+                        categories[index + 1].id !== activeCategory && <Separator />}
+                    </div>
                   ))}
                 </div>
 
                 {/* Content */}
                 <div className="flex-1">
-                  <MegaMenuColumn categoryProducts={activeProducts} bestSellingProducts={bestSellingProducts} />
+                  <MegaMenuColumn
+                    activeCategory={activeCategory}
+                    categoryProducts={activeProducts}
+                    bestSellingProducts={bestSellingProducts}
+                  />
                 </div>
               </div>
             </MegaMenuItem>
@@ -109,4 +118,3 @@ export default function MegaMenu() {
     </nav>
   )
 }
-

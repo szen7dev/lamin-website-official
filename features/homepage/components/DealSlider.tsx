@@ -39,7 +39,7 @@ const deals = [
 
 export default function DealSlider() {
   return (
-    <div className="rounded-lg bg-primary-5 p-4">
+    <div className="rounded-2xl bg-gradient-3 p-4">
       <div className="mb-4 flex items-center justify-between">
         <div className="flex items-center gap-4">
           <h2 className="flex items-center gap-2 text-xl font-bold text-white">
@@ -55,7 +55,10 @@ export default function DealSlider() {
             <span className="rounded bg-primary-20 px-2 py-1">10</span>
           </div>
         </div>
-        <Button variant="link" className="flex items-center gap-1 text-white hover:text-white/90">
+        <Button
+          variant="link"
+          className="flex items-center gap-1 text-primary-5 bg-white rounded-full"
+        >
           Xem thêm
           <ChevronRight className="h-4 w-4" />
         </Button>
@@ -85,23 +88,32 @@ export default function DealSlider() {
       >
         {deals.map((deal) => (
           <SwiperSlide key={deal.id}>
-            <div className="rounded-lg bg-white p-4">
+            <div className="relative rounded-xl bg-white p-4">
               {/* Product Image with Discount Tag */}
               <div className="relative mb-4 aspect-square">
-                <Image src={deal.image || "/placeholder.svg"} alt={deal.name} fill className="object-contain" />
-                <span className="absolute left-2 top-2 rounded bg-error-5 px-2 py-1 text-xs font-bold text-white">
-                  {deal.discount}
-                </span>
+                <Image
+                  src={deal.image || "/placeholder.svg"}
+                  alt={deal.name}
+                  fill
+                  className="object-contain"
+                />
               </div>
+              <span className="absolute top-0 left-0 z-10">
+                <div className="bg-gradient-5 text-white text-xs font-medium px-2 py-1 rounded-tl-xl rounded-br-xl">
+                  {deal.discount}
+                </div>
+              </span>
 
               {/* Product Info */}
-              <h3 className="mb-2 line-clamp-2 min-h-[2.5rem] text-sm font-medium text-grayscale-90">{deal.name}</h3>
+              <h3 className="mb-2 line-clamp-2 min-h-[2.5rem] text-sm font-medium text-grayscale-90">
+                {deal.name}
+              </h3>
 
               {/* Price Info */}
               <div className="mb-2">
-                <div className="flex items-center gap-1">
-                  <span className="text-lg font-bold text-primary-5">{deal.salePrice}</span>
-                  <span className="text-sm text-grayscale-50">/{deal.unit}</span>
+                <div className="flex items-center gap-1 text-primary-5">
+                  <span className="text-lg font-bold ">{deal.salePrice}</span>
+                  <span className="text-xs"> / {deal.unit}</span>
                 </div>
                 <p className="text-sm text-grayscale-40 line-through">{deal.originalPrice}</p>
               </div>
@@ -109,21 +121,19 @@ export default function DealSlider() {
               {/* Best Seller Badge with Progress */}
               {deal.isBestSeller && (
                 <div className="mb-3 space-y-1">
-                  <div className="flex items-center gap-1 text-xs text-error-5">
-                    <Flame className="h-4 w-4 fill-error-5" />
+                  <div
+                    className={`inline-flex items-center gap-1 w-full rounded-full bg-error-5 px-3 py-2 text-sm font-medium text-white shadow-sm`}
+                  >
+                    <Flame className="h-4 w-4" />
                     <span>Đang bán chạy</span>
-                  </div>
-                  <div className="h-1.5 w-full overflow-hidden rounded-full bg-error-5/10">
-                    <div
-                      className="h-full rounded-full bg-error-5 transition-all duration-500"
-                      style={{ width: `${deal.soldProgress}%` }}
-                    />
                   </div>
                 </div>
               )}
 
               {/* Buy Button */}
-              <Button className="w-full bg-primary-5 text-white hover:bg-primary-20">Chọn Mua</Button>
+              <Button className="w-full rounded-full bg-primary-5 text-white hover:bg-primary-20 text-base font-medium">
+                Chọn Mua
+              </Button>
             </div>
           </SwiperSlide>
         ))}
@@ -131,4 +141,3 @@ export default function DealSlider() {
     </div>
   )
 }
-

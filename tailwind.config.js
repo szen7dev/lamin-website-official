@@ -17,6 +17,34 @@ module.exports = {
       },
     },
     extend: {
+      backgroundImage: {
+        "gradient-1": "linear-gradient(90deg, #4173E3 0%, #1250DC 50%, #0E40B0 100%)",
+        "gradient-2": "linear-gradient(180deg, #4173E3 0%, #1250DC 50%, #0E40B0 100%)",
+        "gradient-3":
+          "linear-gradient(180deg, rgba(65, 115, 227, 0.8) 0%, rgba(18, 80, 220, 0.8) 50%, rgba(14, 64, 176, 0.8) 100%)",
+        "gradient-4": "linear-gradient(90deg, #1250DC 0%, #0E40B0 100%)",
+        "gradient-5": "linear-gradient(90deg, #FF5246 0%, #CD1A0C 100%)",
+        "light-0":
+          "linear-gradient(0deg, #FFFFFF, #FFFFFF), linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2))",
+        "light-1":
+          "linear-gradient(0deg, #FFFFFF, #FFFFFF), linear-gradient(0deg, rgba(0, 0, 0, 0.18), rgba(0, 0, 0, 0.18))",
+        "light-2":
+          "linear-gradient(0deg, #FFFFFF, #FFFFFF), linear-gradient(0deg, rgba(0, 0, 0, 0.16), rgba(0, 0, 0, 0.16))",
+        "light-3":
+          "linear-gradient(0deg, #FFFFFF, #FFFFFF), linear-gradient(0deg, rgba(0, 0, 0, 0.14), rgba(0, 0, 0, 0.14))",
+        "light-4":
+          "linear-gradient(0deg, #FFFFFF, #FFFFFF), linear-gradient(0deg, rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0.12))",
+        "light-6":
+          "linear-gradient(0deg, #FFFFFF, #FFFFFF), linear-gradient(0deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1))",
+        "light-8":
+          "linear-gradient(0deg, #FFFFFF, #FFFFFF), linear-gradient(0deg, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.08))",
+        "light-12":
+          "linear-gradient(0deg, #FFFFFF, #FFFFFF), linear-gradient(0deg, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.06))",
+        "light-16":
+          "linear-gradient(0deg, #FFFFFF, #FFFFFF), linear-gradient(0deg, rgba(0, 0, 0, 0.04), rgba(0, 0, 0, 0.04))",
+        "light-24":
+          "linear-gradient(0deg, #FFFFFF, #FFFFFF), linear-gradient(0deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0))",
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -65,17 +93,17 @@ module.exports = {
         // Grayscale
         grayscale: {
           0: "#FCFCFD",
-          5: "#F9FAFB",
-          10: "#F2F4F7",
-          20: "#EAECF0",
-          30: "#D0D5DD",
-          40: "#98A2B3",
-          50: "#667085",
-          60: "#475467",
-          70: "#344054",
-          80: "#1D2939",
-          90: "#101828",
-          100: "#0C111D",
+          5: "#F9F9FB",
+          10: "#EFF1F5",
+          20: "#DCDFEA",
+          30: "#B9C0D4",
+          40: "#7D89B0",
+          50: "#5D6B98",
+          60: "#4A5578",
+          70: "#404968",
+          80: "#30374F",
+          90: "#111322",
+          100: "#0E101B",
         },
 
         // Primary Colors
@@ -222,4 +250,3 @@ module.exports = {
   },
   plugins: [require("tailwindcss-animate")],
 }
-

@@ -1,7 +1,11 @@
+"use client"
+
 import Image from "next/image"
 import Link from "next/link"
 import { ChevronRight, Newspaper } from "lucide-react"
 import { Button } from "@/components/ui/Button"
+import { Separator } from "@/components/ui/separator"
+import { Badge } from "@/components/ui/badge"
 
 const categories = [
   { id: 1, label: "Dinh dưỡng", href: "#" },
@@ -64,24 +68,32 @@ export default function HealthNews() {
       <div className="mb-6 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Newspaper className="h-6 w-6 text-primary-40" />
-          <h2 className="text-xl font-bold text-primary-5">Góc Sức Khỏe</h2>
+          <h2 className="text-lg font-semibold">Góc Sức Khỏe</h2>
+          <div className="h-6">
+            <Separator orientation="vertical" className="flex-1 w-[1px]" />
+          </div>
+
+          <Button
+            variant="link"
+            className="flex items-center gap-1 text-primary-40 pl-0 decoration-transparent"
+          >
+            Xem thêm
+            <ChevronRight className="h-4 w-4" />
+          </Button>
         </div>
-        <Button variant="link" className="flex items-center gap-1 text-primary-40">
-          Xem thêm
-          <ChevronRight className="h-4 w-4" />
-        </Button>
       </div>
 
       {/* Categories */}
       <div className="mb-6 flex flex-wrap gap-2">
         {categories.map((category) => (
-          <Link
-            key={category.id}
-            href={category.href}
-            className="rounded-full border border-grayscale-30 px-4 py-2 text-sm text-grayscale-70 transition-colors hover:bg-primary-5 hover:text-white"
-          >
-            {category.label}
-          </Link>
+          <Badge key={category.id} variant="outline" className="bg-white border-1">
+            <Link
+              href={category.href}
+              className="decoration-transparent text-black font-medium text-sm"
+            >
+              {category.label}
+            </Link>
+          </Badge>
         ))}
       </div>
 
@@ -89,7 +101,7 @@ export default function HealthNews() {
       <div className="grid gap-6 md:grid-cols-3">
         {/* Main Article */}
         <div className="md:col-span-2">
-          <Link href={mainArticle.href} className="group block">
+          <Link href={mainArticle.href} className="group block decoration-transparent">
             <div className="relative mb-4 aspect-[16/9] overflow-hidden rounded-lg">
               <Image
                 src={mainArticle.image || "/placeholder.svg"}
@@ -99,21 +111,24 @@ export default function HealthNews() {
               />
             </div>
             <div className="mb-2 flex items-center gap-3">
-              <span className="rounded bg-primary-5/10 px-2 py-1 text-xs font-medium text-primary-40">
+              <Badge className="text-grayscale-40 font-medium text-xs bg-light-12">
                 {mainArticle.category}
-              </span>
-              <time dateTime={mainArticle.date} className="text-sm text-grayscale-50">
-                {mainArticle.date}
-              </time>
+              </Badge>
             </div>
-            <h3 className="text-xl font-semibold text-grayscale-90 group-hover:text-primary-40">{mainArticle.title}</h3>
+            <h3 className="text-xl font-semibold text-grayscale-90 group-hover:text-primary-40">
+              {mainArticle.title}
+            </h3>
           </Link>
         </div>
 
         {/* Related Articles */}
-        <div className="space-y-4">
+        <div className="flex flex-col justify-between space-y-4">
           {relatedArticles.map((article) => (
-            <Link key={article.id} href={article.href} className="group flex gap-4">
+            <Link
+              key={article.id}
+              href={article.href}
+              className="group flex gap-4 decoration-transparent"
+            >
               <div className="relative h-24 w-36 flex-shrink-0 overflow-hidden rounded-lg">
                 <Image
                   src={article.image || "/placeholder.svg"}
@@ -122,16 +137,13 @@ export default function HealthNews() {
                   className="object-cover transition-transform duration-300 group-hover:scale-105"
                 />
               </div>
-              <div className="flex-1">
-                <span className="mb-2 inline-block rounded bg-primary-5/10 px-2 py-1 text-xs font-medium text-primary-40">
+              <div className="flex flex-col justify-around">
+                <Badge className="text-grayscale-40 font-medium text-xs bg-light-12">
                   {article.category}
-                </span>
+                </Badge>
                 <h3 className="line-clamp-2 text-sm font-medium text-grayscale-90 group-hover:text-primary-40">
                   {article.title}
                 </h3>
-                <time dateTime={article.date} className="mt-1 text-sm text-grayscale-50">
-                  {article.date}
-                </time>
               </div>
             </Link>
           ))}
@@ -140,4 +152,3 @@ export default function HealthNews() {
     </div>
   )
 }
-
