@@ -1,139 +1,94 @@
 import Link from "next/link"
 import Image from "next/image"
+import { Dot } from "lucide-react"
 
 export function Footer() {
   return (
-    <footer className="bg-background">
+    <footer className="bg-white">
       <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-8">
           {/* About Us Column */}
           <div>
-            <h4 className="font-semibold text-lg mb-4">VỀ CHÚNG TÔI</h4>
+            <div className="flex">
+              <span className="text-primary-5">
+                <Dot stroke="currentColor" strokeWidth={5} className="text-primary-5 -ml-2" />
+              </span>
+              <h4 className="font-semibold text-lg mb-4">VỀ CHÚNG TÔI</h4>
+            </div>
+
             <ul className="space-y-2">
-              <li>
-                <Link href="#" className="hover:text-primary">
-                  Giới thiệu
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="hover:text-primary">
-                  Hệ thống cửa hàng
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="hover:text-primary">
-                  Giấy phép kinh doanh
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="hover:text-primary">
-                  Quy chế hoạt động
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="hover:text-primary">
-                  Chính sách đặt cọc
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="hover:text-primary">
-                  Chính sách nội dung
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="hover:text-primary">
-                  Chính sách giao hàng
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="hover:text-primary">
-                  Chính sách thanh toán
-                </Link>
-              </li>
+              {[
+                "Giới thiệu",
+                "Hệ thống cửa hàng",
+                "Giấy phép kinh doanh",
+                "Quy chế hoạt động",
+                "Chính sách đặt cọc",
+                "Chính sách nội dung",
+                "Chính sách giao hàng",
+                "Chính sách thanh toán",
+              ].map((item, index) => (
+                <li key={index} className="flex items-center">
+                  <Link href="#" className="text-grayscale-40 hover:text-primary -ml-1">
+                    {item}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
           {/* Learn More Column */}
           <div>
-            <h4 className="font-semibold text-lg mb-4">TÌM HIỂU THÊM</h4>
+            <div className="flex">
+              <span className="text-primary-5">
+                <Dot stroke="currentColor" strokeWidth={5} className="text-primary-5 -ml-2" />
+              </span>
+              <h4 className="font-semibold text-lg mb-4">TÌM HIỂU THÊM</h4>
+            </div>
+
             <ul className="space-y-2">
-              <li>
-                <Link href="#" className="hover:text-primary">
-                  Bệnh viện
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="hover:text-primary">
-                  Góc sức khoẻ
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="hover:text-primary">
-                  Tra cứu thuốc
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="hover:text-primary">
-                  Tra cứu dược chất
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="hover:text-primary">
-                  Tra cứu dược liệu
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="hover:text-primary">
-                  Bệnh thường gặp
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="hover:text-primary">
-                  Đội ngũ chuyên môn
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="hover:text-primary">
-                  Tin tức tuyển dụng
-                </Link>
-              </li>
+              {[
+                "Bệnh viện",
+                "Góc sức khoẻ",
+                "Tra cứu thuốc",
+                "Tra cứu dược chất",
+                "Tra cứu dược liệu",
+                "Bệnh thường gặp",
+                "Đội ngũ chuyên môn",
+                "Tin tức tuyển dụng",
+              ].map((item, index) => (
+                <li key={index} className="flex items-center">
+                  <Link href="#" className="text-grayscale-40 hover:text-primary -ml-1">
+                    {item}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
           {/* Categories Column */}
           <div>
-            <h4 className="font-semibold text-lg mb-4">DANH MỤC</h4>
+            <div className="flex">
+              <span className="text-primary-5">
+                <Dot stroke="currentColor" strokeWidth={5} className="text-primary-5 -ml-2" />
+              </span>
+              <h4 className="font-semibold text-lg mb-4">DANH MỤC</h4>
+            </div>
+
             <ul className="space-y-2">
-              <li>
-                <Link href="#" className="hover:text-primary">
-                  Thực phẩm chức năng
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="hover:text-primary">
-                  Dược mỹ phẩm
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="hover:text-primary">
-                  Chăm sóc cá nhân
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="hover:text-primary">
-                  Trang thiết bị y tế
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="hover:text-primary">
-                  Đặt thuốc online
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="hover:text-primary">
-                  Trung tâm Tiêm chủng
-                </Link>
-              </li>
+              {[
+                "Thực phẩm chức năng",
+                "Dược mỹ phẩm",
+                "Chăm sóc cá nhân",
+                "Trang thiết bị y tế",
+                "Đặt thuốc online",
+                "Trung tâm Tiêm chủng",
+              ].map((item, index) => (
+                <li key={index} className="flex items-center">
+                  <Link href="#" className="text-grayscale-40 hover:text-primary -ml-1">
+                    {item}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
@@ -141,26 +96,38 @@ export function Footer() {
           <div className="space-y-6">
             {/* Hotline Section */}
             <div>
-              <h4 className="font-semibold text-lg mb-4">TỔNG ĐÀI</h4>
+              <div className="flex">
+                <span className="text-primary-5">
+                  <Dot stroke="currentColor" strokeWidth={5} className="text-primary-5 -ml-2" />
+                </span>
+                <h4 className="font-semibold text-lg mb-4">TỔNG ĐÀI</h4>
+              </div>
+
               <ul className="space-y-2">
                 <li>
                   <p>Tư vấn mua hàng</p>
-                  <p className="font-semibold text-primary">1900 6789 (Nhánh 1)</p>
+                  <p className="font-normal text-primary-5">1900 6789 (Nhánh 1)</p>
                 </li>
                 <li>
                   <p>Trung tâm Vắc Xin</p>
-                  <p className="font-semibold text-primary">1900 6789 (Nhánh 2)</p>
+                  <p className="font-normal text-primary-5">1900 6789 (Nhánh 2)</p>
                 </li>
                 <li>
                   <p>Góp ý - Khiếu nại</p>
-                  <p className="font-semibold text-primary">1900 6789 (Nhánh 3)</p>
+                  <p className="font-normal text-primary-5">1900 6789 (Nhánh 3)</p>
                 </li>
               </ul>
             </div>
 
             {/* Certifications */}
             <div>
-              <h4 className="font-semibold text-lg mb-4">CHỨNG NHẬN</h4>
+              <div className="flex">
+                <span className="text-primary-5">
+                  <Dot stroke="currentColor" strokeWidth={5} className="text-primary-5 -ml-2" />
+                </span>
+                <h4 className="font-semibold text-lg mb-4">CHỨNG NHẬN</h4>
+              </div>
+
               <div className="flex space-x-4">
                 <Image
                   src="/placeholder.svg?height=40&width=40"
@@ -179,7 +146,13 @@ export function Footer() {
 
             {/* Social Media */}
             <div>
-              <h4 className="font-semibold text-lg mb-4">KẾT NỐI VỚI CHÚNG TÔI</h4>
+              <div className="flex">
+                <span className="text-primary-5">
+                  <Dot stroke="currentColor" strokeWidth={5} className="text-primary-5 -ml-2" />
+                </span>
+                <h4 className="font-semibold text-lg mb-4">KẾT NỐI VỚI CHÚNG TÔI</h4>
+              </div>
+
               <div className="flex space-x-4">
                 <Link href="#" className="hover:opacity-80">
                   <Image
@@ -205,7 +178,13 @@ export function Footer() {
           <div className="space-y-6">
             {/* Payment Methods */}
             <div>
-              <h4 className="font-semibold text-lg mb-4">HỖ TRỢ THANH TOÁN</h4>
+              <div className="flex">
+                <span className="text-primary-5">
+                  <Dot stroke="currentColor" strokeWidth={5} className="text-primary-5 -ml-2" />
+                </span>
+                <h4 className="font-semibold text-lg mb-4">HỖ TRỢ THANH TOÁN</h4>
+              </div>
+
               <div className="grid grid-cols-3 gap-2">
                 {["JCB", "Mastercard", "Visa", "VNPay", "ZaloPay", "MoMo"].map((method) => (
                   <Image
@@ -222,7 +201,13 @@ export function Footer() {
 
             {/* App Download */}
             <div>
-              <h4 className="font-semibold text-lg mb-4">TẢI ỨNG DỤNG</h4>
+              <div className="flex">
+                <span className="text-primary-5">
+                  <Dot stroke="currentColor" strokeWidth={5} className="text-primary-5 -ml-2" />
+                </span>
+                <h4 className="font-semibold text-lg mb-4">TẢI ỨNG DỤNG</h4>
+              </div>
+
               <Image
                 src="/placeholder.svg?height=120&width=120"
                 alt="QR Code"

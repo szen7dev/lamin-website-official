@@ -136,7 +136,7 @@ export default function HealthNews() {
                 />
               </div>
               <div className="flex flex-col justify-around">
-                <Badge className="text-grayscale-40 font-medium text-xs bg-light-12">
+                <Badge className="text-grayscale-40 font-medium text-xs bg-light-12 w-max">
                   {article.category}
                 </Badge>
                 <h3 className="line-clamp-2 text-sm font-medium text-grayscale-90 group-hover:text-primary-40">
