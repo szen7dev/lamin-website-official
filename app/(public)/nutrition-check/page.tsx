@@ -7,8 +7,6 @@ export const metadata: Metadata = {
   description: "Kiểm tra thói quen ăn uống và nhận tư vấn dinh dưỡng",
 }
 
-// Fix giao diện để trông giống figma
-
 export default function NutritionCheckPage() {
   return (
     <div className="min-h-screen bg-[#F8F9FE] pb-12 pt-6">
@@ -19,9 +17,7 @@ export default function NutritionCheckPage() {
         {/* Main Content */}
         <div className="mx-auto max-w-xl">
           <h1 className="text-xl font-bold text-grayscale-90">Thói quen ăn uống hàng ngày</h1>
-          <p className="mb-6 text-sm text-[#6C757D]">
-            Hãy nhập thông tin dưới đây để nhận phân tích chi tiết
-          </p>
+          <p className="mb-6 text-sm text-[#6C757D]">Hãy nhập thông tin dưới đây để nhận phân tích chi tiết</p>
 
           <NutritionCheckForm />
         </div>
@@ -29,3 +25,4 @@ export default function NutritionCheckPage() {
     </div>
   )
 }
+

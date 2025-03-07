@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react"
 import { Check } from "lucide-react"
 import Chart from "chart.js/auto"
 import { useHeightMeasurementResult } from "../hooks/useHeightMeasurementMutation"
-import type { HeightMeasurementResult as ResultType } from "@/services/mockHeightMeasurementService"
+import type { HeightMeasurementResult as ResultType } from "../types/heightMeasurementTypes"
 
 const percentiles = [
   { name: "P3", color: "#0D6EFD" },

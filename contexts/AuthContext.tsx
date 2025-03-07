@@ -3,13 +3,8 @@
 import type React from "react"
 
 import { createContext, useState, useEffect } from "react"
-import { authService } from "@/services/authService"
-
-type User = {
-  id: string
-  name: string
-  email: string
-}
+import { authService } from "@/features/auth/services/authServiceFactory"
+import type { User } from "@/features/auth/types/authTypes"
 
 type AuthContextType = {
   user: User | null

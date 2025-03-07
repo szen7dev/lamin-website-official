@@ -3,14 +3,7 @@
 import Image from "next/image"
 import Link from "next/link"
 import { Search, ChevronRight } from "lucide-react"
-
-interface SearchResult {
-  id: string
-  name: string
-  price: number
-  image: string
-  unit: string
-}
+import type { SearchResult } from "@/features/search/types/searchTypes"
 
 interface SearchSuggestionsProps {
   query: string

@@ -7,8 +7,6 @@ export const metadata: Metadata = {
   description: "Công cụ đo và dự đoán chiều cao cho trẻ em",
 }
 
-// Fix giao diện để trông giống figma
-
 export default function HeightMeasurementPage() {
   return (
     <>
@@ -18,9 +16,7 @@ export default function HeightMeasurementPage() {
       {/* Title Section */}
       <div className="mb-6">
         <h1 className="mb-2 text-[28px] font-bold text-grayscale-90">Hướng dẫn chiều cao</h1>
-        <p className="text-base text-[#6C757D]">
-          Hãy nhập thông tin dưới đây để nhận phân tích chi tiết
-        </p>
+        <p className="text-base text-[#6C757D]">Hãy nhập thông tin dưới đây để nhận phân tích chi tiết</p>
       </div>
 
       {/* Form Section */}
@@ -30,3 +26,4 @@ export default function HeightMeasurementPage() {
     </>
   )
 }
+

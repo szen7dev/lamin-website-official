@@ -2,13 +2,7 @@
 import { useForm, Controller } from "react-hook-form"
 import { AlertCircle } from "lucide-react"
 import { useNutritionCheckMutation } from "../hooks/useNutritionCheckMutation"
-
-interface FormData {
-  name: string
-  birthDate: string
-  regularFoods: string[]
-  knownProduct: "yes" | "no"
-}
+import type { NutritionCheckFormData } from "../types/nutritionCheckTypes"
 
 const foodOptions = [
   { id: "egg", label: "Trứng" },
@@ -27,7 +21,7 @@ export default function NutritionCheckForm() {
     reset,
     control,
     formState: { errors },
-  } = useForm<FormData>({
+  } = useForm<NutritionCheckFormData>({
     defaultValues: {
       name: "",
       birthDate: "",
@@ -36,7 +30,7 @@ export default function NutritionCheckForm() {
     },
   })
 
-  const onSubmit = (data: FormData) => {
+  const onSubmit = (data: NutritionCheckFormData) => {
     mutate(data)
   }
 

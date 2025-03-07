@@ -2,15 +2,7 @@
 import { useForm } from "react-hook-form"
 import { useHeightMeasurementMutation } from "../hooks/useHeightMeasurementMutation"
 import { AlertCircle } from "lucide-react"
-
-interface FormData {
-  name: string
-  birthDate: string
-  weight: string
-  height: string
-  phone: string
-  gender: "male" | "female"
-}
+import type { HeightMeasurementFormData } from "../types/heightMeasurementTypes"
 
 export default function HeightMeasurementForm() {
   const { mutate, isPending, error } = useHeightMeasurementMutation()
@@ -20,7 +12,7 @@ export default function HeightMeasurementForm() {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<FormData>({
+  } = useForm<HeightMeasurementFormData>({
     defaultValues: {
       name: "",
       birthDate: "",
@@ -31,7 +23,7 @@ export default function HeightMeasurementForm() {
     },
   })
 
-  const onSubmit = (data: FormData) => {
+  const onSubmit = (data: HeightMeasurementFormData) => {
     mutate(data)
   }
 
