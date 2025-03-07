@@ -1,5 +1,6 @@
 "use client"
 
+import { Button } from "@/components/ui/Button"
 import { CheckCircle2 } from "lucide-react"
 import { useNutritionCheckResult } from "../hooks/useNutritionCheckMutation"
 
@@ -94,15 +95,16 @@ export default function NutritionCheckResult({ resultId }: NutritionCheckResultP
 
       {/* Actions */}
       <div className="flex justify-end gap-3">
-        <button
+        <Button
           onClick={() => window.history.back()}
+          variant="outline"
           className="rounded border border-[#1250DC] px-6 py-2 text-sm font-medium text-[#1250DC] hover:bg-[#1250DC]/5"
         >
           Quay lại
-        </button>
-        <button className="rounded bg-[#1250DC] px-6 py-2 text-sm font-medium text-white hover:bg-[#1250DC]/90">
+        </Button>
+        <Button className="rounded bg-[#1250DC] px-6 py-2 text-sm font-medium text-white hover:bg-[#1250DC]/90">
           Xác nhận
-        </button>
+        </Button>
       </div>
     </div>
   )

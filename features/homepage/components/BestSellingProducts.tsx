@@ -1,5 +1,5 @@
-import Image from "next/image"
 import { Button } from "@/components/ui/Button"
+import Image from "next/image"
 
 const products = [
   {
@@ -48,17 +48,27 @@ export default function BestSellingProducts() {
       {/* Products Grid */}
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
         {products.map((product) => (
-          <div key={product.id} className="rounded-lg border border-grayscale-20 bg-white p-4 shadow-sm">
+          <div
+            key={product.id}
+            className="rounded-lg border border-grayscale-20 bg-white p-4 shadow-sm"
+          >
             {/* Product Image */}
             <div className="relative mb-4 aspect-square">
-              <Image src={product.image || "/placeholder.svg"} alt={product.name} fill className="object-contain" />
+              <Image
+                src={product.image || "/placeholder.svg"}
+                alt={product.name}
+                fill
+                className="object-contain"
+              />
               <span className="absolute left-2 top-2 rounded bg-error-5 px-2 py-1 text-xs font-bold text-white">
                 {product.discount}
               </span>
             </div>
 
             {/* Product Info */}
-            <h3 className="mb-3 line-clamp-2 min-h-[2.5rem] text-sm font-medium text-grayscale-90">{product.name}</h3>
+            <h3 className="mb-3 line-clamp-2 min-h-[2.5rem] text-sm font-medium text-grayscale-90">
+              {product.name}
+            </h3>
 
             {/* Unit Selection */}
             <div className="mb-3 flex gap-2">
@@ -66,7 +76,9 @@ export default function BestSellingProducts() {
                 <span
                   key={unit.value}
                   className={`rounded-full px-3 py-1 text-sm ${
-                    unit.value === "hop" ? "bg-primary-5 text-white" : "border border-grayscale-30 text-grayscale-60"
+                    unit.value === "hop"
+                      ? "bg-primary-5 text-white"
+                      : "border border-grayscale-30 text-grayscale-60"
                   }`}
                 >
                   {unit.label}
@@ -80,7 +92,9 @@ export default function BestSellingProducts() {
                 <span className="text-lg font-bold text-primary-5">{product.price}</span>
                 <span className="text-sm text-grayscale-50">/ {product.unit}</span>
               </div>
-              <span className="text-sm text-grayscale-40 line-through">{product.originalPrice}</span>
+              <span className="text-sm text-grayscale-40 line-through">
+                {product.originalPrice}
+              </span>
             </div>
 
             {/* Package Info */}
@@ -94,4 +108,3 @@ export default function BestSellingProducts() {
     </div>
   )
 }
-

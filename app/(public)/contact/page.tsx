@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import { Breadcrumb } from "@/components/ui/Breadcrumb"
-import { ContactForm } from "@/components/form/ContactForm"
+import { ContactForm } from "@/features/contact/components/ContactForm"
 
 export const metadata: Metadata = {
   title: "Liên Hệ - Elena Pharmacy",

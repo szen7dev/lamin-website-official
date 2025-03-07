@@ -1,9 +1,10 @@
 "use client"
 
-import { useState, useRef, useEffect } from "react"
-import { Search, X } from "lucide-react"
-import SearchSuggestions from "./SearchSuggestions"
+import { Button } from "@/components/ui/Button"
 import { useSearch } from "@/features/search/hooks/useSearch"
+import { Search, X } from "lucide-react"
+import { useEffect, useRef, useState } from "react"
+import SearchSuggestions from "./SearchSuggestions"
 
 export default function SearchBar() {
   const [isFocused, setIsFocused] = useState(false)
@@ -35,12 +36,15 @@ export default function SearchBar() {
           className="h-12 w-full rounded-lg border-none bg-white pl-12 pr-10 text-base text-grayscale-90 shadow-sm placeholder:text-grayscale-40 focus:outline-none focus:ring-2 focus:ring-primary-20"
         />
         {query && (
-          <button
+          <Button
             onClick={() => setQuery("")}
+            variant="ghost"
+            size="sm"
             className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full p-1 hover:bg-grayscale-10"
           >
             <X className="h-5 w-5 text-grayscale-50" />
-          </button>
+            <span className="sr-only">Clear search</span>
+          </Button>
         )}
 
         {isLoading && (
@@ -59,4 +63,3 @@ export default function SearchBar() {
     </div>
   )
 }
-

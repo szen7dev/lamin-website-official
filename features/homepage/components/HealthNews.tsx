@@ -1,7 +1,7 @@
+import { Button } from "@/components/ui/Button"
+import { ChevronRight, Newspaper } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
-import { ChevronRight, Newspaper } from "lucide-react"
-import { Button } from "@/components/ui/Button"
 
 const categories = [
   { id: 1, label: "Dinh dưỡng", href: "#" },
@@ -106,7 +106,9 @@ export default function HealthNews() {
                 {mainArticle.date}
               </time>
             </div>
-            <h3 className="text-xl font-semibold text-grayscale-90 group-hover:text-primary-40">{mainArticle.title}</h3>
+            <h3 className="text-xl font-semibold text-grayscale-90 group-hover:text-primary-40">
+              {mainArticle.title}
+            </h3>
           </Link>
         </div>
 
@@ -140,4 +142,3 @@ export default function HealthNews() {
     </div>
   )
 }
-

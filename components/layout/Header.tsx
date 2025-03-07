@@ -1,9 +1,9 @@
-import Link from "next/link"
-import Image from "next/image"
-import { ShoppingCart, Phone, Download, User } from "lucide-react"
 import { Button } from "@/components/ui/Button"
-import SearchBar from "@/features/homepage/components/SearchBar"
 import MegaMenu from "@/features/homepage/components/MegaMenu"
+import SearchBar from "@/features/homepage/components/SearchBar"
+import { Download, Phone, ShoppingCart, User } from "lucide-react"
+import Image from "next/image"
+import Link from "next/link"
 
 const popularKeywords = [
   { label: "Thuốc nhỏ mắt", href: "#" },
@@ -119,4 +119,3 @@ export function Header() {
     </header>
   )
 }
-

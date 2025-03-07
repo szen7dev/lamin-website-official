@@ -5,7 +5,7 @@ import SimpleBanner from "@/features/homepage/components/SimpleBanner"
 import GridBanner from "@/features/homepage/components/GridBanner"
 import BestSellingProducts from "@/features/homepage/components/BestSellingProducts"
 import FeatureShortcuts from "@/features/homepage/components/FeatureShortcuts"
-import LoadingSpinner from "@/components/ui/LoadingSpinner"
+import LoadingSpinner from "@/components/ui/LoadingSpinner" // Assuming you have this
 
 // Dynamically import components that need data fetching
 const DynamicCoachExperts = dynamic(() => import("@/features/homepage/components/CoachExperts"), {
@@ -30,8 +30,7 @@ const DynamicTrustedStores = dynamic(() => import("@/features/homepage/component
 
 export const metadata: Metadata = {
   title: "Elena Pharmacy - Nhà thuốc trực tuyến của bạn",
-  description:
-    "Mua thuốc trực tuyến, nhận tư vấn sức khỏe và nhiều dịch vụ khác tại Elena Pharmacy",
+  description: "Mua thuốc trực tuyến, nhận tư vấn sức khỏe và nhiều dịch vụ khác tại Elena Pharmacy",
   keywords: ["nhà thuốc", "thuốc", "sức khỏe", "tư vấn sức khỏe", "mua thuốc online"],
 }
 
@@ -87,3 +86,4 @@ export default function HomePage() {
     </main>
   )
 }
+

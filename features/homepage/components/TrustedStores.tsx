@@ -1,10 +1,10 @@
 "use client"
 
-import Image from "next/image"
-import { Swiper, SwiperSlide } from "swiper/react"
-import { Navigation } from "swiper/modules"
-import { Star, ChevronRight } from "lucide-react"
 import { Button } from "@/components/ui/Button"
+import { ChevronRight, Star } from "lucide-react"
+import Image from "next/image"
+import { Navigation } from "swiper/modules"
+import { Swiper, SwiperSlide } from "swiper/react"
 
 // Import Swiper styles
 import "swiper/css"
@@ -76,12 +76,17 @@ export default function TrustedStores() {
         <div className="mb-6">
           <div className="mb-4 flex items-center justify-between">
             <h2 className="text-xl font-bold text-white">Các cửa hàng uy tín của Elela</h2>
-            <Button variant="link" className="flex items-center gap-1 text-white hover:text-white/90">
+            <Button
+              variant="link"
+              className="flex items-center gap-1 text-white hover:text-white/90"
+            >
               Xem tất cả
               <ChevronRight className="h-4 w-4" />
             </Button>
           </div>
-          <p className="text-sm text-white/80">Tổng hợp các cửa hàng được người dùng tin dùng và đánh giá cao</p>
+          <p className="text-sm text-white/80">
+            Tổng hợp các cửa hàng được người dùng tin dùng và đánh giá cao
+          </p>
         </div>
 
         <Swiper
@@ -149,4 +154,3 @@ export default function TrustedStores() {
     </div>
   )
 }
-

@@ -1,42 +1,24 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
+import { useQuery } from "@tanstack/react-query"
 import { useDebounce } from "@/hooks/useDebounce"
 import { searchService } from "../services/searchServiceFactory"
-import type { SearchResult } from "../types/searchTypes"
 
 export function useSearch() {
   const [query, setQuery] = useState("")
-  const [results, setResults] = useState<SearchResult[]>([])
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState<Error | null>(null)
 
   // Debounce the search query to avoid too many API calls
   const debouncedQuery = useDebounce(query, 300)
 
-  useEffect(() => {
-    const fetchResults = async () => {
-      if (!debouncedQuery.trim()) {
-        setResults([])
-        return
-      }
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["searchProducts", debouncedQuery],
+    queryFn: () => searchService.searchProducts({ query: debouncedQuery }),
+    enabled: debouncedQuery.trim().length > 0,
+    staleTime: 1000 * 60 * 5, // 5 minutes
+  })
 
-      setIsLoading(true)
-      setError(null)
-
-      try {
-        const data = await searchService.searchProducts({ query: debouncedQuery })
-        setResults(data)
-      } catch (err) {
-        setError(err instanceof Error ? err : new Error("An error occurred"))
-        setResults([])
-      } finally {
-        setIsLoading(false)
-      }
-    }
-
-    fetchResults()
-  }, [debouncedQuery])
+  const results = data || []
 
   return {
     query,

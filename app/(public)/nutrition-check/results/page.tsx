@@ -1,12 +1,14 @@
 import { Breadcrumb } from "@/components/ui/Breadcrumb"
 import NutritionCheckResult from "@/features/nutrition-check/components/NutritionCheckResult"
 
-export default function NutritionCheckResultsPage({
+export default async function NutritionCheckResultsPage({
   searchParams,
 }: {
   searchParams: { [key: string]: string | undefined }
 }) {
-  const resultId = searchParams.id
+  // Await the searchParams object before accessing its properties
+  const params = await searchParams
+  const resultId = params.id
 
   return (
     <div className="min-h-screen bg-[#F8F9FE] pb-12 pt-6">

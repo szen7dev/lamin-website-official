@@ -1,8 +1,8 @@
 "use client"
 
-import Image from "next/image"
-import { ChevronRight } from "lucide-react"
 import { Button } from "@/components/ui/Button"
+import { ChevronRight } from "lucide-react"
+import Image from "next/image"
 
 const coaches = [
   {
@@ -63,4 +63,3 @@ export default function CoachExperts() {
     </section>
   )
 }
-

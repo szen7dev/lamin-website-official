@@ -1,7 +1,8 @@
 "use client"
+import { Button } from "@/components/ui/Button"
+import { AlertCircle } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { useHeightMeasurementMutation } from "../hooks/useHeightMeasurementMutation"
-import { AlertCircle } from "lucide-react"
 import type { HeightMeasurementFormData } from "../types/heightMeasurementTypes"
 
 export default function HeightMeasurementForm() {
@@ -51,7 +52,9 @@ export default function HeightMeasurementForm() {
           id="name"
           disabled={isPending}
           placeholder="Nhập tên"
-          className={`w-full rounded-lg border ${errors.name ? "border-error-5" : "border-[#DEE2E6]"} bg-white px-4 py-3 text-sm text-grayscale-90 placeholder:text-[#ADB5BD] focus:border-[#1250DC] focus:outline-none focus:ring-1 focus:ring-[#1250DC] disabled:opacity-70`}
+          className={`w-full rounded-lg border ${
+            errors.name ? "border-error-5" : "border-[#DEE2E6]"
+          } bg-white px-4 py-3 text-sm text-grayscale-90 placeholder:text-[#ADB5BD] focus:border-[#1250DC] focus:outline-none focus:ring-1 focus:ring-[#1250DC] disabled:opacity-70`}
           {...register("name", { required: "Vui lòng nhập tên bé" })}
         />
         {errors.name && <p className="text-sm text-error-5">{errors.name.message}</p>}
@@ -68,7 +71,9 @@ export default function HeightMeasurementForm() {
           type="date"
           disabled={isPending}
           placeholder="Nhập ngày sinh"
-          className={`w-full rounded-lg border ${errors.birthDate ? "border-error-5" : "border-[#DEE2E6]"} bg-white px-4 py-3 text-sm text-grayscale-90 focus:border-[#1250DC] focus:outline-none focus:ring-1 focus:ring-[#1250DC] disabled:opacity-70`}
+          className={`w-full rounded-lg border ${
+            errors.birthDate ? "border-error-5" : "border-[#DEE2E6]"
+          } bg-white px-4 py-3 text-sm text-grayscale-90 focus:border-[#1250DC] focus:outline-none focus:ring-1 focus:ring-[#1250DC] disabled:opacity-70`}
           {...register("birthDate", { required: "Vui lòng chọn ngày sinh" })}
         />
         {errors.birthDate && <p className="text-sm text-error-5">{errors.birthDate.message}</p>}
@@ -85,7 +90,9 @@ export default function HeightMeasurementForm() {
           type="text"
           disabled={isPending}
           placeholder="Nhập cân nặng"
-          className={`w-full rounded-lg border ${errors.weight ? "border-error-5" : "border-[#DEE2E6]"} bg-white px-4 py-3 text-sm text-grayscale-90 placeholder:text-[#ADB5BD] focus:border-[#1250DC] focus:outline-none focus:ring-1 focus:ring-[#1250DC] disabled:opacity-70`}
+          className={`w-full rounded-lg border ${
+            errors.weight ? "border-error-5" : "border-[#DEE2E6]"
+          } bg-white px-4 py-3 text-sm text-grayscale-90 placeholder:text-[#ADB5BD] focus:border-[#1250DC] focus:outline-none focus:ring-1 focus:ring-[#1250DC] disabled:opacity-70`}
           {...register("weight", { required: "Vui lòng nhập cân nặng" })}
         />
         {errors.weight && <p className="text-sm text-error-5">{errors.weight.message}</p>}
@@ -102,7 +109,9 @@ export default function HeightMeasurementForm() {
           type="text"
           disabled={isPending}
           placeholder="Nhập chiều cao"
-          className={`w-full rounded-lg border ${errors.height ? "border-error-5" : "border-[#DEE2E6]"} bg-white px-4 py-3 text-sm text-grayscale-90 placeholder:text-[#ADB5BD] focus:border-[#1250DC] focus:outline-none focus:ring-1 focus:ring-[#1250DC] disabled:opacity-70`}
+          className={`w-full rounded-lg border ${
+            errors.height ? "border-error-5" : "border-[#DEE2E6]"
+          } bg-white px-4 py-3 text-sm text-grayscale-90 placeholder:text-[#ADB5BD] focus:border-[#1250DC] focus:outline-none focus:ring-1 focus:ring-[#1250DC] disabled:opacity-70`}
           {...register("height", { required: "Vui lòng nhập chiều cao" })}
         />
         {errors.height && <p className="text-sm text-error-5">{errors.height.message}</p>}
@@ -119,7 +128,9 @@ export default function HeightMeasurementForm() {
           type="tel"
           disabled={isPending}
           placeholder="Nhập SĐT"
-          className={`w-full rounded-lg border ${errors.phone ? "border-error-5" : "border-[#DEE2E6]"} bg-white px-4 py-3 text-sm text-grayscale-90 placeholder:text-[#ADB5BD] focus:border-[#1250DC] focus:outline-none focus:ring-1 focus:ring-[#1250DC] disabled:opacity-70`}
+          className={`w-full rounded-lg border ${
+            errors.phone ? "border-error-5" : "border-[#DEE2E6]"
+          } bg-white px-4 py-3 text-sm text-grayscale-90 placeholder:text-[#ADB5BD] focus:border-[#1250DC] focus:outline-none focus:ring-1 focus:ring-[#1250DC] disabled:opacity-70`}
           {...register("phone", {
             required: "Vui lòng nhập số điện thoại",
             pattern: {
@@ -164,15 +175,16 @@ export default function HeightMeasurementForm() {
 
       {/* Form Actions */}
       <div className="flex justify-end gap-3 pt-4">
-        <button
+        <Button
           type="button"
           onClick={handleReset}
           disabled={isPending}
+          variant="outline"
           className="rounded-lg bg-[#E9ECEF] px-6 py-2.5 text-sm font-medium text-[#212529] transition-colors hover:bg-[#DEE2E6] disabled:opacity-70"
         >
           Đặt lại
-        </button>
-        <button
+        </Button>
+        <Button
           type="submit"
           disabled={isPending}
           className="rounded-lg bg-[#1250DC] px-6 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[#1250DC]/90 disabled:opacity-70 flex items-center gap-2"
@@ -185,7 +197,14 @@ export default function HeightMeasurementForm() {
                 fill="none"
                 viewBox="0 0 24 24"
               >
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                ></circle>
                 <path
                   className="opacity-75"
                   fill="currentColor"
@@ -197,9 +216,8 @@ export default function HeightMeasurementForm() {
           ) : (
             "Gửi đi"
           )}
-        </button>
+        </Button>
       </div>
     </form>
   )
 }
-

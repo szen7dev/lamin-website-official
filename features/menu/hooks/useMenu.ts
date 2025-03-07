@@ -1,45 +1,34 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useQueries } from "@tanstack/react-query"
 import { menuService } from "../services/menuServiceFactory"
 import type { MenuItem, MenuCategory, BestSellingProduct } from "../types/menuTypes"
 
 export function useMenu() {
-  const [menuItems, setMenuItems] = useState<MenuItem[]>([])
-  const [categories, setCategories] = useState<MenuCategory[]>([])
-  const [bestSellingProducts, setBestSellingProducts] = useState<BestSellingProduct[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState<Error | null>(null)
+  const results = useQueries({
+    queries: [
+      {
+        queryKey: ["menuItems"],
+        queryFn: () => menuService.getMenuItems(),
+      },
+      {
+        queryKey: ["menuCategories"],
+        queryFn: () => menuService.getCategories(),
+      },
+      {
+        queryKey: ["menuBestSellingProducts"],
+        queryFn: () => menuService.getBestSellingProducts(),
+      },
+    ],
+  })
 
-  useEffect(() => {
-    const fetchMenuData = async () => {
-      setIsLoading(true)
-      setError(null)
-
-      try {
-        const [menuItemsData, categoriesData, productsData] = await Promise.all([
-          menuService.getMenuItems(),
-          menuService.getCategories(),
-          menuService.getBestSellingProducts(),
-        ])
-
-        setMenuItems(menuItemsData)
-        setCategories(categoriesData)
-        setBestSellingProducts(productsData)
-      } catch (err) {
-        setError(err instanceof Error ? err : new Error("An error occurred"))
-      } finally {
-        setIsLoading(false)
-      }
-    }
-
-    fetchMenuData()
-  }, [])
+  const isLoading = results.some((result) => result.isLoading)
+  const error = results.find((result) => result.error)?.error || null
 
   return {
-    menuItems,
-    categories,
-    bestSellingProducts,
+    menuItems: (results[0].data as MenuItem[]) || [],
+    categories: (results[1].data as MenuCategory[]) || [],
+    bestSellingProducts: (results[2].data as BestSellingProduct[]) || [],
     isLoading,
     error,
   }

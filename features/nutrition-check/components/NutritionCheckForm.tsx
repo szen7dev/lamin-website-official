@@ -1,6 +1,7 @@
 "use client"
-import { useForm, Controller } from "react-hook-form"
+import { Button } from "@/components/ui/Button"
 import { AlertCircle } from "lucide-react"
+import { Controller, useForm } from "react-hook-form"
 import { useNutritionCheckMutation } from "../hooks/useNutritionCheckMutation"
 import type { NutritionCheckFormData } from "../types/nutritionCheckTypes"
 
@@ -151,15 +152,16 @@ export default function NutritionCheckForm() {
 
         {/* Form Actions */}
         <div className="flex justify-end gap-3 px-4 py-3">
-          <button
+          <Button
             type="button"
             onClick={handleReset}
             disabled={isPending}
-            className="rounded bg-white px-6 py-2 text-sm font-medium text-[#1250DC] border border-[#1250DC] hover:bg-[#1250DC]/5 disabled:opacity-70"
+            variant="outline"
+            className="rounded border border-[#1250DC] px-6 py-2 text-sm font-medium text-[#1250DC] hover:bg-[#1250DC]/5 disabled:opacity-70"
           >
             Đặt lại
-          </button>
-          <button
+          </Button>
+          <Button
             type="submit"
             disabled={isPending}
             className="rounded bg-[#1250DC] px-6 py-2 text-sm font-medium text-white hover:bg-[#1250DC]/90 disabled:opacity-70 flex items-center gap-2"
@@ -184,7 +186,7 @@ export default function NutritionCheckForm() {
             ) : (
               "Gửi đi"
             )}
-          </button>
+          </Button>
         </div>
       </form>
     </div>

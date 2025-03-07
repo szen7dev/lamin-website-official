@@ -1,47 +1,36 @@
 "use client"
 
+import { useQuery } from "@tanstack/react-query"
+import { productApi } from "@/services/api/productApi" // Assuming you have this
 import { articleApi } from "@/services/api/articleApi" // Assuming you have this
 import { bannerApi } from "@/services/api/bannerApi" // Assuming you have this
-import { productApi } from "@/services/api/productApi" // Assuming you have this
-import { useEffect, useState } from "react"
 
 export function useHomePageData() {
-  const [bestSellingProducts, setBestSellingProducts] = useState([])
-  const [featuredArticles, setFeaturedArticles] = useState([])
-  const [banners, setBanners] = useState([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState(null)
+  const bestSellingProductsQuery = useQuery({
+    queryKey: ["bestSellingProducts"],
+    queryFn: () => productApi.getBestSellingProducts(),
+  })
 
-  useEffect(() => {
-    const fetchHomePageData = async () => {
-      setIsLoading(true)
-      setError(null)
+  const featuredArticlesQuery = useQuery({
+    queryKey: ["featuredArticles"],
+    queryFn: () => articleApi.getFeaturedArticles(),
+  })
 
-      try {
-        const [productsData, articlesData, bannersData] = await Promise.all([
-          productApi.getBestSellingProducts(),
-          articleApi.getFeaturedArticles(),
-          bannerApi.getHomeBanners(),
-        ])
+  const bannersQuery = useQuery({
+    queryKey: ["homeBanners"],
+    queryFn: () => bannerApi.getHomeBanners(),
+  })
 
-        setBestSellingProducts(productsData)
-        setFeaturedArticles(articlesData)
-        setBanners(bannersData)
-      } catch (err) {
-        setError(err)
-      } finally {
-        setIsLoading(false)
-      }
-    }
+  const isLoading = bestSellingProductsQuery.isLoading || featuredArticlesQuery.isLoading || bannersQuery.isLoading
 
-    fetchHomePageData()
-  }, [])
+  const error = bestSellingProductsQuery.error || featuredArticlesQuery.error || bannersQuery.error
 
   return {
-    bestSellingProducts,
-    featuredArticles,
-    banners,
+    bestSellingProducts: bestSellingProductsQuery.data || [],
+    featuredArticles: featuredArticlesQuery.data || [],
+    banners: bannersQuery.data || [],
     isLoading,
     error,
   }
 }
+

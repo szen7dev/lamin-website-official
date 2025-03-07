@@ -1,10 +1,10 @@
 "use client"
 
-import Image from "next/image"
-import { Swiper, SwiperSlide } from "swiper/react"
-import { Navigation, Grid } from "swiper/modules"
 import { Button } from "@/components/ui/Button"
 import { ChevronRight, Flame } from "lucide-react"
+import Image from "next/image"
+import { Grid, Navigation } from "swiper/modules"
+import { Swiper, SwiperSlide } from "swiper/react"
 
 // Import Swiper styles
 import "swiper/css"
@@ -88,14 +88,21 @@ export default function DealSlider() {
             <div className="rounded-lg bg-white p-4">
               {/* Product Image with Discount Tag */}
               <div className="relative mb-4 aspect-square">
-                <Image src={deal.image || "/placeholder.svg"} alt={deal.name} fill className="object-contain" />
+                <Image
+                  src={deal.image || "/placeholder.svg"}
+                  alt={deal.name}
+                  fill
+                  className="object-contain"
+                />
                 <span className="absolute left-2 top-2 rounded bg-error-5 px-2 py-1 text-xs font-bold text-white">
                   {deal.discount}
                 </span>
               </div>
 
               {/* Product Info */}
-              <h3 className="mb-2 line-clamp-2 min-h-[2.5rem] text-sm font-medium text-grayscale-90">{deal.name}</h3>
+              <h3 className="mb-2 line-clamp-2 min-h-[2.5rem] text-sm font-medium text-grayscale-90">
+                {deal.name}
+              </h3>
 
               {/* Price Info */}
               <div className="mb-2">
@@ -123,7 +130,9 @@ export default function DealSlider() {
               )}
 
               {/* Buy Button */}
-              <Button className="w-full bg-primary-5 text-white hover:bg-primary-20">Chọn Mua</Button>
+              <Button className="w-full bg-primary-5 text-white hover:bg-primary-20">
+                Chọn Mua
+              </Button>
             </div>
           </SwiperSlide>
         ))}
@@ -131,4 +140,3 @@ export default function DealSlider() {
     </div>
   )
 }
-
