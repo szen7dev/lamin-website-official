@@ -230,7 +230,8 @@ module.exports = {
         24: "0 24px 24px 0 #00000024",
       },
       fontFamily: {
-        sans: ["Inter", "sans-serif"],
+        sans: ["var(--font-sans)"],
+        mono: ["var(--font-mono)"],
       },
       keyframes: {
         "accordion-down": {

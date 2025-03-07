@@ -1,8 +1,7 @@
-import { Inter } from "next/font/google"
 import type React from "react"
 import "../styles/globals.css"
-
-const inter = Inter({ subsets: ["latin"] })
+import clsx from "clsx"
+import { fontSans } from "@/config/fonts"
 
 export const metadata = {
   title: "Elena Pharmacy",
@@ -12,7 +11,9 @@ export const metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={clsx("bg-background font-sans antialiased", fontSans.variable)}>
+        {children}
+      </body>
     </html>
   )
 }
