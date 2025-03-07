@@ -16,12 +16,14 @@ export const metadata: Metadata = {
 
 export default function HomePage() {
   return (
-    <div className="flex flex-col min-h-screen bg-[#f1f4fd]">
+    <div className="min-h-screen bg-[#f1f4fd]">
+      {/* Hero Section with Banners */}
+      {/* <SimpleBanner /> */}
       <Image
         src="/images/Banner 1.png"
         alt="Hero Banner"
-        width={1920}
-        height={500}
+        width={1200}
+        height={400}
         className="w-full"
       />
 

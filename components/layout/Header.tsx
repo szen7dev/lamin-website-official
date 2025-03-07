@@ -33,7 +33,7 @@ export function Header() {
         <div className="flex justify-between gap-8">
           <div className="flex flex-col grow justify-between h-44">
             <div className="flex h-max items-center justify-between">
-              <div className="flex justify-items-start gap-4">
+              <div className="flex justify-items-start gap-4 items-end">
                 {/* Logo */}
                 <Link href="/" className="flex items-end gap-2">
                   <Image
@@ -50,7 +50,7 @@ export function Header() {
                 </Link>
 
                 {/* Contact and Download */}
-                <div className="flex items-end gap-4 ml-4">
+                <div className="flex items-center gap-4 ml-4">
                   <div className="flex items-end gap-2">
                     <Phone className="h-5 w-5 text-white" />
                     <div className="text-white">
@@ -60,10 +60,12 @@ export function Header() {
                   </div>
                   <div className="h-5">
                     <Separator className="h-full bg-white" orientation="vertical" />
+                    <Separator className="h-full bg-white" orientation="vertical" />
                   </div>
-                  <div className="flex items-end gap-2 rounded-full text-white px-0 py-0">
+                  <div className="flex items-end gap-2 text-white">
                     <Smartphone className="h-5 w-5" />
                     <span>Tải ứng dụng</span>
+                  </div>
                   </div>
                 </div>
               </div>
@@ -113,7 +115,6 @@ export function Header() {
             <div className=" flex justify-between bg-white w-full h-full rounded-b-xl"></div>
           </div>
         </div>
-      </div>
       {/* Main Navigation */}
       <MegaMenu />
     </header>
