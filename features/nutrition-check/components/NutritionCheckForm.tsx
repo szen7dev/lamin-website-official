@@ -42,7 +42,9 @@ export default function NutritionCheckForm() {
   return (
     <div className="space-y-4">
       {/* Header */}
-      <div className="bg-[#1250DC] text-white px-4 py-3 text-[15px] font-medium">MÔ TẢ THÔNG TIN</div>
+      <div className="bg-[#1250DC] text-white px-4 py-3 text-[15px] font-medium">
+        MÔ TẢ THÔNG TIN
+      </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         {/* Error message */}
@@ -62,7 +64,9 @@ export default function NutritionCheckForm() {
             id="name"
             disabled={isPending}
             placeholder="Nguyễn Văn A"
-            className={`w-full border-b ${errors.name ? "border-error-5" : "border-[#DEE2E6]"} bg-transparent px-0 py-2 text-sm text-grayscale-90 focus:border-[#1250DC] focus:outline-none disabled:opacity-70`}
+            className={`w-full border-b ${
+              errors.name ? "border-error-5" : "border-[#DEE2E6]"
+            } bg-transparent px-0 py-2 text-sm text-grayscale-90 focus:border-[#1250DC] focus:outline-none disabled:opacity-70`}
             {...register("name", { required: "Vui lòng nhập họ và tên" })}
           />
           {errors.name && <p className="mt-1 text-xs text-error-5">{errors.name.message}</p>}
@@ -77,10 +81,14 @@ export default function NutritionCheckForm() {
             id="birthDate"
             type="date"
             disabled={isPending}
-            className={`w-full border-b ${errors.birthDate ? "border-error-5" : "border-[#DEE2E6]"} bg-transparent px-0 py-2 text-sm text-grayscale-90 focus:border-[#1250DC] focus:outline-none disabled:opacity-70`}
+            className={`w-full border-b ${
+              errors.birthDate ? "border-error-5" : "border-[#DEE2E6]"
+            } bg-transparent px-0 py-2 text-sm text-grayscale-90 focus:border-[#1250DC] focus:outline-none disabled:opacity-70`}
             {...register("birthDate", { required: "Vui lòng chọn ngày sinh" })}
           />
-          {errors.birthDate && <p className="mt-1 text-xs text-error-5">{errors.birthDate.message}</p>}
+          {errors.birthDate && (
+            <p className="mt-1 text-xs text-error-5">{errors.birthDate.message}</p>
+          )}
         </div>
 
         {/* Regular Foods */}
@@ -116,7 +124,9 @@ export default function NutritionCheckForm() {
                 </>
               )}
             />
-            {errors.regularFoods && <p className="mt-1 text-xs text-error-5">{errors.regularFoods.message}</p>}
+            {errors.regularFoods && (
+              <p className="mt-1 text-xs text-error-5">{errors.regularFoods.message}</p>
+            )}
           </div>
         </div>
 
@@ -147,7 +157,9 @@ export default function NutritionCheckForm() {
               <span className="text-sm text-grayscale-90">Chưa biết</span>
             </label>
           </div>
-          {errors.knownProduct && <p className="mt-1 text-xs text-error-5">{errors.knownProduct.message}</p>}
+          {errors.knownProduct && (
+            <p className="mt-1 text-xs text-error-5">{errors.knownProduct.message}</p>
+          )}
         </div>
 
         {/* Form Actions */}
@@ -174,7 +186,14 @@ export default function NutritionCheckForm() {
                   fill="none"
                   viewBox="0 0 24 24"
                 >
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
                   <path
                     className="opacity-75"
                     fill="currentColor"
@@ -192,4 +211,3 @@ export default function NutritionCheckForm() {
     </div>
   )
 }
-

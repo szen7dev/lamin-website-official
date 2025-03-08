@@ -37,7 +37,9 @@ export default function NutritionCheckResult({ resultId }: NutritionCheckResultP
           <CheckCircle2 className="h-5 w-5 text-[#38CB1C]" />
           <div>
             <h3 className="font-medium">KẾT QUẢ ĐÃ ĐƯỢC GHI NHẬN</h3>
-            <p className="text-sm text-white/90">Cảm ơn bạn, kết quả đã được trả về Zalo OA cho bạn</p>
+            <p className="text-sm text-white/90">
+              Cảm ơn bạn, kết quả đã được trả về Zalo OA cho bạn
+            </p>
           </div>
         </div>
       </div>
@@ -109,4 +111,3 @@ export default function NutritionCheckResult({ resultId }: NutritionCheckResultP
     </div>
   )
 }
-

@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/Button"
-import MegaMenu from "@/features/homepage/components/MegaMenu"
-import SearchBar from "@/features/homepage/components/SearchBar"
+import MegaMenu from "@/features/menu/components/MegaMenu"
+import SearchBar from "@/features/search/components/SearchBar"
 import { Download, Phone, ShoppingCart, User } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
