@@ -1,8 +1,8 @@
-"use client"
+'use client'
 
-import Image from "next/image"
-import Link from "next/link"
-import { Search, ChevronRight } from "lucide-react"
+import Image from 'next/image'
+import Link from 'next/link'
+import { Search, ChevronRight } from 'lucide-react'
 
 interface SearchResult {
   id: string
@@ -39,15 +39,14 @@ export default function SearchSuggestions({
 
       {/* Search Results */}
       <div className="max-h-[400px] overflow-y-auto">
-        {results.map((result) => (
+        {results.map(result => (
           <Link
             key={result.id}
             href={`/products/${result.id}`}
             className="flex items-center gap-4 px-4 py-3 transition-colors hover:bg-grayscale-5 decoration-transparent"
-            onClick={onClose}
-          >
+            onClick={onClose}>
             <Image
-              src={result.image || "/placeholder.svg"}
+              src={result.image || '/placeholder.svg'}
               alt={result.name}
               width={48}
               height={48}
@@ -70,8 +69,7 @@ export default function SearchSuggestions({
       <Link
         href={`/search?q=${encodeURIComponent(query)}`}
         className="flex items-center justify-center gap-1 border-t border-grayscale-20 p-3 text-sm text-primary-5 decoration-transparent"
-        onClick={onClose}
-      >
+        onClick={onClose}>
         Xem tất cả
         <ChevronRight className="h-4 w-4" />
       </Link>

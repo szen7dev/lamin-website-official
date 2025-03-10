@@ -1,6 +1,6 @@
-import Link from "next/link"
-import Image from "next/image"
-import { cn } from "@/utils/helpers"
+import Link from 'next/link'
+import Image from 'next/image'
+import { cn } from '@/utils/helpers'
 
 interface MegaMenuItemLinkProps {
   href: string
@@ -23,16 +23,15 @@ export default function MegaMenuItemLink({
     <Link
       href={href}
       className={cn(
-        "flex items-center gap-3 px-4 py-3 text-sm text-grayscale-90 transition-colors hover:bg-[#F1F4FD] decoration-transparent",
-        isActive && "bg-[#F1F4FD] rounded-tl-[8px] rounded-bl-[8px]",
-        className
+        'flex items-center gap-3 px-4 py-3 text-sm text-grayscale-90 transition-colors hover:bg-[#F1F4FD] decoration-transparent',
+        isActive && 'bg-[#F1F4FD] rounded-tl-[8px] rounded-bl-[8px]',
+        className,
       )}
-      onMouseEnter={onMouseEnter}
-    >
+      onMouseEnter={onMouseEnter}>
       {icon && (
         <div className="flex h-5 w-5 items-center justify-center">
           <Image
-            src={icon || "/placeholder.svg"}
+            src={icon || '/placeholder.svg'}
             alt=""
             width={20}
             height={20}

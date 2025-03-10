@@ -1,70 +1,70 @@
-"use client"
+'use client'
 
-import Image from "next/image"
-import { Swiper, SwiperSlide } from "swiper/react"
-import { Navigation } from "swiper/modules"
-import { Star, ChevronRight } from "lucide-react"
-import { Button } from "@/components/ui/Button"
+import Image from 'next/image'
+import { Swiper, SwiperSlide } from 'swiper/react'
+import { Navigation } from 'swiper/modules'
+import { Star, ChevronRight } from 'lucide-react'
+import { Button } from '@/components/ui/Button'
 
 // Import Swiper styles
-import "swiper/css"
-import "swiper/css/navigation"
+import 'swiper/css'
+import 'swiper/css/navigation'
 
 const stores = [
   {
     id: 1,
-    name: "Cửa hàng 1",
+    name: 'Cửa hàng 1',
     rating: 5.0,
     reviews: 80,
-    image: "/placeholder.svg?height=48&width=48",
+    image: '/placeholder.svg?height=48&width=48',
   },
   {
     id: 2,
-    name: "Cửa hàng 2",
+    name: 'Cửa hàng 2',
     rating: 5.0,
     reviews: 75,
-    image: "/placeholder.svg?height=48&width=48",
+    image: '/placeholder.svg?height=48&width=48',
   },
   {
     id: 3,
-    name: "Cửa hàng 3",
+    name: 'Cửa hàng 3',
     rating: 5.0,
     reviews: 62,
-    image: "/placeholder.svg?height=48&width=48",
+    image: '/placeholder.svg?height=48&width=48',
   },
   {
     id: 4,
-    name: "Cửa hàng 4",
+    name: 'Cửa hàng 4',
     rating: 5.0,
     reviews: 88,
-    image: "/placeholder.svg?height=48&width=48",
+    image: '/placeholder.svg?height=48&width=48',
   },
 ]
 
 const benefits = [
   {
     id: 1,
-    icon: "shield",
-    title: "Thuốc chính hãng",
-    description: "Đa dạng và chuyên sâu",
+    icon: 'shield',
+    title: 'Thuốc chính hãng',
+    description: 'Đa dạng và chuyên sâu',
   },
   {
     id: 2,
-    icon: "refresh",
-    title: "Đổi trả trong 30 ngày",
-    description: "Kể từ ngày mua hàng",
+    icon: 'refresh',
+    title: 'Đổi trả trong 30 ngày',
+    description: 'Kể từ ngày mua hàng',
   },
   {
     id: 3,
-    icon: "check-circle",
-    title: "Cam kết 100%",
-    description: "Chất lượng sản phẩm",
+    icon: 'check-circle',
+    title: 'Cam kết 100%',
+    description: 'Chất lượng sản phẩm',
   },
   {
     id: 4,
-    icon: "truck",
-    title: "Miễn phí vận chuyển",
-    description: "Theo chính sách giao hàng",
+    icon: 'truck',
+    title: 'Miễn phí vận chuyển',
+    description: 'Theo chính sách giao hàng',
   },
 ]
 
@@ -82,8 +82,7 @@ export default function TrustedStores() {
           </div>
           <Button
             variant="link"
-            className="flex rounded-full bg-white items-center gap-1 text-primary-5 hover:text-white/90 text-sm font-normal"
-          >
+            className="flex rounded-full bg-white items-center gap-1 text-primary-5 hover:text-white/90 text-sm font-normal">
             Xem tất cả
             <ChevronRight className="h-4 w-4" />
           </Button>
@@ -105,13 +104,12 @@ export default function TrustedStores() {
               slidesPerView: 4,
             },
           }}
-          className="trusted-stores-slider"
-        >
-          {stores.map((store) => (
+          className="trusted-stores-slider">
+          {stores.map(store => (
             <SwiperSlide key={store.id}>
               <div className="flex items-center gap-4 rounded-xl bg-white p-4">
                 <Image
-                  src={store.image || "/placeholder.svg"}
+                  src={store.image || '/placeholder.svg'}
                   alt={store.name}
                   width={48}
                   height={48}
@@ -135,7 +133,7 @@ export default function TrustedStores() {
 
       {/* Benefits Section */}
       <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {benefits.map((benefit) => (
+        {benefits.map(benefit => (
           <div key={benefit.id} className="flex items-center gap-4">
             <div className="rounded-full bg-primary-5/10 p-3">
               <Image

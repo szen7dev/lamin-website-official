@@ -1,28 +1,21 @@
-import Link from "next/link"
-import Image from "next/image"
-import { ShoppingCart, Phone, Smartphone, CircleUser } from "lucide-react"
-import { Button } from "@/components/ui/Button"
-import SearchBar from "@/features/homepage/components/SearchBar"
-import MegaMenu from "@/features/homepage/components/MegaMenu"
-import { Separator } from "../ui/separator"
+import Link from 'next/link'
+import Image from 'next/image'
+import { ShoppingCart, Phone, Smartphone, CircleUser } from 'lucide-react'
+
+import { Separator } from '../ui/separator'
+
+import { Button } from '@/components/ui/Button'
+import SearchBar from '@/features/homepage/components/SearchBar'
+import MegaMenu from '@/features/homepage/components/MegaMenu'
 
 const popularKeywords = [
-  { label: "Thuốc nhỏ mắt", href: "#" },
-  { label: "Men vi sinh", href: "#" },
-  { label: "Bột hòa tan", href: "#" },
-  { label: "Omega 3", href: "#" },
-  { label: "Siro ho", href: "#" },
-  { label: "Canxi", href: "#" },
-  { label: "Kẽm", href: "#" },
-]
-
-const mainMenu = [
-  { label: "Sản phẩm", href: "/products", hasDropdown: true },
-  { label: "Giải Pháp", href: "/solutions" },
-  { label: "Đo Cao", href: "/height-measurement" },
-  { label: "Kiểm Tra Dinh Dưỡng", href: "/nutrition-check" },
-  { label: "Hệ Thống Cửa Hàng", href: "/trusted-shops" },
-  { label: "Liên Hệ", href: "/contact" },
+  { label: 'Thuốc nhỏ mắt', href: '#' },
+  { label: 'Men vi sinh', href: '#' },
+  { label: 'Bột hòa tan', href: '#' },
+  { label: 'Omega 3', href: '#' },
+  { label: 'Siro ho', href: '#' },
+  { label: 'Canxi', href: '#' },
+  { label: 'Kẽm', href: '#' },
 ]
 
 export function Header() {
@@ -35,13 +28,13 @@ export function Header() {
             <div className="flex h-max items-center justify-between">
               <div className="flex justify-items-start gap-4">
                 {/* Logo */}
-                <Link href="/" className="flex items-end gap-2">
+                <Link className="flex items-end gap-2" href="/">
                   <Image
-                    src="https://images.glints.com/unsafe/glints-dashboard.oss-ap-southeast-1.aliyuncs.com/company-logo/fd3ef04e572c6436a8580539e7555fd0.jpg"
                     alt="FPT Retail"
-                    width={40}
-                    height={40}
                     className="h-10 w-auto"
+                    height={40}
+                    src="https://images.glints.com/unsafe/glints-dashboard.oss-ap-southeast-1.aliyuncs.com/company-logo/fd3ef04e572c6436a8580539e7555fd0.jpg"
+                    width={40}
                   />
                   <div className="text-white">
                     <div className="text-xs font-medium">NHÀ THUỐC</div>
@@ -75,7 +68,7 @@ export function Header() {
                   Đăng Nhập
                 </Button>
                 <Button className="rounded-full bg-primary-5 px-6 text-white hover:bg-primary-5/90">
-                  <ShoppingCart fill="white" className="mr-2 h-5 w-5" />
+                  <ShoppingCart className="mr-2 h-5 w-5" fill="white" />
                   Giỏ Hàng
                 </Button>
               </div>
@@ -92,12 +85,11 @@ export function Header() {
             {/* Popular Keywords */}
             <div className="flex flex-wrap gap-x-4 gap-y-1">
               <span className="text-sm text-white/80">Từ khóa phổ biến:</span>
-              {popularKeywords.map((keyword) => (
+              {popularKeywords.map(keyword => (
                 <Link
                   key={keyword.label}
-                  href={keyword.href}
                   className="text-sm text-white decoration-white underline decoration-1 underline-offset-4 hover:text-white/90"
-                >
+                  href={keyword.href}>
                   {keyword.label}
                 </Link>
               ))}
@@ -110,7 +102,7 @@ export function Header() {
               <div className="text-sm">- Quét Mã QR -</div>
               <div className="text-sm">Tặng Voucher 1tr</div>
             </div>
-            <div className=" flex justify-between bg-white w-full h-full rounded-b-xl"></div>
+            <div className=" flex justify-between bg-white w-full h-full rounded-b-xl" />
           </div>
         </div>
       </div>

@@ -1,5 +1,5 @@
-import type { Metadata } from "next"
-import { siteConfig } from "@/config/siteConfig"
+import type { Metadata } from 'next'
+import { siteConfig } from '@/config/siteConfig'
 
 interface UseSEOProps {
   title?: string

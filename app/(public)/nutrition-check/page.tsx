@@ -1,10 +1,11 @@
-import type { Metadata } from "next"
-import { Breadcrumb } from "@/components/ui/Breadcrumb"
-import NutritionCheckForm from "@/features/nutrition-check/components/NutritionCheckForm"
+import type { Metadata } from 'next'
+
+import { Breadcrumb } from '@/components/ui/Breadcrumb'
+import NutritionCheckForm from '@/features/nutrition-check/components/NutritionCheckForm'
 
 export const metadata: Metadata = {
-  title: "Kiểm Tra Dinh Dưỡng - Elena Pharmacy",
-  description: "Kiểm tra thói quen ăn uống và nhận tư vấn dinh dưỡng",
+  title: 'Kiểm Tra Dinh Dưỡng - Elena Pharmacy',
+  description: 'Kiểm tra thói quen ăn uống và nhận tư vấn dinh dưỡng',
 }
 
 // Fix giao diện để trông giống figma
@@ -14,7 +15,7 @@ export default function NutritionCheckPage() {
     <div className="min-h-screen bg-[#F8F9FE] pb-12 pt-6">
       <div className="container mx-auto px-4">
         {/* Breadcrumb */}
-        <Breadcrumb items={[{ label: "Trang Chủ", href: "/" }, { label: "Kiểm Tra Dinh Dưỡng" }]} />
+        <Breadcrumb items={[{ label: 'Trang Chủ', href: '/' }, { label: 'Kiểm Tra Dinh Dưỡng' }]} />
 
         {/* Main Content */}
         <div className="mx-auto max-w-xl">

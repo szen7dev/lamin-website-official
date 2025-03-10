@@ -1,11 +1,11 @@
-"use client"
+'use client'
 
-import type React from "react"
+import type React from 'react'
 
-import { useState } from "react"
-import Link from "next/link"
-import { ChevronDown } from "lucide-react"
-import { cn } from "@/utils/helpers"
+import { useState } from 'react'
+import Link from 'next/link'
+import { ChevronDown } from 'lucide-react'
+import { cn } from '@/utils/helpers'
 
 interface MegaMenuItemProps {
   label: string
@@ -28,15 +28,13 @@ export default function MegaMenuItem({
     <div
       className="relative"
       onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
+      onMouseLeave={() => setIsHovered(false)}>
       <Link
         href={href}
         className={cn(
-          "flex items-center gap-1 text-xl font-medium text-black hover:text-primary-40 decoration-transparent",
-          isActive && "text-white/90"
-        )}
-      >
+          'flex items-center gap-1 text-xl font-medium text-black hover:text-primary-40 decoration-transparent',
+          isActive && 'text-white/90',
+        )}>
         {label}
         {hasDropdown && <ChevronDown className="h-4 w-4" />}
       </Link>

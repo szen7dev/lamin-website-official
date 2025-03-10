@@ -1,18 +1,18 @@
-"use client"
+'use client'
 
-import { CheckCircle2 } from "lucide-react"
-import { useNutritionCheckResult } from "../hooks/useNutritionCheckMutation"
+import { CheckCircle2 } from 'lucide-react'
+import { useNutritionCheckResult } from '../hooks/useNutritionCheckMutation'
 
 interface NutritionCheckResultProps {
   resultId?: string
 }
 
 const foodLabels: Record<string, string> = {
-  egg: "Trứng",
-  chicken: "Thịt gà",
-  beef: "Thịt bò",
-  pork: "Thịt heo",
-  vegetables: "Rau xanh",
+  egg: 'Trứng',
+  chicken: 'Thịt gà',
+  beef: 'Thịt bò',
+  pork: 'Thịt heo',
+  vegetables: 'Rau xanh',
 }
 
 export default function NutritionCheckResult({ resultId }: NutritionCheckResultProps) {
@@ -36,7 +36,9 @@ export default function NutritionCheckResult({ resultId }: NutritionCheckResultP
           <CheckCircle2 className="h-5 w-5 text-[#38CB1C]" />
           <div>
             <h3 className="font-medium">KẾT QUẢ ĐÃ ĐƯỢC GHI NHẬN</h3>
-            <p className="text-sm text-white/90">Cảm ơn bạn, kết quả đã được trả về Zalo OA cho bạn</p>
+            <p className="text-sm text-white/90">
+              Cảm ơn bạn, kết quả đã được trả về Zalo OA cho bạn
+            </p>
           </div>
         </div>
       </div>
@@ -73,7 +75,7 @@ export default function NutritionCheckResult({ resultId }: NutritionCheckResultP
           </label>
           <input
             type="text"
-            value={result.regularFoods.map((food) => foodLabels[food]).join(", ")}
+            value={result.regularFoods.map(food => foodLabels[food]).join(', ')}
             readOnly
             className="w-full rounded border border-[#DEE2E6] bg-white px-3 py-2 text-sm text-grayscale-90"
           />
@@ -85,7 +87,7 @@ export default function NutritionCheckResult({ resultId }: NutritionCheckResultP
           </label>
           <input
             type="text"
-            value={result.knownProduct === "yes" ? "Đã biết" : "Chưa biết"}
+            value={result.knownProduct === 'yes' ? 'Đã biết' : 'Chưa biết'}
             readOnly
             className="w-full rounded border border-[#DEE2E6] bg-white px-3 py-2 text-sm text-grayscale-90"
           />
@@ -96,8 +98,7 @@ export default function NutritionCheckResult({ resultId }: NutritionCheckResultP
       <div className="flex justify-end gap-3">
         <button
           onClick={() => window.history.back()}
-          className="rounded border border-[#1250DC] px-6 py-2 text-sm font-medium text-[#1250DC] hover:bg-[#1250DC]/5"
-        >
+          className="rounded border border-[#1250DC] px-6 py-2 text-sm font-medium text-[#1250DC] hover:bg-[#1250DC]/5">
           Quay lại
         </button>
         <button className="rounded bg-[#1250DC] px-6 py-2 text-sm font-medium text-white hover:bg-[#1250DC]/90">
@@ -107,4 +108,3 @@ export default function NutritionCheckResult({ resultId }: NutritionCheckResultP
     </div>
   )
 }
-

@@ -1,8 +1,8 @@
-import api from "./api"
+import api from './api'
 
 export const trustedShopService = {
   getTrustedShops: async (params?: any) => {
-    const response = await api.get("/trusted-shops", { params })
+    const response = await api.get('/trusted-shops', { params })
     return response.data
   },
   getTrustedShopBySlug: async (slug: string) => {
@@ -10,4 +10,3 @@ export const trustedShopService = {
     return response.data
   },
 }
-

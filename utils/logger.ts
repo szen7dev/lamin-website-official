@@ -1,4 +1,4 @@
-type LogLevel = "info" | "warn" | "error" | "debug"
+type LogLevel = 'info' | 'warn' | 'error' | 'debug'
 
 const logger = {
   info: (message: string, ...args: any[]) => {
@@ -11,11 +11,10 @@ const logger = {
     console.error(`[ERROR] ${message}`, ...args)
   },
   debug: (message: string, ...args: any[]) => {
-    if (process.env.NODE_ENV !== "production") {
+    if (process.env.NODE_ENV !== 'production') {
       console.debug(`[DEBUG] ${message}`, ...args)
     }
   },
 }
 
 export default logger
-

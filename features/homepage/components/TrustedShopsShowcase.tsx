@@ -1,36 +1,36 @@
-import Image from "next/image"
-import { Button } from "@/components/ui/Button"
+import Image from 'next/image'
+import { Button } from '@/components/ui/Button'
 
 const trustedShops = [
   {
     id: 1,
-    image: "/placeholder.svg?height=80&width=160",
-    name: "Nhà thuốc Elena 1",
+    image: '/placeholder.svg?height=80&width=160',
+    name: 'Nhà thuốc Elena 1',
   },
   {
     id: 2,
-    image: "/placeholder.svg?height=80&width=160",
-    name: "Nhà thuốc Elena 2",
+    image: '/placeholder.svg?height=80&width=160',
+    name: 'Nhà thuốc Elena 2',
   },
   {
     id: 3,
-    image: "/placeholder.svg?height=80&width=160",
-    name: "Nhà thuốc Elena 3",
+    image: '/placeholder.svg?height=80&width=160',
+    name: 'Nhà thuốc Elena 3',
   },
   {
     id: 4,
-    image: "/placeholder.svg?height=80&width=160",
-    name: "Nhà thuốc Elena 4",
+    image: '/placeholder.svg?height=80&width=160',
+    name: 'Nhà thuốc Elena 4',
   },
   {
     id: 5,
-    image: "/placeholder.svg?height=80&width=160",
-    name: "Nhà thuốc Elena 5",
+    image: '/placeholder.svg?height=80&width=160',
+    name: 'Nhà thuốc Elena 5',
   },
   {
     id: 6,
-    image: "/placeholder.svg?height=80&width=160",
-    name: "Nhà thuốc Elena 6",
+    image: '/placeholder.svg?height=80&width=160',
+    name: 'Nhà thuốc Elena 6',
   },
 ]
 
@@ -44,13 +44,12 @@ export default function TrustedShopsShowcase() {
         </Button>
       </div>
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
-        {trustedShops.map((shop) => (
+        {trustedShops.map(shop => (
           <div
             key={shop.id}
-            className="flex items-center justify-center rounded-lg border border-grayscale-20 bg-white p-4 transition-shadow hover:shadow-sm"
-          >
+            className="flex items-center justify-center rounded-lg border border-grayscale-20 bg-white p-4 transition-shadow hover:shadow-sm">
             <Image
-              src={shop.image || "/placeholder.svg"}
+              src={shop.image || '/placeholder.svg'}
               alt={shop.name}
               width={160}
               height={80}
@@ -62,4 +61,3 @@ export default function TrustedShopsShowcase() {
     </section>
   )
 }
-

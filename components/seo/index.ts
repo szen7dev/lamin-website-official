@@ -1,3 +1,2 @@
-export * from "./Metadata"
-export * from "./SchemaMarkup"
-
+export * from './Metadata'
+export * from './SchemaMarkup'

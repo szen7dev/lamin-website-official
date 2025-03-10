@@ -1,36 +1,37 @@
-import Image from "next/image"
-import { Button } from "@/components/ui/Button"
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
+import Image from 'next/image'
+
+import { Button } from '@/components/ui/Button'
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 
 const products = [
   {
     id: 1,
-    image: "/placeholder.svg?height=200&width=200",
-    name: "Hỗn dịch viên uống men vi sinh Enterogermina gut defense Sanofi tăng cường miễn dịch",
-    price: "165.000đ",
-    originalPrice: "200.000đ",
-    unit: "Hộp",
-    packageInfo: "Hộp 2 Vỉ x 10 Ống",
-    discount: "-25%",
+    image: '/placeholder.svg?height=200&width=200',
+    name: 'Hỗn dịch viên uống men vi sinh Enterogermina gut defense Sanofi tăng cường miễn dịch',
+    price: '165.000đ',
+    originalPrice: '200.000đ',
+    unit: 'Hộp',
+    packageInfo: 'Hộp 2 Vỉ x 10 Ống',
+    discount: '-25%',
     units: [
-      { label: "Hộp", value: "hop" },
-      { label: "Ống", value: "ong" },
-      { label: "Vỉ", value: "vi" },
+      { label: 'Hộp', value: 'hop' },
+      { label: 'Ống', value: 'ong' },
+      { label: 'Vỉ', value: 'vi' },
     ],
   },
   {
     id: 2,
-    image: "/placeholder.svg?height=200&width=200",
-    name: "Hộp Telfor 60 DHG điều trị triệu chứng viêm mũi dị ứng trẻ em dưới 12 tuổi",
-    price: "100.000đ",
-    originalPrice: "150.000đ",
-    unit: "Hộp",
-    packageInfo: "Hộp 5 Vỉ x 10 Viên",
-    discount: "-25%",
+    image: '/placeholder.svg?height=200&width=200',
+    name: 'Hộp Telfor 60 DHG điều trị triệu chứng viêm mũi dị ứng trẻ em dưới 12 tuổi',
+    price: '100.000đ',
+    originalPrice: '150.000đ',
+    unit: 'Hộp',
+    packageInfo: 'Hộp 5 Vỉ x 10 Viên',
+    discount: '-25%',
     units: [
-      { label: "Hộp", value: "hop" },
-      { label: "Ống", value: "ong" },
-      { label: "Viên", value: "vien" },
+      { label: 'Hộp', value: 'hop' },
+      { label: 'Ống', value: 'ong' },
+      { label: 'Viên', value: 'vien' },
     ],
   },
   // Add more products as needed
@@ -48,15 +49,14 @@ export default function BestSellingProducts() {
 
       {/* Products Grid */}
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
-        {products.map((product) => (
+        {products.map(product => (
           <div
             key={product.id}
-            className="relative rounded-xl border border-grayscale-20 bg-white p-4 shadow-sm"
-          >
+            className="relative rounded-xl border border-grayscale-20 bg-white p-4 shadow-sm">
             {/* Product Image */}
             <div className="relative mb-4 aspect-square">
               <Image
-                src={product.image || "/placeholder.svg"}
+                src={product.image || '/placeholder.svg'}
                 alt={product.name}
                 fill
                 className="object-contain"
@@ -81,12 +81,11 @@ export default function BestSellingProducts() {
                   value={unit.value}
                   className={`${
                     index === 0
-                      ? "rounded-l-lg"
+                      ? 'rounded-l-lg'
                       : index === product.units.length - 1
-                      ? "rounded-r-lg"
-                      : ""
-                  }`}
-                >
+                        ? 'rounded-r-lg'
+                        : ''
+                  }`}>
                   {unit.label}
                 </ToggleGroupItem>
               ))}

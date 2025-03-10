@@ -1,5 +1,5 @@
-import { Breadcrumb } from "@/components/ui/Breadcrumb"
-import NutritionCheckResult from "@/features/nutrition-check/components/NutritionCheckResult"
+import { Breadcrumb } from '@/components/ui/Breadcrumb'
+import NutritionCheckResult from '@/features/nutrition-check/components/NutritionCheckResult'
 
 export default function NutritionCheckResultsPage({
   searchParams,
@@ -14,9 +14,9 @@ export default function NutritionCheckResultsPage({
         {/* Breadcrumb */}
         <Breadcrumb
           items={[
-            { label: "Trang Chủ", href: "/" },
-            { label: "Kiểm Tra Dinh Dưỡng", href: "/nutrition-check" },
-            { label: "Kết quả phân tích" },
+            { label: 'Trang Chủ', href: '/' },
+            { label: 'Kiểm Tra Dinh Dưỡng', href: '/nutrition-check' },
+            { label: 'Kết quả phân tích' },
           ]}
         />
 
@@ -28,4 +28,3 @@ export default function NutritionCheckResultsPage({
     </div>
   )
 }
-

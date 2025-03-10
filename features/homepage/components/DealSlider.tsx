@@ -1,36 +1,36 @@
-"use client"
+'use client'
 
-import Image from "next/image"
-import { Swiper, SwiperSlide } from "swiper/react"
-import { Navigation, Grid } from "swiper/modules"
-import { Button } from "@/components/ui/Button"
-import { ChevronRight, Flame } from "lucide-react"
+import Image from 'next/image'
+import { Swiper, SwiperSlide } from 'swiper/react'
+import { Navigation, Grid } from 'swiper/modules'
+import { Button } from '@/components/ui/Button'
+import { ChevronRight, Flame } from 'lucide-react'
 
 // Import Swiper styles
-import "swiper/css"
-import "swiper/css/grid"
-import "swiper/css/navigation"
+import 'swiper/css'
+import 'swiper/css/grid'
+import 'swiper/css/navigation'
 
 const deals = [
   {
     id: 1,
-    image: "/placeholder.svg?height=200&width=200",
-    name: "Hỗn hợp Vitamin D3 King Phar bổ sung Canxi, giúp xương chắc khỏe",
-    originalPrice: "200.000đ",
-    salePrice: "100.000đ",
-    unit: "Hộp",
-    discount: "-50%",
+    image: '/placeholder.svg?height=200&width=200',
+    name: 'Hỗn hợp Vitamin D3 King Phar bổ sung Canxi, giúp xương chắc khỏe',
+    originalPrice: '200.000đ',
+    salePrice: '100.000đ',
+    unit: 'Hộp',
+    discount: '-50%',
     isBestSeller: true,
     soldProgress: 75, // percentage of stock sold
   },
   {
     id: 2,
-    image: "/placeholder.svg?height=200&width=200",
-    name: "Hỗn hợp Vitamin D3 King Phar bổ sung Canxi, giúp xương chắc khỏe",
-    originalPrice: "200.000đ",
-    salePrice: "100.000đ",
-    unit: "Hộp",
-    discount: "-50%",
+    image: '/placeholder.svg?height=200&width=200',
+    name: 'Hỗn hợp Vitamin D3 King Phar bổ sung Canxi, giúp xương chắc khỏe',
+    originalPrice: '200.000đ',
+    salePrice: '100.000đ',
+    unit: 'Hộp',
+    discount: '-50%',
     isBestSeller: true,
     soldProgress: 85,
   },
@@ -57,8 +57,7 @@ export default function DealSlider() {
         </div>
         <Button
           variant="link"
-          className="flex items-center gap-1 text-primary-5 bg-white rounded-full"
-        >
+          className="flex items-center gap-1 text-primary-5 bg-white rounded-full">
           Xem thêm
           <ChevronRight className="h-4 w-4" />
         </Button>
@@ -69,7 +68,7 @@ export default function DealSlider() {
         navigation
         grid={{
           rows: 1,
-          fill: "row",
+          fill: 'row',
         }}
         spaceBetween={16}
         slidesPerView={2}
@@ -84,15 +83,14 @@ export default function DealSlider() {
             slidesPerView: 5,
           },
         }}
-        className="deal-slider"
-      >
-        {deals.map((deal) => (
+        className="deal-slider">
+        {deals.map(deal => (
           <SwiperSlide key={deal.id}>
             <div className="relative rounded-xl bg-white p-4">
               {/* Product Image with Discount Tag */}
               <div className="relative mb-4 aspect-square">
                 <Image
-                  src={deal.image || "/placeholder.svg"}
+                  src={deal.image || '/placeholder.svg'}
                   alt={deal.name}
                   fill
                   className="object-contain"
@@ -122,8 +120,7 @@ export default function DealSlider() {
               {deal.isBestSeller && (
                 <div className="mb-3 space-y-1">
                   <div
-                    className={`inline-flex items-center gap-1 w-full rounded-full bg-error-5 px-3 py-2 text-sm font-medium text-white shadow-sm`}
-                  >
+                    className={`inline-flex items-center gap-1 w-full rounded-full bg-error-5 px-3 py-2 text-sm font-medium text-white shadow-sm`}>
                     <Flame className="h-4 w-4" />
                     <span>Đang bán chạy</span>
                   </div>

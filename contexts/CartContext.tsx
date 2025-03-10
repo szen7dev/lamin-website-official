@@ -1,9 +1,10 @@
-"use client"
+'use client'
 
-import type React from "react"
+import type React from 'react'
 
-import { createContext, useState, useEffect } from "react"
-import { cartService } from "@/services/cartService"
+import { createContext, useState, useEffect } from 'react'
+
+import { cartService } from '@/services/cartService'
 
 type CartItem = {
   id: string
@@ -38,9 +39,10 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     const fetchCart = async () => {
       try {
         const cart = await cartService.getCart()
+
         setItems(cart.items)
       } catch (error) {
-        console.error("Failed to fetch cart:", error)
+        console.error('Failed to fetch cart:', error)
       } finally {
         setIsLoading(false)
       }
@@ -53,6 +55,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     setIsLoading(true)
     try {
       const response = await cartService.addToCart(productId, quantity)
+
       setItems(response.items)
     } finally {
       setIsLoading(false)
@@ -63,6 +66,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     setIsLoading(true)
     try {
       const response = await cartService.removeFromCart(itemId)
+
       setItems(response.items)
     } finally {
       setIsLoading(false)
@@ -73,6 +77,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     setIsLoading(true)
     try {
       const response = await cartService.updateCartItem(itemId, quantity)
+
       setItems(response.items)
     } finally {
       setIsLoading(false)
@@ -83,6 +88,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     setIsLoading(true)
     try {
       const response = await cartService.clearCart()
+
       setItems([])
     } finally {
       setIsLoading(false)
@@ -100,10 +106,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         removeItem,
         updateQuantity,
         clearCart,
-      }}
-    >
+      }}>
       {children}
     </CartContext.Provider>
   )
 }
-

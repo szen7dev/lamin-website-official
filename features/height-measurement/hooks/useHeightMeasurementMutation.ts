@@ -1,12 +1,12 @@
-"use client"
+'use client'
 
-import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { useRouter } from "next/navigation"
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useRouter } from 'next/navigation'
 import {
   submitHeightMeasurement,
   type HeightMeasurementFormData,
   type HeightMeasurementResult,
-} from "@/services/mockHeightMeasurementService"
+} from '@/services/mockHeightMeasurementService'
 
 export function useHeightMeasurementMutation() {
   const queryClient = useQueryClient()
@@ -16,7 +16,7 @@ export function useHeightMeasurementMutation() {
     mutationFn: (formData: HeightMeasurementFormData) => submitHeightMeasurement(formData),
     onSuccess: (data: HeightMeasurementResult) => {
       // Lưu kết quả vào cache
-      queryClient.setQueryData(["heightMeasurement", data.id], data)
+      queryClient.setQueryData(['heightMeasurement', data.id], data)
 
       router.push(`/height-measurement/results?id=${data.id}`)
     },
@@ -30,6 +30,5 @@ export function useHeightMeasurementResult(id: string | undefined) {
   if (!id) return null
 
   // Lấy dữ liệu từ cache
-  return queryClient.getQueryData<HeightMeasurementResult>(["heightMeasurement", id])
+  return queryClient.getQueryData<HeightMeasurementResult>(['heightMeasurement', id])
 }
-

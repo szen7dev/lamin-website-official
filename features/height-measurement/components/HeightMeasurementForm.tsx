@@ -1,7 +1,7 @@
-"use client"
-import { useForm } from "react-hook-form"
-import { useHeightMeasurementMutation } from "../hooks/useHeightMeasurementMutation"
-import { AlertCircle } from "lucide-react"
+'use client'
+import { useForm } from 'react-hook-form'
+import { useHeightMeasurementMutation } from '../hooks/useHeightMeasurementMutation'
+import { AlertCircle } from 'lucide-react'
 
 interface FormData {
   name: string
@@ -9,7 +9,7 @@ interface FormData {
   weight: string
   height: string
   phone: string
-  gender: "male" | "female"
+  gender: 'male' | 'female'
 }
 
 export default function HeightMeasurementForm() {
@@ -22,12 +22,12 @@ export default function HeightMeasurementForm() {
     formState: { errors },
   } = useForm<FormData>({
     defaultValues: {
-      name: "",
-      birthDate: "",
-      weight: "",
-      height: "",
-      phone: "",
-      gender: "male",
+      name: '',
+      birthDate: '',
+      weight: '',
+      height: '',
+      phone: '',
+      gender: 'male',
     },
   })
 
@@ -45,7 +45,7 @@ export default function HeightMeasurementForm() {
       {error && (
         <div className="rounded-lg bg-error-5/10 p-4 text-error-5 flex items-start gap-3">
           <AlertCircle className="h-5 w-5 shrink-0 mt-0.5" />
-          <p>{error instanceof Error ? error.message : "Có lỗi xảy ra. Vui lòng thử lại."}</p>
+          <p>{error instanceof Error ? error.message : 'Có lỗi xảy ra. Vui lòng thử lại.'}</p>
         </div>
       )}
 
@@ -59,8 +59,8 @@ export default function HeightMeasurementForm() {
           id="name"
           disabled={isPending}
           placeholder="Nhập tên"
-          className={`w-full rounded-lg border ${errors.name ? "border-error-5" : "border-[#DEE2E6]"} bg-white px-4 py-3 text-sm text-grayscale-90 placeholder:text-[#ADB5BD] focus:border-[#1250DC] focus:outline-none focus:ring-1 focus:ring-[#1250DC] disabled:opacity-70`}
-          {...register("name", { required: "Vui lòng nhập tên bé" })}
+          className={`w-full rounded-lg border ${errors.name ? 'border-error-5' : 'border-[#DEE2E6]'} bg-white px-4 py-3 text-sm text-grayscale-90 placeholder:text-[#ADB5BD] focus:border-[#1250DC] focus:outline-none focus:ring-1 focus:ring-[#1250DC] disabled:opacity-70`}
+          {...register('name', { required: 'Vui lòng nhập tên bé' })}
         />
         {errors.name && <p className="text-sm text-error-5">{errors.name.message}</p>}
       </div>
@@ -76,8 +76,8 @@ export default function HeightMeasurementForm() {
           type="date"
           disabled={isPending}
           placeholder="Nhập ngày sinh"
-          className={`w-full rounded-lg border ${errors.birthDate ? "border-error-5" : "border-[#DEE2E6]"} bg-white px-4 py-3 text-sm text-grayscale-90 focus:border-[#1250DC] focus:outline-none focus:ring-1 focus:ring-[#1250DC] disabled:opacity-70`}
-          {...register("birthDate", { required: "Vui lòng chọn ngày sinh" })}
+          className={`w-full rounded-lg border ${errors.birthDate ? 'border-error-5' : 'border-[#DEE2E6]'} bg-white px-4 py-3 text-sm text-grayscale-90 focus:border-[#1250DC] focus:outline-none focus:ring-1 focus:ring-[#1250DC] disabled:opacity-70`}
+          {...register('birthDate', { required: 'Vui lòng chọn ngày sinh' })}
         />
         {errors.birthDate && <p className="text-sm text-error-5">{errors.birthDate.message}</p>}
       </div>
@@ -93,8 +93,8 @@ export default function HeightMeasurementForm() {
           type="text"
           disabled={isPending}
           placeholder="Nhập cân nặng"
-          className={`w-full rounded-lg border ${errors.weight ? "border-error-5" : "border-[#DEE2E6]"} bg-white px-4 py-3 text-sm text-grayscale-90 placeholder:text-[#ADB5BD] focus:border-[#1250DC] focus:outline-none focus:ring-1 focus:ring-[#1250DC] disabled:opacity-70`}
-          {...register("weight", { required: "Vui lòng nhập cân nặng" })}
+          className={`w-full rounded-lg border ${errors.weight ? 'border-error-5' : 'border-[#DEE2E6]'} bg-white px-4 py-3 text-sm text-grayscale-90 placeholder:text-[#ADB5BD] focus:border-[#1250DC] focus:outline-none focus:ring-1 focus:ring-[#1250DC] disabled:opacity-70`}
+          {...register('weight', { required: 'Vui lòng nhập cân nặng' })}
         />
         {errors.weight && <p className="text-sm text-error-5">{errors.weight.message}</p>}
       </div>
@@ -110,8 +110,8 @@ export default function HeightMeasurementForm() {
           type="text"
           disabled={isPending}
           placeholder="Nhập chiều cao"
-          className={`w-full rounded-lg border ${errors.height ? "border-error-5" : "border-[#DEE2E6]"} bg-white px-4 py-3 text-sm text-grayscale-90 placeholder:text-[#ADB5BD] focus:border-[#1250DC] focus:outline-none focus:ring-1 focus:ring-[#1250DC] disabled:opacity-70`}
-          {...register("height", { required: "Vui lòng nhập chiều cao" })}
+          className={`w-full rounded-lg border ${errors.height ? 'border-error-5' : 'border-[#DEE2E6]'} bg-white px-4 py-3 text-sm text-grayscale-90 placeholder:text-[#ADB5BD] focus:border-[#1250DC] focus:outline-none focus:ring-1 focus:ring-[#1250DC] disabled:opacity-70`}
+          {...register('height', { required: 'Vui lòng nhập chiều cao' })}
         />
         {errors.height && <p className="text-sm text-error-5">{errors.height.message}</p>}
       </div>
@@ -127,12 +127,12 @@ export default function HeightMeasurementForm() {
           type="tel"
           disabled={isPending}
           placeholder="Nhập SĐT"
-          className={`w-full rounded-lg border ${errors.phone ? "border-error-5" : "border-[#DEE2E6]"} bg-white px-4 py-3 text-sm text-grayscale-90 placeholder:text-[#ADB5BD] focus:border-[#1250DC] focus:outline-none focus:ring-1 focus:ring-[#1250DC] disabled:opacity-70`}
-          {...register("phone", {
-            required: "Vui lòng nhập số điện thoại",
+          className={`w-full rounded-lg border ${errors.phone ? 'border-error-5' : 'border-[#DEE2E6]'} bg-white px-4 py-3 text-sm text-grayscale-90 placeholder:text-[#ADB5BD] focus:border-[#1250DC] focus:outline-none focus:ring-1 focus:ring-[#1250DC] disabled:opacity-70`}
+          {...register('phone', {
+            required: 'Vui lòng nhập số điện thoại',
             pattern: {
               value: /^[0-9]{10,11}$/,
-              message: "Số điện thoại không hợp lệ",
+              message: 'Số điện thoại không hợp lệ',
             },
           })}
         />
@@ -152,7 +152,7 @@ export default function HeightMeasurementForm() {
               value="male"
               disabled={isPending}
               className="h-4 w-4 accent-[#1250DC] disabled:opacity-70"
-              {...register("gender", { required: "Vui lòng chọn giới tính" })}
+              {...register('gender', { required: 'Vui lòng chọn giới tính' })}
             />
             <span className="text-sm text-grayscale-90">Nam</span>
           </label>
@@ -162,7 +162,7 @@ export default function HeightMeasurementForm() {
               value="female"
               disabled={isPending}
               className="h-4 w-4 accent-[#1250DC] disabled:opacity-70"
-              {...register("gender")}
+              {...register('gender')}
             />
             <span className="text-sm text-grayscale-90">Nữ</span>
           </label>
@@ -176,38 +176,39 @@ export default function HeightMeasurementForm() {
           type="button"
           onClick={handleReset}
           disabled={isPending}
-          className="rounded-lg bg-[#E9ECEF] px-6 py-2.5 text-sm font-medium text-[#212529] transition-colors hover:bg-[#DEE2E6] disabled:opacity-70"
-        >
+          className="rounded-lg bg-[#E9ECEF] px-6 py-2.5 text-sm font-medium text-[#212529] transition-colors hover:bg-[#DEE2E6] disabled:opacity-70">
           Đặt lại
         </button>
         <button
           type="submit"
           disabled={isPending}
-          className="rounded-lg bg-[#1250DC] px-6 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[#1250DC]/90 disabled:opacity-70 flex items-center gap-2"
-        >
+          className="rounded-lg bg-[#1250DC] px-6 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[#1250DC]/90 disabled:opacity-70 flex items-center gap-2">
           {isPending ? (
             <>
               <svg
                 className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
-                viewBox="0 0 24 24"
-              >
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                viewBox="0 0 24 24">
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"></circle>
                 <path
                   className="opacity-75"
                   fill="currentColor"
-                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                ></path>
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
               </svg>
               Đang xử lý...
             </>
           ) : (
-            "Gửi đi"
+            'Gửi đi'
           )}
         </button>
       </div>
     </form>
   )
 }
-

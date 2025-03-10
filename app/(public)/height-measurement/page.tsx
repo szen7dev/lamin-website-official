@@ -1,10 +1,11 @@
-import type { Metadata } from "next"
-import { Breadcrumb } from "@/components/ui/Breadcrumb"
-import HeightMeasurementForm from "@/features/height-measurement/components/HeightMeasurementForm"
+import type { Metadata } from 'next'
+
+import { Breadcrumb } from '@/components/ui/Breadcrumb'
+import HeightMeasurementForm from '@/features/height-measurement/components/HeightMeasurementForm'
 
 export const metadata: Metadata = {
-  title: "Đo Cao - Elena Pharmacy",
-  description: "Công cụ đo và dự đoán chiều cao cho trẻ em",
+  title: 'Đo Cao - Elena Pharmacy',
+  description: 'Công cụ đo và dự đoán chiều cao cho trẻ em',
 }
 
 // Fix giao diện để trông giống figma
@@ -13,7 +14,7 @@ export default function HeightMeasurementPage() {
   return (
     <>
       {/* Breadcrumb */}
-      <Breadcrumb items={[{ label: "Trang Chủ", href: "/" }, { label: "Đo Cao" }]} />
+      <Breadcrumb items={[{ label: 'Trang Chủ', href: '/' }, { label: 'Đo Cao' }]} />
 
       {/* Title Section */}
       <div className="mb-6">

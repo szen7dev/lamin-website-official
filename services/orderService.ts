@@ -1,8 +1,8 @@
-import api from "./api"
+import api from './api'
 
 export const orderService = {
   getOrders: async () => {
-    const response = await api.get("/orders")
+    const response = await api.get('/orders')
     return response.data
   },
   getOrderById: async (orderId: string) => {
@@ -10,8 +10,7 @@ export const orderService = {
     return response.data
   },
   createOrder: async (orderData: any) => {
-    const response = await api.post("/orders", orderData)
+    const response = await api.post('/orders', orderData)
     return response.data
   },
 }
-

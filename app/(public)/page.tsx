@@ -1,17 +1,19 @@
-import type { Metadata } from "next"
-import GridBanner from "@/features/homepage/components/GridBanner"
-import BestSellingProducts from "@/features/homepage/components/BestSellingProducts"
-import CoachExperts from "@/features/homepage/components/CoachExperts"
-import DealSlider from "@/features/homepage/components/DealSlider"
-import HealthNews from "@/features/homepage/components/HealthNews"
-import TrustedStores from "@/features/homepage/components/TrustedStores"
-import Image from "next/image"
+import type { Metadata } from 'next'
+
+import Image from 'next/image'
+
+import GridBanner from '@/features/homepage/components/GridBanner'
+import BestSellingProducts from '@/features/homepage/components/BestSellingProducts'
+import CoachExperts from '@/features/homepage/components/CoachExperts'
+import DealSlider from '@/features/homepage/components/DealSlider'
+import HealthNews from '@/features/homepage/components/HealthNews'
+import TrustedStores from '@/features/homepage/components/TrustedStores'
 
 export const metadata: Metadata = {
-  title: "Elena Pharmacy - Nhà thuốc trực tuyến của bạn",
+  title: 'Elena Pharmacy - Nhà thuốc trực tuyến của bạn',
   description:
-    "Mua thuốc trực tuyến, nhận tư vấn sức khỏe và nhiều dịch vụ khác tại Elena Pharmacy",
-  keywords: ["nhà thuốc", "thuốc", "sức khỏe", "tư vấn sức khỏe", "mua thuốc online"],
+    'Mua thuốc trực tuyến, nhận tư vấn sức khỏe và nhiều dịch vụ khác tại Elena Pharmacy',
+  keywords: ['nhà thuốc', 'thuốc', 'sức khỏe', 'tư vấn sức khỏe', 'mua thuốc online'],
 }
 
 export default function HomePage() {
@@ -20,11 +22,11 @@ export default function HomePage() {
       {/* Hero Section with Banners */}
       {/* <SimpleBanner /> */}
       <Image
-        src="/images/Banner 1.png"
         alt="Hero Banner"
-        width={1200}
-        height={400}
         className="w-full"
+        height={400}
+        src="/images/Banner 1.png"
+        width={1200}
       />
 
       <div className="mx-auto max-w-[1400px] px-4">

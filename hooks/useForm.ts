@@ -1,6 +1,6 @@
-"use client"
+'use client'
 
-import { useState, type ChangeEvent, type FormEvent } from "react"
+import { useState, type ChangeEvent, type FormEvent } from 'react'
 
 interface UseFormOptions<T> {
   initialValues: T
@@ -8,20 +8,28 @@ interface UseFormOptions<T> {
   onSubmit: (values: T) => void | Promise<void>
 }
 
-export function useForm<T extends Record<string, any>>({ initialValues, validate, onSubmit }: UseFormOptions<T>) {
+export function useForm<T extends Record<string, any>>({
+  initialValues,
+  validate,
+  onSubmit,
+}: UseFormOptions<T>) {
   const [values, setValues] = useState<T>(initialValues)
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [touched, setTouched] = useState<Record<string, boolean>>({})
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
+  ) => {
     const { name, value } = e.target
-    setValues((prev) => ({ ...prev, [name]: value }))
-    setTouched((prev) => ({ ...prev, [name]: true }))
+    setValues(prev => ({ ...prev, [name]: value }))
+    setTouched(prev => ({ ...prev, [name]: true }))
   }
 
-  const handleBlur = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleBlur = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
+  ) => {
     const { name } = e.target
-    setTouched((prev) => ({ ...prev, [name]: true }))
+    setTouched(prev => ({ ...prev, [name]: true }))
     if (validate) {
       const validationErrors = validate(values)
       setErrors(validationErrors)
@@ -57,4 +65,3 @@ export function useForm<T extends Record<string, any>>({ initialValues, validate
     resetForm,
   }
 }
-

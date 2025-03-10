@@ -1,9 +1,10 @@
-"use client"
+'use client'
 
-import type React from "react"
+import type React from 'react'
 
-import { createContext, useState, useEffect } from "react"
-import { authService } from "@/services/authService"
+import { createContext, useState, useEffect } from 'react'
+
+import { authService } from '@/services/authService'
 
 type User = {
   id: string
@@ -30,15 +31,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     // Check if user is logged in
     const checkAuth = async () => {
       try {
-        const token = localStorage.getItem("auth-token")
+        const token = localStorage.getItem('auth-token')
+
         if (token) {
           // Fetch user profile
           const userProfile = await authService.getProfile()
+
           setUser(userProfile)
         }
       } catch (error) {
-        console.error("Auth check failed:", error)
-        localStorage.removeItem("auth-token")
+        console.error('Auth check failed:', error)
+        localStorage.removeItem('auth-token')
       } finally {
         setIsLoading(false)
       }
@@ -51,7 +54,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setIsLoading(true)
     try {
       const response = await authService.login(email, password)
-      localStorage.setItem("auth-token", response.token)
+
+      localStorage.setItem('auth-token', response.token)
       setUser(response.user)
     } finally {
       setIsLoading(false)
@@ -62,7 +66,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setIsLoading(true)
     try {
       const response = await authService.register(email, password, name)
-      localStorage.setItem("auth-token", response.token)
+
+      localStorage.setItem('auth-token', response.token)
       setUser(response.user)
     } finally {
       setIsLoading(false)
@@ -73,7 +78,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setIsLoading(true)
     try {
       await authService.logout()
-      localStorage.removeItem("auth-token")
+      localStorage.removeItem('auth-token')
       setUser(null)
     } finally {
       setIsLoading(false)
@@ -89,10 +94,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         login,
         register,
         logout,
-      }}
-    >
+      }}>
       {children}
     </AuthContext.Provider>
   )
 }
-

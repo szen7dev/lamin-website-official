@@ -1,8 +1,8 @@
-import api from "./api"
+import api from './api'
 
 export const articleService = {
   getArticles: async (params?: any) => {
-    const response = await api.get("/articles", { params })
+    const response = await api.get('/articles', { params })
     return response.data
   },
   getArticleBySlug: async (slug: string) => {
@@ -10,4 +10,3 @@ export const articleService = {
     return response.data
   },
 }
-

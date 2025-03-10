@@ -1,8 +1,9 @@
-"use client"
+'use client'
 
-import { useEffect } from "react"
-import { Button } from "@/components/ui/Button"
-import { ThemeProvider } from "@/contexts/ThemeContext"
+import { useEffect } from 'react'
+
+import { Button } from '@/components/ui/Button'
+import { ThemeProvider } from '@/contexts/ThemeContext'
 
 export default function Error({
   error,
@@ -24,4 +25,3 @@ export default function Error({
     </ThemeProvider>
   )
 }
-

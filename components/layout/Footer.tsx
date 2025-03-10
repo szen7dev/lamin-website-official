@@ -1,6 +1,6 @@
-import Link from "next/link"
-import Image from "next/image"
-import { Dot } from "lucide-react"
+import Link from 'next/link'
+import Image from 'next/image'
+import { Dot } from 'lucide-react'
 
 export function Footer() {
   return (
@@ -11,24 +11,24 @@ export function Footer() {
           <div>
             <div className="flex">
               <span className="text-primary-5">
-                <Dot stroke="currentColor" strokeWidth={5} className="text-primary-5 -ml-2" />
+                <Dot className="text-primary-5 -ml-2" stroke="currentColor" strokeWidth={5} />
               </span>
               <h4 className="font-semibold text-lg mb-4">VỀ CHÚNG TÔI</h4>
             </div>
 
             <ul className="space-y-2">
               {[
-                "Giới thiệu",
-                "Hệ thống cửa hàng",
-                "Giấy phép kinh doanh",
-                "Quy chế hoạt động",
-                "Chính sách đặt cọc",
-                "Chính sách nội dung",
-                "Chính sách giao hàng",
-                "Chính sách thanh toán",
+                'Giới thiệu',
+                'Hệ thống cửa hàng',
+                'Giấy phép kinh doanh',
+                'Quy chế hoạt động',
+                'Chính sách đặt cọc',
+                'Chính sách nội dung',
+                'Chính sách giao hàng',
+                'Chính sách thanh toán',
               ].map((item, index) => (
                 <li key={index} className="flex items-center">
-                  <Link href="#" className="text-grayscale-40 hover:text-primary -ml-1">
+                  <Link className="text-grayscale-40 hover:text-primary -ml-1" href="#">
                     {item}
                   </Link>
                 </li>
@@ -40,24 +40,24 @@ export function Footer() {
           <div>
             <div className="flex">
               <span className="text-primary-5">
-                <Dot stroke="currentColor" strokeWidth={5} className="text-primary-5 -ml-2" />
+                <Dot className="text-primary-5 -ml-2" stroke="currentColor" strokeWidth={5} />
               </span>
               <h4 className="font-semibold text-lg mb-4">TÌM HIỂU THÊM</h4>
             </div>
 
             <ul className="space-y-2">
               {[
-                "Bệnh viện",
-                "Góc sức khoẻ",
-                "Tra cứu thuốc",
-                "Tra cứu dược chất",
-                "Tra cứu dược liệu",
-                "Bệnh thường gặp",
-                "Đội ngũ chuyên môn",
-                "Tin tức tuyển dụng",
+                'Bệnh viện',
+                'Góc sức khoẻ',
+                'Tra cứu thuốc',
+                'Tra cứu dược chất',
+                'Tra cứu dược liệu',
+                'Bệnh thường gặp',
+                'Đội ngũ chuyên môn',
+                'Tin tức tuyển dụng',
               ].map((item, index) => (
                 <li key={index} className="flex items-center">
-                  <Link href="#" className="text-grayscale-40 hover:text-primary -ml-1">
+                  <Link className="text-grayscale-40 hover:text-primary -ml-1" href="#">
                     {item}
                   </Link>
                 </li>
@@ -69,22 +69,22 @@ export function Footer() {
           <div>
             <div className="flex">
               <span className="text-primary-5">
-                <Dot stroke="currentColor" strokeWidth={5} className="text-primary-5 -ml-2" />
+                <Dot className="text-primary-5 -ml-2" stroke="currentColor" strokeWidth={5} />
               </span>
               <h4 className="font-semibold text-lg mb-4">DANH MỤC</h4>
             </div>
 
             <ul className="space-y-2">
               {[
-                "Thực phẩm chức năng",
-                "Dược mỹ phẩm",
-                "Chăm sóc cá nhân",
-                "Trang thiết bị y tế",
-                "Đặt thuốc online",
-                "Trung tâm Tiêm chủng",
+                'Thực phẩm chức năng',
+                'Dược mỹ phẩm',
+                'Chăm sóc cá nhân',
+                'Trang thiết bị y tế',
+                'Đặt thuốc online',
+                'Trung tâm Tiêm chủng',
               ].map((item, index) => (
                 <li key={index} className="flex items-center">
-                  <Link href="#" className="text-grayscale-40 hover:text-primary -ml-1">
+                  <Link className="text-grayscale-40 hover:text-primary -ml-1" href="#">
                     {item}
                   </Link>
                 </li>
@@ -98,7 +98,7 @@ export function Footer() {
             <div>
               <div className="flex">
                 <span className="text-primary-5">
-                  <Dot stroke="currentColor" strokeWidth={5} className="text-primary-5 -ml-2" />
+                  <Dot className="text-primary-5 -ml-2" stroke="currentColor" strokeWidth={5} />
                 </span>
                 <h4 className="font-semibold text-lg mb-4">TỔNG ĐÀI</h4>
               </div>
@@ -123,23 +123,23 @@ export function Footer() {
             <div>
               <div className="flex">
                 <span className="text-primary-5">
-                  <Dot stroke="currentColor" strokeWidth={5} className="text-primary-5 -ml-2" />
+                  <Dot className="text-primary-5 -ml-2" stroke="currentColor" strokeWidth={5} />
                 </span>
                 <h4 className="font-semibold text-lg mb-4">CHỨNG NHẬN</h4>
               </div>
 
               <div className="flex space-x-4">
                 <Image
-                  src="/placeholder.svg?height=40&width=40"
                   alt="Certification 1"
-                  width={40}
                   height={40}
+                  src="/placeholder.svg?height=40&width=40"
+                  width={40}
                 />
                 <Image
-                  src="/placeholder.svg?height=40&width=100"
                   alt="DMCA Protected"
-                  width={100}
                   height={40}
+                  src="/placeholder.svg?height=40&width=100"
+                  width={100}
                 />
               </div>
             </div>
@@ -148,26 +148,26 @@ export function Footer() {
             <div>
               <div className="flex">
                 <span className="text-primary-5">
-                  <Dot stroke="currentColor" strokeWidth={5} className="text-primary-5 -ml-2" />
+                  <Dot className="text-primary-5 -ml-2" stroke="currentColor" strokeWidth={5} />
                 </span>
                 <h4 className="font-semibold text-lg mb-4">KẾT NỐI VỚI CHÚNG TÔI</h4>
               </div>
 
               <div className="flex space-x-4">
-                <Link href="#" className="hover:opacity-80">
+                <Link className="hover:opacity-80" href="#">
                   <Image
-                    src="/placeholder.svg?height=32&width=32"
                     alt="Facebook"
-                    width={32}
                     height={32}
+                    src="/placeholder.svg?height=32&width=32"
+                    width={32}
                   />
                 </Link>
-                <Link href="#" className="hover:opacity-80">
+                <Link className="hover:opacity-80" href="#">
                   <Image
-                    src="/placeholder.svg?height=32&width=32"
                     alt="Zalo"
-                    width={32}
                     height={32}
+                    src="/placeholder.svg?height=32&width=32"
+                    width={32}
                   />
                 </Link>
               </div>
@@ -180,20 +180,20 @@ export function Footer() {
             <div>
               <div className="flex">
                 <span className="text-primary-5">
-                  <Dot stroke="currentColor" strokeWidth={5} className="text-primary-5 -ml-2" />
+                  <Dot className="text-primary-5 -ml-2" stroke="currentColor" strokeWidth={5} />
                 </span>
                 <h4 className="font-semibold text-lg mb-4">HỖ TRỢ THANH TOÁN</h4>
               </div>
 
               <div className="grid grid-cols-3 gap-2">
-                {["JCB", "Mastercard", "Visa", "VNPay", "ZaloPay", "MoMo"].map((method) => (
+                {['JCB', 'Mastercard', 'Visa', 'VNPay', 'ZaloPay', 'MoMo'].map(method => (
                   <Image
                     key={method}
-                    src="/placeholder.svg?height=32&width=48"
                     alt={method}
-                    width={48}
-                    height={32}
                     className="object-contain"
+                    height={32}
+                    src="/placeholder.svg?height=32&width=48"
+                    width={48}
                   />
                 ))}
               </div>
@@ -203,17 +203,17 @@ export function Footer() {
             <div>
               <div className="flex">
                 <span className="text-primary-5">
-                  <Dot stroke="currentColor" strokeWidth={5} className="text-primary-5 -ml-2" />
+                  <Dot className="text-primary-5 -ml-2" stroke="currentColor" strokeWidth={5} />
                 </span>
                 <h4 className="font-semibold text-lg mb-4">TẢI ỨNG DỤNG</h4>
               </div>
 
               <Image
-                src="/placeholder.svg?height=120&width=120"
                 alt="QR Code"
-                width={120}
-                height={120}
                 className="rounded-lg"
+                height={120}
+                src="/placeholder.svg?height=120&width=120"
+                width={120}
               />
             </div>
           </div>

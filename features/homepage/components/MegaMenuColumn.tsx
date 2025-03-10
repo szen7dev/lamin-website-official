@@ -1,8 +1,8 @@
-import Link from "next/link"
-import Image from "next/image"
-import { ChevronRight, Cross } from "lucide-react"
-import { cn } from "@/utils"
-import { Separator } from "@/components/ui/separator"
+import Link from 'next/link'
+import Image from 'next/image'
+import { ChevronRight, Cross } from 'lucide-react'
+import { cn } from '@/utils'
+import { Separator } from '@/components/ui/separator'
 
 interface CategoryProduct {
   id: string
@@ -33,19 +33,18 @@ export default function MegaMenuColumn({
   return (
     <div
       className={cn(
-        "space-y-6 bg-[#F1F4FD] p-6 rounded-xl w-full",
-        activeCategory === "vitamin" ? "rounded-tl-none" : ""
-      )}
-    >
+        'space-y-6 bg-[#F1F4FD] p-6 rounded-xl w-full',
+        activeCategory === 'vitamin' ? 'rounded-tl-none' : '',
+      )}>
       {/* Category Products Grid */}
       {categoryProducts && (
         <div className="grid grid-cols-3 gap-4">
-          {categoryProducts.map((product) => (
+          {categoryProducts.map(product => (
             <div className="flex items-center gap-3 rounded-[8px] bg-white p-3 shadow-md transition-shadow hover:shadow-xl decoration-transparent">
               <Link key={product.id} href={`/products/${product.id}`}>
                 <div className="flex justify-between items-center gap-2">
                   <Image
-                    src={product.image || "/placeholder.svg"}
+                    src={product.image || '/placeholder.svg'}
                     alt={product.name}
                     width={40}
                     height={40}
@@ -73,8 +72,7 @@ export default function MegaMenuColumn({
               </div>
               <Link
                 href="#"
-                className="flex items-center gap-1 text-sm text-primary-5 hover:underline"
-              >
+                className="flex items-center gap-1 text-sm text-primary-5 hover:underline">
                 Xem thêm
                 <ChevronRight className="h-4 w-4" />
               </Link>
@@ -82,11 +80,11 @@ export default function MegaMenuColumn({
           </div>
 
           <div className="grid grid-cols-4 grid-flow-col gap-6">
-            {bestSellingProducts.map((product) => (
+            {bestSellingProducts.map(product => (
               <Link key={product.id} href={`/products/${product.id}`} className="group space-y-2">
                 <div className="relative aspect-square overflow-hidden rounded-lg">
                   <Image
-                    src={product.image || "/placeholder.svg"}
+                    src={product.image || '/placeholder.svg'}
                     alt={product.name}
                     fill
                     className="object-contain transition-transform group-hover:scale-105"
