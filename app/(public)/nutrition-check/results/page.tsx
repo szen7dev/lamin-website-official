@@ -1,14 +1,18 @@
 import { Breadcrumb } from "@/components/ui/Breadcrumb"
 import NutritionCheckResult from "@/features/nutrition-check/components/NutritionCheckResult"
+import { notFound } from "next/navigation"
 
 export default async function NutritionCheckResultsPage({
   searchParams,
 }: {
   searchParams: { [key: string]: string | undefined }
 }) {
-  // Await the searchParams object before accessing its properties
   const params = await searchParams
   const resultId = params.id
+
+  if (!resultId) {
+    notFound() // Redirect to 404 if id is missing
+  }
 
   return (
     <div className="min-h-screen bg-[#F8F9FE] pb-12 pt-6">
@@ -30,4 +34,3 @@ export default async function NutritionCheckResultsPage({
     </div>
   )
 }
-

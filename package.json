@@ -59,9 +59,9 @@
     "vaul": "^0.9.6",
     "zod": "^3.24.1",
     "@tanstack/react-query": "latest",
-    "swiper": "latest",
     "@tanstack/react-query-devtools": "latest",
     "axios": "latest",
+    "swiper": "latest",
     "chart.js": "latest"
   },
   "devDependencies": {

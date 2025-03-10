@@ -1,11 +1,12 @@
 import type { Metadata } from "next"
 import { Breadcrumb } from "@/components/ui/Breadcrumb"
 import { ContactForm } from "@/features/contact/components/ContactForm"
+import { generateMetadata as generateSeoMetadata } from "@/utils/seo"
 
-export const metadata: Metadata = {
+export const metadata: Metadata = generateSeoMetadata({
   title: "Liên Hệ - Elena Pharmacy",
   description: "Liên hệ với chúng tôi để được hỗ trợ và tư vấn",
-}
+})
 
 export default function ContactPage() {
   return (

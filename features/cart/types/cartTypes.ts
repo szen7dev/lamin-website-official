@@ -1,29 +1,19 @@
-// Types for cart feature
 export interface CartItem {
   id: string
-  productId: string
   name: string
   price: number
+  originalPrice: number
   quantity: number
-  image: string
+  unit: string
+  image?: string
 }
 
 export interface Cart {
   id: string
-  userId?: string
+  userId: string
   items: CartItem[]
   totalItems: number
   totalPrice: number
-}
-
-export interface AddToCartRequest {
-  productId: string
-  quantity: number
-}
-
-export interface UpdateCartItemRequest {
-  itemId: string
-  quantity: number
 }
 
 export interface CartService {

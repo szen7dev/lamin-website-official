@@ -1,14 +1,14 @@
 import type { Metadata } from "next"
 import { siteConfig } from "@/config/siteConfig"
 
-interface MetadataProps {
+interface SEOProps {
   title?: string
   description?: string
   keywords?: string[]
   image?: string
 }
 
-export function generateMetadata({ title, description, keywords, image }: MetadataProps): Metadata {
+export function generateMetadata({ title, description, keywords, image }: SEOProps): Metadata {
   return {
     title: title ? `${title} | ${siteConfig.name}` : siteConfig.name,
     description: description || siteConfig.description,

@@ -5,6 +5,7 @@ import { Check } from "lucide-react"
 import Chart from "chart.js/auto"
 import { useHeightMeasurementResult } from "../hooks/useHeightMeasurementMutation"
 import type { HeightMeasurementResult as ResultType } from "../types/heightMeasurementTypes"
+import { useMediaQuery } from "@/hooks/useMediaQuery"
 
 const percentiles = [
   { name: "P3", color: "#0D6EFD" },
@@ -74,6 +75,7 @@ export default function HeightMeasurementResult({ resultId }: HeightMeasurementR
   const chartRef = useRef<HTMLCanvasElement>(null)
   const chartInstance = useRef<Chart | null>(null)
   const [isLoading, setIsLoading] = useState(true)
+  const isMobile = useMediaQuery("(max-width: 768px)")
 
   // Lấy dữ liệu từ React Query cache
   const resultData = useHeightMeasurementResult(resultId)
@@ -125,7 +127,7 @@ export default function HeightMeasurementResult({ resultId }: HeightMeasurementR
             borderColor: "#198754",
             backgroundColor: "#198754",
             borderWidth: 2.5,
-            pointRadius: 6,
+            pointRadius: isMobile ? 4 : 6,
             pointBackgroundColor: "#198754",
             pointBorderColor: "#fff",
             pointBorderWidth: 2,
@@ -143,11 +145,11 @@ export default function HeightMeasurementResult({ resultId }: HeightMeasurementR
             text: "Biểu đồ dự đoán chiều cao CDC",
             align: "center",
             font: {
-              size: 16,
+              size: isMobile ? 14 : 16,
               weight: "bold",
             },
             padding: {
-              bottom: 30,
+              bottom: isMobile ? 20 : 30,
             },
           },
           legend: {
@@ -162,13 +164,19 @@ export default function HeightMeasurementResult({ resultId }: HeightMeasurementR
             title: {
               display: true,
               text: "Tuổi",
+              font: {
+                size: isMobile ? 10 : 12,
+              },
             },
             grid: {
               display: false, // Remove vertical grid lines
             },
             ticks: {
-              stepSize: 1,
-              callback: (value) => value + " Tuổi",
+              stepSize: isMobile ? 2 : 1,
+              callback: (value) => value + (isMobile ? "" : " Tuổi"),
+              font: {
+                size: isMobile ? 8 : 12,
+              },
             },
             border: {
               width: 1,
@@ -180,11 +188,17 @@ export default function HeightMeasurementResult({ resultId }: HeightMeasurementR
             title: {
               display: true,
               text: "Chiều cao (cm)",
+              font: {
+                size: isMobile ? 10 : 12,
+              },
             },
             min: 80, // Điều chỉnh min để biểu đồ dễ nhìn hơn
             max: 220,
             ticks: {
-              stepSize: 20,
+              stepSize: isMobile ? 40 : 20,
+              font: {
+                size: isMobile ? 8 : 12,
+              },
             },
             grid: {
               color: "#E9ECEF",
@@ -197,8 +211,8 @@ export default function HeightMeasurementResult({ resultId }: HeightMeasurementR
         },
         layout: {
           padding: {
-            right: 20,
-            top: 20, // Thêm padding phía trên để hiển thị số liệu
+            right: isMobile ? 10 : 20,
+            top: isMobile ? 10 : 20, // Thêm padding phía trên để hiển thị số liệu
           },
         },
       },
@@ -216,9 +230,9 @@ export default function HeightMeasurementResult({ resultId }: HeightMeasurementR
               ctx.save()
               ctx.textAlign = "center"
               ctx.textBaseline = "bottom"
-              ctx.font = "bold 12px Inter"
+              ctx.font = `bold ${isMobile ? "10px" : "12px"} Inter`
               ctx.fillStyle = "#198754"
-              ctx.fillText(`${height}cm`, x, y - 10)
+              ctx.fillText(`${height}cm`, x, y - (isMobile ? 6 : 10))
               ctx.restore()
             })
           },
@@ -231,17 +245,18 @@ export default function HeightMeasurementResult({ resultId }: HeightMeasurementR
         chartInstance.current.destroy()
       }
     }
-  }, [isLoading, data])
+  }, [isLoading, data, isMobile])
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center py-12">
-        <div className="flex flex-col items-center gap-4">
+      <div className="flex items-center justify-center py-8 sm:py-12" aria-live="polite" aria-busy="true">
+        <div className="flex flex-col items-center gap-3 sm:gap-4">
           <svg
-            className="animate-spin h-8 w-8 text-primary-40"
+            className="animate-spin h-6 w-6 sm:h-8 sm:w-8 text-primary-40"
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
+            aria-hidden="true"
           >
             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
             <path
@@ -250,7 +265,7 @@ export default function HeightMeasurementResult({ resultId }: HeightMeasurementR
               d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
             ></path>
           </svg>
-          <p className="text-grayscale-60">Đang tải kết quả phân tích...</p>
+          <p className="text-sm sm:text-base text-grayscale-60">Đang tải kết quả phân tích...</p>
         </div>
       </div>
     )
@@ -258,9 +273,9 @@ export default function HeightMeasurementResult({ resultId }: HeightMeasurementR
 
   if (!data || !data.heightData) {
     return (
-      <div className="flex items-center justify-center py-12">
-        <div className="flex flex-col items-center gap-4">
-          <p className="text-grayscale-60">Không tìm thấy dữ liệu phân tích. Vui lòng thử lại.</p>
+      <div className="flex items-center justify-center py-8 sm:py-12" aria-live="polite">
+        <div className="flex flex-col items-center gap-3 sm:gap-4">
+          <p className="text-sm sm:text-base text-grayscale-60">Không tìm thấy dữ liệu phân tích. Vui lòng thử lại.</p>
         </div>
       </div>
     )
@@ -291,58 +306,68 @@ export default function HeightMeasurementResult({ resultId }: HeightMeasurementR
   const age = calculateAge(data.birthDate)
 
   return (
-    <div className="flex flex-col md:flex-row gap-6">
+    <article className="flex flex-col md:flex-row gap-4 sm:gap-6" aria-labelledby="height-measurement-result-title">
+      <h2 id="height-measurement-result-title" className="sr-only">
+        Kết quả phân tích đo cao
+      </h2>
+
       {/* Column 1: Age and Height Table */}
-      <div className="w-full md:w-[200px] shrink-0">
+      <aside className="w-full md:w-[200px] shrink-0 order-2 md:order-1">
         <div className="rounded-lg border border-grayscale-20">
-          <div className="grid grid-cols-2 bg-[#0D6EFD] text-center text-sm font-medium text-white">
-            <div className="border-r border-white/10 px-4 py-2">Tuổi</div>
-            <div className="px-4 py-2">Chiều cao (cm)</div>
-          </div>
-          <div className="max-h-[600px] overflow-y-auto">
+          <header className="grid grid-cols-2 bg-primary-5 text-center text-xs sm:text-sm font-medium text-white">
+            <div className="border-r border-white/10 px-2 sm:px-4 py-2">Tuổi</div>
+            <div className="px-2 sm:px-4 py-2">Chiều cao (cm)</div>
+          </header>
+          <div className="max-h-[300px] md:max-h-[600px] overflow-y-auto">
             {data.heightData.map((item, index) => (
               <div
                 key={item.age}
-                className={`grid grid-cols-2 border-t border-grayscale-20 text-center ${
-                  index === data.heightData.length - 1 ? "text-[#DC3545]" : ""
+                className={`grid grid-cols-2 border-t border-grayscale-20 text-center text-xs sm:text-sm ${
+                  index === data.heightData.length - 1 ? "text-error-5" : ""
                 }`}
               >
-                <div className="border-r border-grayscale-20 px-4 py-2">{item.age}</div>
-                <div className="px-4 py-2">{item.height}</div>
+                <div className="border-r border-grayscale-20 px-2 sm:px-4 py-2">{item.age}</div>
+                <div className="px-2 sm:px-4 py-2">{item.height}</div>
               </div>
             ))}
           </div>
         </div>
-      </div>
+      </aside>
 
       {/* Column 2: Growth Chart and Info */}
-      <div className="flex-1 space-y-4">
+      <section className="flex-1 space-y-3 sm:space-y-4 order-1 md:order-2">
         {/* Row 1: Growth Rate */}
-        <div className="flex items-center gap-4">
-          <div className="whitespace-nowrap text-base font-medium">Đường tăng trưởng: {data.growthRate}</div>
-          <div className="h-8 flex-1 rounded-md bg-[#FD7E14]"></div>
+        <div className="flex items-center gap-2 sm:gap-4" aria-label="Đường tăng trưởng">
+          <div className="whitespace-nowrap text-sm sm:text-base font-medium">Đường tăng trưởng: {data.growthRate}</div>
+          <div
+            className="h-6 sm:h-8 flex-1 rounded-md bg-primary-5"
+            role="progressbar"
+            aria-valuenow={data.growthRate}
+            aria-valuemin={0}
+            aria-valuemax={100}
+          ></div>
         </div>
 
         {/* Row 2: Chart Area */}
         <div className="grid grid-cols-1 md:grid-cols-[auto_1fr] gap-2">
           {/* Percentile Legend */}
-          <div className="flex md:flex-col flex-wrap gap-2 md:gap-1 py-4">
+          <div className="flex md:flex-col flex-wrap gap-1 md:gap-1 py-2 sm:py-4" aria-label="Chú thích biểu đồ">
             {[...percentiles, { name: "Dự đoán", color: "#198754" }].map((item) => (
-              <div key={item.name} className="flex items-center gap-2 whitespace-nowrap px-2">
-                <div className="h-0.5 w-4" style={{ backgroundColor: item.color }}></div>
-                <span className="text-sm">{item.name}</span>
+              <div key={item.name} className="flex items-center gap-1 sm:gap-2 whitespace-nowrap px-1 sm:px-2">
+                <div className="h-0.5 w-3 sm:w-4" style={{ backgroundColor: item.color }}></div>
+                <span className="text-xs sm:text-sm">{item.name}</span>
               </div>
             ))}
           </div>
 
           {/* Chart */}
-          <div className="h-[400px] rounded-lg border border-grayscale-20 p-4">
-            <canvas ref={chartRef}></canvas>
-          </div>
+          <figure className="h-[300px] sm:h-[400px] rounded-lg border border-grayscale-20 p-2 sm:p-4">
+            <canvas ref={chartRef} aria-label="Biểu đồ dự đoán chiều cao"></canvas>
+          </figure>
         </div>
 
         {/* Row 3: Analysis Text */}
-        <div className="space-y-2 text-sm">
+        <div className="space-y-1 sm:space-y-2 text-xs sm:text-sm">
           <p>
             • Chiều cao: {data.height}cm. Đạt chuẩn. Bé thấp hơn so với chiều cao trung bình là 2,156cm. Chuẩn WHO:
             114,156cm
@@ -352,8 +377,8 @@ export default function HeightMeasurementResult({ resultId }: HeightMeasurementR
             {new Date(data.birthDate).toLocaleDateString("vi-VN")} - {age.years} tuổi, {age.months} tháng, {age.days}{" "}
             ngày
           </p>
-          <p className="flex items-center gap-1">
-            • <span className="text-[#DC3545]">Dự đoán chiều cao khi trưởng thành: {data.predictedHeight}cm</span>
+          <p className="flex flex-wrap items-center gap-1">
+            • <span className="text-error-5">Dự đoán chiều cao khi trưởng thành: {data.predictedHeight}cm</span>
             <span className="text-grayscale-60">
               | Ngày: {data.analysisDate} - Coach: {data.coach}
             </span>
@@ -369,19 +394,22 @@ export default function HeightMeasurementResult({ resultId }: HeightMeasurementR
             • Con có thể tăng thêm 7 - 15cm so với dự đoán khi trưởng thành nếu bố mẹ giúp con áp dụng giải pháp tăng
             chiều cao của Lamin
           </p>
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+          <ul
+            className="flex flex-wrap items-center gap-x-2 sm:gap-x-4 gap-y-1 sm:gap-y-2 mt-2"
+            aria-label="Khuyến nghị"
+          >
             {data.recommendations.map((recommendation, index) => (
-              <div key={index} className="flex items-center gap-2">
-                <div className="flex h-5 w-5 items-center justify-center rounded-full bg-[#198754]">
-                  <Check className="h-3 w-3 text-white" />
+              <li key={index} className="flex items-center gap-1 sm:gap-2">
+                <div className="flex h-4 w-4 sm:h-5 sm:w-5 items-center justify-center rounded-full bg-success-5">
+                  <Check className="h-2 w-2 sm:h-3 sm:w-3 text-white" aria-hidden="true" />
                 </div>
-                <span className="text-grayscale-60">{recommendation}</span>
-              </div>
+                <span className="text-xs sm:text-sm text-grayscale-60">{recommendation}</span>
+              </li>
             ))}
-          </div>
+          </ul>
         </div>
-      </div>
-    </div>
+      </section>
+    </article>
   )
 }
 

@@ -1,2 +1,2 @@
-// Export cart components
+export * from "./CartDropdown"
 
