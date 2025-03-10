@@ -1,7 +1,13 @@
-"use server"
+"use client"
 
-export async function useArticleDetail(slug: string) {
-  // Server action to fetch article detail
-  return { id: "1", title: "Article", content: "Content" }
+import { useQuery } from "@tanstack/react-query"
+import { articleService } from "../services/articleServiceFactory"
+
+export function useArticleDetail(slug: string | undefined) {
+  return useQuery({
+    queryKey: ["article", slug],
+    queryFn: () => articleService.getArticleBySlug(slug as string),
+    enabled: !!slug,
+  })
 }
 

@@ -96,3 +96,4 @@ Lựa chọn công nghệ state management cho dự án Elena Pharmacy được 
 *   **Tối Ưu Hóa Cho React & Next.js:** Chọn công nghệ tích hợp tốt với React và Next.js App Router.
 *   **Đáp Ứng Đầy Đủ Yêu Cầu:** Đảm bảo công nghệ đáp ứng đủ yêu cầu quản lý state của từng loại (global, UI, remote, local).
 *   **Giảm Thiểu Dependency Không Cần Thiết:** Hạn chế thêm dependency ngoài khi công nghệ built-in đã đủ tốt.
+

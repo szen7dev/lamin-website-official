@@ -1,5 +1,5 @@
-import Image from "next/image"
 import { Button } from "@/components/ui/Button"
+import Image from "next/image"
 
 const products = [
   {
@@ -37,37 +37,58 @@ const products = [
 
 export default function BestSellingProducts() {
   return (
-    <div className="py-6">
+    <section className="py-4 sm:py-6" aria-labelledby="bestselling-title">
       {/* Section Title */}
-      <div className="mb-6 flex justify-center">
-        <h2 className="inline-block rounded-full bg-primary-5 px-8 py-2 text-lg font-bold text-white">
+      <header className="mb-4 sm:mb-6 flex justify-center">
+        <h2
+          id="bestselling-title"
+          className="inline-block rounded-full bg-primary-5 px-4 sm:px-8 py-1.5 sm:py-2 text-white font-bold text-base sm:text-lg"
+        >
           Sản Phẩm Bán Chạy
         </h2>
-      </div>
+      </header>
 
       {/* Products Grid */}
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+      <ul className="grid grid-cols-2 gap-2 sm:gap-3 md:gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
         {products.map((product) => (
-          <div key={product.id} className="rounded-lg border border-grayscale-20 bg-white p-4 shadow-sm">
+          <li
+            key={product.id}
+            className="rounded-lg border border-grayscale-20 bg-white p-2 sm:p-3 md:p-4 shadow-sm"
+          >
             {/* Product Image */}
-            <div className="relative mb-4 aspect-square">
-              <Image src={product.image || "/placeholder.svg"} alt={product.name} fill className="object-contain" />
-              <span className="absolute left-2 top-2 rounded bg-error-5 px-2 py-1 text-xs font-bold text-white">
+            <figure className="relative mb-2 sm:mb-3 md:mb-4 aspect-square">
+              <Image
+                src={product.image || "/placeholder.svg"}
+                alt={product.name}
+                fill
+                className="object-contain"
+              />
+              <span className="absolute left-1 top-1 sm:left-2 sm:top-2 rounded bg-error-5 px-1 py-0.5 sm:px-2 sm:py-1 text-xs font-bold text-white">
                 {product.discount}
               </span>
-            </div>
+            </figure>
 
             {/* Product Info */}
-            <h3 className="mb-3 line-clamp-2 min-h-[2.5rem] text-sm font-medium text-grayscale-90">{product.name}</h3>
+            <h3 className="mb-1.5 sm:mb-2 md:mb-3 line-clamp-2 min-h-[2.5rem] text-xs sm:text-sm font-medium text-grayscale-90">
+              {product.name}
+            </h3>
 
             {/* Unit Selection */}
-            <div className="mb-3 flex gap-2">
+            <div
+              className="mb-1.5 sm:mb-2 md:mb-3 flex flex-wrap gap-1 sm:gap-2"
+              role="radiogroup"
+              aria-label="Đơn vị sản phẩm"
+            >
               {product.units.map((unit) => (
                 <span
                   key={unit.value}
-                  className={`rounded-full px-3 py-1 text-sm ${
-                    unit.value === "hop" ? "bg-primary-5 text-white" : "border border-grayscale-30 text-grayscale-60"
+                  className={`rounded-full px-1.5 py-0.5 sm:px-2 sm:py-0.5 md:px-3 md:py-1 text-[10px] sm:text-xs md:text-sm ${
+                    unit.value === "hop"
+                      ? "bg-primary-5 text-white"
+                      : "border border-grayscale-30 text-grayscale-60"
                   }`}
+                  role="radio"
+                  aria-checked={unit.value === "hop"}
                 >
                   {unit.label}
                 </span>
@@ -75,23 +96,32 @@ export default function BestSellingProducts() {
             </div>
 
             {/* Price */}
-            <div className="mb-2">
-              <div className="flex items-baseline gap-2">
-                <span className="text-lg font-bold text-primary-5">{product.price}</span>
-                <span className="text-sm text-grayscale-50">/ {product.unit}</span>
+            <div className="mb-1.5 sm:mb-2">
+              <div className="flex items-baseline gap-1 sm:gap-2">
+                <span className="text-sm sm:text-base md:text-lg font-bold text-primary-5">
+                  {product.price}
+                </span>
+                <span className="text-[10px] sm:text-xs md:text-sm text-grayscale-50">
+                  / {product.unit}
+                </span>
               </div>
-              <span className="text-sm text-grayscale-40 line-through">{product.originalPrice}</span>
+              <span className="text-[10px] sm:text-xs md:text-sm text-grayscale-40 line-through">
+                {product.originalPrice}
+              </span>
             </div>
 
             {/* Package Info */}
-            <p className="mb-4 text-sm text-grayscale-50">{product.packageInfo}</p>
+            <p className="mb-2 sm:mb-3 md:mb-4 text-[10px] sm:text-xs md:text-sm text-grayscale-50">
+              {product.packageInfo}
+            </p>
 
             {/* Buy Button */}
-            <Button className="w-full bg-primary-5 text-white hover:bg-primary-20">Chọn Mua</Button>
-          </div>
+            <Button className="w-full text-xs sm:text-sm py-1 sm:py-1.5 md:py-2 h-auto bg-primary-5 text-white hover:bg-primary-20">
+              Chọn Mua
+            </Button>
+          </li>
         ))}
-      </div>
-    </div>
+      </ul>
+    </section>
   )
 }
-

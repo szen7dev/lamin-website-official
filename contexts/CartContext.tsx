@@ -3,16 +3,8 @@
 import type React from "react"
 
 import { createContext, useState, useEffect } from "react"
-import { cartService } from "@/services/cartService"
-
-type CartItem = {
-  id: string
-  productId: string
-  name: string
-  price: number
-  quantity: number
-  image: string
-}
+import { cartService } from "@/features/cart/services/cartServiceFactory"
+import type { CartItem } from "@/features/cart/types/cartTypes"
 
 type CartContextType = {
   items: CartItem[]
@@ -82,7 +74,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const clearCart = async () => {
     setIsLoading(true)
     try {
-      const response = await cartService.clearCart()
+      await cartService.clearCart()
       setItems([])
     } finally {
       setIsLoading(false)

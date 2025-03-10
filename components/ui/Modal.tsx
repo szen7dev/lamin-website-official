@@ -5,7 +5,6 @@ import type React from "react"
 import { useEffect, useState } from "react"
 import { createPortal } from "react-dom"
 import { cn } from "@/utils/helpers"
-import { useTheme } from "@/hooks/useTheme"
 
 interface ModalProps {
   isOpen: boolean
@@ -16,7 +15,6 @@ interface ModalProps {
 
 export function Modal({ isOpen, onClose, children, className }: ModalProps) {
   const [mounted, setMounted] = useState(false)
-  const { theme } = useTheme()
 
   useEffect(() => {
     setMounted(true)
