@@ -84,7 +84,7 @@ export default function TrustedStores() {
             </p>
           </div>
           <Button
-            className="hidden sm:flex rounded-full bg-white items-center gap-1 text-primary hover:text-white/90 text-sm font-normal"
+            className="hidden sm:flex rounded-full bg-white items-center gap-1 text-primary text-sm font-normal decoration-transparent hover:bg-white/90"
             variant="link">
             Xem tất cả
             <ChevronRight className="h-4 w-4" />
@@ -145,7 +145,7 @@ export default function TrustedStores() {
         {/* Mobile View All Button */}
         <div className="mt-4 flex sm:hidden justify-center">
           <Button
-            className="flex rounded-full bg-white items-center gap-1 text-primary hover:text-white/90 text-xs font-normal px-3 py-1"
+            className="decoration-transparent flex rounded-full bg-white items-center gap-1 text-primary hover:bg-white/90 text-xs font-normal px-3 py-1"
             variant="link">
             Xem tất cả
             <ChevronRight className="h-3 w-3" />

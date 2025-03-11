@@ -1,4 +1,5 @@
 import Image from 'next/image'
+
 import { Button } from '@/components/ui/Button'
 
 const trustedShops = [
@@ -39,7 +40,7 @@ export default function TrustedShopsShowcase() {
     <section className="py-8">
       <div className="mb-6 flex items-center justify-between">
         <h2 className="text-xl font-bold text-primary">Hệ thống nhà thuốc uy tín</h2>
-        <Button variant="link" className="text-primary-40">
+        <Button className="text-primary-40" variant="link">
           Xem tất cả
         </Button>
       </div>
@@ -49,11 +50,11 @@ export default function TrustedShopsShowcase() {
             key={shop.id}
             className="flex items-center justify-center rounded-lg border border-grayscale-20 bg-white p-4 transition-shadow hover:shadow-sm">
             <Image
-              src={shop.image || '/placeholder.svg'}
               alt={shop.name}
-              width={160}
-              height={80}
               className="object-contain"
+              height={80}
+              src={shop.image || '/placeholder.svg'}
+              width={160}
             />
           </div>
         ))}
