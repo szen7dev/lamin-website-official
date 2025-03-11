@@ -1,19 +1,19 @@
-import { generateMetadata as generateSeoMetadata } from "@/utils/seo"
-import { Inter } from "next/font/google"
-import type React from "react"
-import "../styles/globals.css"
+import type React from 'react'
 
-const inter = Inter({ subsets: ["latin"] })
+import '../styles/globals.css'
+import clsx from 'clsx'
 
-export const metadata = generateSeoMetadata({
-  title: "Elena Pharmacy",
-  description: "Your trusted pharmacy partner",
-})
+import { fontSans } from '@/config/fonts'
+
+export const metadata = {
+  title: 'Elena Pharmacy',
+  description: 'Your trusted pharmacy partner',
+}
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={`${inter.className} bg-background text-foreground antialiased`}>
+      <body className={clsx('bg-background font-sans antialiased', fontSans.variable)}>
         {children}
       </body>
     </html>

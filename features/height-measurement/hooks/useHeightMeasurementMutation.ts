@@ -1,19 +1,23 @@
-"use client"
+'use client'
 
-import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { useRouter } from "next/navigation"
-import { heightMeasurementService } from "../services/heightMeasurementServiceFactory"
-import type { HeightMeasurementFormData, HeightMeasurementResult } from "../types/heightMeasurementTypes"
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useRouter } from 'next/navigation'
+import { heightMeasurementService } from '../services/heightMeasurementServiceFactory'
+import type {
+  HeightMeasurementFormData,
+  HeightMeasurementResult,
+} from '../types/heightMeasurementTypes'
 
 export function useHeightMeasurementMutation() {
   const queryClient = useQueryClient()
   const router = useRouter()
 
   return useMutation({
-    mutationFn: (formData: HeightMeasurementFormData) => heightMeasurementService.submitHeightMeasurement(formData),
+    mutationFn: (formData: HeightMeasurementFormData) =>
+      heightMeasurementService.submitHeightMeasurement(formData),
     onSuccess: (data: HeightMeasurementResult) => {
       // Save result to cache
-      queryClient.setQueryData(["heightMeasurement", data.id], data)
+      queryClient.setQueryData(['heightMeasurement', data.id], data)
 
       router.push(`/height-measurement/results?id=${data.id}`)
     },
@@ -27,6 +31,5 @@ export function useHeightMeasurementResult(id: string | undefined) {
   if (!id) return null
 
   // Get data from cache
-  return queryClient.getQueryData<HeightMeasurementResult>(["heightMeasurement", id])
+  return queryClient.getQueryData<HeightMeasurementResult>(['heightMeasurement', id])
 }
-

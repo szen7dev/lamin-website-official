@@ -1,195 +1,150 @@
-"use client"
+'use client'
 
-import { Button } from "@/components/ui/Button"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { CartDropdown } from "@/features/cart/components/CartDropdown"
-import MegaMenu from "@/features/menu/components/MegaMenu"
-import SearchBar from "@/features/search/components/SearchBar"
-import { useMediaQuery } from "@/hooks/useMediaQuery"
-import { Download, Menu, Phone, Search, ShoppingCart, User, X } from "lucide-react"
-import Image from "next/image"
-import Link from "next/link"
-import { useEffect, useState } from "react"
+import Image from 'next/image'
+import Link from 'next/link'
+import { CircleUser, Phone, ShoppingCart, Smartphone, Menu } from 'lucide-react'
+import { useRef } from 'react'
 
+import { Button } from '@/components/ui/Button'
+import { Separator } from '@/components/ui/separator'
+import SearchBar from '@/features/homepage/components/SearchBar'
+import MegaMenu from '@/features/homepage/components/MegaMenu'
+
+// Sample data for popular keywords
 const popularKeywords = [
-  { label: "Thuốc nhỏ mắt", href: "#" },
-  { label: "Men vi sinh", href: "#" },
-  { label: "Bột hòa tan", href: "#" },
-  { label: "Omega 3", href: "#" },
-  { label: "Siro ho", href: "#" },
-  { label: "Canxi", href: "#" },
-  { label: "Kẽm", href: "#" },
+  { label: 'Thuốc kháng sinh', href: '#' },
+  { label: 'Vitamin C', href: '#' },
+  { label: 'Paracetamol', href: '#' },
+  { label: 'Mỹ phẩm', href: '#' },
 ]
 
-export function Header() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [searchOpen, setSearchOpen] = useState(false)
-  const isMobile = useMediaQuery("(max-width: 768px)")
-
-  // Close mobile menu when screen size changes to desktop
-  useEffect(() => {
-    if (!isMobile && mobileMenuOpen) {
-      setMobileMenuOpen(false)
-    }
-  }, [isMobile, mobileMenuOpen])
+export default function Header() {
+  const menuButtonRef = useRef<HTMLButtonElement>(null)
 
   return (
-    <header className="w-full bg-gradient-to-r from-primary-5 to-primary-40">
-      {/* Actions Row */}
-      <div className="container mx-auto px-4">
-        <div className="flex gap-4 flex-col md:flex-row">
-          {/* Main Content Column */}
-          <div className="flex-1">
-            {/* Top Row with Logo, Actions and Auth */}
-            <div className="flex h-16 items-center justify-between">
-              {/* Logo and Mobile Menu Toggle */}
-              <div className="flex items-center gap-4">
-                {/* Mobile Menu Toggle */}
-                <button
-                  className="md:hidden text-white"
-                  onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                  aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
-                >
-                  {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-                </button>
-
-                {/* Logo */}
-                <Link href="/" className="flex items-center gap-2" aria-label="Elena Pharmacy Home">
+    <header className="w-full bg-gradient-3">
+      {/* Top Bar */}
+      <div className="container mx-auto px-4 py-4 md:mt-8 md:mb-8">
+        <div className="flex flex-col md:flex-row md:justify-between md:gap-8">
+          <div className="flex flex-col grow justify-between md:h-44">
+            <div className="flex flex-col space-y-4 sm:flex-row sm:space-y-0 h-max items-start sm:items-center justify-between">
+              {/* Mobile Menu Button - Only visible on small screens */}
+              <div className="flex w-full justify-between items-center sm:hidden">
+                <Link className="flex items-end gap-2" href="/">
                   <Image
-                    src="https://images.glints.com/unsafe/glints-dashboard.oss-ap-southeast-1.aliyuncs.com/company-logo/fd3ef04e572c6436a8580539e7555fd0.jpg"
                     alt="FPT Retail"
-                    width={40}
-                    height={40}
-                    className="h-10 w-auto"
+                    className="h-8 w-auto"
+                    height={32}
+                    src="https://images.glints.com/unsafe/glints-dashboard.oss-ap-southeast-1.aliyuncs.com/company-logo/fd3ef04e572c6436a8580539e7555fd0.jpg"
+                    width={32}
                   />
                   <div className="text-white">
-                    <div className="text-xs font-medium uppercase tracking-wide">Nhà Thuốc</div>
+                    <div className="text-xs font-medium">NHÀ THUỐC</div>
+                    <div className="text-base font-bold leading-none">LONG CHÂU</div>
+                  </div>
+                </Link>
+                <Button
+                  className="text-white"
+                  variant="ghost"
+                  onClick={() => menuButtonRef.current?.click()}>
+                  <Menu className="h-6 w-6" />
+                </Button>
+              </div>
+
+              <div className="hidden sm:flex justify-items-start gap-4">
+                {/* Logo */}
+                <Link className="flex items-end gap-2" href="/">
+                  <Image
+                    alt="FPT Retail"
+                    className="h-10 w-auto"
+                    height={40}
+                    src="https://images.glints.com/unsafe/glints-dashboard.oss-ap-southeast-1.aliyuncs.com/company-logo/fd3ef04e572c6436a8580539e7555fd0.jpg"
+                    width={40}
+                  />
+                  <div className="text-white">
+                    <div className="text-xs font-medium">NHÀ THUỐC</div>
                     <div className="text-lg font-bold leading-none">LONG CHÂU</div>
                   </div>
                 </Link>
-              </div>
 
-              {/* Mobile Search Toggle and Cart/Auth Buttons */}
-              <div className="flex items-center gap-2">
-                {/* Mobile Search Toggle */}
-                <button
-                  className="md:hidden text-white p-2"
-                  onClick={() => setSearchOpen(!searchOpen)}
-                  aria-label={searchOpen ? "Close search" : "Open search"}
-                >
-                  <Search className="h-5 w-5" />
-                </button>
-
-                {/* Auth Button - Simplified on Mobile */}
-                <div className="hidden sm:block">
-                  <Button
-                    variant="secondary"
-                    className="flex items-center gap-2 rounded-full bg-white px-3 sm:px-6 text-primary-5 hover:bg-white/90"
-                  >
-                    <User className="h-5 w-5" />
-                    <span className="font-medium hidden sm:inline">Đăng Nhập</span>
-                  </Button>
+                {/* Contact and Download - Hidden on mobile, visible on medium screens */}
+                <div className="hidden md:flex items-end gap-4 ml-4">
+                  <div className="flex items-end gap-2">
+                    <Phone className="h-5 w-5 text-white" />
+                    <div className="text-white">
+                      <span className="mr-1 text-sm">Tư vấn ngay:</span>
+                      <span className="font-medium">1800 6789</span>
+                    </div>
+                  </div>
+                  <div className="h-5">
+                    <Separator className="h-full bg-white" orientation="vertical" />
+                  </div>
+                  <div className="flex items-end gap-2 rounded-full text-white px-0 py-0">
+                    <Smartphone className="h-5 w-5" />
+                    <span>Tải ứng dụng</span>
+                  </div>
                 </div>
+              </div>
 
-                {/* Cart Dropdown - Simplified on Mobile */}
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button
-                      variant="secondary"
-                      className="flex items-center gap-2 rounded-full bg-white px-3 sm:px-6 text-primary-5 hover:bg-white/90"
-                    >
-                      <ShoppingCart className="h-5 w-5" />
-                      <span className="font-medium hidden sm:inline">Giỏ Hàng</span>
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-[90vw] sm:w-[400px] p-0">
-                    <CartDropdown />
-                  </DropdownMenuContent>
-                </DropdownMenu>
+              {/* Auth and Cart */}
+              <div className="hidden sm:flex items-center gap-2 md:gap-4 mt-4 sm:mt-0">
+                <Button className="rounded-full bg-white px-3 md:px-6 text-primary hover:bg-white/90 text-xs md:text-sm">
+                  <CircleUser className="mr-1 md:mr-2 h-4 md:h-5 w-4 md:w-5" />
+                  Đăng Nhập
+                </Button>
+                <Button className="rounded-full bg-primary px-3 md:px-6 text-white hover:bg-primary/90 text-xs md:text-sm">
+                  <ShoppingCart className="mr-1 md:mr-2 h-4 md:h-5 w-4 md:w-5" fill="white" />
+                  Giỏ Hàng
+                </Button>
               </div>
             </div>
 
-            {/* Search Bar - Responsive */}
-            <div className={`py-4 ${searchOpen || !isMobile ? "block" : "hidden"}`}>
-              <SearchBar />
+            {/* Search Bar Section */}
+            <div className="flex gap-4 py-4 mt-4 sm:mt-0">
+              <div className="flex-1">
+                <SearchBar />
+              </div>
             </div>
 
-            {/* Popular Keywords - Hide on Small Mobile */}
-            <div className="hidden sm:flex flex-wrap items-center gap-x-4 gap-y-2 pb-4">
+            {/* Popular Keywords - Hidden on smallest screens */}
+            <div className="hidden sm:flex flex-wrap gap-x-4 gap-y-1">
               <span className="text-sm text-white/80">Từ khóa phổ biến:</span>
-              {popularKeywords.map((keyword) => (
+              {popularKeywords.map(keyword => (
                 <Link
                   key={keyword.label}
-                  href={keyword.href}
-                  className="text-sm text-white underline decoration-white decoration-1 underline-offset-4 transition hover:text-white/90"
-                >
+                  className="text-sm text-white decoration-white underline decoration-1 underline-offset-4 hover:text-white/90"
+                  href={keyword.href}>
                   {keyword.label}
                 </Link>
               ))}
             </div>
           </div>
 
-          {/* QR Code Column - Hide on Mobile */}
-          <div className="hidden md:flex w-[220px] flex-shrink-0 flex-col items-center justify-center rounded-lg bg-error-30 px-4 py-3">
-            <div className="text-center text-white">
-              <div className="text-sm font-medium">- Quét Mã QR -</div>
-              <div className="text-base font-bold">Tặng Voucher 1tr</div>
+          {/* QR Code Section - Hidden on mobile */}
+          <div className="hidden md:flex w-max flex-col items-center justify-center rounded-xl bg-[#F37021]">
+            <div className="text-center text-white p-2">
+              <div className="text-sm">- Quét Mã QR -</div>
+              <div className="text-sm">Tặng Voucher 1tr</div>
             </div>
-            <div className="mt-2 overflow-hidden rounded-lg bg-white p-2">
-              <Image
-                src="/placeholder.svg?height=100&width=100"
-                alt="QR Code"
-                width={100}
-                height={100}
-                className="h-auto w-full"
-              />
-            </div>
+            <div className="flex justify-between bg-white w-full h-full rounded-b-xl" />
           </div>
         </div>
       </div>
 
-      {/* Navigation Menu - Toggle on Mobile */}
-      <nav
-        className={`border-t border-white/10 ${mobileMenuOpen || !isMobile ? "block" : "hidden"}`}
-        aria-label="Main Navigation"
-      >
-        <div className="container mx-auto px-4">
-          <MegaMenu />
-        </div>
-      </nav>
+      {/* Mobile Auth and Cart - Only visible on small screens */}
+      <div className="flex sm:hidden justify-between items-center px-4 py-2 bg-white/10">
+        <Button className="rounded-full bg-white px-4 text-primary hover:bg-white/90 text-xs h-8">
+          <CircleUser className="mr-1 h-3 w-3" />
+          Đăng Nhập
+        </Button>
+        <Button className="rounded-full bg-primary px-4 text-white hover:bg-primary/90 text-xs h-8">
+          <ShoppingCart className="mr-1 h-3 w-3" fill="white" />
+          Giỏ Hàng
+        </Button>
+      </div>
 
-      {/* Mobile Contact and Download - Show in Mobile Menu */}
-      {mobileMenuOpen && (
-        <div className="md:hidden border-t border-white/10 py-4">
-          <div className="container mx-auto px-4 flex flex-col gap-3">
-            <button className="flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-white transition hover:bg-white/20 w-full justify-center">
-              <Phone className="h-5 w-5" />
-              <div>
-                <span className="mr-1 text-sm">Tư vấn ngay:</span>
-                <span className="font-medium">1800 6789</span>
-              </div>
-            </button>
-
-            <button className="flex items-center gap-2 rounded-full border border-white/20 px-4 py-2 text-white transition hover:bg-white/10 w-full justify-center">
-              <Download className="h-5 w-5" />
-              <span>Tải ứng dụng</span>
-            </button>
-
-            {/* Mobile Auth Button */}
-            <Button
-              variant="secondary"
-              className="flex items-center gap-2 rounded-full bg-white px-6 text-primary-5 hover:bg-white/90 w-full justify-center sm:hidden"
-            >
-              <User className="h-5 w-5" />
-              <span className="font-medium">Đăng Nhập</span>
-            </Button>
-          </div>
-        </div>
-      )}
+      {/* Main Navigation */}
+      <MegaMenu megaMenuRef={menuButtonRef} />
     </header>
   )
 }

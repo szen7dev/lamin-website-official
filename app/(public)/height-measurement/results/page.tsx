@@ -1,5 +1,5 @@
-import { Breadcrumb } from "@/components/ui/Breadcrumb"
-import HeightMeasurementResult from "@/features/height-measurement/components/HeightMeasurementResult"
+import { Breadcrumb } from '@/components/ui/Breadcrumb'
+import HeightMeasurementResult from '@/features/height-measurement/components/HeightMeasurementResult'
 
 export default async function HeightMeasurementResultsPage({
   searchParams,
@@ -16,9 +16,9 @@ export default async function HeightMeasurementResultsPage({
           {/* Breadcrumb */}
           <Breadcrumb
             items={[
-              { label: "Trang Chủ", href: "/" },
-              { label: "Đo Cao", href: "/height-measurement" },
-              { label: "Kết quả phân tích" },
+              { label: 'Trang Chủ', href: '/' },
+              { label: 'Đo Cao', href: '/height-measurement' },
+              { label: 'Kết quả phân tích' },
             ]}
           />
 

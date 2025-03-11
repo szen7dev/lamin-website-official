@@ -1,7 +1,9 @@
-import type React from "react"
-import { Header } from "./Header"
-import { Footer } from "./Footer"
-import { ThemeProvider } from "@/contexts/ThemeContext"
+import type React from 'react'
+
+import { Footer } from './Footer'
+import Header from './Header'
+
+import { ThemeProvider } from '@/contexts/ThemeContext'
 
 export function PublicLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -14,4 +16,3 @@ export function PublicLayout({ children }: { children: React.ReactNode }) {
     </ThemeProvider>
   )
 }
-
