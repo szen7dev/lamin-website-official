@@ -1,15 +1,32 @@
-"use client"
+'use client'
 
-import { Button } from "@/components/ui/Button"
-import { useSearch } from "@/features/search/hooks/useSearch"
-import { Search, X } from "lucide-react"
-import { useEffect, useRef, useState } from "react"
-import SearchSuggestions from "./SearchSuggestions"
+import { useState, useEffect, useRef } from 'react'
+
+import SearchSuggestions from './SearchSuggestions'
+
+import { useSearch } from '@/features/search/hooks/useSearch'
+
+const CustomCircleX = () => (
+  <svg
+    fill="none"
+    height="24"
+    stroke="currentColor"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    strokeWidth="2"
+    viewBox="0 0 24 24"
+    width="24"
+    xmlns="http://www.w3.org/2000/svg">
+    <circle cx="12" cy="12" fill="#404968" r="10" stroke="#404968" />
+    <path d="m15 9-6 6" stroke="white" />
+    <path d="m9 9 6 6" stroke="white" />
+  </svg>
+)
 
 export default function SearchBar() {
   const [isFocused, setIsFocused] = useState(false)
   const searchRef = useRef<HTMLDivElement>(null)
-  const { query, setQuery, results, isLoading, hasResults } = useSearch()
+  const { query, setQuery, results } = useSearch()
 
   // Handle click outside to close suggestions
   useEffect(() => {
@@ -19,45 +36,25 @@ export default function SearchBar() {
       }
     }
 
-    document.addEventListener("mousedown", handleClickOutside)
-    return () => document.removeEventListener("mousedown", handleClickOutside)
+    document.addEventListener('mousedown', handleClickOutside)
+
+    return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
   return (
     <div ref={searchRef} className="relative w-full">
       <div className="relative">
-        <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-grayscale-50" />
-        <input
-          type="search"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          onFocus={() => setIsFocused(true)}
-          placeholder="Tìm kiếm sản phẩm, dịch vụ . . ."
-          className="h-12 w-full rounded-lg border-none bg-white pl-12 pr-10 text-base text-grayscale-90 shadow-sm placeholder:text-grayscale-40 focus:outline-none focus:ring-2 focus:ring-primary-20"
-        />
         {query && (
-          <Button
-            onClick={() => setQuery("")}
-            variant="ghost"
-            size="sm"
-            className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full p-1 hover:bg-grayscale-10"
-          >
-            <X className="h-5 w-5 text-grayscale-50" />
-            <span className="sr-only">Clear search</span>
-          </Button>
-        )}
-
-        {isLoading && (
-          <div className="absolute right-12 top-1/2 -translate-y-1/2">
-            <div className="h-4 w-4 animate-spin rounded-full border-2 border-primary-40 border-t-transparent"></div>
-          </div>
+          <button className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full p-1 hover:bg-grayscale-10">
+            <CustomCircleX />
+          </button>
         )}
       </div>
 
       <SearchSuggestions
+        isVisible={isFocused && query.length > 0}
         query={query}
         results={results}
-        isVisible={isFocused && query.length > 0}
         onClose={() => setIsFocused(false)}
       />
     </div>

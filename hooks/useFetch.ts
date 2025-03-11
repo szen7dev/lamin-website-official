@@ -1,9 +1,9 @@
-"use client"
+'use client'
 
-import { useState, useEffect } from "react"
+import { useState, useEffect } from 'react'
 
 interface UseFetchOptions {
-  method?: "GET" | "POST" | "PUT" | "DELETE"
+  method?: 'GET' | 'POST' | 'PUT' | 'DELETE'
   body?: any
   headers?: Record<string, string>
 }
@@ -17,9 +17,9 @@ export function useFetch<T>(url: string, options?: UseFetchOptions) {
     const fetchData = async () => {
       try {
         const response = await fetch(url, {
-          method: options?.method || "GET",
+          method: options?.method || 'GET',
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
             ...options?.headers,
           },
           body: options?.body ? JSON.stringify(options.body) : undefined,
@@ -43,4 +43,3 @@ export function useFetch<T>(url: string, options?: UseFetchOptions) {
 
   return { data, error, loading }
 }
-

@@ -1,32 +1,32 @@
-"use client"
+'use client'
 
-import { Button } from "@/components/ui/Button"
-import { Input } from "@/components/ui/Input"
-import { useForm } from "@/hooks/useForm"
-import { useState } from "react"
+import { Button } from '@/components/ui/Button'
+import { Input } from '@/components/ui/Input'
+import { useForm } from '@/hooks/useForm'
+import { useState } from 'react'
 
 export function ContactForm() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { values, errors, handleChange, handleSubmit } = useForm({
     initialValues: {
-      name: "",
-      email: "",
-      message: "",
+      name: '',
+      email: '',
+      message: '',
     },
-    validate: (values) => {
+    validate: values => {
       const errors: Record<string, string> = {}
-      if (!values.name) errors.name = "Name is required"
-      if (!values.email) errors.email = "Email is required"
-      if (!values.message) errors.message = "Message is required"
+      if (!values.name) errors.name = 'Name is required'
+      if (!values.email) errors.email = 'Email is required'
+      if (!values.message) errors.message = 'Message is required'
       return errors
     },
-    onSubmit: async (values) => {
+    onSubmit: async values => {
       setIsSubmitting(true)
       try {
         // Submit form logic
-        console.log("Form submitted:", values)
+        console.log('Form submitted:', values)
       } catch (error) {
-        console.error("Error submitting form:", error)
+        console.error('Error submitting form:', error)
       } finally {
         setIsSubmitting(false)
       }
@@ -77,7 +77,7 @@ export function ContactForm() {
         {errors.message && <p className="text-sm text-destructive">{errors.message}</p>}
       </div>
       <Button type="submit" disabled={isSubmitting}>
-        {isSubmitting ? "Sending..." : "Send Message"}
+        {isSubmitting ? 'Sending...' : 'Send Message'}
       </Button>
     </form>
   )

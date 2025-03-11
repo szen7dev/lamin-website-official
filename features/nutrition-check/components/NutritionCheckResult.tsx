@@ -1,19 +1,19 @@
-"use client"
+'use client'
 
-import { Button } from "@/components/ui/Button"
-import { CheckCircle2 } from "lucide-react"
-import { useNutritionCheckResult } from "../hooks/useNutritionCheckMutation"
+import { Button } from '@/components/ui/Button'
+import { CheckCircle2 } from 'lucide-react'
+import { useNutritionCheckResult } from '../hooks/useNutritionCheckMutation'
 
 interface NutritionCheckResultProps {
   resultId?: string
 }
 
 const foodLabels: Record<string, string> = {
-  egg: "Trứng",
-  chicken: "Thịt gà",
-  beef: "Thịt bò",
-  pork: "Thịt heo",
-  vegetables: "Rau xanh",
+  egg: 'Trứng',
+  chicken: 'Thịt gà',
+  beef: 'Thịt bò',
+  pork: 'Thịt heo',
+  vegetables: 'Rau xanh',
 }
 
 export default function NutritionCheckResult({ resultId }: NutritionCheckResultProps) {
@@ -83,7 +83,7 @@ export default function NutritionCheckResult({ resultId }: NutritionCheckResultP
           <input
             type="text"
             id="result-foods"
-            value={result.regularFoods.map((food) => foodLabels[food]).join(", ")}
+            value={result.regularFoods.map(food => foodLabels[food]).join(', ')}
             readOnly
             className="w-full rounded border border-grayscale-20 bg-white px-3 py-2 text-sm text-grayscale-90"
           />
@@ -96,7 +96,7 @@ export default function NutritionCheckResult({ resultId }: NutritionCheckResultP
           <input
             type="text"
             id="result-known"
-            value={result.knownProduct === "yes" ? "Đã biết" : "Chưa biết"}
+            value={result.knownProduct === 'yes' ? 'Đã biết' : 'Chưa biết'}
             readOnly
             className="w-full rounded border border-grayscale-20 bg-white px-3 py-2 text-sm text-grayscale-90"
           />
@@ -108,8 +108,7 @@ export default function NutritionCheckResult({ resultId }: NutritionCheckResultP
         <Button
           onClick={() => window.history.back()}
           variant="outline"
-          className="rounded border border-primary-5 px-6 py-2 text-sm font-medium text-primary-5 hover:bg-primary-5/5"
-        >
+          className="rounded border border-primary-5 px-6 py-2 text-sm font-medium text-primary-5 hover:bg-primary-5/5">
           Quay lại
         </Button>
         <Button className="rounded bg-primary-5 px-6 py-2 text-sm font-medium text-white hover:bg-primary-20">

@@ -1,7 +1,9 @@
-import type React from "react"
-import { Header } from "./Header"
-import { Footer } from "./Footer"
-import { ThemeProvider } from "@/contexts/ThemeContext"
+import type React from 'react'
+
+import { Header } from './Header'
+import { Footer } from './Footer'
+
+import { ThemeProvider } from '@/contexts/ThemeContext'
 
 export function ProtectedLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -14,4 +16,3 @@ export function ProtectedLayout({ children }: { children: React.ReactNode }) {
     </ThemeProvider>
   )
 }
-

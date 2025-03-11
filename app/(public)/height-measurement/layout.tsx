@@ -1,4 +1,4 @@
-import type { ReactNode } from "react"
+import type { ReactNode } from 'react'
 
 export default function HeightMeasurementLayout({ children }: { children: ReactNode }) {
   return (
@@ -7,4 +7,3 @@ export default function HeightMeasurementLayout({ children }: { children: ReactN
     </div>
   )
 }
-
