@@ -4,8 +4,8 @@ import type React from 'react'
 
 import { forwardRef } from 'react'
 import { cva, type VariantProps } from 'class-variance-authority'
+
 import { cn } from '@/utils/helpers'
-import { useTheme } from '@/hooks/useTheme'
 
 const buttonVariants = cva(
   'inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background',
@@ -38,13 +38,12 @@ export interface ButtonProps
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, ...props }, ref) => {
-    const { theme } = useTheme()
-
     return (
-      <button className={cn(buttonVariants({ variant, size, className }))} ref={ref} {...props} />
+      <button ref={ref} className={cn(buttonVariants({ variant, size, className }))} {...props} />
     )
   },
 )
+
 Button.displayName = 'Button'
 
 export { Button, buttonVariants }

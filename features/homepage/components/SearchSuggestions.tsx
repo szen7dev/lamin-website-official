@@ -42,15 +42,15 @@ export default function SearchSuggestions({
         {results.map(result => (
           <Link
             key={result.id}
-            href={`/products/${result.id}`}
             className="flex items-center gap-4 px-4 py-3 transition-colors hover:bg-grayscale-5 decoration-transparent"
+            href={`/products/${result.id}`}
             onClick={onClose}>
             <Image
-              src={result.image || '/placeholder.svg'}
               alt={result.name}
-              width={48}
-              height={48}
               className="h-12 w-12 rounded-lg object-cover"
+              height={48}
+              src={result.image || '/placeholder.svg'}
+              width={48}
             />
             <div className="flex flex-col flex-1 items-start justify-between">
               <p className="line-clamp-2 flex-1 text-sm text-grayscale-50">{result.name}</p>
@@ -67,8 +67,8 @@ export default function SearchSuggestions({
 
       {/* View All Link */}
       <Link
-        href={`/search?q=${encodeURIComponent(query)}`}
         className="flex items-center justify-center gap-1 border-t border-grayscale-20 p-3 text-sm text-primary decoration-transparent"
+        href={`/search?q=${encodeURIComponent(query)}`}
         onClick={onClose}>
         Xem tất cả
         <ChevronRight className="h-4 w-4" />

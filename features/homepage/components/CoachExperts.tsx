@@ -32,7 +32,7 @@ const coaches = [
 export default function CoachExperts() {
   return (
     <section className="rounded-2xl bg-gradient-3 p-8">
-      <div className="mb-8">
+      <header className="mb-8">
         <h2 className="mb-2 text-3xl font-semibold text-white">Coach tư vấn chăm sóc sức khỏe</h2>
         <p className="mb-4 text-white/90 text-base font-medium">
           Danh sách các Coach tư vấn chăm sóc sức khỏe của Elela
@@ -41,14 +41,14 @@ export default function CoachExperts() {
           className="flex !rounded-full items-center gap-2 bg-white text-primary hover:bg-white/90"
           variant="secondary">
           Tìm hiểu thêm
-          <ChevronRight className="h-4 w-4" />
+          <ChevronRight aria-hidden="true" className="h-3 w-3 sm:h-4 sm:w-4" />
         </Button>
-      </div>
+      </header>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {coaches.map(coach => (
-          <div key={coach.id} className="rounded-xl bg-white p-4">
-            <div className="flex items-center gap-4">
+          <li key={coach.id} className="rounded-xl bg-white p-4">
+            <article className="flex items-center gap-4">
               <Image
                 alt={coach.name}
                 className="rounded-full"
@@ -61,10 +61,10 @@ export default function CoachExperts() {
                 <h3 className="text-lg font-semibold text-grayscale-90">{coach.name}</h3>
                 <p className="text-sm text-primary">{coach.experience}</p>
               </div>
-            </div>
-          </div>
+            </article>
+          </li>
         ))}
-      </div>
+      </ul>
     </section>
   )
 }

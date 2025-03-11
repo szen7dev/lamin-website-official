@@ -1,14 +1,12 @@
 import type { Metadata } from 'next'
-
 import { Breadcrumb } from '@/components/ui/Breadcrumb'
 import NutritionCheckForm from '@/features/nutrition-check/components/NutritionCheckForm'
+import { generateMetadata as generateSeoMetadata } from '@/utils/seo'
 
-export const metadata: Metadata = {
+export const metadata: Metadata = generateSeoMetadata({
   title: 'Kiểm Tra Dinh Dưỡng - Elena Pharmacy',
   description: 'Kiểm tra thói quen ăn uống và nhận tư vấn dinh dưỡng',
-}
-
-// Fix giao diện để trông giống figma
+})
 
 export default function NutritionCheckPage() {
   return (

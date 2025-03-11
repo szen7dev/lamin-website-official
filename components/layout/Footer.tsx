@@ -93,7 +93,7 @@ export function Footer() {
           </div>
 
           {/* Contact & Certifications Column */}
-          <div className="space-y-6">
+          <section className="space-y-6">
             {/* Hotline Section */}
             <div>
               <div className="flex">
@@ -172,10 +172,10 @@ export function Footer() {
                 </Link>
               </div>
             </div>
-          </div>
+          </section>
 
           {/* Payment & App Download Column */}
-          <div className="space-y-6">
+          <section className="space-y-6">
             {/* Payment Methods */}
             <div>
               <div className="flex">
@@ -216,7 +216,7 @@ export function Footer() {
                 width={120}
               />
             </div>
-          </div>
+          </section>
         </div>
 
         {/* Copyright Section */}

@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { ChevronRight, Newspaper } from 'lucide-react'
+
 import { Button } from '@/components/ui/Button'
 import { Separator } from '@/components/ui/separator'
 import { Badge } from '@/components/ui/badge'
@@ -61,19 +62,19 @@ const relatedArticles = [
 
 export default function HealthNews() {
   return (
-    <div>
+    <section aria-labelledby="health-news-title">
       {/* Header */}
       <div className="mb-6 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Newspaper className="h-6 w-6 text-primary-40" />
           <h2 className="text-lg font-semibold">Góc Sức Khỏe</h2>
           <div className="h-6">
-            <Separator orientation="vertical" className="flex-1 w-[1px]" />
+            <Separator className="flex-1 w-[1px]" orientation="vertical" />
           </div>
 
           <Button
-            variant="link"
-            className="flex items-center gap-1 text-primary-40 pl-0 decoration-transparent">
+            className="flex items-center gap-1 text-primary-40 pl-0 decoration-transparent"
+            variant="link">
             Xem thêm
             <ChevronRight className="h-4 w-4" />
           </Button>
@@ -81,29 +82,29 @@ export default function HealthNews() {
       </div>
 
       {/* Categories */}
-      <div className="mb-6 flex flex-wrap gap-2">
+      <nav className="mb-6 flex flex-wrap gap-2">
         {categories.map(category => (
-          <Badge key={category.id} variant="outline" className="bg-white border-1">
+          <Badge key={category.id} className="bg-white border-1" variant="outline">
             <Link
-              href={category.href}
-              className="decoration-transparent text-black font-medium text-sm">
+              className="decoration-transparent text-black font-medium text-sm"
+              href={category.href}>
               {category.label}
             </Link>
           </Badge>
         ))}
-      </div>
+      </nav>
 
       {/* Content Grid */}
-      <div className="grid gap-6 md:grid-cols-3">
+      <div className="grid gap-4 sm:gap-6 md:grid-cols-3">
         {/* Main Article */}
-        <div className="md:col-span-2">
-          <Link href={mainArticle.href} className="group block decoration-transparent">
+        <article className="md:col-span-2">
+          <Link className="group block decoration-transparent" href={mainArticle.href}>
             <div className="relative mb-4 aspect-[16/9] overflow-hidden rounded-lg">
               <Image
-                src={mainArticle.image || '/placeholder.svg'}
-                alt={mainArticle.title}
                 fill
+                alt={mainArticle.title}
                 className="object-cover transition-transform duration-300 group-hover:scale-105"
+                src={mainArticle.image || '/placeholder.svg'}
               />
             </div>
             <div className="mb-2 flex items-center gap-3">
@@ -115,21 +116,21 @@ export default function HealthNews() {
               {mainArticle.title}
             </h3>
           </Link>
-        </div>
+        </article>
 
         {/* Related Articles */}
-        <div className="flex flex-col justify-between space-y-4">
+        <aside className="flex flex-col justify-between space-y-4">
           {relatedArticles.map(article => (
             <Link
               key={article.id}
-              href={article.href}
-              className="group flex gap-4 decoration-transparent">
+              className="group flex gap-4 decoration-transparent"
+              href={article.href}>
               <div className="relative h-24 w-36 flex-shrink-0 overflow-hidden rounded-lg">
                 <Image
-                  src={article.image || '/placeholder.svg'}
-                  alt={article.title}
                   fill
+                  alt={article.title}
                   className="object-cover transition-transform duration-300 group-hover:scale-105"
+                  src={article.image || '/placeholder.svg'}
                 />
               </div>
               <div className="flex flex-col justify-around">
@@ -142,8 +143,8 @@ export default function HealthNews() {
               </div>
             </Link>
           ))}
-        </div>
+        </aside>
       </div>
-    </div>
+    </section>
   )
 }

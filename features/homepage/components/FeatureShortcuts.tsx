@@ -1,7 +1,6 @@
 'use client'
 
 import Link from 'next/link'
-import { ShoppingBag, Stethoscope, MapPin, FileText, Activity, Ruler } from 'lucide-react'
 import Image from 'next/image'
 
 const features = [
@@ -52,7 +51,7 @@ export default function FeatureShortcuts() {
           className="gap-2 border-1 border-[#EFF1F5] rounded-xl drop-shadow-lg px-4 py-3 transition-colors bg-white hover:bg-primary/5 decoration-transparent">
           <Link href={feature.href}>
             <div className="flex flex-wrap justify-start items-center gap-1">
-              <Image src={feature.image} alt={feature.label} width={32} height={32} />
+              <Image alt={feature.label} height={32} src={feature.image} width={32} />
               <span className="text-center text-sm font-medium text-grayscale-70">
                 {feature.label}
               </span>

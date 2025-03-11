@@ -41,7 +41,7 @@ const deals = [
 export default function DealSlider() {
   return (
     <div className="rounded-2xl bg-gradient-3 p-3 sm:p-4">
-      <div className="mb-3 sm:mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-0">
+      <header className="mb-3 sm:mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-0">
         <div className="flex items-center justify-between sm:justify-start gap-2 sm:gap-4">
           <h2 className="flex items-center gap-1 sm:gap-2 text-lg sm:text-xl font-bold text-white">
             Săn
@@ -62,7 +62,7 @@ export default function DealSlider() {
           Xem thêm
           <ChevronRight className="h-3 w-3 sm:h-4 sm:w-4" />
         </Button>
-      </div>
+      </header>
 
       <Swiper
         navigation
@@ -80,6 +80,10 @@ export default function DealSlider() {
             spaceBetween: 16,
           },
           1024: {
+            slidesPerView: 4,
+            spaceBetween: 16,
+          },
+          1280: {
             slidesPerView: 5,
             spaceBetween: 16,
           },
@@ -121,6 +125,9 @@ export default function DealSlider() {
                   <span className="text-base sm:text-lg font-bold">{deal.salePrice}</span>
                   <span className="text-[10px] sm:text-xs"> / {deal.unit}</span>
                 </div>
+                <p className="text-xs sm:text-sm text-grayscale-40 line-through">
+                  {deal.originalPrice}
+                </p>
                 <p className="text-xs sm:text-sm text-grayscale-40 line-through">
                   {deal.originalPrice}
                 </p>

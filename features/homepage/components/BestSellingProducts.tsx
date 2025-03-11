@@ -39,16 +39,16 @@ const products = [
 
 export default function BestSellingProducts() {
   return (
-    <div className="py-6">
+    <section aria-labelledby="bestselling-title" className="py-4 sm:py-6">
       {/* Section Title */}
-      <div className="mb-6 flex justify-center">
+      <header className="mb-6 flex justify-center">
         <h2 className="inline-block rounded-t-[8px] rounded-b-[40px] bg-gradient-1 px-14 py-2 text-xl font-semibold text-white">
           Sản Phẩm Bán Chạy
         </h2>
-      </div>
+      </header>
 
       {/* Products Grid */}
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+      <ul className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
         {products.map(product => (
           <div
             key={product.id}
@@ -105,7 +105,9 @@ export default function BestSellingProducts() {
             </div>
 
             {/* Package Info */}
-            <p className="mb-4 text-sm text-grayscale-50">{product.packageInfo}</p>
+            <p className="mb-2 sm:mb-3 md:mb-4 text-[10px] sm:text-xs md:text-sm text-grayscale-50">
+              {product.packageInfo}
+            </p>
 
             {/* Buy Button */}
             <Button className="w-full rounded-full bg-primary text-white hover:bg-primary-20 font-medium text-base">
@@ -113,7 +115,7 @@ export default function BestSellingProducts() {
             </Button>
           </div>
         ))}
-      </div>
-    </div>
+      </ul>
+    </section>
   )
 }

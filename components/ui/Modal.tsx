@@ -4,8 +4,8 @@ import type React from 'react'
 
 import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
+
 import { cn } from '@/utils/helpers'
-import { useTheme } from '@/hooks/useTheme'
 
 interface ModalProps {
   isOpen: boolean
@@ -16,10 +16,10 @@ interface ModalProps {
 
 export function Modal({ isOpen, onClose, children, className }: ModalProps) {
   const [mounted, setMounted] = useState(false)
-  const { theme } = useTheme()
 
   useEffect(() => {
     setMounted(true)
+
     return () => setMounted(false)
   }, [])
 
@@ -29,6 +29,7 @@ export function Modal({ isOpen, onClose, children, className }: ModalProps) {
     } else {
       document.body.style.overflow = 'unset'
     }
+
     return () => {
       document.body.style.overflow = 'unset'
     }
@@ -44,22 +45,22 @@ export function Modal({ isOpen, onClose, children, className }: ModalProps) {
           className,
         )}>
         <button
-          onClick={onClose}
-          className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none">
+          className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none"
+          onClick={onClose}>
           <span className="sr-only">Close</span>
           <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
+            className="h-4 w-4"
             fill="none"
+            height="24"
             stroke="currentColor"
-            strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
-            className="h-4 w-4">
-            <line x1="18" y1="6" x2="6" y2="18"></line>
-            <line x1="6" y1="6" x2="18" y2="18"></line>
+            strokeWidth="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg">
+            <line x1="18" x2="6" y1="6" y2="18" />
+            <line x1="6" x2="18" y1="6" y2="18" />
           </svg>
         </button>
         {children}

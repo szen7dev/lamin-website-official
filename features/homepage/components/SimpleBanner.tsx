@@ -26,21 +26,21 @@ export default function SimpleBanner() {
   return (
     <div className="relative w-full">
       <Swiper
-        modules={[Navigation, Pagination, Autoplay]}
-        navigation
-        pagination={{ clickable: true }}
-        autoplay={{ delay: 5000 }}
         loop
-        className="aspect-[16/5] w-full">
+        navigation
+        autoplay={{ delay: 5000 }}
+        className="aspect-[16/5] w-full"
+        modules={[Navigation, Pagination, Autoplay]}
+        pagination={{ clickable: true }}>
         {banners.map(banner => (
           <SwiperSlide key={banner.id}>
             <div className="relative h-full w-full">
               <Image
-                src={banner.image || '/placeholder.svg'}
-                alt={banner.alt}
                 fill
-                className="object-cover"
                 priority
+                alt={banner.alt}
+                className="object-cover"
+                src={banner.image || '/placeholder.svg'}
               />
             </div>
           </SwiperSlide>

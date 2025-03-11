@@ -1,19 +1,11 @@
 'use client'
 
 import type React from 'react'
+import type { CartItem } from '@/features/cart/types/cartTypes'
 
 import { createContext, useState, useEffect } from 'react'
 
-import { cartService } from '@/services/cartService'
-
-type CartItem = {
-  id: string
-  productId: string
-  name: string
-  price: number
-  quantity: number
-  image: string
-}
+import { cartRealService } from '@/features/cart/services/cartService'
 
 type CartContextType = {
   items: CartItem[]
@@ -38,7 +30,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const fetchCart = async () => {
       try {
-        const cart = await cartService.getCart()
+        const cart = await cartRealService.getCart()
 
         setItems(cart.items)
       } catch (error) {
@@ -54,7 +46,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const addItem = async (productId: string, quantity: number) => {
     setIsLoading(true)
     try {
-      const response = await cartService.addToCart(productId, quantity)
+      const response = await cartRealService.addToCart(productId, quantity)
 
       setItems(response.items)
     } finally {
@@ -65,7 +57,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const removeItem = async (itemId: string) => {
     setIsLoading(true)
     try {
-      const response = await cartService.removeFromCart(itemId)
+      const response = await cartRealService.removeFromCart(itemId)
 
       setItems(response.items)
     } finally {
@@ -76,7 +68,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const updateQuantity = async (itemId: string, quantity: number) => {
     setIsLoading(true)
     try {
-      const response = await cartService.updateCartItem(itemId, quantity)
+      const response = await cartRealService.updateCartItem(itemId, quantity)
 
       setItems(response.items)
     } finally {
@@ -87,8 +79,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const clearCart = async () => {
     setIsLoading(true)
     try {
-      const response = await cartService.clearCart()
-
+      await cartRealService.clearCart()
       setItems([])
     } finally {
       setIsLoading(false)

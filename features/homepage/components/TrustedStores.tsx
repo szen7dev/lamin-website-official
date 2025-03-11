@@ -117,7 +117,7 @@ export default function TrustedStores() {
           spaceBetween={8}>
           {stores.map(store => (
             <SwiperSlide key={store.id}>
-              <div className="flex items-center gap-3 sm:gap-4 rounded-xl bg-white p-3 sm:p-4">
+              <article className="flex items-center gap-3 sm:gap-4 rounded-xl bg-white p-3 sm:p-4">
                 <Image
                   alt={store.name}
                   className="rounded-full h-10 w-10 sm:h-12 sm:w-12 md:h-[48px] md:w-[48px]"
@@ -137,7 +137,7 @@ export default function TrustedStores() {
                     </span>
                   </div>
                 </div>
-              </div>
+              </article>
             </SwiperSlide>
           ))}
         </Swiper>

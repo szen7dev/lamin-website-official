@@ -1,14 +1,9 @@
 'use client'
-import { useForm, Controller } from 'react-hook-form'
+import { Button } from '@/components/ui/Button'
 import { AlertCircle } from 'lucide-react'
+import { Controller, useForm } from 'react-hook-form'
 import { useNutritionCheckMutation } from '../hooks/useNutritionCheckMutation'
-
-interface FormData {
-  name: string
-  birthDate: string
-  regularFoods: string[]
-  knownProduct: 'yes' | 'no'
-}
+import type { NutritionCheckFormData } from '../types/nutritionCheckTypes'
 
 const foodOptions = [
   { id: 'egg', label: 'Trứng' },
@@ -27,7 +22,7 @@ export default function NutritionCheckForm() {
     reset,
     control,
     formState: { errors },
-  } = useForm<FormData>({
+  } = useForm<NutritionCheckFormData>({
     defaultValues: {
       name: '',
       birthDate: '',
@@ -36,7 +31,7 @@ export default function NutritionCheckForm() {
     },
   })
 
-  const onSubmit = (data: FormData) => {
+  const onSubmit = (data: NutritionCheckFormData) => {
     mutate(data)
   }
 
@@ -47,15 +42,18 @@ export default function NutritionCheckForm() {
   return (
     <div className="space-y-4">
       {/* Header */}
-      <div className="bg-[#1250DC] text-white px-4 py-3 text-[15px] font-medium">
-        MÔ TẢ THÔNG TIN
-      </div>
+      <header className="bg-primary-5 text-white px-4 py-3 text-[15px] font-medium">
+        <h2 id="nutrition-form-title">MÔ TẢ THÔNG TIN</h2>
+      </header>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="space-y-4"
+        aria-labelledby="nutrition-form-title">
         {/* Error message */}
         {error && (
-          <div className="bg-error-5/10 p-4 text-error-5 flex items-start gap-3">
-            <AlertCircle className="h-5 w-5 shrink-0 mt-0.5" />
+          <div className="bg-error-5/10 p-4 text-error-5 flex items-start gap-3" role="alert">
+            <AlertCircle className="h-5 w-5 shrink-0 mt-0.5" aria-hidden="true" />
             <p>{error instanceof Error ? error.message : 'Có lỗi xảy ra. Vui lòng thử lại.'}</p>
           </div>
         )}
@@ -63,40 +61,66 @@ export default function NutritionCheckForm() {
         {/* Name */}
         <div className="bg-white px-4 py-3">
           <label htmlFor="name" className="flex items-center text-sm text-grayscale-90">
-            Họ và tên <span className="text-error-5 ml-1">*</span>
+            Họ và tên{' '}
+            <span className="text-error-5 ml-1" aria-hidden="true">
+              *
+            </span>
+            <span className="sr-only">(bắt buộc)</span>
           </label>
           <input
             id="name"
             disabled={isPending}
             placeholder="Nguyễn Văn A"
-            className={`w-full border-b ${errors.name ? 'border-error-5' : 'border-[#DEE2E6]'} bg-transparent px-0 py-2 text-sm text-grayscale-90 focus:border-[#1250DC] focus:outline-none disabled:opacity-70`}
+            className={`w-full border-b ${
+              errors.name ? 'border-error-5' : 'border-grayscale-20'
+            } bg-transparent px-0 py-2 text-sm text-grayscale-90 focus:border-primary-5 focus:outline-none disabled:opacity-70`}
             {...register('name', { required: 'Vui lòng nhập họ và tên' })}
+            aria-invalid={errors.name ? 'true' : 'false'}
+            aria-describedby={errors.name ? 'name-error' : undefined}
           />
-          {errors.name && <p className="mt-1 text-xs text-error-5">{errors.name.message}</p>}
+          {errors.name && (
+            <p id="name-error" className="mt-1 text-xs text-error-5">
+              {errors.name.message}
+            </p>
+          )}
         </div>
 
         {/* Birth Date */}
         <div className="bg-white px-4 py-3">
           <label htmlFor="birthDate" className="flex items-center text-sm text-grayscale-90">
-            Ngày sinh <span className="text-error-5 ml-1">*</span>
+            Ngày sinh{' '}
+            <span className="text-error-5 ml-1" aria-hidden="true">
+              *
+            </span>
+            <span className="sr-only">(bắt buộc)</span>
           </label>
           <input
             id="birthDate"
             type="date"
             disabled={isPending}
-            className={`w-full border-b ${errors.birthDate ? 'border-error-5' : 'border-[#DEE2E6]'} bg-transparent px-0 py-2 text-sm text-grayscale-90 focus:border-[#1250DC] focus:outline-none disabled:opacity-70`}
+            className={`w-full border-b ${
+              errors.birthDate ? 'border-error-5' : 'border-grayscale-20'
+            } bg-transparent px-0 py-2 text-sm text-grayscale-90 focus:border-primary-5 focus:outline-none disabled:opacity-70`}
             {...register('birthDate', { required: 'Vui lòng chọn ngày sinh' })}
+            aria-invalid={errors.birthDate ? 'true' : 'false'}
+            aria-describedby={errors.birthDate ? 'birthDate-error' : undefined}
           />
           {errors.birthDate && (
-            <p className="mt-1 text-xs text-error-5">{errors.birthDate.message}</p>
+            <p id="birthDate-error" className="mt-1 text-xs text-error-5">
+              {errors.birthDate.message}
+            </p>
           )}
         </div>
 
         {/* Regular Foods */}
-        <div className="bg-white px-4 py-3">
-          <label className="flex items-center text-sm text-grayscale-90">
-            Bạn đã ăn những món nào thường xuyên <span className="text-error-5 ml-1">*</span>
-          </label>
+        <fieldset className="bg-white px-4 py-3">
+          <legend className="flex items-center text-sm text-grayscale-90">
+            Bạn đã ăn những món nào thường xuyên{' '}
+            <span className="text-error-5 ml-1" aria-hidden="true">
+              *
+            </span>
+            <span className="sr-only">(bắt buộc)</span>
+          </legend>
           <div className="mt-2 space-y-2">
             <Controller
               name="regularFoods"
@@ -117,7 +141,7 @@ export default function NutritionCheckForm() {
                             : field.value.filter(id => id !== food.id)
                           field.onChange(updatedFoods)
                         }}
-                        className="h-4 w-4 rounded border-[#DEE2E6] text-[#1250DC] focus:ring-[#1250DC] disabled:opacity-70"
+                        className="h-4 w-4 rounded border-grayscale-20 text-primary-5 focus:ring-primary-5 disabled:opacity-70"
                       />
                       <span className="text-sm text-grayscale-90">{food.label}</span>
                     </label>
@@ -126,23 +150,29 @@ export default function NutritionCheckForm() {
               )}
             />
             {errors.regularFoods && (
-              <p className="mt-1 text-xs text-error-5">{errors.regularFoods.message}</p>
+              <p id="regularFoods-error" className="mt-1 text-xs text-error-5">
+                {errors.regularFoods.message}
+              </p>
             )}
           </div>
-        </div>
+        </fieldset>
 
         {/* Known Product */}
-        <div className="bg-white px-4 py-3">
-          <label className="flex items-center text-sm text-grayscale-90">
-            Bạn đã biết tới sản phẩm của chúng tôi chưa <span className="text-error-5 ml-1">*</span>
-          </label>
-          <div className="mt-2 flex gap-6">
+        <fieldset className="bg-white px-4 py-3">
+          <legend className="flex items-center text-sm text-grayscale-90">
+            Bạn đã biết tới sản phẩm của chúng tôi chưa{' '}
+            <span className="text-error-5 ml-1" aria-hidden="true">
+              *
+            </span>
+            <span className="sr-only">(bắt buộc)</span>
+          </legend>
+          <div className="mt-2 flex gap-6" role="radiogroup">
             <label className="flex items-center gap-2">
               <input
                 type="radio"
                 value="yes"
                 disabled={isPending}
-                className="h-4 w-4 border-[#DEE2E6] text-[#1250DC] focus:ring-[#1250DC] disabled:opacity-70"
+                className="h-4 w-4 border-grayscale-20 text-primary-5 focus:ring-primary-5 disabled:opacity-70"
                 {...register('knownProduct', { required: 'Vui lòng chọn một lựa chọn' })}
               />
               <span className="text-sm text-grayscale-90">Đã biết</span>
@@ -152,37 +182,41 @@ export default function NutritionCheckForm() {
                 type="radio"
                 value="no"
                 disabled={isPending}
-                className="h-4 w-4 border-[#DEE2E6] text-[#1250DC] focus:ring-[#1250DC] disabled:opacity-70"
+                className="h-4 w-4 border-grayscale-20 text-primary-5 focus:ring-primary-5 disabled:opacity-70"
                 {...register('knownProduct')}
               />
               <span className="text-sm text-grayscale-90">Chưa biết</span>
             </label>
           </div>
           {errors.knownProduct && (
-            <p className="mt-1 text-xs text-error-5">{errors.knownProduct.message}</p>
+            <p id="knownProduct-error" className="mt-1 text-xs text-error-5">
+              {errors.knownProduct.message}
+            </p>
           )}
-        </div>
+        </fieldset>
 
         {/* Form Actions */}
         <div className="flex justify-end gap-3 px-4 py-3">
-          <button
+          <Button
             type="button"
             onClick={handleReset}
             disabled={isPending}
-            className="rounded bg-white px-6 py-2 text-sm font-medium text-[#1250DC] border border-[#1250DC] hover:bg-[#1250DC]/5 disabled:opacity-70">
+            variant="outline"
+            className="rounded border border-primary-5 px-6 py-2 text-sm font-medium text-primary-5 hover:bg-primary-5/5 disabled:opacity-70">
             Đặt lại
-          </button>
-          <button
+          </Button>
+          <Button
             type="submit"
             disabled={isPending}
-            className="rounded bg-[#1250DC] px-6 py-2 text-sm font-medium text-white hover:bg-[#1250DC]/90 disabled:opacity-70 flex items-center gap-2">
+            className="rounded bg-primary-5 px-6 py-2 text-sm font-medium text-white hover:bg-primary-20 disabled:opacity-70 flex items-center gap-2">
             {isPending ? (
               <>
                 <svg
                   className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
-                  viewBox="0 0 24 24">
+                  viewBox="0 0 24 24"
+                  aria-hidden="true">
                   <circle
                     className="opacity-25"
                     cx="12"
@@ -195,12 +229,12 @@ export default function NutritionCheckForm() {
                     fill="currentColor"
                     d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                 </svg>
-                Đang xử lý...
+                <span>Đang xử lý...</span>
               </>
             ) : (
               'Gửi đi'
             )}
-          </button>
+          </Button>
         </div>
       </form>
     </div>

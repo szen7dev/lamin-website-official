@@ -32,15 +32,15 @@ export default function CommitmentsSection() {
     <section className="rounded-lg bg-primary/5 py-8">
       <div className="container mx-auto px-4">
         <h2 className="mb-8 text-center text-2xl font-bold text-primary">Cam kết của chúng tôi</h2>
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {commitments.map(commitment => (
-            <div key={commitment.id} className="flex flex-col items-center text-center">
+            <li key={commitment.id} className="flex flex-col items-center text-center">
               <commitment.icon className="mb-4 h-12 w-12 text-primary-40" />
               <h3 className="mb-2 font-semibold text-grayscale-90">{commitment.title}</h3>
               <p className="text-sm text-grayscale-60">{commitment.description}</p>
-            </div>
+            </li>
           ))}
-        </div>
+        </ul>
       </div>
     </section>
   )
