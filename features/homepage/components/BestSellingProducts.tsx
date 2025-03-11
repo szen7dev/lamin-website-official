@@ -56,10 +56,10 @@ export default function BestSellingProducts() {
             {/* Product Image */}
             <div className="relative mb-4 aspect-square">
               <Image
-                src={product.image || '/placeholder.svg'}
-                alt={product.name}
                 fill
+                alt={product.name}
                 className="object-contain"
+                src={product.image || '/placeholder.svg'}
               />
             </div>
             <span className="absolute top-0 left-0 z-10">
@@ -73,27 +73,30 @@ export default function BestSellingProducts() {
               {product.name}
             </h3>
 
-            {/* Unit Selection */}
-            <ToggleGroup type="single" className="w-max">
-              {product.units.map((unit, index) => (
-                <ToggleGroupItem
-                  key={unit.value}
-                  value={unit.value}
-                  className={`${
-                    index === 0
-                      ? 'rounded-l-lg'
-                      : index === product.units.length - 1
-                        ? 'rounded-r-lg'
-                        : ''
-                  }`}>
-                  {unit.label}
-                </ToggleGroupItem>
-              ))}
-            </ToggleGroup>
+            {/* Unit Selection - Responsive Toggle Group */}
+            <div className="mb-3">
+              <ToggleGroup
+                className="w-full flex flex-wrap gap-1 xs:gap-0 xs:flex-nowrap"
+                defaultValue={product.units[0].value}
+                type="single">
+                {product.units.map((unit, index) => (
+                  <ToggleGroupItem
+                    key={unit.value}
+                    className={`
+                      flex-1 min-w-0 text-xs px-1 sm:px-2 md:text-sm
+                      ${index === 0 ? 'rounded-l-lg' : index === product.units.length - 1 ? 'rounded-r-lg' : ''}
+                    `}
+                    value={unit.value}>
+                    {unit.label}
+                  </ToggleGroupItem>
+                ))}
+              </ToggleGroup>
+            </div>
+
             {/* Price */}
             <div className="mb-2">
               <div className="flex items-baseline gap-2">
-                <span className="text-lg font-bold text-primary-5">{product.price}</span>
+                <span className="text-lg font-bold text-primary">{product.price}</span>
                 <span className="text-sm text-grayscale-50">/ {product.unit}</span>
               </div>
               <span className="text-sm text-grayscale-40 line-through">
@@ -105,7 +108,7 @@ export default function BestSellingProducts() {
             <p className="mb-4 text-sm text-grayscale-50">{product.packageInfo}</p>
 
             {/* Buy Button */}
-            <Button className="w-full rounded-full bg-primary-5 text-white hover:bg-primary-20 font-medium text-base">
+            <Button className="w-full rounded-full bg-primary text-white hover:bg-primary-20 font-medium text-base">
               Chọn Mua
             </Button>
           </div>

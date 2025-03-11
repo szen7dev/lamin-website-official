@@ -49,7 +49,7 @@ export default function FeatureShortcuts() {
       {features.map(feature => (
         <div
           key={feature.id}
-          className="gap-2 border-1 border-[#EFF1F5] rounded-xl drop-shadow-lg px-4 py-3 transition-colors bg-white hover:bg-primary-5/5 decoration-transparent">
+          className="gap-2 border-1 border-[#EFF1F5] rounded-xl drop-shadow-lg px-4 py-3 transition-colors bg-white hover:bg-primary/5 decoration-transparent">
           <Link href={feature.href}>
             <div className="flex flex-wrap justify-start items-center gap-1">
               <Image src={feature.image} alt={feature.label} width={32} height={32} />

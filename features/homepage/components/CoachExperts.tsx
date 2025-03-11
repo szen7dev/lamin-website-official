@@ -2,6 +2,7 @@
 
 import Image from 'next/image'
 import { ChevronRight } from 'lucide-react'
+
 import { Button } from '@/components/ui/Button'
 
 const coaches = [
@@ -37,8 +38,8 @@ export default function CoachExperts() {
           Danh sách các Coach tư vấn chăm sóc sức khỏe của Elela
         </p>
         <Button
-          variant="secondary"
-          className="flex !rounded-full items-center gap-2 bg-white text-primary-5 hover:bg-white/90">
+          className="flex !rounded-full items-center gap-2 bg-white text-primary hover:bg-white/90"
+          variant="secondary">
           Tìm hiểu thêm
           <ChevronRight className="h-4 w-4" />
         </Button>
@@ -49,16 +50,16 @@ export default function CoachExperts() {
           <div key={coach.id} className="rounded-xl bg-white p-4">
             <div className="flex items-center gap-4">
               <Image
-                src={coach.image || '/placeholder.svg'}
                 alt={coach.name}
-                width={80}
-                height={80}
                 className="rounded-full"
+                height={80}
+                src={coach.image || '/placeholder.svg'}
+                width={80}
               />
               <div>
                 <span className="text-sm text-grayscale-40">{coach.title}</span>
                 <h3 className="text-lg font-semibold text-grayscale-90">{coach.name}</h3>
-                <p className="text-sm text-primary-5">{coach.experience}</p>
+                <p className="text-sm text-primary">{coach.experience}</p>
               </div>
             </div>
           </div>

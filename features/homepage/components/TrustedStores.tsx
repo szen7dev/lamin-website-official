@@ -4,6 +4,7 @@ import Image from 'next/image'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Navigation } from 'swiper/modules'
 import { Star, ChevronRight } from 'lucide-react'
+
 import { Button } from '@/components/ui/Button'
 
 // Import Swiper styles
@@ -70,57 +71,68 @@ const benefits = [
 
 export default function TrustedStores() {
   return (
-    <div className="space-y-12">
+    <div className="space-y-8 sm:space-y-12">
       {/* Trusted Stores Section */}
-      <section className="rounded-2xl bg-gradient-3 p-6">
-        <div className="flex justify-between items-center mb-6">
-          <div className="flex flex-col justify-between gap-3">
-            <h2 className="text-3xl font-semibold text-white">Các cửa hàng uy tín của Elela</h2>
-            <p className="text-base text-grayscale-5">
+      <section className="rounded-2xl bg-gradient-3 p-3 sm:p-4 md:p-6">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4 sm:mb-6">
+          <div className="flex flex-col justify-between gap-2 sm:gap-3">
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-white">
+              Các cửa hàng uy tín của Elela
+            </h2>
+            <p className="text-sm sm:text-base text-grayscale-5">
               Tổng hợp các cửa hàng được người dùng tin dùng và đánh giá cao
             </p>
           </div>
           <Button
-            variant="link"
-            className="flex rounded-full bg-white items-center gap-1 text-primary-5 hover:text-white/90 text-sm font-normal">
+            className="hidden sm:flex rounded-full bg-white items-center gap-1 text-primary hover:text-white/90 text-sm font-normal"
+            variant="link">
             Xem tất cả
             <ChevronRight className="h-4 w-4" />
           </Button>
         </div>
 
         <Swiper
-          modules={[Navigation]}
           navigation
-          spaceBetween={16}
-          slidesPerView={1}
           breakpoints={{
+            480: {
+              slidesPerView: 1,
+              spaceBetween: 12,
+            },
             640: {
               slidesPerView: 2,
+              spaceBetween: 16,
             },
             768: {
               slidesPerView: 3,
+              spaceBetween: 16,
             },
             1024: {
               slidesPerView: 4,
+              spaceBetween: 16,
             },
           }}
-          className="trusted-stores-slider">
+          className="trusted-stores-slider"
+          modules={[Navigation]}
+          slidesPerView={1}
+          spaceBetween={8}>
           {stores.map(store => (
             <SwiperSlide key={store.id}>
-              <div className="flex items-center gap-4 rounded-xl bg-white p-4">
+              <div className="flex items-center gap-3 sm:gap-4 rounded-xl bg-white p-3 sm:p-4">
                 <Image
-                  src={store.image || '/placeholder.svg'}
                   alt={store.name}
-                  width={48}
+                  className="rounded-full h-10 w-10 sm:h-12 sm:w-12 md:h-[48px] md:w-[48px]"
                   height={48}
-                  className="rounded-full"
+                  src={store.image || '/placeholder.svg'}
+                  width={48}
                 />
                 <div>
-                  <h3 className="font-medium text-xl text-grayscale-90">{store.name}</h3>
+                  <h3 className="font-medium text-base sm:text-lg md:text-xl text-grayscale-90">
+                    {store.name}
+                  </h3>
                   <div className="flex items-center gap-1">
-                    <Star className="h-4 w-4 fill-[#FFB200] text-[#FFB200]" />
-                    <span className="font-normal text-grayscale-90">{store.rating}</span>
-                    <span className="font-normal text-sm text-grayscale-40">
+                    <Star className="h-3 w-3 sm:h-4 sm:w-4 fill-[#FFB200] text-[#FFB200]" />
+                    <span className="text-sm font-normal text-grayscale-90">{store.rating}</span>
+                    <span className="font-normal text-xs sm:text-sm text-grayscale-40">
                       ({store.reviews} đánh giá)
                     </span>
                   </div>
@@ -129,24 +141,36 @@ export default function TrustedStores() {
             </SwiperSlide>
           ))}
         </Swiper>
+
+        {/* Mobile View All Button */}
+        <div className="mt-4 flex sm:hidden justify-center">
+          <Button
+            className="flex rounded-full bg-white items-center gap-1 text-primary hover:text-white/90 text-xs font-normal px-3 py-1"
+            variant="link">
+            Xem tất cả
+            <ChevronRight className="h-3 w-3" />
+          </Button>
+        </div>
       </section>
 
       {/* Benefits Section */}
       <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {benefits.map(benefit => (
-          <div key={benefit.id} className="flex items-center gap-4">
-            <div className="rounded-full bg-primary-5/10 p-3">
+          <div key={benefit.id} className="flex items-center gap-3 sm:gap-4">
+            <div className="rounded-full bg-primary/10 p-2 sm:p-3">
               <Image
-                src={`/placeholder.svg?height=24&width=24`}
                 alt={benefit.title}
-                width={24}
+                className="text-primary-40 h-5 w-5 sm:h-6 sm:w-6 md:h-[24px] md:w-[24px]"
                 height={24}
-                className="text-primary-40"
+                src={`/placeholder.svg?height=24&width=24`}
+                width={24}
               />
             </div>
             <div>
-              <h3 className="font-medium text-grayscale-90">{benefit.title}</h3>
-              <p className="text-sm text-grayscale-50">{benefit.description}</p>
+              <h3 className="font-medium text-sm sm:text-base text-grayscale-90">
+                {benefit.title}
+              </h3>
+              <p className="text-xs sm:text-sm text-grayscale-50">{benefit.description}</p>
             </div>
           </div>
         ))}

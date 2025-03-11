@@ -10,8 +10,8 @@ export function Footer() {
           {/* About Us Column */}
           <div>
             <div className="flex">
-              <span className="text-primary-5">
-                <Dot className="text-primary-5 -ml-2" stroke="currentColor" strokeWidth={5} />
+              <span className="text-primary">
+                <Dot className="text-primary -ml-2" stroke="currentColor" strokeWidth={5} />
               </span>
               <h4 className="font-semibold text-lg mb-4">VỀ CHÚNG TÔI</h4>
             </div>
@@ -39,8 +39,8 @@ export function Footer() {
           {/* Learn More Column */}
           <div>
             <div className="flex">
-              <span className="text-primary-5">
-                <Dot className="text-primary-5 -ml-2" stroke="currentColor" strokeWidth={5} />
+              <span className="text-primary">
+                <Dot className="text-primary -ml-2" stroke="currentColor" strokeWidth={5} />
               </span>
               <h4 className="font-semibold text-lg mb-4">TÌM HIỂU THÊM</h4>
             </div>
@@ -68,8 +68,8 @@ export function Footer() {
           {/* Categories Column */}
           <div>
             <div className="flex">
-              <span className="text-primary-5">
-                <Dot className="text-primary-5 -ml-2" stroke="currentColor" strokeWidth={5} />
+              <span className="text-primary">
+                <Dot className="text-primary -ml-2" stroke="currentColor" strokeWidth={5} />
               </span>
               <h4 className="font-semibold text-lg mb-4">DANH MỤC</h4>
             </div>
@@ -97,8 +97,8 @@ export function Footer() {
             {/* Hotline Section */}
             <div>
               <div className="flex">
-                <span className="text-primary-5">
-                  <Dot className="text-primary-5 -ml-2" stroke="currentColor" strokeWidth={5} />
+                <span className="text-primary">
+                  <Dot className="text-primary -ml-2" stroke="currentColor" strokeWidth={5} />
                 </span>
                 <h4 className="font-semibold text-lg mb-4">TỔNG ĐÀI</h4>
               </div>
@@ -106,15 +106,15 @@ export function Footer() {
               <ul className="space-y-2">
                 <li>
                   <p>Tư vấn mua hàng</p>
-                  <p className="font-normal text-primary-5">1900 6789 (Nhánh 1)</p>
+                  <p className="font-normal text-primary">1900 6789 (Nhánh 1)</p>
                 </li>
                 <li>
                   <p>Trung tâm Vắc Xin</p>
-                  <p className="font-normal text-primary-5">1900 6789 (Nhánh 2)</p>
+                  <p className="font-normal text-primary">1900 6789 (Nhánh 2)</p>
                 </li>
                 <li>
                   <p>Góp ý - Khiếu nại</p>
-                  <p className="font-normal text-primary-5">1900 6789 (Nhánh 3)</p>
+                  <p className="font-normal text-primary">1900 6789 (Nhánh 3)</p>
                 </li>
               </ul>
             </div>
@@ -122,8 +122,8 @@ export function Footer() {
             {/* Certifications */}
             <div>
               <div className="flex">
-                <span className="text-primary-5">
-                  <Dot className="text-primary-5 -ml-2" stroke="currentColor" strokeWidth={5} />
+                <span className="text-primary">
+                  <Dot className="text-primary -ml-2" stroke="currentColor" strokeWidth={5} />
                 </span>
                 <h4 className="font-semibold text-lg mb-4">CHỨNG NHẬN</h4>
               </div>
@@ -147,8 +147,8 @@ export function Footer() {
             {/* Social Media */}
             <div>
               <div className="flex">
-                <span className="text-primary-5">
-                  <Dot className="text-primary-5 -ml-2" stroke="currentColor" strokeWidth={5} />
+                <span className="text-primary">
+                  <Dot className="text-primary -ml-2" stroke="currentColor" strokeWidth={5} />
                 </span>
                 <h4 className="font-semibold text-lg mb-4">KẾT NỐI VỚI CHÚNG TÔI</h4>
               </div>
@@ -179,8 +179,8 @@ export function Footer() {
             {/* Payment Methods */}
             <div>
               <div className="flex">
-                <span className="text-primary-5">
-                  <Dot className="text-primary-5 -ml-2" stroke="currentColor" strokeWidth={5} />
+                <span className="text-primary">
+                  <Dot className="text-primary -ml-2" stroke="currentColor" strokeWidth={5} />
                 </span>
                 <h4 className="font-semibold text-lg mb-4">HỖ TRỢ THANH TOÁN</h4>
               </div>
@@ -202,8 +202,8 @@ export function Footer() {
             {/* App Download */}
             <div>
               <div className="flex">
-                <span className="text-primary-5">
-                  <Dot className="text-primary-5 -ml-2" stroke="currentColor" strokeWidth={5} />
+                <span className="text-primary">
+                  <Dot className="text-primary -ml-2" stroke="currentColor" strokeWidth={5} />
                 </span>
                 <h4 className="font-semibold text-lg mb-4">TẢI ỨNG DỤNG</h4>
               </div>

@@ -1,7 +1,7 @@
 import type React from 'react'
 
-import { Header } from './Header'
 import { Footer } from './Footer'
+import Header from './Header'
 
 import { ThemeProvider } from '@/contexts/ThemeContext'
 

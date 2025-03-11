@@ -32,9 +32,9 @@ export default function SearchSuggestions({
       {/* Search Query Header */}
       <div className="flex items-center gap-2 border-b border-grayscale-20 p-4">
         <div className="flex items-center justify-center rounded-full">
-          <Search className="h-4 w-4 text-primary-5" size={32} />
+          <Search className="h-4 w-4 text-primary" size={32} />
         </div>
-        <span className="text-primary-5">{query}</span>
+        <span className="text-primary">{query}</span>
       </div>
 
       {/* Search Results */}
@@ -68,7 +68,7 @@ export default function SearchSuggestions({
       {/* View All Link */}
       <Link
         href={`/search?q=${encodeURIComponent(query)}`}
-        className="flex items-center justify-center gap-1 border-t border-grayscale-20 p-3 text-sm text-primary-5 decoration-transparent"
+        className="flex items-center justify-center gap-1 border-t border-grayscale-20 p-3 text-sm text-primary decoration-transparent"
         onClick={onClose}>
         Xem tất cả
         <ChevronRight className="h-4 w-4" />

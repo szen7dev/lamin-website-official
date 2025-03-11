@@ -23,7 +23,7 @@ export default function HomePage() {
       {/* <SimpleBanner /> */}
       <Image
         alt="Hero Banner"
-        className="w-full"
+        className="w-full hidden md:block"
         height={400}
         src="/images/Banner 1.png"
         width={1200}
@@ -32,7 +32,7 @@ export default function HomePage() {
       <div className="mx-auto max-w-[1400px] px-4">
         <div className="space-y-8 py-6">
           {/* Grid Banner Section */}
-          <section>
+          <section className="container mx-auto px-4 py-6">
             <GridBanner />
           </section>
 

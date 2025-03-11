@@ -38,7 +38,7 @@ export default function TrustedShopsShowcase() {
   return (
     <section className="py-8">
       <div className="mb-6 flex items-center justify-between">
-        <h2 className="text-xl font-bold text-primary-5">Hệ thống nhà thuốc uy tín</h2>
+        <h2 className="text-xl font-bold text-primary">Hệ thống nhà thuốc uy tín</h2>
         <Button variant="link" className="text-primary-40">
           Xem tất cả
         </Button>

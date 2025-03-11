@@ -1,10 +1,23 @@
 'use client'
 
+import type { RefObject } from 'react'
+
 import { useState } from 'react'
+import { Menu } from 'lucide-react'
+
 import MegaMenuItem from './MegaMenuItem'
 import MegaMenuItemLink from './MegaMenuItemLink'
 import MegaMenuColumn from './MegaMenuColumn'
+
 import { Separator } from '@/components/ui/separator'
+import { Button } from '@/components/ui/Button'
+import { Sheet, SheetContent } from '@/components/ui/sheet'
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion'
 
 const categories = [
   {
@@ -56,27 +69,33 @@ const bestSellingProducts = [
   },
 ]
 
-export default function MegaMenu() {
+interface ChildComponentProps {
+  megaMenuRef: RefObject<HTMLButtonElement>
+}
+
+export default function MegaMenu({ megaMenuRef }: ChildComponentProps) {
   const [activeCategory, setActiveCategory] = useState(categories[0].id)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   const activeProducts = categories.find(cat => cat.id === activeCategory)?.products || []
 
   return (
-    <nav className=" bg-white text-black">
+    <nav className="bg-white text-black">
       <div className="container mx-auto px-4">
-        <ul className="flex space-x-8 py-4">
+        {/* Desktop Menu */}
+        <ul className="hidden md:flex space-x-4 lg:space-x-8 py-4">
           <li>
-            <MegaMenuItem label="Sản phẩm" href="/products" hasDropdown>
-              <div className="flex">
+            <MegaMenuItem hasDropdown href="/products" label="Sản phẩm">
+              <div className="flex flex-col md:flex-row">
                 {/* Categories */}
-                <div className="w-64 rounded-lg">
+                <div className="w-full md:w-64 rounded-lg">
                   {categories.map((category, index) => (
                     <div key={category.id}>
                       <MegaMenuItemLink
                         href={`/categories/${category.id}`}
                         icon={category.icon}
-                        label={category.label}
                         isActive={category.id === activeCategory}
+                        label={category.label}
                         onMouseEnter={() => setActiveCategory(category.id)}
                       />
                       {index < categories.length - 1 &&
@@ -90,8 +109,8 @@ export default function MegaMenu() {
                 <div className="flex-1">
                   <MegaMenuColumn
                     activeCategory={activeCategory}
-                    categoryProducts={activeProducts}
                     bestSellingProducts={bestSellingProducts}
+                    categoryProducts={activeProducts}
                   />
                 </div>
               </div>
@@ -99,21 +118,113 @@ export default function MegaMenu() {
           </li>
 
           <li>
-            <MegaMenuItem label="Giải Pháp" href="/solutions" />
+            <MegaMenuItem href="/solutions" label="Giải Pháp" />
           </li>
           <li>
-            <MegaMenuItem label="Đo Cao" href="/height-measurement" />
+            <MegaMenuItem href="/height-measurement" label="Đo Cao" />
           </li>
           <li>
-            <MegaMenuItem label="Kiểm Tra Dinh Dưỡng" href="/nutrition-check" />
+            <MegaMenuItem href="/nutrition-check" label="Kiểm Tra Dinh Dưỡng" />
           </li>
-          <li>
-            <MegaMenuItem label="Hệ Thống Cửa Hàng" href="/trusted-shops" />
+          <li className="hidden lg:block">
+            <MegaMenuItem href="/trusted-shops" label="Hệ Thống Cửa Hàng" />
           </li>
-          <li>
-            <MegaMenuItem label="Liên Hệ" href="/contact" />
+          <li className="hidden lg:block">
+            <MegaMenuItem href="/contact" label="Liên Hệ" />
           </li>
         </ul>
+
+        {/* Mobile Menu Button */}
+        <div className="hidden">
+          <Button
+            ref={megaMenuRef}
+            className="text-primary p-1"
+            variant="ghost"
+            onClick={() => setMobileMenuOpen(true)}>
+            <Menu className="h-6 w-6" />
+            <span className="ml-2">Menu</span>
+          </Button>
+        </div>
+
+        {/* Mobile Menu */}
+        <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+          <SheetContent className="w-[85vw] sm:w-[350px] p-0" side="left">
+            <div className="flex flex-col h-full">
+              <div className="p-4 border-b flex justify-between items-center">
+                <h2 className="font-bold text-lg">Menu</h2>
+              </div>
+
+              <div className="flex-1 overflow-auto">
+                <Accordion collapsible className="w-full" type="single">
+                  <AccordionItem className="border-b" value="products">
+                    <AccordionTrigger className="px-4 py-3 hover:no-underline">
+                      Sản phẩm
+                    </AccordionTrigger>
+                    <AccordionContent className="pt-1 pb-3">
+                      <Accordion collapsible className="w-full" type="single">
+                        {categories.map(category => (
+                          <AccordionItem key={category.id} className="border-0" value={category.id}>
+                            <AccordionTrigger className="px-6 py-2 text-sm hover:no-underline">
+                              {category.label}
+                            </AccordionTrigger>
+                            <AccordionContent className="pt-1 pb-2 px-8">
+                              <ul className="space-y-2">
+                                {category.products.map(product => (
+                                  <li key={product.id} className="text-sm">
+                                    <a
+                                      className="hover:text-primary"
+                                      href={`/products/${product.id}`}>
+                                      {product.name}
+                                    </a>
+                                  </li>
+                                ))}
+                                {category.products.length === 0 && (
+                                  <li className="text-sm text-muted-foreground">
+                                    Không có sản phẩm
+                                  </li>
+                                )}
+                              </ul>
+                            </AccordionContent>
+                          </AccordionItem>
+                        ))}
+                      </Accordion>
+                    </AccordionContent>
+                  </AccordionItem>
+
+                  <AccordionItem className="border-b" value="solutions">
+                    <a className="flex py-3 px-4" href="/solutions">
+                      Giải Pháp
+                    </a>
+                  </AccordionItem>
+
+                  <AccordionItem className="border-b" value="height">
+                    <a className="flex py-3 px-4" href="/height-measurement">
+                      Đo Cao
+                    </a>
+                  </AccordionItem>
+
+                  <AccordionItem className="border-b" value="nutrition">
+                    <a className="flex py-3 px-4" href="/nutrition-check">
+                      Kiểm Tra Dinh Dưỡng
+                    </a>
+                  </AccordionItem>
+
+                  <AccordionItem className="border-b" value="shops">
+                    <a className="flex py-3 px-4" href="/trusted-shops">
+                      Hệ Thống Cửa Hàng
+                    </a>
+                  </AccordionItem>
+
+                  <AccordionItem className="border-b" value="contact">
+                    <a className="flex py-3 px-4" href="/contact">
+                      Liên Hệ
+                    </a>
+                  </AccordionItem>
+                </Accordion>
+              </div>
+            </div>
+          </SheetContent>
+        </Sheet>
       </div>
     </nav>
   )
