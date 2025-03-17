@@ -117,6 +117,264 @@ Elena Pharmacy là một nền tảng thương mại điện tử chuyên bán t
 - **Tạo Pull Requests:** Khi xong feature hoặc fix bug, tạo Pull Request (PR) để merge branch vào `main` branch. Đặt tên và mô tả PR rõ ràng, chi tiết.
 - **Code Reviews:** Chuẩn bị code của bạn sẽ được review bởi team và đóng góp feedback cho code của người khác.
 
+## 🔄 Kiến trúc Services và API Integration
+
+### Root Services vs Feature Services
+
+Dự án sử dụng hai tầng services để tách biệt concerns:
+
+- **Root Services (`/services`):** Giao tiếp trực tiếp với API, tập trung vào data fetching/sending, không chứa business logic
+- **Feature Services (`/features/*/services`):** Chứa business logic, chuyển đổi dữ liệu từ API format sang domain models
+
+Luồng dữ liệu trong ứng dụng:
+\`\`\`
+UI Components → Feature Hooks → Feature Services → Root Services → API Client → Backend API
+\`\`\`
+
+**Vai trò của Root Services:**
+- Gọi trực tiếp đến các endpoints API thông qua apiClient
+- Xử lý các vấn đề chung như authentication, error handling
+- Trả về dữ liệu nguyên bản từ API (raw data)
+- Tổ chức theo domain của backend API (auth, crm, item, media, store)
+
+**Vai trò của Feature Services:**
+- Sử dụng Root Services thay vì gọi trực tiếp API
+- Chuyển đổi dữ liệu từ API format sang domain models phù hợp với UI
+- Tổng hợp dữ liệu từ nhiều Root Services nếu cần
+- Tổ chức theo features của frontend (product, article, cart, etc.)
+
+### API Factory Pattern
+
+Dự án sử dụng Factory Pattern để dễ dàng chuyển đổi giữa mock và real services:
+
+\`\`\`typescript
+// Tạo factory cho một service
+const myServiceFactory = createApiServiceFactory<MyService>(mockService, realService);
+
+// Sử dụng service
+const myService = myServiceFactory.getService();
+\`\`\`
+
+**Cách hoạt động của API Factory:**
+- `createApiServiceFactory` nhận vào mock service và real service, trả về một factory
+- Factory có method `getService()` trả về service phù hợp dựa trên cấu hình
+- Các hooks và components sử dụng `getService()` để lấy service, không cần biết đó là mock hay real
+
+Để chuyển đổi giữa mock và real API, cấu hình biến môi trường `NEXT_PUBLIC_API_MODE`:
+- `mock`: Sử dụng mock services (phát triển, testing)
+- `real`: Sử dụng real services (production)
+
+### Mappers và Data Transformation
+
+Mappers chuyển đổi dữ liệu giữa API format và domain models:
+
+\`\`\`typescript
+// Ví dụ mapper
+export function mapApiModelToDomainModel(apiModel: ApiModel): DomainModel {
+  return {
+    id: apiModel._id,
+    name: apiModel.name,
+    // Các trường khác...
+  };
+}
+\`\`\`
+
+**Vai trò của Mappers:**
+- Chuyển đổi dữ liệu từ API format sang domain models phù hợp với UI
+- Đảm bảo UI components nhận được dữ liệu đúng format bất kể nguồn dữ liệu
+- Xử lý các edge cases và differences giữa mock và real data
+
+Khi tạo mới một feature, hãy:
+1. Định nghĩa domain models trong `types/`
+2. Tạo mappers trong `mappers/`
+3. Sử dụng mappers trong cả mock và real services
+
+### Hướng dẫn tạo mới một Service
+
+1. **Tạo Root Service (nếu cần):**
+   - Tạo file trong thư mục `/services/` phù hợp
+   - Implement các methods gọi trực tiếp đến API
+   \`\`\`typescript
+   // services/item/newItemService.ts
+   import apiClient from "../api/apiClient";
+   
+   export interface NewItem {
+     _id: string;
+     name: string;
+     // Các trường khác...
+   }
+   
+   class NewItemService {
+     async getItems(): Promise<NewItem[]> {
+       return apiClient.get("/api/items");
+     }
+     // Các methods khác...
+   }
+   
+   export const newItemService = new NewItemService();
+   \`\`\`
+
+2. **Tạo Feature Service Interface:**
+   - Định nghĩa interface trong `/features/your-feature/types/yourFeatureTypes.ts`
+   \`\`\`typescript
+   // features/your-feature/types/yourFeatureTypes.ts
+   export interface YourFeatureItem {
+     id: string;
+     name: string;
+     // Các trường khác...
+   }
+   
+   export interface YourFeatureService {
+     getItems(): Promise<YourFeatureItem[]>;
+     // Các methods khác...
+   }
+   \`\`\`
+
+3. **Implement Real Service:**
+   - Implement interface sử dụng root services
+   \`\`\`typescript
+   // features/your-feature/services/yourFeatureService.ts
+   import { newItemService } from "@/services/item/newItemService";
+   import { mapNewItemToYourFeatureItem } from "../mappers/yourFeatureMappers";
+   import type { YourFeatureItem, YourFeatureService } from "../types/yourFeatureTypes";
+   
+   class YourFeatureServiceImpl implements YourFeatureService {
+     async getItems(): Promise<YourFeatureItem[]> {
+       const items = await newItemService.getItems();
+       return items.map(mapNewItemToYourFeatureItem);
+     }
+     // Các methods khác...
+   }
+   
+   export const yourFeatureService = new YourFeatureServiceImpl();
+   \`\`\`
+
+4. **Implement Mock Service:**
+   - Tạo mock data trong `/features/your-feature/mocks/`
+   - Implement interface sử dụng mock data
+   \`\`\`typescript
+   // features/your-feature/mocks/yourFeatureMockService.ts
+   import { mockItems } from "./yourFeatureMockData";
+   import type { YourFeatureItem, YourFeatureService } from "../types/yourFeatureTypes";
+   
+   class YourFeatureMockService implements YourFeatureService {
+     async getItems(): Promise<YourFeatureItem[]> {
+       // Simulate network delay
+       await new Promise(resolve => setTimeout(resolve, 300));
+       return mockItems;
+     }
+     // Các methods khác...
+   }
+   
+   export const yourFeatureMockService = new YourFeatureMockService();
+   \`\`\`
+
+5. **Tạo Factory:**
+   - Sử dụng `createApiServiceFactory` để tạo factory
+   - Export method `getYourFeatureService()`
+   \`\`\`typescript
+   // features/your-feature/services/yourFeatureServiceFactory.ts
+   import { createApiServiceFactory } from "@/services/api/apiFactory";
+   import { yourFeatureMockService } from "../mocks/yourFeatureMockService";
+   import { yourFeatureService } from "./yourFeatureService";
+   import type { YourFeatureService } from "../types/yourFeatureTypes";
+   
+   export const yourFeatureServiceFactory = createApiServiceFactory<YourFeatureService>(
+     yourFeatureMockService,
+     yourFeatureService
+   );
+   
+   export const getYourFeatureService = () => yourFeatureServiceFactory.getService();
+   \`\`\`
+
+6. **Sử dụng trong Hooks:**
+   - Import `getYourFeatureService` và sử dụng trong hooks
+   \`\`\`typescript
+   // features/your-feature/hooks/useYourFeature.ts
+   import { useState, useEffect } from "react";
+   import { getYourFeatureService } from "../services/yourFeatureServiceFactory";
+   import type { YourFeatureItem } from "../types/yourFeatureTypes";
+   
+   export function useYourFeature() {
+     const [items, setItems] = useState<YourFeatureItem[]>([]);
+     const [loading, setLoading] = useState(true);
+     const [error, setError] = useState<Error | null>(null);
+     
+     useEffect(() => {
+       const fetchItems = async () => {
+         try {
+           const service = getYourFeatureService();
+           const data = await service.getItems();
+           setItems(data);
+         } catch (err) {
+           setError(err as Error);
+         } finally {
+           setLoading(false);
+         }
+       };
+       
+       fetchItems();
+     }, []);
+     
+     return { items, loading, error };
+   }
+   \`\`\`
+
+### Chuyển đổi từ Mock sang Real API
+
+Để chuyển đổi từ mock sang real API, hãy thực hiện các bước sau:
+
+1. **Kiểm tra API endpoints:**
+   - Xác nhận các endpoints trong apiClient.ts khớp với API thực tế
+   - Cập nhật URL, headers, và authentication nếu cần
+
+2. **Cập nhật mappers:**
+   - Đảm bảo mappers chuyển đổi đúng từ API response sang domain models
+   - Xử lý các edge cases và differences giữa mock và real data
+
+3. **Cập nhật environment variables:**
+   - Đặt `NEXT_PUBLIC_API_MODE=real` trong file `.env.local`
+   - Cấu hình các biến môi trường khác như API_URL
+
+4. **Kiểm tra xác thực:**
+   - Đảm bảo authService.ts hoạt động đúng với API thực tế
+   - Kiểm tra flow đăng nhập/đăng xuất
+
+5. **Triển khai error handling:**
+   - Cập nhật interceptors trong apiClient.ts để xử lý lỗi API
+   - Thêm UI components để hiển thị lỗi
+
+6. **Testing:**
+   - Kiểm tra tất cả các API calls với dữ liệu thực
+   - Kiểm tra các edge cases (empty responses, errors, etc.)
+
+### Best Practices khi làm việc với API
+
+1. **Error Handling:**
+   - Luôn bọc API calls trong try-catch blocks
+   - Sử dụng interceptors để xử lý lỗi chung
+   - Hiển thị thông báo lỗi thân thiện với người dùng
+
+2. **Loading States:**
+   - Luôn theo dõi trạng thái loading của API calls
+   - Hiển thị skeleton loaders hoặc spinners khi đang loading
+
+3. **Caching:**
+   - Sử dụng React Query hoặc SWR để caching và revalidation
+   - Tránh gọi API nhiều lần cho cùng một dữ liệu
+
+4. **Pagination:**
+   - Implement pagination cho các danh sách lớn
+   - Sử dụng infinite scrolling hoặc pagination controls
+
+5. **Retry Logic:**
+   - Implement retry logic cho các API calls quan trọng
+   - Sử dụng exponential backoff để tránh overload server
+
+6. **Logging:**
+   - Log các API calls và responses để debug
+   - Sử dụng các tools như Sentry để theo dõi lỗi
+
 ## 🔑 Điểm Mấu Chốt Cần Nhớ
 
 - **Feature-Based Là Ưu Tiên:** Dự án xây dựng theo feature-based để dễ scale và tổ chức.

@@ -5,5 +5,9 @@ type ApiMode = "mock" | "real"
 export const API_MODE: ApiMode = (process.env.NEXT_PUBLIC_API_MODE as ApiMode) || "mock"
 
 // Helper to check if we're using mock API
-export const isMockApi = () => API_MODE === "mock"
+export const isMockApi = () => {
+  const mode = API_MODE === "mock"
+  console.log(`🔧 API Mode: ${mode ? "MOCK" : "REAL"}`)
+  return mode
+}
 
