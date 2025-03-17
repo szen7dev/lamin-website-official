@@ -1,4 +1,6 @@
+import { CheckoutLayout } from "@/features/checkout/components/CheckoutLayout"
+
 export default function CheckoutPage() {
-  return <div>Checkout Page</div>
+  return <CheckoutLayout />
 }
 
