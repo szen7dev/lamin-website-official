@@ -1,13 +1,8 @@
 "use client"
 
-import { useContext } from "react"
-import { CartContext } from "@/contexts/CartContext"
+import { useCart as useCartFromFeature } from "@/features/cart/hooks/useCart"
 
 export function useCart() {
-  const context = useContext(CartContext)
-  if (context === undefined) {
-    throw new Error("useCart must be used within a CartProvider")
-  }
-  return context
+  return useCartFromFeature()
 }
 

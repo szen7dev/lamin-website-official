@@ -1,30 +1,29 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useEffect, useState } from "react"
 
 export function useMediaQuery(query: string): boolean {
+  // During SSR and initial client render, default to false
   const [matches, setMatches] = useState(false)
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
+    setMounted(true)
+
+    // Only run on client
     const media = window.matchMedia(query)
 
-    // Update the state with the current value
-    const updateMatches = () => {
-      setMatches(media.matches)
-    }
+    // Set initial value
+    setMatches(media.matches)
 
-    // Set the initial value
-    updateMatches()
+    // Setup listener for changes
+    const listener = (e: MediaQueryListEvent) => setMatches(e.matches)
+    media.addEventListener("change", listener)
 
-    // Add the listener
-    media.addEventListener("change", updateMatches)
-
-    // Clean up
-    return () => {
-      media.removeEventListener("change", updateMatches)
-    }
+    // Cleanup
+    return () => media.removeEventListener("change", listener)
   }, [query])
 
-  return matches
+  // Return false during SSR to avoid hydration mismatch
+  return mounted ? matches : false
 }
-
