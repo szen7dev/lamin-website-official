@@ -11,6 +11,8 @@ import { useState, useEffect, useRef } from "react"
 import { useMediaQuery } from "@/hooks/useMediaQuery"
 import { useCart } from "@/features/cart/hooks/useCart"
 import { Separator } from "@/components/ui/separator"
+// Import the LoginModal component at the top of the file
+import { LoginModal } from "@/components/ui/LoginModal"
 
 const popularKeywords = [
   { label: "Thuốc nhỏ mắt", href: "#" },
@@ -25,6 +27,9 @@ const popularKeywords = [
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
+  // Add a state for controlling the login modal visibility
+  // Add this inside the Header function component, near the top with other state declarations:
+  const [loginModalOpen, setLoginModalOpen] = useState(false)
   const isMobile = useMediaQuery("(max-width: 768px)")
   const { totalItems } = useCart()
   const menuButtonRef = useRef<HTMLButtonElement>(null)
@@ -105,9 +110,12 @@ export function Header() {
 
               {/* Auth and Cart */}
               <div className="hidden sm:flex items-center gap-2 md:gap-4 mt-4 sm:mt-0">
+                {/* Update the Button for login to open the modal when clicked */}
+                {/* Find the existing login button and replace it with: */}
                 <Button
                   variant="secondary"
                   className="rounded-full bg-white px-3 md:px-6 text-primary hover:bg-white/90 text-xs md:text-sm"
+                  onClick={() => setLoginModalOpen(true)}
                 >
                   <User className="mr-1 md:mr-2 h-4 md:h-5 w-4 md:w-5" />
                   <span className="font-medium">Đăng Nhập</span>
@@ -180,7 +188,13 @@ export function Header() {
 
       {/* Mobile Auth and Cart - Only visible on small screens */}
       <div className="flex sm:hidden justify-between items-center px-4 py-2 bg-white/10">
-        <Button variant="secondary" className="rounded-full bg-white px-4 text-primary hover:bg-white/90 text-xs h-8">
+        {/* Also update the mobile version of the login button */}
+        {/* Find the mobile login button and replace it with: */}
+        <Button
+          variant="secondary"
+          className="rounded-full bg-white px-4 text-primary hover:bg-white/90 text-xs h-8"
+          onClick={() => setLoginModalOpen(true)}
+        >
           <User className="mr-1 h-3 w-3" />
           <span className="font-medium">Đăng Nhập</span>
         </Button>
@@ -227,6 +241,8 @@ export function Header() {
           </div>
         </div>
       )}
+      {/* Login Modal */}
+      <LoginModal isOpen={loginModalOpen} onClose={() => setLoginModalOpen(false)} />
     </header>
   )
 }
