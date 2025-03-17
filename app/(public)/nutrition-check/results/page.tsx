@@ -1,4 +1,4 @@
-import { Breadcrumb } from "@/components/ui/Breadcrumb"
+import { Breadcrumb } from "@/components/ui/breadcrumb"
 import NutritionCheckResult from "@/features/nutrition-check/components/NutritionCheckResult"
 import { notFound } from "next/navigation"
 
@@ -7,11 +7,13 @@ export default async function NutritionCheckResultsPage({
 }: {
   searchParams: { [key: string]: string | undefined }
 }) {
+  // Await the searchParams object to satisfy Next.js strict checking
   const params = await searchParams
   const resultId = params.id
 
+  // Validate required parameter
   if (!resultId) {
-    notFound() // Redirect to 404 if id is missing
+    notFound()
   }
 
   return (

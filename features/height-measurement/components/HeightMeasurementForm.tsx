@@ -1,17 +1,23 @@
 "use client"
-import { Button } from "@/components/ui/Button"
-import { AlertCircle } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { useHeightMeasurementMutation } from "../hooks/useHeightMeasurementMutation"
+import { AlertCircle } from "lucide-react"
 import type { HeightMeasurementFormData } from "../types/heightMeasurementTypes"
+import { Button } from "@/components/ui/button"
+import { useEffect } from "react"
 
 export default function HeightMeasurementForm() {
-  const { mutate, isPending, error } = useHeightMeasurementMutation()
+  const { mutate, isPending, error, isSuccess, data } = useHeightMeasurementMutation()
+
+  useEffect(() => {
+    console.log("🖥️ Form Component: Current state:", { isPending, error, isSuccess, data })
+  }, [isPending, error, isSuccess, data])
 
   const {
     register,
     handleSubmit,
     reset,
+    setError,
     formState: { errors },
   } = useForm<HeightMeasurementFormData>({
     defaultValues: {
@@ -25,10 +31,24 @@ export default function HeightMeasurementForm() {
   })
 
   const onSubmit = (data: HeightMeasurementFormData) => {
+    console.log("🖥️ Form Component: Form submitted with data:", data)
+
+    // Đảm bảo số điện thoại đúng định dạng
+    if (!/^[0-9]{10,11}$/.test(data.phone)) {
+      console.log("🖥️ Form Component: Invalid phone number format")
+      setError("phone", {
+        type: "manual",
+        message: "Số điện thoại không hợp lệ",
+      })
+      return
+    }
+
+    console.log("🖥️ Form Component: Submitting data to API")
     mutate(data)
   }
 
   const handleReset = () => {
+    console.log("🖥️ Form Component: Form reset")
     reset()
   }
 
@@ -44,14 +64,9 @@ export default function HeightMeasurementForm() {
 
       {/* Error message */}
       {error && (
-        <div
-          className="rounded-lg bg-error-5/10 p-3 sm:p-4 text-error-5 flex items-start gap-2 sm:gap-3"
-          role="alert"
-        >
+        <div className="rounded-lg bg-error-5/10 p-3 sm:p-4 text-error-5 flex items-start gap-2 sm:gap-3" role="alert">
           <AlertCircle className="h-4 w-4 sm:h-5 sm:w-5 shrink-0 mt-0.5" aria-hidden="true" />
-          <p className="text-sm">
-            {error instanceof Error ? error.message : "Có lỗi xảy ra. Vui lòng thử lại."}
-          </p>
+          <p className="text-sm">{error instanceof Error ? error.message : "Có lỗi xảy ra. Vui lòng thử lại."}</p>
         </div>
       )}
 
@@ -69,9 +84,7 @@ export default function HeightMeasurementForm() {
             id="name"
             disabled={isPending}
             placeholder="Nhập tên"
-            className={`w-full rounded-lg border ${
-              errors.name ? "border-error-5" : "border-grayscale-20"
-            } bg-white px-3 sm:px-4 py-2 sm:py-3 text-sm text-grayscale-90 placeholder:text-grayscale-40 focus:border-primary-5 focus:outline-none focus:ring-1 focus:ring-primary-5 disabled:opacity-70`}
+            className={`w-full rounded-lg border ${errors.name ? "border-error-5" : "border-grayscale-20"} bg-white px-3 sm:px-4 py-2 sm:py-3 text-sm text-grayscale-90 placeholder:text-grayscale-40 focus:border-primary-5 focus:outline-none focus:ring-1 focus:ring-primary-5 disabled:opacity-70`}
             {...register("name", { required: "Vui lòng nhập tên bé" })}
             aria-invalid={errors.name ? "true" : "false"}
             aria-describedby={errors.name ? "name-error" : undefined}
@@ -85,10 +98,7 @@ export default function HeightMeasurementForm() {
 
         {/* Birth Date */}
         <div className="space-y-1 sm:space-y-2">
-          <label
-            htmlFor="birthDate"
-            className="flex items-center text-xs sm:text-sm text-grayscale-90"
-          >
+          <label htmlFor="birthDate" className="flex items-center text-xs sm:text-sm text-grayscale-90">
             <span className="text-error-5 mr-1" aria-hidden="true">
               *
             </span>
@@ -100,9 +110,7 @@ export default function HeightMeasurementForm() {
             type="date"
             disabled={isPending}
             placeholder="Nhập ngày sinh"
-            className={`w-full rounded-lg border ${
-              errors.birthDate ? "border-error-5" : "border-grayscale-20"
-            } bg-white px-3 sm:px-4 py-2 sm:py-3 text-sm text-grayscale-90 focus:border-primary-5 focus:outline-none focus:ring-1 focus:ring-primary-5 disabled:opacity-70`}
+            className={`w-full rounded-lg border ${errors.birthDate ? "border-error-5" : "border-grayscale-20"} bg-white px-3 sm:px-4 py-2 sm:py-3 text-sm text-grayscale-90 focus:border-primary-5 focus:outline-none focus:ring-1 focus:ring-primary-5 disabled:opacity-70`}
             {...register("birthDate", { required: "Vui lòng chọn ngày sinh" })}
             aria-invalid={errors.birthDate ? "true" : "false"}
             aria-describedby={errors.birthDate ? "birthDate-error" : undefined}
@@ -116,10 +124,7 @@ export default function HeightMeasurementForm() {
 
         {/* Weight */}
         <div className="space-y-1 sm:space-y-2">
-          <label
-            htmlFor="weight"
-            className="flex items-center text-xs sm:text-sm text-grayscale-90"
-          >
+          <label htmlFor="weight" className="flex items-center text-xs sm:text-sm text-grayscale-90">
             <span className="text-error-5 mr-1" aria-hidden="true">
               *
             </span>
@@ -131,9 +136,7 @@ export default function HeightMeasurementForm() {
             type="text"
             disabled={isPending}
             placeholder="Nhập cân nặng"
-            className={`w-full rounded-lg border ${
-              errors.weight ? "border-error-5" : "border-grayscale-20"
-            } bg-white px-3 sm:px-4 py-2 sm:py-3 text-sm text-grayscale-90 placeholder:text-grayscale-40 focus:border-primary-5 focus:outline-none focus:ring-1 focus:ring-primary-5 disabled:opacity-70`}
+            className={`w-full rounded-lg border ${errors.weight ? "border-error-5" : "border-grayscale-20"} bg-white px-3 sm:px-4 py-2 sm:py-3 text-sm text-grayscale-90 placeholder:text-grayscale-40 focus:border-primary-5 focus:outline-none focus:ring-1 focus:ring-primary-5 disabled:opacity-70`}
             {...register("weight", { required: "Vui lòng nhập cân nặng" })}
             aria-invalid={errors.weight ? "true" : "false"}
             aria-describedby={errors.weight ? "weight-error" : undefined}
@@ -147,10 +150,7 @@ export default function HeightMeasurementForm() {
 
         {/* Height */}
         <div className="space-y-1 sm:space-y-2">
-          <label
-            htmlFor="height"
-            className="flex items-center text-xs sm:text-sm text-grayscale-90"
-          >
+          <label htmlFor="height" className="flex items-center text-xs sm:text-sm text-grayscale-90">
             <span className="text-error-5 mr-1" aria-hidden="true">
               *
             </span>
@@ -162,9 +162,7 @@ export default function HeightMeasurementForm() {
             type="text"
             disabled={isPending}
             placeholder="Nhập chiều cao"
-            className={`w-full rounded-lg border ${
-              errors.height ? "border-error-5" : "border-grayscale-20"
-            } bg-white px-3 sm:px-4 py-2 sm:py-3 text-sm text-grayscale-90 placeholder:text-grayscale-40 focus:border-primary-5 focus:outline-none focus:ring-1 focus:ring-primary-5 disabled:opacity-70`}
+            className={`w-full rounded-lg border ${errors.height ? "border-error-5" : "border-grayscale-20"} bg-white px-3 sm:px-4 py-2 sm:py-3 text-sm text-grayscale-90 placeholder:text-grayscale-40 focus:border-primary-5 focus:outline-none focus:ring-1 focus:ring-primary-5 disabled:opacity-70`}
             {...register("height", { required: "Vui lòng nhập chiều cao" })}
             aria-invalid={errors.height ? "true" : "false"}
             aria-describedby={errors.height ? "height-error" : undefined}
@@ -191,9 +189,7 @@ export default function HeightMeasurementForm() {
           type="tel"
           disabled={isPending}
           placeholder="Nhập SĐT"
-          className={`w-full rounded-lg border ${
-            errors.phone ? "border-error-5" : "border-grayscale-20"
-          } bg-white px-3 sm:px-4 py-2 sm:py-3 text-sm text-grayscale-90 placeholder:text-grayscale-40 focus:border-primary-5 focus:outline-none focus:ring-1 focus:ring-primary-5 disabled:opacity-70`}
+          className={`w-full rounded-lg border ${errors.phone ? "border-error-5" : "border-grayscale-20"} bg-white px-3 sm:px-4 py-2 sm:py-3 text-sm text-grayscale-90 placeholder:text-grayscale-40 focus:border-primary-5 focus:outline-none focus:ring-1 focus:ring-primary-5 disabled:opacity-70`}
           {...register("phone", {
             required: "Vui lòng nhập số điện thoại",
             pattern: {
@@ -274,14 +270,7 @@ export default function HeightMeasurementForm() {
                 viewBox="0 0 24 24"
                 aria-hidden="true"
               >
-                <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                ></circle>
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                 <path
                   className="opacity-75"
                   fill="currentColor"
@@ -298,3 +287,4 @@ export default function HeightMeasurementForm() {
     </form>
   )
 }
+

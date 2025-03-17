@@ -4,9 +4,11 @@ import { heightMeasurementRealService } from "./heightMeasurementService"
 import type { HeightMeasurementService } from "../types/heightMeasurementTypes"
 
 export function getHeightMeasurementService(): HeightMeasurementService {
-  return isMockApi() ? heightMeasurementMockService : heightMeasurementRealService
+  const service = isMockApi() ? heightMeasurementMockService : heightMeasurementRealService
+  console.log(`🔧 Height Measurement Service: ${isMockApi() ? "MOCK" : "REAL"}`)
+  return service
 }
 
-// Create and export the service instance
+// Tạo và export instance service
 export const heightMeasurementService = getHeightMeasurementService()
 

@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { Breadcrumb } from "@/components/ui/Breadcrumb"
+import { Breadcrumb } from "@/components/ui/breadcrumb"
 import NutritionCheckForm from "@/features/nutrition-check/components/NutritionCheckForm"
 import { generateMetadata as generateSeoMetadata } from "@/utils/seo"
 
@@ -18,7 +18,9 @@ export default function NutritionCheckPage() {
         {/* Main Content */}
         <div className="mx-auto max-w-xl">
           <h1 className="text-xl font-bold text-grayscale-90">Thói quen ăn uống hàng ngày</h1>
-          <p className="mb-6 text-sm text-[#6C757D]">Hãy nhập thông tin dưới đây để nhận phân tích chi tiết</p>
+          <p className="mb-6 text-sm text-[#6C757D]">
+            Hãy nhập thông tin dưới đây để nhận phân tích chi tiết
+          </p>
 
           <NutritionCheckForm />
         </div>
@@ -26,4 +28,3 @@ export default function NutritionCheckPage() {
     </div>
   )
 }
-

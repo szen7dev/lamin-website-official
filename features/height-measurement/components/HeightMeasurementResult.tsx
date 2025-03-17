@@ -58,7 +58,7 @@ const fallbackData = {
   height: "112",
   predictedHeight: 161,
   growthRate: 36,
-  analysisDate: "2025-02-27",
+  analysisDate: "2025-03-11",
   coach: "Hoàng Thảo",
   recommendations: [
     "Ngủ trước 10h tối",
@@ -72,6 +72,8 @@ interface HeightMeasurementResultProps {
 }
 
 export default function HeightMeasurementResult({ resultId }: HeightMeasurementResultProps) {
+  console.log("🖥️ Result Component: Initializing with resultId:", resultId)
+
   const chartRef = useRef<HTMLCanvasElement>(null)
   const chartInstance = useRef<Chart | null>(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -80,12 +82,21 @@ export default function HeightMeasurementResult({ resultId }: HeightMeasurementR
   // Lấy dữ liệu từ React Query cache
   const resultData = useHeightMeasurementResult(resultId)
 
+  console.log("🖥️ Result Component: Data from hook:", resultData)
+
   // Sử dụng dữ liệu từ cache hoặc fallback data
   const data: ResultType | typeof fallbackData = resultData || fallbackData
 
+  console.log("🖥️ Result Component: Using data:", {
+    source: resultData ? "API/CACHE" : "FALLBACK",
+    data,
+  })
+
   useEffect(() => {
     // Giả lập thời gian loading
+    console.log("🖥️ Result Component: Starting loading timer")
     const timer = setTimeout(() => {
+      console.log("🖥️ Result Component: Loading complete")
       setIsLoading(false)
     }, 500)
 
@@ -93,15 +104,32 @@ export default function HeightMeasurementResult({ resultId }: HeightMeasurementR
   }, [])
 
   useEffect(() => {
-    if (isLoading || !chartRef.current || !data || !data.heightData) return
+    if (isLoading || !chartRef.current || !data || !data.heightData) {
+      console.log("🖥️ Result Component: Skipping chart creation - conditions not met", {
+        isLoading,
+        hasChartRef: !!chartRef.current,
+        hasData: !!data,
+        hasHeightData: !!(data && data.heightData),
+      })
+      return
+    }
 
     const ctx = chartRef.current.getContext("2d")
-    if (!ctx) return
+    if (!ctx) {
+      console.log("🖥️ Result Component: No canvas context available")
+      return
+    }
 
     // Hủy chart cũ nếu có
     if (chartInstance.current) {
+      console.log("🖥️ Result Component: Destroying existing chart")
       chartInstance.current.destroy()
     }
+
+    console.log("🖥️ Result Component: Creating new chart with data:", {
+      ages: data.heightData.map((d) => d.age),
+      heights: data.heightData.map((d) => d.height),
+    })
 
     // Tạo chart mới
     chartInstance.current = new Chart(ctx, {
@@ -240,14 +268,18 @@ export default function HeightMeasurementResult({ resultId }: HeightMeasurementR
       ],
     })
 
+    console.log("🖥️ Result Component: Chart created successfully")
+
     return () => {
       if (chartInstance.current) {
+        console.log("🖥️ Result Component: Cleaning up chart")
         chartInstance.current.destroy()
       }
     }
   }, [isLoading, data, isMobile])
 
   if (isLoading) {
+    console.log("🖥️ Result Component: Rendering loading state")
     return (
       <div className="flex items-center justify-center py-8 sm:py-12" aria-live="polite" aria-busy="true">
         <div className="flex flex-col items-center gap-3 sm:gap-4">
@@ -272,6 +304,7 @@ export default function HeightMeasurementResult({ resultId }: HeightMeasurementR
   }
 
   if (!data || !data.heightData) {
+    console.log("🖥️ Result Component: No data available, rendering error state")
     return (
       <div className="flex items-center justify-center py-8 sm:py-12" aria-live="polite">
         <div className="flex flex-col items-center gap-3 sm:gap-4">
@@ -283,6 +316,7 @@ export default function HeightMeasurementResult({ resultId }: HeightMeasurementR
 
   // Tính tuổi từ ngày sinh
   const calculateAge = (birthDate: string) => {
+    console.log("🖥️ Result Component: Calculating age from birthDate:", birthDate)
     const today = new Date()
     const birth = new Date(birthDate)
     let age = today.getFullYear() - birth.getFullYear()
@@ -300,10 +334,21 @@ export default function HeightMeasurementResult({ resultId }: HeightMeasurementR
     // Tính số ngày
     const days = today.getDate() - birth.getDate()
 
-    return { years: age, months, days: days > 0 ? days : 0 }
+    const result = { years: age, months, days: days > 0 ? days : 0 }
+    console.log("🖥️ Result Component: Calculated age:", result)
+    return result
   }
 
   const age = calculateAge(data.birthDate)
+
+  console.log("🖥️ Result Component: Rendering result with data:", {
+    id: data.id,
+    name: data.name,
+    gender: data.gender,
+    height: data.height,
+    predictedHeight: data.predictedHeight,
+    heightDataPoints: data.heightData.length,
+  })
 
   return (
     <article className="flex flex-col md:flex-row gap-4 sm:gap-6" aria-labelledby="height-measurement-result-title">
