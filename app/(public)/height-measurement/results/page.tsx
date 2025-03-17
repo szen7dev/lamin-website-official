@@ -1,13 +1,20 @@
-import { Breadcrumb } from "@/components/ui/Breadcrumb"
 import HeightMeasurementResult from "@/features/height-measurement/components/HeightMeasurementResult"
+import { Breadcrumb } from "@/components/ui/breadcrumb"
+import { notFound } from "next/navigation"
 
 export default async function HeightMeasurementResultsPage({
   searchParams,
 }: {
   searchParams: { [key: string]: string | undefined }
 }) {
+  // Await the searchParams object to satisfy Next.js strict checking
   const params = await searchParams
   const resultId = params.id
+
+  // Validate required parameter
+  if (!resultId) {
+    notFound()
+  }
 
   return (
     <div className="min-h-screen bg-background pb-8 sm:pb-12 pt-4 sm:pt-6">

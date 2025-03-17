@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { Breadcrumb } from "@/components/ui/Breadcrumb"
+import { Breadcrumb } from "@/components/ui/breadcrumb"
 import HeightMeasurementForm from "@/features/height-measurement/components/HeightMeasurementForm"
 import { generateMetadata as generateSeoMetadata } from "@/utils/seo"
 
@@ -18,7 +18,9 @@ export default function HeightMeasurementPage() {
 
           {/* Title Section */}
           <div className="mb-4 sm:mb-6">
-            <h1 className="mb-1 sm:mb-2 text-xl sm:text-[28px] font-bold text-grayscale-90">Hướng dẫn chiều cao</h1>
+            <h1 className="mb-1 sm:mb-2 text-xl sm:text-[28px] font-bold text-grayscale-90">
+              Hướng dẫn chiều cao
+            </h1>
             <p className="text-sm sm:text-base text-[#6C757D]">
               Hãy nhập thông tin dưới đây để nhận phân tích chi tiết
             </p>
@@ -33,4 +35,3 @@ export default function HeightMeasurementPage() {
     </div>
   )
 }
-
