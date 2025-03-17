@@ -1,7 +1,9 @@
-import { Breadcrumb } from "@/components/ui/Breadcrumb"
-import { Button } from "@/components/ui/Button"
+import { Breadcrumb } from "@/components/ui/breadcrumb"
+import { Button } from "@/components/ui/button"
 import LoadingSpinner from "@/components/ui/LoadingSpinner"
+import ArticleContent from "@/features/article/components/ArticleContent"
 import RelatedArticles from "@/features/article/components/RelatedArticles"
+import TextSizeAdjuster from "@/features/article/components/TextSizeAdjuster"
 import { articleService } from "@/features/article/services/articleServiceFactory"
 import { formatDate } from "@/utils/format"
 import { generateMetadata as generateSeoMetadata } from "@/utils/seo"
@@ -11,11 +13,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { Suspense } from "react"
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { slug: string }
-}): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   let seoData = {
     title: "Bài Viết - Góc Sức Khỏe",
     description: "Bài viết về sức khỏe và dinh dưỡng từ Elena Pharmacy",
@@ -23,12 +21,13 @@ export async function generateMetadata({
 
   try {
     const article = await articleService.getArticleBySlug(params.slug)
-
-    seoData = {
-      title: article.title,
-      description: article.excerpt,
-      keywords: [...article.tags, ...article.categories.map((cat) => cat.name)],
-      image: article.thumbnailUrl,
+    if (article) {
+      seoData = {
+        title: article.title,
+        description: article.excerpt,
+        keywords: article.tags,
+        image: article.thumbnailUrl,
+      }
     }
   } catch (error) {
     console.error("Error generating metadata:", error)
@@ -65,10 +64,7 @@ export default async function ArticleDetailPage({ params }: { params: { slug: st
           <article itemScope itemType="http://schema.org/Article">
             {/* Row 1: Article Title */}
             <header className="mb-6 mt-6">
-              <h1
-                itemProp="headline"
-                className="text-2xl sm:text-3xl font-bold text-grayscale-90 leading-tight"
-              >
+              <h1 itemProp="headline" className="text-2xl sm:text-3xl font-bold text-grayscale-90 leading-tight">
                 {article.title}
               </h1>
               <meta itemProp="author" content={article.author.name} />
@@ -84,7 +80,7 @@ export default async function ArticleDetailPage({ params }: { params: { slug: st
                   {formatDate(article.publishedAt)}
                 </time>
                 <Button
-                  variant="primary"
+                  variant="default"
                   size="sm"
                   className="flex items-center gap-2 rounded-md bg-[#1877F2] px-4 py-2 text-white hover:bg-[#1877F2]/90"
                 >
@@ -94,25 +90,7 @@ export default async function ArticleDetailPage({ params }: { params: { slug: st
               </div>
 
               {/* Text Size Controls */}
-              <div className="flex items-center gap-2">
-                <span className="text-sm text-[#6C757D]">Kích thước chữ</span>
-                <div className="flex">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="rounded-l-md rounded-r-none border-r-0 bg-[#0D6EFD] px-4 py-2 text-white hover:bg-[#0D6EFD]/90"
-                  >
-                    Mặc định
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="rounded-l-none rounded-r-md bg-white px-4 py-2 text-[#0D6EFD] hover:bg-gray-50"
-                  >
-                    Lớn hơn
-                  </Button>
-                </div>
-              </div>
+              <TextSizeAdjuster />
             </div>
 
             {/* Row 3: Article Excerpt */}
@@ -145,11 +123,7 @@ export default async function ArticleDetailPage({ params }: { params: { slug: st
               </figure>
 
               {/* Article Content */}
-              <div
-                itemProp="articleBody"
-                className="prose prose-lg max-w-none prose-headings:text-grayscale-90 prose-p:text-[#6C757D] prose-a:text-primary-40 prose-img:rounded-lg"
-                dangerouslySetInnerHTML={{ __html: article.content }}
-              />
+              <ArticleContent content={article.content} />
             </div>
 
             {/* Author Info */}
@@ -164,9 +138,7 @@ export default async function ArticleDetailPage({ params }: { params: { slug: st
                 />
                 <div>
                   <h3 className="font-medium text-grayscale-90">{article.author.name}</h3>
-                  <p className="text-sm text-grayscale-60">
-                    {article.author.role || "Biên tập viên"}
-                  </p>
+                  <p className="text-sm text-grayscale-60">{article.author.role || "Biên tập viên"}</p>
                 </div>
               </div>
 
@@ -176,8 +148,7 @@ export default async function ArticleDetailPage({ params }: { params: { slug: st
                   <span className="text-success-5">Đã kiểm duyệt nội dung</span>
                 </div>
                 <p className="text-sm text-grayscale-60">
-                  {article.author.experience ||
-                    "Hơn 5 năm kinh nghiệm trong lĩnh vực quản lý nội dung số."}
+                  {article.author.experience || "Hơn 5 năm kinh nghiệm trong lĩnh vực quản lý nội dung số."}
                 </p>
               </div>
             </footer>
@@ -215,3 +186,4 @@ export default async function ArticleDetailPage({ params }: { params: { slug: st
     </div>
   )
 }
+
