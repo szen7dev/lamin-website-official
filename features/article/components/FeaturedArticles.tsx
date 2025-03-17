@@ -1,10 +1,10 @@
 "use client"
 
-import { Button } from "@/components/ui/Button"
-import { ChevronLeft, ChevronRight } from "lucide-react"
 import { useState } from "react"
-import type { Article } from "../types/articleTypes"
+import { ChevronLeft, ChevronRight } from "lucide-react"
 import ArticleCard from "./ArticleCard"
+import { Button } from "@/components/ui/button"
+import type { Article } from "../types/articleTypes"
 
 interface FeaturedArticlesProps {
   articles: Article[]
@@ -69,3 +69,4 @@ export default function FeaturedArticles({ articles }: FeaturedArticlesProps) {
     </section>
   )
 }
+

@@ -1,9 +1,9 @@
 "use client"
 
-import { Button } from "@/components/ui/Button"
-import { Input } from "@/components/ui/Input"
-import { useForm } from "@/hooks/useForm"
 import { useState } from "react"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { useForm } from "@/hooks/useForm"
 
 export function ContactForm() {
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -39,13 +39,7 @@ export function ContactForm() {
         <label htmlFor="name" className="text-sm font-medium">
           Name
         </label>
-        <Input
-          id="name"
-          name="name"
-          value={values.name}
-          onChange={handleChange}
-          placeholder="Your name"
-        />
+        <Input id="name" name="name" value={values.name} onChange={handleChange} placeholder="Your name" />
         {errors.name && <p className="text-sm text-destructive">{errors.name}</p>}
       </div>
       <div className="space-y-2">
@@ -82,3 +76,4 @@ export function ContactForm() {
     </form>
   )
 }
+
