@@ -1,36 +1,33 @@
 import Link from "next/link"
 import { ChevronRight } from "lucide-react"
 
-export interface BreadcrumbItem {
+interface BreadcrumbItem {
   label: string
   href?: string
 }
 
 interface BreadcrumbProps {
   items: BreadcrumbItem[]
-  className?: string
 }
 
-export function Breadcrumb({ items, className = "" }: BreadcrumbProps) {
+export function Breadcrumb({ items }: BreadcrumbProps) {
   return (
-    <nav className={`mb-6 flex items-center gap-2 text-sm ${className}`} aria-label="Breadcrumb">
-      {items.map((item, index) => {
-        const isLast = index === items.length - 1
-
-        return (
-          <div key={index} className="flex items-center">
-            {index > 0 && <ChevronRight className="mx-2 h-4 w-4 text-[#1250DC]" />}
-
-            {item.href && !isLast ? (
-              <Link href={item.href} className="text-[#1250DC] hover:underline">
-                {item.label}
-              </Link>
-            ) : (
-              <span className={isLast ? "text-grayscale-60" : "text-[#1250DC]"}>{item.label}</span>
-            )}
-          </div>
-        )
-      })}
+    <nav className="flex items-center space-x-2 text-sm text-gray-500">
+      {items.map((item, index) => (
+        <div
+          key={`${item.href || item.label}-${index}`}
+          className="flex items-center last:font-medium last:text-gray-900"
+        >
+          {index > 0 && <ChevronRight className="w-4 h-4 mx-2" />}
+          {item.href ? (
+            <Link href={item.href} className="hover:text-gray-700">
+              {item.label}
+            </Link>
+          ) : (
+            <span>{item.label}</span>
+          )}
+        </div>
+      ))}
     </nav>
   )
 }
