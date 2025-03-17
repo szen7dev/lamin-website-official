@@ -9,7 +9,7 @@ import { useCart } from "@/features/cart/hooks/useCart"
 import type { CartItem as CartItemType } from "@/features/cart/types"
 
 export function CartDropdown() {
-  const { items, removeFromCart } = useCart()
+  const { items, removeItem } = useCart()
 
   if (items.length === 0) {
     return (
@@ -27,7 +27,7 @@ export function CartDropdown() {
 
       <div className="max-h-[400px] overflow-y-auto">
         {items.map((item) => (
-          <CartItem key={item.id} item={item} onRemove={() => removeFromCart(item.id)} />
+          <CartItem key={item.id} item={item} onRemove={() => removeItem(item.id)} />
         ))}
       </div>
 
