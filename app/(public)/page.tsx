@@ -15,7 +15,11 @@ const FeatureShortcuts = dynamic(() => import("@/features/homepage/components/Fe
 
 const DealSlider = dynamic(() => import("@/features/homepage/components/DealSlider"), {
   ssr: true,
-  loading: () => <LoadingSpinner />,
+  loading: () => (
+    <div className="rounded-xl overflow-hidden bg-gradient-1 p-4 min-h-[200px] flex items-center justify-center">
+      <LoadingSpinner />
+    </div>
+  ),
 })
 
 const TrustedStores = dynamic(() => import("@/features/homepage/components/TrustedStores"), {
@@ -83,7 +87,13 @@ export default function HomePage() {
         <h2 id="deals-heading" className="sr-only">
           Ưu đãi hấp dẫn
         </h2>
-        <Suspense fallback={<LoadingSpinner />}>
+        <Suspense
+          fallback={
+            <div className="rounded-xl overflow-hidden bg-gradient-1 p-4 min-h-[200px] flex items-center justify-center">
+              <LoadingSpinner />
+            </div>
+          }
+        >
           <DealSlider />
         </Suspense>
       </section>
@@ -113,16 +123,7 @@ export default function HomePage() {
       </section>
 
       {/* Health News - Server Component for SEO */}
-      <section
-        className="container mx-auto px-3 sm:px-4 py-6 sm:py-8"
-        aria-labelledby="health-news-heading"
-      >
-        <h2
-          id="health-news-heading"
-          className="mb-4 sm:mb-6 text-xl sm:text-2xl font-bold text-grayscale-90"
-        >
-          Góc Sức Khỏe
-        </h2>
+      <section className="container mx-auto px-3 sm:px-4 py-6 sm:py-8">
         <Suspense fallback={<LoadingSpinner />}>
           <HealthNews />
         </Suspense>
