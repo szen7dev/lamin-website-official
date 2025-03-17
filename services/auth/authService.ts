@@ -1,106 +1,74 @@
-import apiClient from "../api/apiClient"
+// This is a mock service that simulates API calls
+// Later, this can be replaced with actual API calls
 
-export interface CheckUserExistsParams {
-  phone: string
-}
+import { sleep } from "@/utils/helpers"
 
-export interface GetPhoneOtpParams {
-  optionSeller: number
-  phone: string
-}
-
-export interface LoginParams {
-  email: string
-  password: string
-}
-
-export interface LoginWithOtpParams {
-  phone: string
-  password: string // OTP code
-}
-
-export interface LoginResponse {
-  token: string
-  infoUser: any // Use the InfoUser type from common.ts
+export interface AuthResponse {
+  success: boolean
+  message?: string
+  data?: any
 }
 
 class AuthService {
-  // Check if user exists
-  async checkUserExists(params: CheckUserExistsParams): Promise<boolean> {
-    try {
-      const response = await apiClient.post("/api/auth/users/check-user-exists", params, false)
-      return !!response
-    } catch (error) {
-      console.error("Error checking user existence:", error)
-      return false
+  async sendOTP(phoneNumber: string): Promise<AuthResponse> {
+    // Simulate API call
+    await sleep(1000)
+
+    return {
+      success: true,
+      message: "OTP sent successfully",
+      data: {
+        expiresIn: 290, // 4 minutes 50 seconds
+      },
     }
   }
 
-  // Get OTP for phone login
-  async getPhoneOtp(params: GetPhoneOtpParams): Promise<boolean> {
-    try {
-      const response = await apiClient.post("/api/auth/users/get-phone-otp", params, false)
-      return !!response
-    } catch (error) {
-      console.error("Error getting phone OTP:", error)
-      throw error
-    }
-  }
+  async verifyOTP(phoneNumber: string, otp: string): Promise<AuthResponse> {
+    // Simulate API call
+    await sleep(1000)
 
-  // Login with email/password
-  async login(params: LoginParams): Promise<LoginResponse> {
-    try {
-      const response = await apiClient.post<LoginResponse>("/api/auth/users/login", params, false)
-
-      // Store token for future requests
-      if (response.token) {
-        apiClient.setToken(response.token)
-      }
-
-      return response
-    } catch (error) {
-      console.error("Error during login:", error)
-      throw error
-    }
-  }
-
-  // Login with phone/OTP
-  async loginWithOtp(params: LoginWithOtpParams): Promise<LoginResponse> {
-    try {
-      const response = await apiClient.post<LoginResponse>(
-        "/api/auth/users/login",
-        {
-          email: params.phone, // API uses email field for phone
-          password: params.password, // OTP code
+    // For demo purposes, 111111 is valid, 000000 is invalid
+    if (otp === "111111") {
+      return {
+        success: true,
+        message: "OTP verified successfully",
+        data: {
+          token: "mock-jwt-token",
+          user: {
+            id: "user-123",
+            phoneNumber,
+            name: "Demo User",
+          },
         },
-        false,
-      )
-
-      // Store token for future requests
-      if (response.token) {
-        apiClient.setToken(response.token)
       }
-
-      return response
-    } catch (error) {
-      console.error("Error during OTP login:", error)
-      throw error
+    } else {
+      return {
+        success: false,
+        message: `Xác thực không thành công: ${phoneNumber}, Mã OTP không đúng`,
+      }
     }
   }
 
-  // Logout
-  async logout(): Promise<void> {
-    apiClient.clearToken()
+  async loginWithZalo(phoneNumber: string): Promise<AuthResponse> {
+    // Simulate API call
+    await sleep(1000)
+
+    return {
+      success: true,
+      message: "Zalo verification initiated",
+    }
   }
 
-  // Check if user is authenticated
-  isAuthenticated(): boolean {
-    return !!apiClient.getToken()
+  async loginWithSMS(phoneNumber: string): Promise<AuthResponse> {
+    // Simulate API call
+    await sleep(1000)
+
+    return {
+      success: true,
+      message: "SMS verification initiated",
+    }
   }
 }
 
-// Create and export a singleton instance
 export const authService = new AuthService()
-
-export default authService
 
