@@ -1,8 +1,8 @@
-"use client"
+// "use client"
 
-import { Button } from "@/components/ui/Button"
 import { CheckCircle2 } from "lucide-react"
 import { useNutritionCheckResult } from "../hooks/useNutritionCheckMutation"
+import { Button } from "@/components/ui/button"
 
 interface NutritionCheckResultProps {
   resultId?: string
@@ -41,9 +41,7 @@ export default function NutritionCheckResult({ resultId }: NutritionCheckResultP
           <CheckCircle2 className="h-5 w-5 text-success-5" aria-hidden="true" />
           <div>
             <h3 className="font-medium">KẾT QUẢ ĐÃ ĐƯỢC GHI NHẬN</h3>
-            <p className="text-sm text-white/90">
-              Cảm ơn bạn, kết quả đã được trả về Zalo OA cho bạn
-            </p>
+            <p className="text-sm text-white/90">Cảm ơn bạn, kết quả đã được trả về Zalo OA cho bạn</p>
           </div>
         </div>
       </header>
@@ -119,3 +117,4 @@ export default function NutritionCheckResult({ resultId }: NutritionCheckResultP
     </article>
   )
 }
+
