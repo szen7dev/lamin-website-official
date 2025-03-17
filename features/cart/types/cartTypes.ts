@@ -2,7 +2,7 @@ export interface CartItem {
   id: string
   name: string
   price: number
-  originalPrice: number
+  originalPrice?: number // Make this optional to avoid the toLocaleString error
   quantity: number
   unit: string
   image?: string
