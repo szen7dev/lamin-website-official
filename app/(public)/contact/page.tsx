@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { Breadcrumb } from "@/components/ui/Breadcrumb"
+import { Breadcrumb } from "@/components/ui/breadcrumb"
 import { ContactForm } from "@/features/contact/components/ContactForm"
 import { generateMetadata as generateSeoMetadata } from "@/utils/seo"
 
@@ -30,4 +30,3 @@ export default function ContactPage() {
     </div>
   )
 }
-
