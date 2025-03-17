@@ -13,6 +13,8 @@ import { useCart } from "@/features/cart/hooks/useCart"
 import { Separator } from "@/components/ui/separator"
 // Import the LoginModal component at the top of the file
 import { LoginModal } from "@/components/ui/LoginModal"
+// Add the import for useContactInfo at the top with other imports
+import { useContactInfo } from "@/hooks/useContactInfo"
 
 const popularKeywords = [
   { label: "Thuốc nhỏ mắt", href: "#" },
@@ -33,6 +35,9 @@ export function Header() {
   const isMobile = useMediaQuery("(max-width: 768px)")
   const { totalItems } = useCart()
   const menuButtonRef = useRef<HTMLButtonElement>(null)
+
+  // Inside the Header component, add the hook call before the return statement
+  const { data: contactInfo, isLoading: isContactInfoLoading } = useContactInfo()
 
   // Close mobile menu when screen size changes to desktop
   useEffect(() => {
@@ -91,11 +96,19 @@ export function Header() {
 
                 {/* Contact and Download - Hidden on mobile, visible on medium screens */}
                 <div className="hidden md:flex items-end gap-4 ml-4">
+                  {/* Find the hotline display section and replace it with this dynamic version */}
+                  {/* Look for the section with <Phone className="h-5 w-5 text-white" /> and replace that div with: */}
                   <div className="flex items-end gap-2">
                     <Phone className="h-5 w-5 text-white" />
                     <div className="text-white">
                       <span className="mr-1 text-sm">Tư vấn ngay:</span>
-                      <span className="font-medium">1800 6789</span>
+                      <span className="font-medium">
+                        {isContactInfoLoading
+                          ? "Đang tải..."
+                          : contactInfo && contactInfo[0]?.hotline1
+                            ? contactInfo[0].hotline1
+                            : "1800 6789"}
+                      </span>
                     </div>
                   </div>
                   <div className="h-5">
@@ -226,11 +239,19 @@ export function Header() {
       {mobileMenuOpen && (
         <div className="md:hidden border-t border-white/10 py-4">
           <div className="container mx-auto px-4 flex flex-col gap-3">
+            {/* Also update the mobile version of the phone number in the mobile menu section */}
+            {/* Find the section with <Phone className="h-5 w-5" /> in the mobile menu and replace that div with: */}
             <div className="flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-white w-full justify-center">
               <Phone className="h-5 w-5" />
               <div>
                 <span className="mr-1 text-sm">Tư vấn ngay:</span>
-                <span className="font-medium">1800 6789</span>
+                <span className="font-medium">
+                  {isContactInfoLoading
+                    ? "Đang tải..."
+                    : contactInfo && contactInfo[0]?.hotline1
+                      ? contactInfo[0].hotline1
+                      : "1800 6789"}
+                </span>
               </div>
             </div>
 

@@ -8,12 +8,31 @@ export interface Config {
   status: number
   createdAt: string
   updatedAt: string
+  // Add the specific fields from the API response
+  hotline1?: string
+  hotline2?: string
+  hotline3?: string
+  youtube?: string
+  facebook?: string
+  zalo?: string
+  address?: string
+  content?: string
+  email?: string
+  phone?: string
+  registration?: string
+  company?: string
 }
 
 export interface ConfigQueryParams {
   optionSeller?: number
   isInfo?: number
   type?: number
+}
+
+export interface ConfigResponse {
+  error: boolean
+  data: Config
+  status: number
 }
 
 class ConfigService {
@@ -26,8 +45,9 @@ class ConfigService {
         type: 3,
       }
 
-      const response = await apiClient.get<Config[]>("/api/item/configs", params)
-      return response
+      const response = await apiClient.get<ConfigResponse>("/api/item/configs", params)
+      // If the response contains a data object, return it as an array for consistency
+      return response.data ? [response.data] : []
     } catch (error) {
       console.error("Error fetching contact info:", error)
       return []

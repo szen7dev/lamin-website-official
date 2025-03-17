@@ -16,7 +16,10 @@ export const metadata = generateSeoMetadata({
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.className} bg-background text-foreground antialiased`} suppressHydrationWarning>
+      <body
+        className={`${inter.className} bg-background text-foreground antialiased`}
+        suppressHydrationWarning
+      >
         <ThemeProvider>
           <QueryProvider>
             <CartProvider>{children}</CartProvider>
