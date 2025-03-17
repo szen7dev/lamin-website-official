@@ -18,3 +18,5 @@ export function truncateText(text: string, maxLength: number) {
   return text.slice(0, maxLength) + "..."
 }
 
+export const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
+

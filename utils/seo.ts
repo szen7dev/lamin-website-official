@@ -1,5 +1,5 @@
-import { siteConfig } from "@/config/siteConfig"
 import type { Metadata } from "next"
+import { siteConfig } from "@/config/siteConfig"
 
 interface SEOProps {
   title?: string
@@ -26,3 +26,4 @@ export function generateMetadata({ title, description, keywords, image }: SEOPro
     }),
   }
 }
+
