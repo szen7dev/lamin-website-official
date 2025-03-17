@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { ShoppingBag, Stethoscope, MapPin, FileText, Activity, Ruler } from "lucide-react"
-import { useEffect, useRef } from "react"
+import { useMediaQuery } from "@/hooks/useMediaQuery"
 
 const features = [
   {
@@ -44,42 +44,43 @@ const features = [
 ]
 
 export default function FeatureShortcuts() {
-  const scrollRef = useRef<HTMLUListElement>(null)
-
-  // Add horizontal scroll with touch/mouse for mobile
-  useEffect(() => {
-    const scrollContainer = scrollRef.current
-    if (!scrollContainer) return
-
-    const handleWheel = (e: WheelEvent) => {
-      if (window.innerWidth < 768) {
-        e.preventDefault()
-        scrollContainer.scrollLeft += e.deltaY
-      }
-    }
-
-    scrollContainer.addEventListener("wheel", handleWheel, { passive: false })
-    return () => scrollContainer.removeEventListener("wheel", handleWheel)
-  }, [])
+  const isDesktop = useMediaQuery("(min-width: 768px)")
 
   return (
-    <nav className="py-4" aria-label="Truy cập nhanh">
-      <ul
-        ref={scrollRef}
-        className="flex w-full space-x-2 overflow-x-auto pb-2 scrollbar-hide md:justify-between md:space-x-0 md:overflow-visible"
-      >
+    <nav className="py-4 md:py-6" aria-label="Truy cập nhanh">
+      <div className="grid grid-cols-3 gap-3 md:grid-cols-6 md:gap-4">
         {features.map((feature) => (
-          <li key={feature.id} className="flex-shrink-0">
+          <div key={feature.id} className="flex-shrink-0">
             <Link
               href={feature.href}
-              className="flex min-w-[80px] sm:min-w-[100px] flex-col items-center gap-2 rounded-lg px-2 sm:px-3 py-2 sm:py-3 transition-colors hover:bg-primary-5/5 md:min-w-[120px] md:px-4"
+              className={`group flex h-full rounded-xl bg-white shadow-light-08 transition-all hover:shadow-light-16 ${
+                isDesktop ? "flex-row items-center gap-3 p-4" : "flex-col items-center gap-2 p-3"
+              }`}
             >
-              <feature.icon className="h-5 w-5 sm:h-6 sm:w-6 text-primary-40" aria-hidden="true" />
-              <span className="text-center text-xs sm:text-sm font-medium text-grayscale-70">{feature.label}</span>
+              <div
+                className={`flex items-center justify-center ${
+                  isDesktop ? "h-10 w-10 flex-shrink-0 rounded-full bg-primary-5" : "h-8 w-8 rounded-full bg-primary-5"
+                }`}
+              >
+                <feature.icon
+                  className={`text-primary-40 transition-colors group-hover:text-primary-50 ${
+                    isDesktop ? "h-5 w-5" : "h-4 w-4"
+                  }`}
+                  aria-hidden="true"
+                  strokeWidth={1.5}
+                />
+              </div>
+              <span
+                className={`font-medium text-grayscale-70 group-hover:text-grayscale-90 ${
+                  isDesktop ? "text-sm break-words" : "text-center text-xs"
+                }`}
+              >
+                {feature.label}
+              </span>
             </Link>
-          </li>
+          </div>
         ))}
-      </ul>
+      </div>
     </nav>
   )
 }
