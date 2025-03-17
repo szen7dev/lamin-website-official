@@ -1,3 +1,5 @@
+import type { Metadata } from "next"
+import { Suspense } from "react"
 import { Breadcrumb } from "@/components/ui/breadcrumb"
 import LoadingSpinner from "@/components/ui/LoadingSpinner"
 import ArticleList from "@/features/article/components/ArticleList"
@@ -5,14 +7,8 @@ import CategoryList from "@/features/article/components/CategoryList"
 import PopularArticles from "@/features/article/components/PopularArticles"
 import { articleService } from "@/features/article/services/articleServiceFactory"
 import { generateMetadata as generateSeoMetadata } from "@/utils/seo"
-import type { Metadata } from "next"
-import { Suspense } from "react"
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { slug: string }
-}): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   let seoData = {
     title: "Danh Mục Bài Viết - Góc Sức Khỏe",
     description: "Các bài viết theo danh mục về sức khỏe và dinh dưỡng từ Elena Pharmacy",
@@ -62,9 +58,7 @@ export default async function CategoryPage({ params }: { params: { slug: string 
         {/* Title Section */}
         <header className="mb-8">
           <h1 className="mb-2 text-3xl font-bold text-grayscale-90">{currentCategory?.name}</h1>
-          {currentCategory?.description && (
-            <p className="text-grayscale-60">{currentCategory.description}</p>
-          )}
+          {currentCategory?.description && <p className="text-grayscale-60">{currentCategory.description}</p>}
         </header>
 
         <div className="grid grid-cols-1 gap-8 md:grid-cols-12">
@@ -87,9 +81,7 @@ export default async function CategoryPage({ params }: { params: { slug: string 
                 <ArticleList articles={articles.articles} />
 
                 {articles.articles.length === 0 && (
-                  <p className="py-8 text-center text-grayscale-60">
-                    Không có bài viết nào trong danh mục này.
-                  </p>
+                  <p className="py-8 text-center text-grayscale-60">Không có bài viết nào trong danh mục này.</p>
                 )}
               </Suspense>
             </section>
@@ -98,10 +90,7 @@ export default async function CategoryPage({ params }: { params: { slug: string 
           {/* Sidebar */}
           <aside className="md:col-span-4">
             {/* Popular Articles */}
-            <section
-              className="mb-8 rounded-lg bg-white p-6 shadow-sm"
-              aria-labelledby="popular-articles"
-            >
+            <section className="mb-8 rounded-lg bg-white p-6 shadow-sm" aria-labelledby="popular-articles">
               <h2 id="popular-articles" className="mb-4 text-xl font-bold text-grayscale-90">
                 Bài Viết Phổ Biến
               </h2>
@@ -109,10 +98,7 @@ export default async function CategoryPage({ params }: { params: { slug: string 
             </section>
 
             {/* Newsletter Signup */}
-            <section
-              className="rounded-lg bg-primary-5 p-6 text-white"
-              aria-labelledby="newsletter-signup"
-            >
+            <section className="rounded-lg bg-primary-5 p-6 text-white" aria-labelledby="newsletter-signup">
               <h2 id="newsletter-signup" className="mb-2 text-xl font-bold">
                 Đăng Ký Nhận Tin
               </h2>
@@ -141,3 +127,4 @@ export default async function CategoryPage({ params }: { params: { slug: string 
     </div>
   )
 }
+

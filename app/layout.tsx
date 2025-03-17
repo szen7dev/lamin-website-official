@@ -1,10 +1,10 @@
-import { ThemeProvider } from "@/components/theme-provider"
-import { CartProvider } from "@/features/cart/contexts/CartContext"
-import { QueryProvider } from "@/providers/QueryProvider"
-import { generateMetadata as generateSeoMetadata } from "@/utils/seo"
-import { Inter } from "next/font/google"
 import type React from "react"
+import { Inter } from "next/font/google"
 import "./globals.css"
+import { generateMetadata as generateSeoMetadata } from "@/utils/seo"
+import { QueryProvider } from "@/providers/QueryProvider"
+import { CartProvider } from "@/features/cart/contexts/CartContext"
+import { ThemeProvider } from "@/components/theme-provider"
 
 const inter = Inter({ subsets: ["latin"] })
 

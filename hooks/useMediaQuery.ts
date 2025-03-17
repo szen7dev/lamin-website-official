@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useState, useEffect } from "react"
 
 export function useMediaQuery(query: string): boolean {
   // During SSR and initial client render, default to false
@@ -27,3 +27,4 @@ export function useMediaQuery(query: string): boolean {
   // Return false during SSR to avoid hydration mismatch
   return mounted ? matches : false
 }
+

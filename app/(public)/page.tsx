@@ -1,11 +1,11 @@
-import LoadingSpinner from "@/components/ui/LoadingSpinner"
-import BestSellingProducts from "@/features/homepage/components/BestSellingProducts"
-import GridBanner from "@/features/homepage/components/GridBanner"
-import SimpleBanner from "@/features/homepage/components/SimpleBanner"
-import { generateMetadata as generateSeoMetadata } from "@/utils/seo"
 import type { Metadata } from "next"
 import dynamic from "next/dynamic"
 import { Suspense } from "react"
+import SimpleBanner from "@/features/homepage/components/SimpleBanner"
+import GridBanner from "@/features/homepage/components/GridBanner"
+import BestSellingProducts from "@/features/homepage/components/BestSellingProducts"
+import LoadingSpinner from "@/components/ui/LoadingSpinner"
+import { generateMetadata as generateSeoMetadata } from "@/utils/seo"
 
 // Client components with interactivity - load without SSR to avoid hydration issues
 const FeatureShortcuts = dynamic(() => import("@/features/homepage/components/FeatureShortcuts"), {
@@ -40,8 +40,7 @@ const HealthNews = dynamic(() => import("@/features/homepage/components/HealthNe
 
 export const metadata: Metadata = generateSeoMetadata({
   title: "Elena Pharmacy - Nhà thuốc trực tuyến của bạn",
-  description:
-    "Mua thuốc trực tuyến, nhận tư vấn sức khỏe và nhiều dịch vụ khác tại Elena Pharmacy",
+  description: "Mua thuốc trực tuyến, nhận tư vấn sức khỏe và nhiều dịch vụ khác tại Elena Pharmacy",
   keywords: ["nhà thuốc", "thuốc", "sức khỏe", "tư vấn sức khỏe", "mua thuốc online"],
 })
 
@@ -57,10 +56,7 @@ export default function HomePage() {
       </section>
 
       {/* Promotions - Server Component for immediate display */}
-      <section
-        className="container mx-auto px-3 sm:px-4 py-4 sm:py-6"
-        aria-labelledby="promotions-heading"
-      >
+      <section className="container mx-auto px-3 sm:px-4 py-4 sm:py-6" aria-labelledby="promotions-heading">
         <h2 id="promotions-heading" className="sr-only">
           Ưu đãi nổi bật
         </h2>
@@ -72,18 +68,13 @@ export default function HomePage() {
         <h2 id="shortcuts-heading" className="sr-only">
           Truy cập nhanh
         </h2>
-        <Suspense
-          fallback={<div className="h-24 w-full animate-pulse bg-gray-100 rounded-lg"></div>}
-        >
+        <Suspense fallback={<div className="h-24 w-full animate-pulse bg-gray-100 rounded-lg"></div>}>
           <FeatureShortcuts />
         </Suspense>
       </section>
 
       {/* Deal Slider - Client Component for carousel */}
-      <section
-        className="container mx-auto px-3 sm:px-4 py-4 sm:py-6"
-        aria-labelledby="deals-heading"
-      >
+      <section className="container mx-auto px-3 sm:px-4 py-4 sm:py-6" aria-labelledby="deals-heading">
         <h2 id="deals-heading" className="sr-only">
           Ưu đãi hấp dẫn
         </h2>
@@ -99,10 +90,7 @@ export default function HomePage() {
       </section>
 
       {/* Best Selling Products - Server Component for SEO */}
-      <section
-        className="container mx-auto px-3 sm:px-4 py-6 sm:py-8"
-        aria-labelledby="bestselling-heading"
-      >
+      <section className="container mx-auto px-3 sm:px-4 py-6 sm:py-8" aria-labelledby="bestselling-heading">
         <h2 id="bestselling-heading" className="sr-only">
           Sản phẩm bán chạy
         </h2>
@@ -110,10 +98,7 @@ export default function HomePage() {
       </section>
 
       {/* Coach Experts - Server Component for SEO */}
-      <section
-        className="container mx-auto px-3 sm:px-4 py-6 sm:py-8"
-        aria-labelledby="coaches-heading"
-      >
+      <section className="container mx-auto px-3 sm:px-4 py-6 sm:py-8" aria-labelledby="coaches-heading">
         <h2 id="coaches-heading" className="sr-only">
           Chuyên gia tư vấn
         </h2>
@@ -130,10 +115,7 @@ export default function HomePage() {
       </section>
 
       {/* Trusted Stores - Client Component for carousel */}
-      <section
-        className="container mx-auto px-3 sm:px-4 py-6 sm:py-8"
-        aria-labelledby="trusted-stores-heading"
-      >
+      <section className="container mx-auto px-3 sm:px-4 py-6 sm:py-8" aria-labelledby="trusted-stores-heading">
         <h2 id="trusted-stores-heading" className="sr-only">
           Cửa hàng uy tín
         </h2>
@@ -144,3 +126,4 @@ export default function HomePage() {
     </main>
   )
 }
+

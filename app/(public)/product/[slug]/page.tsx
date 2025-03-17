@@ -12,11 +12,7 @@ import ProductQA from "@/features/product/components/ProductQA"
 import { mockProduct, mockRelatedProducts } from "@/features/product/mocks/productMockData"
 import { generateMetadata as generateSeoMetadata } from "@/utils/seo"
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { slug: string }
-}): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   // In production, fetch this data from API
   const product = mockProduct
 
@@ -41,10 +37,7 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
             items={[
               { label: "Trang Chủ", href: "/" },
               { label: "Sản Phẩm", href: "/products" },
-              {
-                label: product.category?.name || "Danh Mục",
-                href: `/products/category/${product.category?.slug}`,
-              },
+              { label: product.category?.name || "Danh Mục", href: `/products/category/${product.category?.slug}` },
               { label: product.name },
             ]}
           />
@@ -101,3 +94,4 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
     </div>
   )
 }
+

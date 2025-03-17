@@ -34,3 +34,4 @@ export function CartItemsReadOnly({ items = [], selectedItems = [] }: CartItemsR
     </div>
   )
 }
+

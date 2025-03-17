@@ -34,9 +34,7 @@ export default async function HealthNewsPage() {
 
         {/* Title Section */}
         <header className="mb-6 sm:mb-8">
-          <h1 className="mb-1 sm:mb-2 text-2xl sm:text-3xl font-bold text-grayscale-90">
-            Góc Sức Khỏe
-          </h1>
+          <h1 className="mb-1 sm:mb-2 text-2xl sm:text-3xl font-bold text-grayscale-90">Góc Sức Khỏe</h1>
           <p className="text-sm sm:text-base text-grayscale-60">
             Cập nhật thông tin sức khỏe, dinh dưỡng và lời khuyên từ chuyên gia y tế
           </p>
@@ -57,10 +55,7 @@ export default async function HealthNewsPage() {
           <main className="md:col-span-8">
             {/* Categories Section */}
             <section className="mb-6 sm:mb-8" aria-labelledby="categories-heading">
-              <h2
-                id="categories-heading"
-                className="mb-3 sm:mb-4 text-lg sm:text-xl font-bold text-grayscale-90"
-              >
+              <h2 id="categories-heading" className="mb-3 sm:mb-4 text-lg sm:text-xl font-bold text-grayscale-90">
                 Danh Mục
               </h2>
               <CategoryList categories={categories} />
@@ -84,26 +79,18 @@ export default async function HealthNewsPage() {
               className="mb-6 sm:mb-8 rounded-lg bg-white p-4 sm:p-6 shadow-sm"
               aria-labelledby="popular-articles"
             >
-              <h2
-                id="popular-articles"
-                className="mb-3 sm:mb-4 text-lg sm:text-xl font-bold text-grayscale-90"
-              >
+              <h2 id="popular-articles" className="mb-3 sm:mb-4 text-lg sm:text-xl font-bold text-grayscale-90">
                 Bài Viết Phổ Biến
               </h2>
               <PopularArticles articles={popularArticles} />
             </section>
 
             {/* Newsletter Signup */}
-            <section
-              className="rounded-lg bg-primary-5 p-4 sm:p-6 text-white"
-              aria-labelledby="newsletter-signup"
-            >
+            <section className="rounded-lg bg-primary-5 p-4 sm:p-6 text-white" aria-labelledby="newsletter-signup">
               <h2 id="newsletter-signup" className="mb-1 sm:mb-2 text-lg sm:text-xl font-bold">
                 Đăng Ký Nhận Tin
               </h2>
-              <p className="mb-3 sm:mb-4 text-sm text-white/80">
-                Nhận thông tin sức khỏe mới nhất qua email
-              </p>
+              <p className="mb-3 sm:mb-4 text-sm text-white/80">Nhận thông tin sức khỏe mới nhất qua email</p>
               <form className="space-y-2 sm:space-y-3">
                 <label htmlFor="email-signup" className="sr-only">
                   Email của bạn
@@ -128,3 +115,4 @@ export default async function HealthNewsPage() {
     </div>
   )
 }
+

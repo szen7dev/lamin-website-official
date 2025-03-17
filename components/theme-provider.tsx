@@ -15,14 +15,9 @@ export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
   // Only render the children after the component is mounted on the client
   // This prevents hydration mismatch between server and client
   return (
-    <NextThemesProvider
-      attribute="class"
-      defaultTheme="system"
-      enableSystem
-      disableTransitionOnChange
-      {...props}
-    >
+    <NextThemesProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange {...props}>
       {mounted ? children : <div style={{ visibility: "hidden" }}>{children}</div>}
     </NextThemesProvider>
   )
 }
+

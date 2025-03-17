@@ -74,3 +74,4 @@ export default function TextSizeAdjuster({ className = "" }: TextSizeAdjusterPro
     </div>
   )
 }
+
