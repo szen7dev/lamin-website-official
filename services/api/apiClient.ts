@@ -20,6 +20,29 @@ if (!process.env.NEXT_PUBLIC_CLOUDFRONT_URL) {
 // Tham số chung
 export const DEFAULT_OPTION_SELLER = 1
 
+// Cải thiện xử lý lỗi trong apiClient.ts
+
+// Thêm các hằng số cho mã lỗi HTTP phổ biến
+const HTTP_STATUS = {
+  OK: 200,
+  BAD_REQUEST: 400,
+  UNAUTHORIZED: 401,
+  FORBIDDEN: 403,
+  NOT_FOUND: 404,
+  INTERNAL_SERVER_ERROR: 500,
+  SERVICE_UNAVAILABLE: 503,
+}
+
+// Thêm các loại lỗi
+const ERROR_TYPES = {
+  NETWORK: "NETWORK_ERROR",
+  TIMEOUT: "TIMEOUT_ERROR",
+  SERVER: "SERVER_ERROR",
+  AUTH: "AUTH_ERROR",
+  VALIDATION: "VALIDATION_ERROR",
+  UNKNOWN: "UNKNOWN_ERROR",
+}
+
 class ApiClient {
   private instance: AxiosInstance
   private token: string | null = null
@@ -112,6 +135,92 @@ class ApiClient {
     }
   }
 
+  // Phân loại lỗi HTTP
+  private categorizeError(error: any): { type: string; message: string; status?: number; data?: any } {
+    if (!error.response) {
+      // Lỗi mạng hoặc timeout
+      return {
+        type: error.message?.includes("timeout") ? ERROR_TYPES.TIMEOUT : ERROR_TYPES.NETWORK,
+        message: "Không thể kết nối đến máy chủ. Vui lòng kiểm tra kết nối mạng của bạn.",
+      }
+    }
+
+    const status = error.response.status
+    const data = error.response.data
+
+    switch (status) {
+      case HTTP_STATUS.UNAUTHORIZED:
+        return {
+          type: ERROR_TYPES.AUTH,
+          message: "Phiên đăng nhập đã hết hạn hoặc không hợp lệ.",
+          status,
+          data,
+        }
+      case HTTP_STATUS.FORBIDDEN:
+        return {
+          type: ERROR_TYPES.AUTH,
+          message: "Bạn không có quyền truy cập vào tài nguyên này.",
+          status,
+          data,
+        }
+      case HTTP_STATUS.NOT_FOUND:
+        return {
+          type: ERROR_TYPES.SERVER,
+          message: "Không tìm thấy tài nguyên yêu cầu.",
+          status,
+          data,
+        }
+      case HTTP_STATUS.BAD_REQUEST:
+        return {
+          type: ERROR_TYPES.VALIDATION,
+          message: data?.message || "Dữ liệu gửi lên không hợp lệ.",
+          status,
+          data,
+        }
+      case HTTP_STATUS.INTERNAL_SERVER_ERROR:
+      case HTTP_STATUS.SERVICE_UNAVAILABLE:
+        return {
+          type: ERROR_TYPES.SERVER,
+          message: "Máy chủ đang gặp sự cố. Vui lòng thử lại sau.",
+          status,
+          data,
+        }
+      default:
+        return {
+          type: ERROR_TYPES.UNKNOWN,
+          message: "Đã xảy ra lỗi không xác định.",
+          status,
+          data,
+        }
+    }
+  }
+
+  // Xử lý lỗi chung cho tất cả các request
+  private handleRequestError(error: any, url: string): never {
+    const errorInfo = this.categorizeError(error)
+
+    console.error(`API Error (${errorInfo.type}):`, {
+      url,
+      status: errorInfo.status,
+      message: errorInfo.message,
+      data: errorInfo.data,
+    })
+
+    // Xử lý lỗi xác thực - tự động đăng xuất nếu token hết hạn
+    if (errorInfo.type === ERROR_TYPES.AUTH && typeof window !== "undefined") {
+      // Xóa token và chuyển hướng đến trang đăng nhập nếu cần
+      this.clearToken()
+
+      // Không chuyển hướng tự động để tránh ảnh hưởng đến UX
+      // window.location.href = '/auth/login'
+    }
+
+    throw {
+      ...errorInfo,
+      originalError: error,
+    }
+  }
+
   // Lấy token mặc định cho các request không cần xác thực
   public getDefaultToken(): string {
     return DEFAULT_TOKEN
@@ -135,8 +244,7 @@ class ApiClient {
       const response = await this.instance.get<T>(url, { params, headers })
       return response
     } catch (error) {
-      console.error(`GET Error: ${url}`, error)
-      throw error
+      return this.handleRequestError(error, url)
     }
   }
 
@@ -158,8 +266,7 @@ class ApiClient {
       const response = await this.instance.post<T>(url, data, { headers })
       return response
     } catch (error) {
-      console.error(`POST Error: ${url}`, error)
-      throw error
+      return this.handleRequestError(error, url)
     }
   }
 
@@ -181,8 +288,29 @@ class ApiClient {
       const response = await this.instance.put<T>(url, data, { headers })
       return response
     } catch (error) {
-      console.error(`PUT Error: ${url}`, error)
-      throw error
+      return this.handleRequestError(error, url)
+    }
+  }
+
+  // Thêm phương thức DELETE
+  public async delete<T = any>(url: string, requireAuth = true): Promise<T> {
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+    }
+
+    // Thêm token nếu cần
+    if (requireAuth) {
+      const token = this.getToken() || (requireAuth ? DEFAULT_TOKEN : "")
+      if (token) {
+        headers.Authorization = `Bearer ${token}`
+      }
+    }
+
+    try {
+      const response = await this.instance.delete<T>(url, { headers })
+      return response
+    } catch (error) {
+      return this.handleRequestError(error, url)
     }
   }
 

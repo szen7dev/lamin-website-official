@@ -14,11 +14,24 @@ export interface PaginatedResponse<T> {
   nextCursor: string | null
 }
 
-export interface ApiResponse<T> {
+// Thêm enum ErrorType
+export enum ErrorType {
+  API_ERROR = "API_ERROR",
+  NETWORK_ERROR = "NETWORK_ERROR",
+  TIMEOUT_ERROR = "TIMEOUT_ERROR",
+  SERVER_ERROR = "SERVER_ERROR",
+  AUTH_ERROR = "AUTH_ERROR",
+  VALIDATION_ERROR = "VALIDATION_ERROR",
+  UNKNOWN_ERROR = "UNKNOWN_ERROR",
+}
+
+// Cập nhật ApiResponse interface để thêm code
+export interface ApiResponse<T = any> {
   error: boolean
-  data: T
   status?: number
+  code?: ErrorType
   message?: string
+  data: T
 }
 
 export interface BaseEntity {
@@ -32,10 +45,11 @@ export interface BaseEntity {
 }
 
 // Common error types
+// Cập nhật ApiError class để sử dụng ErrorType
 export class ApiError extends Error {
   constructor(
     public status: number,
-    public code: string,
+    public code: ErrorType,
     message: string,
     public data?: any,
   ) {

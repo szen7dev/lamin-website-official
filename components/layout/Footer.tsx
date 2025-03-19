@@ -129,8 +129,18 @@ export function Footer() {
               </div>
 
               <div className="flex space-x-4">
-                <Image alt="Certification 1" height={40} src="/placeholder.svg?height=40&width=40" width={40} />
-                <Image alt="DMCA Protected" height={40} src="/placeholder.svg?height=40&width=100" width={100} />
+                <Image
+                  alt="Certification 1"
+                  height={40}
+                  src="/placeholder.svg?height=40&width=40"
+                  width={40}
+                />
+                <Image
+                  alt="DMCA Protected"
+                  height={40}
+                  src="/placeholder.svg?height=40&width=100"
+                  width={100}
+                />
               </div>
             </div>
 
@@ -145,10 +155,20 @@ export function Footer() {
 
               <div className="flex space-x-4">
                 <Link className="hover:opacity-80" href="#" aria-label="Facebook">
-                  <Image alt="Facebook" height={32} src="/placeholder.svg?height=32&width=32" width={32} />
+                  <Image
+                    alt="Facebook"
+                    height={32}
+                    src="/placeholder.svg?height=32&width=32"
+                    width={32}
+                  />
                 </Link>
                 <Link className="hover:opacity-80" href="#" aria-label="Zalo">
-                  <Image alt="Zalo" height={32} src="/placeholder.svg?height=32&width=32" width={32} />
+                  <Image
+                    alt="Zalo"
+                    height={32}
+                    src="/placeholder.svg?height=32&width=32"
+                    width={32}
+                  />
                 </Link>
               </div>
             </div>
@@ -201,14 +221,16 @@ export function Footer() {
 
         {/* Copyright Section */}
         <div className="mt-8 pt-8 border-t border-grayscale-20 text-sm text-grayscale-50">
-          <p>© 2023 - 2024 Công ty Cổ Phần Elena | Số ĐKKD 000000000 cấp ngày 17/09/2023 tại Sở Kế hoạch Đầu tư TPHN</p>
+          <p>
+            © 2023 - 2024 Công ty Cổ Phần Elena | Số ĐKKD 000000000 cấp ngày 17/09/2023 tại Sở Kế
+            hoạch Đầu tư TPHN
+          </p>
           <address className="mt-2 not-italic">
-            • Địa chỉ: 30 Vĩnh Phúc, Ba Đình, Hà Nội • Số điện thoại: (084)00000000 • Email: sale@elena.com.vn • Người
-            quản lý nội dung: Elena
+            • Địa chỉ: 30 Vĩnh Phúc, Ba Đình, Hà Nội • Số điện thoại: (084)00000000 • Email:
+            sale@elena.com.vn • Người quản lý nội dung: Elena
           </address>
         </div>
       </div>
     </footer>
   )
 }
-
