@@ -1,14 +1,15 @@
-import Link from "next/link"
-import Image from "next/image"
-import { cn } from "@/utils/helpers"
+import Link from 'next/link';
+import Image from 'next/image';
+
+import { cn } from '@/utils/helpers';
 
 interface MegaMenuItemLinkProps {
-  href: string
-  icon?: string
-  label: string
-  isActive?: boolean
-  className?: string
-  onMouseEnter?: () => void
+  href: string;
+  icon?: string;
+  label: string;
+  isActive?: boolean;
+  className?: string;
+  onMouseEnter?: () => void;
 }
 
 export default function MegaMenuItemLink({
@@ -21,21 +22,27 @@ export default function MegaMenuItemLink({
 }: MegaMenuItemLinkProps) {
   return (
     <Link
-      href={href}
       className={cn(
-        "flex items-center gap-3 px-4 py-3 text-sm transition-colors hover:bg-primary-5/5",
-        isActive && "bg-primary-5/5",
+        'flex items-center gap-3 px-4 py-3 text-sm transition-colors hover:bg-primary-5/5',
+        isActive && 'bg-primary-5/5',
         className,
       )}
-      onMouseEnter={onMouseEnter}
-    >
+      href={href}
+      onMouseEnter={onMouseEnter}>
       {icon && (
         <div className="flex h-5 w-5 items-center justify-center">
-          <Image src={icon || "/placeholder.svg"} alt="" width={20} height={20} className="h-5 w-5 text-primary-40" />
+          <Image
+            alt=""
+            className="h-5 w-5 text-primary-40"
+            height={20}
+            src={icon || '/placeholder.svg'}
+            width={20}
+          />
         </div>
       )}
-      <span className={cn("flex-1", isActive && "text-primary-40")}>{label}</span>
+      <span className={cn('flex-1', isActive && 'text-primary-40')}>
+        {label}
+      </span>
     </Link>
-  )
+  );
 }
-

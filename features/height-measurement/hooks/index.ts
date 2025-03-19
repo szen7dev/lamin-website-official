@@ -1,2 +1,1 @@
-export * from "./useHeightMeasurementMutation"
-
+export * from './useHeightMeasurementMutation';

@@ -1,19 +1,20 @@
-import { Breadcrumb } from "@/components/ui/breadcrumb"
-import NutritionCheckResult from "@/features/nutrition-check/components/NutritionCheckResult"
-import { notFound } from "next/navigation"
+import { notFound } from 'next/navigation';
+
+import { Breadcrumb } from '@/components/ui/breadcrumb';
+import NutritionCheckResult from '@/features/nutrition-check/components/NutritionCheckResult';
 
 export default async function NutritionCheckResultsPage({
   searchParams,
 }: {
-  searchParams: { [key: string]: string | undefined }
+  searchParams: { [key: string]: string | undefined };
 }) {
   // Await the searchParams object to satisfy Next.js strict checking
-  const params = await searchParams
-  const resultId = params.id
+  const params = await searchParams;
+  const resultId = params.id;
 
   // Validate required parameter
   if (!resultId) {
-    notFound()
+    notFound();
   }
 
   return (
@@ -22,9 +23,9 @@ export default async function NutritionCheckResultsPage({
         {/* Breadcrumb */}
         <Breadcrumb
           items={[
-            { label: "Trang Chủ", href: "/" },
-            { label: "Kiểm Tra Dinh Dưỡng", href: "/nutrition-check" },
-            { label: "Kết quả phân tích" },
+            { label: 'Trang Chủ', href: '/' },
+            { label: 'Kiểm Tra Dinh Dưỡng', href: '/nutrition-check' },
+            { label: 'Kết quả phân tích' },
           ]}
         />
 
@@ -34,6 +35,5 @@ export default async function NutritionCheckResultsPage({
         </div>
       </div>
     </div>
-  )
+  );
 }
-

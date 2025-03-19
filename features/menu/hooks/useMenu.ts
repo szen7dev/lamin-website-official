@@ -1,29 +1,35 @@
-"use client"
+'use client';
 
-import { useQueries } from "@tanstack/react-query"
-import { menuService } from "../services/menuServiceFactory"
-import type { MenuItem, MenuCategory, BestSellingProduct } from "../types/menuTypes"
+import type {
+  MenuItem,
+  MenuCategory,
+  BestSellingProduct,
+} from '../types/menuTypes';
+
+import { useQueries } from '@tanstack/react-query';
+
+import { menuService } from '../services/menuServiceFactory';
 
 export function useMenu() {
   const results = useQueries({
     queries: [
       {
-        queryKey: ["menuItems"],
+        queryKey: ['menuItems'],
         queryFn: () => menuService.getMenuItems(),
       },
       {
-        queryKey: ["menuCategories"],
+        queryKey: ['menuCategories'],
         queryFn: () => menuService.getCategories(),
       },
       {
-        queryKey: ["menuBestSellingProducts"],
+        queryKey: ['menuBestSellingProducts'],
         queryFn: () => menuService.getBestSellingProducts(),
       },
     ],
-  })
+  });
 
-  const isLoading = results.some((result) => result.isLoading)
-  const error = results.find((result) => result.error)?.error || null
+  const isLoading = results.some(result => result.isLoading);
+  const error = results.find(result => result.error)?.error || null;
 
   return {
     menuItems: (results[0].data as MenuItem[]) || [],
@@ -31,6 +37,5 @@ export function useMenu() {
     bestSellingProducts: (results[2].data as BestSellingProduct[]) || [],
     isLoading,
     error,
-  }
+  };
 }
-

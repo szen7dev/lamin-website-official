@@ -1,4 +1,3 @@
 // export * from "./nutritionCheckApi"
 // export * from "./heightMeasurementApi"
-export * from "./apiFactory"
-
+export * from './apiFactory';

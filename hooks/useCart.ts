@@ -1,8 +1,7 @@
-"use client"
+'use client';
 
-import { useCart as useCartFromFeature } from "@/features/cart/hooks/useCart"
+import { useCart as useCartFromFeature } from '@/features/cart/hooks/useCart';
 
 export function useCart() {
-  return useCartFromFeature()
+  return useCartFromFeature();
 }
-

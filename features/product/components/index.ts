@@ -1,12 +1,11 @@
-export { default as ProductCard } from "./ProductCard"
-export { default as ProductDetailInfo } from "./ProductDetailInfo"
-export { default as ProductFAQ } from "./ProductFAQ"
-export { default as ProductGallery } from "./ProductGallery"
-export { default as ProductInfo } from "./ProductInfo"
-export { default as ProductQA } from "./ProductQA"
-export { default as ProductQuestions } from "./ProductQuestions"
-export { default as ProductReviews } from "./ProductReviews"
-export { default as ProductTabs } from "./ProductTabs"
-export { default as RelatedProducts } from "./RelatedProducts"
-export { default as ImageGalleryModal } from "./ImageGalleryModal"
-
+export { default as ProductCard } from './ProductCard';
+export { default as ProductDetailInfo } from './ProductDetailInfo';
+export { default as ProductFAQ } from './ProductFAQ';
+export { default as ProductGallery } from './ProductGallery';
+export { default as ProductInfo } from './ProductInfo';
+export { default as ProductQA } from './ProductQA';
+export { default as ProductQuestions } from './ProductQuestions';
+export { default as ProductReviews } from './ProductReviews';
+export { default as ProductTabs } from './ProductTabs';
+export { default as RelatedProducts } from './RelatedProducts';
+export { default as ImageGalleryModal } from './ImageGalleryModal';

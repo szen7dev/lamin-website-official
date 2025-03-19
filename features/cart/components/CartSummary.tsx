@@ -1,26 +1,38 @@
-"use client"
+'use client';
 
-import { useState, useEffect } from "react"
-import { useRouter } from "next/navigation"
-import { ChevronRight, HelpCircle, Coins } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Switch } from "@/components/ui/switch"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
-import { formatPrice } from "@/utils/format"
-import { PromotionModal } from "./PromotionModal"
-import type { CartItem } from "../types"
-import { validateVoucher, calculateVoucherDiscount } from "../mocks/voucherMockData"
+import type { CartItem } from '../types';
+
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { ChevronRight, HelpCircle, Coins } from 'lucide-react';
+
+import {
+  validateVoucher,
+  calculateVoucherDiscount,
+} from '../mocks/voucherMockData';
+
+import { PromotionModal } from './PromotionModal';
+
+import { Button } from '@/components/ui/button';
+import { Switch } from '@/components/ui/switch';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
+import { formatPrice } from '@/utils/format';
 
 interface CartSummaryProps {
-  items: CartItem[]
-  selectedItems: string[]
+  items: CartItem[];
+  selectedItems: string[];
 }
 
 export function CartSummary({ items, selectedItems }: CartSummaryProps) {
-  const router = useRouter()
-  const [usePoints, setUsePoints] = useState(false)
-  const [isPromoModalOpen, setIsPromoModalOpen] = useState(false)
-  const [appliedPromoCode, setAppliedPromoCode] = useState("")
+  const router = useRouter();
+  const [usePoints, setUsePoints] = useState(false);
+  const [isPromoModalOpen, setIsPromoModalOpen] = useState(false);
+  const [appliedPromoCode, setAppliedPromoCode] = useState('');
   const [summary, setSummary] = useState({
     subtotal: 0,
     directDiscount: 0,
@@ -29,37 +41,46 @@ export function CartSummary({ items, selectedItems }: CartSummaryProps) {
     total: 0,
     rewardPoints: 0,
     savedAmount: 0,
-  })
+  });
 
   // Tính toán tổng tiền và các giảm giá mỗi khi có thay đổi
   useEffect(() => {
-    const selectedProducts = items.filter((item) => selectedItems.includes(item.id))
+    const selectedProducts = items.filter(item =>
+      selectedItems.includes(item.id),
+    );
 
     // Tổng tiền gốc
-    const subtotal = selectedProducts.reduce((sum, item) => sum + item.price * item.quantity, 0)
+    const subtotal = selectedProducts.reduce(
+      (sum, item) => sum + item.price * item.quantity,
+      0,
+    );
 
     // Giảm giá trực tiếp
     const directDiscount = selectedProducts.reduce((sum, item) => {
-      if (!item.originalPrice) return sum
-      return sum + (item.originalPrice - item.price) * item.quantity
-    }, 0)
+      if (!item.originalPrice) return sum;
+
+      return sum + (item.originalPrice - item.price) * item.quantity;
+    }, 0);
 
     // Điểm thưởng (1% tổng tiền)
-    const rewardPoints = Math.floor(subtotal * 0.01)
+    const rewardPoints = Math.floor(subtotal * 0.01);
 
     // Giảm giá từ điểm tích lũy
-    const pointsDiscount = usePoints ? 25000 : 0
+    const pointsDiscount = usePoints ? 25000 : 0;
 
     // Tính voucher discount nếu có
     const voucherDiscount = appliedPromoCode
-      ? calculateVoucherDiscount(validateVoucher(appliedPromoCode, subtotal)!, subtotal)
-      : 0
+      ? calculateVoucherDiscount(
+          validateVoucher(appliedPromoCode, subtotal)!,
+          subtotal,
+        )
+      : 0;
 
     // Tổng tiết kiệm
-    const savedAmount = directDiscount + pointsDiscount + voucherDiscount
+    const savedAmount = directDiscount + pointsDiscount + voucherDiscount;
 
     // Thành tiền
-    const total = Math.max(0, subtotal - savedAmount)
+    const total = Math.max(0, subtotal - savedAmount);
 
     setSummary({
       subtotal,
@@ -69,29 +90,29 @@ export function CartSummary({ items, selectedItems }: CartSummaryProps) {
       total,
       rewardPoints,
       savedAmount,
-    })
-  }, [items, selectedItems, usePoints, appliedPromoCode])
+    });
+  }, [items, selectedItems, usePoints, appliedPromoCode]);
 
   const handleApplyPromoCode = (code: string) => {
-    const voucher = validateVoucher(code, summary.subtotal)
+    const voucher = validateVoucher(code, summary.subtotal);
+
     if (voucher) {
-      setAppliedPromoCode(code)
+      setAppliedPromoCode(code);
     } else {
-      setAppliedPromoCode("")
+      setAppliedPromoCode('');
     }
-    setIsPromoModalOpen(false)
-  }
+    setIsPromoModalOpen(false);
+  };
 
   const handleCheckout = () => {
-    router.push("/checkout")
-  }
+    router.push('/checkout');
+  };
 
   return (
     <div className="bg-white rounded-lg shadow p-4 space-y-4">
       <div
         className="flex items-center justify-between text-blue-600 cursor-pointer hover:underline"
-        onClick={() => setIsPromoModalOpen(true)}
-      >
+        onClick={() => setIsPromoModalOpen(true)}>
         <span>Áp dụng ưu đãi để được giảm giá</span>
         <ChevronRight className="w-4 h-4" />
       </div>
@@ -151,41 +172,50 @@ export function CartSummary({ items, selectedItems }: CartSummaryProps) {
           <span>Điểm thưởng</span>
           <span className="text-yellow-500">{summary.rewardPoints} điểm</span>
         </div>
-        <div className="text-sm text-orange-500">Tiết kiệm được {formatPrice(summary.savedAmount)}</div>
+        <div className="text-sm text-orange-500">
+          Tiết kiệm được {formatPrice(summary.savedAmount)}
+        </div>
       </div>
 
       <div className="pt-2 border-t">
         <div className="flex justify-between items-center mb-4">
           <span>Thành tiền</span>
           <div className="text-right">
-            <span className="text-gray-500 line-through text-sm">{formatPrice(summary.subtotal)}</span>
-            <div className="text-blue-600 text-xl font-bold">{formatPrice(summary.total)}</div>
+            <span className="text-gray-500 line-through text-sm">
+              {formatPrice(summary.subtotal)}
+            </span>
+            <div className="text-blue-600 text-xl font-bold">
+              {formatPrice(summary.total)}
+            </div>
           </div>
         </div>
 
-        <Button className="w-full" size="lg" onClick={handleCheckout} disabled={selectedItems.length === 0}>
+        <Button
+          className="w-full"
+          disabled={selectedItems.length === 0}
+          size="lg"
+          onClick={handleCheckout}>
           Mua hàng
         </Button>
 
         <p className="mt-4 text-xs text-center text-gray-500">
-          Bằng việc tiến hành đặt mua hàng, bạn đồng ý với{" "}
-          <a href="#" className="underline">
+          Bằng việc tiến hành đặt mua hàng, bạn đồng ý với{' '}
+          <a className="underline" href="#">
             Điều khoản dịch vụ
-          </a>{" "}
-          và{" "}
-          <a href="#" className="underline">
+          </a>{' '}
+          và{' '}
+          <a className="underline" href="#">
             Chính sách xử lý dữ liệu cá nhân
-          </a>{" "}
+          </a>{' '}
           của Nhà thuốc Elela
         </p>
       </div>
 
       <PromotionModal
         isOpen={isPromoModalOpen}
-        onClose={() => setIsPromoModalOpen(false)}
         onApply={handleApplyPromoCode}
+        onClose={() => setIsPromoModalOpen(false)}
       />
     </div>
-  )
+  );
 }
-

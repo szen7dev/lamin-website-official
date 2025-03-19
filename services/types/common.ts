@@ -1,34 +1,34 @@
 // Common types used across services
 
 export interface PaginationParams {
-  page?: number
-  limit?: number
-  cursor?: string
+  page?: number;
+  limit?: number;
+  cursor?: string;
 }
 
 export interface PaginatedResponse<T> {
-  listRecords: T[]
-  totalRecord: number
-  totalPage: number
-  limit: number
-  nextCursor: string | null
+  listRecords: T[];
+  totalRecord: number;
+  totalPage: number;
+  limit: number;
+  nextCursor: string | null;
 }
 
 export interface ApiResponse<T> {
-  error: boolean
-  data: T
-  status?: number
-  message?: string
+  error: boolean;
+  data: T;
+  status?: number;
+  message?: string;
 }
 
 export interface BaseEntity {
-  _id: string
-  createAt: string
-  modifyAt: string
-  state: number
-  company: string
-  userCreate: string
-  userUpdate?: string
+  _id: string;
+  createAt: string;
+  modifyAt: string;
+  state: number;
+  company: string;
+  userCreate: string;
+  userUpdate?: string;
 }
 
 // Common error types
@@ -39,15 +39,14 @@ export class ApiError extends Error {
     message: string,
     public data?: any,
   ) {
-    super(message)
-    this.name = "ApiError"
+    super(message);
+    this.name = 'ApiError';
   }
 }
 
 // Common query params
 export interface CommonQueryParams {
-  optionSeller?: number
-  keyword?: string
-  usage?: number
+  optionSeller?: number;
+  keyword?: string;
+  usage?: number;
 }
-

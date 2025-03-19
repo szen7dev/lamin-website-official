@@ -1,28 +1,34 @@
-"use client"
+'use client';
 
-import { Breadcrumb } from "@/components/ui/breadcrumb"
-import { CartItems } from "@/features/cart/components/CartItems"
-import { CartSummary } from "@/features/cart/components/CartSummary"
-import { useCart } from "@/features/cart/contexts/CartContext"
-import { CheckoutForm } from "./CheckoutForm"
-import { useState } from "react"
+import { useState } from 'react';
+
+import { CheckoutForm } from './CheckoutForm';
+
+import { Breadcrumb } from '@/components/ui/breadcrumb';
+import { CartItems } from '@/features/cart/components/CartItems';
+import { CartSummary } from '@/features/cart/components/CartSummary';
+import { useCart } from '@/features/cart/contexts/CartContext';
 
 const breadcrumbItems = [
-  { label: "Giỏ hàng", href: "/cart" },
-  { label: "Thanh toán", href: "/checkout" },
-]
+  { label: 'Giỏ hàng', href: '/cart' },
+  { label: 'Thanh toán', href: '/checkout' },
+];
 
 export function CheckoutLayout() {
-  const { items } = useCart()
-  const [selectedItems, setSelectedItems] = useState<string[]>(items.map((item) => item.id))
+  const { items } = useCart();
+  const [selectedItems, setSelectedItems] = useState<string[]>(
+    items.map(item => item.id),
+  );
 
   const handleSelectAll = (checked: boolean) => {
-    setSelectedItems(checked ? items.map((item) => item.id) : [])
-  }
+    setSelectedItems(checked ? items.map(item => item.id) : []);
+  };
 
   const handleSelectItem = (id: string, checked: boolean) => {
-    setSelectedItems((prev) => (checked ? [...prev, id] : prev.filter((itemId) => itemId !== id)))
-  }
+    setSelectedItems(prev =>
+      checked ? [...prev, id] : prev.filter(itemId => itemId !== id),
+    );
+  };
 
   return (
     <div className="container mx-auto py-8">
@@ -32,13 +38,13 @@ export function CheckoutLayout() {
         <div className="lg:col-span-2 space-y-8">
           <div className="bg-white rounded-lg shadow">
             <CartItems
+              readOnly
               items={items}
               selectedItems={selectedItems}
+              onRemoveItem={() => {}}
               onSelectAll={handleSelectAll}
               onSelectItem={handleSelectItem}
               onUpdateQuantity={() => {}}
-              onRemoveItem={() => {}}
-              readOnly
             />
           </div>
 
@@ -48,13 +54,12 @@ export function CheckoutLayout() {
         <div>
           <div className="sticky top-8">
             <CartSummary
-              items={items.filter((item) => selectedItems.includes(item.id))}
+              items={items.filter(item => selectedItems.includes(item.id))}
               selectedItems={selectedItems}
             />
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }
-

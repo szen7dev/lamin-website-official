@@ -1,4 +1,3 @@
 export default function SolutionsPage() {
-  return <div>Solutions Page</div>
+  return <div>Solutions Page</div>;
 }
-

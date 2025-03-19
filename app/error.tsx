@@ -1,19 +1,20 @@
-"use client"
+'use client';
 
-import { useEffect } from "react"
-import { Button } from "@/components/ui/button"
-import { ThemeProvider } from "@/components/theme-provider"
+import { useEffect } from 'react';
+
+import { Button } from '@/components/ui/button';
+import { ThemeProvider } from '@/components/theme-provider';
 
 export default function Error({
   error,
   reset,
 }: {
-  error: Error & { digest?: string }
-  reset: () => void
+  error: Error & { digest?: string };
+  reset: () => void;
 }) {
   useEffect(() => {
-    console.error(error)
-  }, [error])
+    console.error(error);
+  }, [error]);
 
   return (
     <ThemeProvider>
@@ -22,6 +23,5 @@ export default function Error({
         <Button onClick={() => reset()}>Try again</Button>
       </div>
     </ThemeProvider>
-  )
+  );
 }
-

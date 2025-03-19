@@ -1,11 +1,13 @@
-"use client"
+'use client';
 
-import Link from "next/link"
-import { formatDate } from "@/utils/format"
-import type { Article } from "../types/articleTypes"
+import type { Article } from '../types/articleTypes';
+
+import Link from 'next/link';
+
+import { formatDate } from '@/utils/format';
 
 interface PopularArticlesProps {
-  articles: Article[]
+  articles: Article[];
 }
 
 export default function PopularArticles({ articles }: PopularArticlesProps) {
@@ -14,14 +16,16 @@ export default function PopularArticles({ articles }: PopularArticlesProps) {
       <div className="py-4 text-center">
         <p className="text-grayscale-60">Không có bài viết phổ biến.</p>
       </div>
-    )
+    );
   }
 
   return (
     <ul className="space-y-4">
       {articles.map((article, index) => (
         <li key={article.id}>
-          <Link href={`/health-news/article/${article.slug}`} className="group flex gap-3">
+          <Link
+            className="group flex gap-3"
+            href={`/health-news/article/${article.slug}`}>
             <div className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-primary-5/10 text-sm font-bold text-primary-40">
               {index + 1}
             </div>
@@ -30,7 +34,9 @@ export default function PopularArticles({ articles }: PopularArticlesProps) {
                 {article.title}
               </h3>
               <div className="mt-1 flex items-center gap-2 text-xs text-grayscale-50">
-                <time dateTime={article.publishedAt}>{formatDate(article.publishedAt)}</time>
+                <time dateTime={article.publishedAt}>
+                  {formatDate(article.publishedAt)}
+                </time>
                 <span>•</span>
                 <span>{article.viewCount} lượt xem</span>
               </div>
@@ -39,6 +45,5 @@ export default function PopularArticles({ articles }: PopularArticlesProps) {
         </li>
       ))}
     </ul>
-  )
+  );
 }
-

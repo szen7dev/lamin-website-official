@@ -1,57 +1,75 @@
-"use client"
+'use client';
 
-import { useState } from "react"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { Label } from "@/components/ui/label"
-import { Clock } from "lucide-react"
-import { vouchers } from "../mocks/voucherMockData"
+import { useState } from 'react';
+import { Clock } from 'lucide-react';
+
+import { vouchers } from '../mocks/voucherMockData';
+
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Label } from '@/components/ui/label';
 
 interface PromotionModalProps {
-  isOpen: boolean
-  onClose: () => void
-  onApply: (code: string) => void
+  isOpen: boolean;
+  onClose: () => void;
+  onApply: (code: string) => void;
 }
 
-export function PromotionModal({ isOpen, onClose, onApply }: PromotionModalProps) {
-  const [manualCode, setManualCode] = useState("")
-  const [selectedCode, setSelectedCode] = useState("")
+export function PromotionModal({
+  isOpen,
+  onClose,
+  onApply,
+}: PromotionModalProps) {
+  const [manualCode, setManualCode] = useState('');
+  const [selectedCode, setSelectedCode] = useState('');
 
   const handleApply = () => {
     if (selectedCode) {
-      onApply(selectedCode)
+      onApply(selectedCode);
     } else if (manualCode) {
-      onApply(manualCode)
+      onApply(manualCode);
     }
-  }
+  };
 
   const formatTimeLeft = (expiryDate: string) => {
-    const hours = Math.floor((new Date(expiryDate).getTime() - new Date().getTime()) / (1000 * 60 * 60))
+    const hours = Math.floor(
+      (new Date(expiryDate).getTime() - new Date().getTime()) /
+        (1000 * 60 * 60),
+    );
+
     if (hours < 24) {
-      return `${hours}h`
+      return `${hours}h`;
     }
-    const days = Math.floor(hours / 24)
-    return `${days} ngày`
-  }
+    const days = Math.floor(hours / 24);
+
+    return `${days} ngày`;
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle className="text-center text-lg font-semibold">Ưu đãi dành cho bạn</DialogTitle>
+          <DialogTitle className="text-center text-lg font-semibold">
+            Ưu đãi dành cho bạn
+          </DialogTitle>
         </DialogHeader>
 
         <div className="mt-4">
           <div className="flex gap-2">
             <Input
+              className="flex-1"
               placeholder="Nhập mã giảm giá"
               value={manualCode}
-              onChange={(e) => setManualCode(e.target.value)}
-              className="flex-1"
+              onChange={e => setManualCode(e.target.value)}
             />
-            <Button onClick={handleApply} variant="secondary">
+            <Button variant="secondary" onClick={handleApply}>
               Xác nhận
             </Button>
           </div>
@@ -60,13 +78,12 @@ export function PromotionModal({ isOpen, onClose, onApply }: PromotionModalProps
             <div className="mt-4">
               <RadioGroup value={selectedCode} onValueChange={setSelectedCode}>
                 <div className="space-y-3">
-                  {vouchers.map((voucher) => (
+                  {vouchers.map(voucher => (
                     <div
                       key={voucher.code}
                       className="flex items-center space-x-2 border rounded-lg p-3 hover:border-blue-500 cursor-pointer"
-                      onClick={() => setSelectedCode(voucher.code)}
-                    >
-                      <RadioGroupItem value={voucher.code} id={voucher.code} />
+                      onClick={() => setSelectedCode(voucher.code)}>
+                      <RadioGroupItem id={voucher.code} value={voucher.code} />
                       <div className="flex-1">
                         <div className="flex items-center gap-2">
                           <span className="font-medium">{voucher.code}</span>
@@ -74,7 +91,7 @@ export function PromotionModal({ isOpen, onClose, onApply }: PromotionModalProps
                             {voucher.type}
                           </span>
                         </div>
-                        <Label htmlFor={voucher.code} className="font-normal">
+                        <Label className="font-normal" htmlFor={voucher.code}>
                           {voucher.description}
                         </Label>
                         <div className="text-sm text-gray-500 mt-1 flex items-center gap-1">
@@ -94,20 +111,23 @@ export function PromotionModal({ isOpen, onClose, onApply }: PromotionModalProps
           ) : (
             <div className="mt-8 text-center">
               <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 mb-4">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
+                <svg fill="none" height="32" viewBox="0 0 24 24" width="32">
                   <path
                     d="M21 6H3a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1zm-1 10H4V8h16v8z"
                     fill="currentColor"
                   />
                 </svg>
               </div>
-              <p className="text-gray-600">Bạn hiện tại chưa có mã ưu đãi nào</p>
-              <p className="text-sm text-gray-500 mt-1">Nhập mã giảm giá để được áp dụng những ưu đãi</p>
+              <p className="text-gray-600">
+                Bạn hiện tại chưa có mã ưu đãi nào
+              </p>
+              <p className="text-sm text-gray-500 mt-1">
+                Nhập mã giảm giá để được áp dụng những ưu đãi
+              </p>
             </div>
           )}
         </div>
       </DialogContent>
     </Dialog>
-  )
+  );
 }
-

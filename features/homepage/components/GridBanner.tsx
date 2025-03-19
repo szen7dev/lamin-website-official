@@ -1,29 +1,29 @@
-"use client"
+'use client';
 
-import Image from "next/image"
-import { Swiper, SwiperSlide } from "swiper/react"
-import { Navigation, Pagination, Autoplay } from "swiper/modules"
-import { ChevronLeft, ChevronRight } from "lucide-react"
+import Image from 'next/image';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination, Autoplay } from 'swiper/modules';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 // Import Swiper styles
-import "swiper/css"
-import "swiper/css/navigation"
-import "swiper/css/pagination"
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 
 const leftSlides = [
   {
     id: 1,
     image:
-      "https://cdn.nhathuoclongchau.com.vn/unsafe/828x0/filters:quality(90)/https://cms-prod.s3-sgn09.fptcloud.com/Vitabiotic_totchomebaut2_Homepage_PC_1610x492_db075dc88c.jpg",
-    alt: "Pharmaton Kiddi promotion 20% off",
+      'https://cdn.nhathuoclongchau.com.vn/unsafe/828x0/filters:quality(90)/https://cms-prod.s3-sgn09.fptcloud.com/Vitabiotic_totchomebaut2_Homepage_PC_1610x492_db075dc88c.jpg',
+    alt: 'Pharmaton Kiddi promotion 20% off',
   },
   {
     id: 2,
     image:
-      "https://cdn.nhathuoclongchau.com.vn/unsafe/828x0/filters:quality(90)/https://cms-prod.s3-sgn09.fptcloud.com/Banner_Web_PC_1610x492_5d06ac70b8.png",
-    alt: "Pharmaton Kiddi promotion special offer",
+      'https://cdn.nhathuoclongchau.com.vn/unsafe/828x0/filters:quality(90)/https://cms-prod.s3-sgn09.fptcloud.com/Banner_Web_PC_1610x492_5d06ac70b8.png',
+    alt: 'Pharmaton Kiddi promotion special offer',
   },
-]
+];
 
 export default function GridBanner() {
   return (
@@ -37,20 +37,19 @@ export default function GridBanner() {
               delay: 5000,
               disableOnInteraction: false,
             }}
-            navigation={{
-              prevEl: ".swiper-button-prev",
-              nextEl: ".swiper-button-next",
-            }}
             className="h-full"
             modules={[Navigation, Pagination, Autoplay]}
+            navigation={{
+              prevEl: '.swiper-button-prev',
+              nextEl: '.swiper-button-next',
+            }}
             pagination={{
               clickable: true,
-              bulletActiveClass: "bg-primary opacity-100",
+              bulletActiveClass: 'bg-primary opacity-100',
               bulletClass:
-                "inline-block w-2 h-2 rounded-full bg-grayscale-30 opacity-70 mx-1 cursor-pointer transition-all",
-            }}
-          >
-            {leftSlides.map((slide) => (
+                'inline-block w-2 h-2 rounded-full bg-grayscale-30 opacity-70 mx-1 cursor-pointer transition-all',
+            }}>
+            {leftSlides.map(slide => (
               <SwiperSlide key={slide.id} className="h-full">
                 <div className="relative h-full">
                   <Image
@@ -59,22 +58,20 @@ export default function GridBanner() {
                     alt={slide.alt}
                     className="object-cover"
                     sizes="(max-width: 768px) 100vw, 60vw"
-                    src={slide.image || "/placeholder.svg"}
+                    src={slide.image || '/placeholder.svg'}
                   />
                 </div>
               </SwiperSlide>
             ))}
             {/* Custom Navigation Buttons - Refined positioning and styling */}
             <button
-              className="swiper-button-prev !hidden group-hover:!flex absolute left-0 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full bg-black/40 items-center justify-center transition-all hover:bg-black/60 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-transparent"
               aria-label="Previous slide"
-            >
+              className="swiper-button-prev !hidden group-hover:!flex absolute left-0 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full bg-black/40 items-center justify-center transition-all hover:bg-black/60 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-transparent">
               <ChevronLeft className="w-8 h-8 text-white stroke-[1.5]" />
             </button>
             <button
-              className="swiper-button-next !hidden group-hover:!flex absolute right-0 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full bg-black/40 items-center justify-center transition-all hover:bg-black/60 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-transparent"
               aria-label="Next slide"
-            >
+              className="swiper-button-next !hidden group-hover:!flex absolute right-0 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full bg-black/40 items-center justify-center transition-all hover:bg-black/60 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-transparent">
               <ChevronRight className="w-8 h-8 text-white stroke-[1.5]" />
             </button>
           </Swiper>
@@ -85,9 +82,9 @@ export default function GridBanner() {
           {/* Top image - Fixed height container */}
           <div className="relative w-full h-[140px] rounded-lg overflow-hidden shadow-08">
             <Image
+              fill
               alt="Top right image"
               className="object-cover"
-              fill
               sizes="(max-width: 768px) 100vw, 40vw"
               src="https://cdn.nhathuoclongchau.com.vn/unsafe/425x0/filters:quality(90)/https://cms-prod.s3-sgn09.fptcloud.com/399x117_1_3d5f4d9c5d.png"
             />
@@ -96,9 +93,9 @@ export default function GridBanner() {
           {/* Bottom image - Fixed height container */}
           <div className="relative w-full h-[140px] rounded-lg overflow-hidden shadow-08">
             <Image
+              fill
               alt="Bottom right image"
               className="object-cover"
-              fill
               sizes="(max-width: 768px) 100vw, 40vw"
               src="https://cdn.nhathuoclongchau.com.vn/unsafe/425x0/filters:quality(90)/https://cms-prod.s3-sgn09.fptcloud.com/PC_3d7805381e.png"
             />
@@ -106,6 +103,5 @@ export default function GridBanner() {
         </div>
       </div>
     </div>
-  )
+  );
 }
-

@@ -1,5 +1,11 @@
-import { apiClient, DEFAULT_OPTION_SELLER } from "@/services/api/apiClient"
-import type { ProductService, Product, ProductListParams, ProductListResponse } from "../types/productTypes"
+import type {
+  ProductService,
+  Product,
+  ProductListParams,
+  ProductListResponse,
+} from '../types/productTypes';
+
+import { apiClient, DEFAULT_OPTION_SELLER } from '@/services/api/apiClient';
 
 export class ProductRealService implements ProductService {
   async getProducts(params?: ProductListParams): Promise<ProductListResponse> {
@@ -9,28 +15,29 @@ export class ProductRealService implements ProductService {
         optionSeller: DEFAULT_OPTION_SELLER,
         usage: 2, // Theo tài liệu API
         ...params,
-      }
+      };
 
-      const response = await apiClient.get("/api/item/goods", apiParams)
-      return response
+      const response = await apiClient.get('/api/item/goods', apiParams);
+
+      return response;
     } catch (error) {
-      console.error("Error fetching products:", error)
-      throw error
+      console.error('Error fetching products:', error);
+      throw error;
     }
   }
 
   async getProductBySlug(slug: string): Promise<Product> {
     try {
       // Theo tài liệu API, truyền slug như một tham số
-      const response = await apiClient.get(`/api/item/goods`, { slug })
-      return response
+      const response = await apiClient.get(`/api/item/goods`, { slug });
+
+      return response;
     } catch (error) {
-      console.error(`Error fetching product by slug ${slug}:`, error)
-      throw error
+      console.error(`Error fetching product by slug ${slug}:`, error);
+      throw error;
     }
   }
 }
 
 // Export a singleton instance
-export const productRealService = new ProductRealService()
-
+export const productRealService = new ProductRealService();

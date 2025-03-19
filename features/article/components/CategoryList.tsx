@@ -1,40 +1,51 @@
-import Link from "next/link"
-import Image from "next/image"
-import { cn } from "@/utils/helpers"
-import type { ArticleCategory } from "../types/articleTypes"
+import type { ArticleCategory } from '../types/articleTypes';
+
+import Link from 'next/link';
+import Image from 'next/image';
+
+import { cn } from '@/utils/helpers';
 
 interface CategoryListProps {
-  categories: ArticleCategory[]
-  activeSlug?: string
+  categories: ArticleCategory[];
+  activeSlug?: string;
 }
 
-export default function CategoryList({ categories, activeSlug }: CategoryListProps) {
+export default function CategoryList({
+  categories,
+  activeSlug,
+}: CategoryListProps) {
   return (
-    <nav className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-6" aria-label="Danh mục bài viết">
-      {categories.map((category) => (
+    <nav
+      aria-label="Danh mục bài viết"
+      className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-6">
+      {categories.map(category => (
         <Link
           key={category.id}
-          href={`/health-news/category/${category.slug}`}
+          aria-current={activeSlug === category.slug ? 'page' : undefined}
           className={cn(
-            "flex flex-col items-center rounded-lg p-4 transition-colors",
-            activeSlug === category.slug ? "bg-primary-5 text-white" : "bg-white hover:bg-primary-5/5",
+            'flex flex-col items-center rounded-lg p-4 transition-colors',
+            activeSlug === category.slug
+              ? 'bg-primary-5 text-white'
+              : 'bg-white hover:bg-primary-5/5',
           )}
-          aria-current={activeSlug === category.slug ? "page" : undefined}
-        >
+          href={`/health-news/category/${category.slug}`}>
           <div className="relative mb-3 h-12 w-12 overflow-hidden rounded-full">
-            <Image src={category.thumbnailUrl || "/placeholder.svg"} alt="" fill className="object-cover" />
+            <Image
+              fill
+              alt=""
+              className="object-cover"
+              src={category.thumbnailUrl || '/placeholder.svg'}
+            />
           </div>
           <span
             className={cn(
-              "text-center text-sm font-medium",
-              activeSlug === category.slug ? "text-white" : "text-grayscale-90",
-            )}
-          >
+              'text-center text-sm font-medium',
+              activeSlug === category.slug ? 'text-white' : 'text-grayscale-90',
+            )}>
             {category.name}
           </span>
         </Link>
       ))}
     </nav>
-  )
+  );
 }
-

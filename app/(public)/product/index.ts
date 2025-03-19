@@ -1,3 +1,2 @@
-export * from "../../../features/product/components"
-export * from "../../../features/product/hooks"
-
+export * from '../../../features/product/components';
+export * from '../../../features/product/hooks';

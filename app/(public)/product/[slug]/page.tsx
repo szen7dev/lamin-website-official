@@ -1,32 +1,45 @@
-import type { Metadata } from "next"
-import { Suspense } from "react"
-import { Breadcrumb } from "@/components/ui/breadcrumb"
-import LoadingSpinner from "@/components/ui/LoadingSpinner"
-import ProductGallery from "@/features/product/components/ProductGallery"
-import ProductInfo from "@/features/product/components/ProductInfo"
-import ProductTabs from "@/features/product/components/ProductTabs"
-import RelatedProducts from "@/features/product/components/RelatedProducts"
-import ProductReviews from "@/features/product/components/ProductReviews"
-import ProductFAQ from "@/features/product/components/ProductFAQ"
-import ProductQA from "@/features/product/components/ProductQA"
-import { mockProduct, mockRelatedProducts } from "@/features/product/mocks/productMockData"
-import { generateMetadata as generateSeoMetadata } from "@/utils/seo"
+import type { Metadata } from 'next';
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+import { Suspense } from 'react';
+
+import { Breadcrumb } from '@/components/ui/breadcrumb';
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
+import ProductGallery from '@/features/product/components/ProductGallery';
+import ProductInfo from '@/features/product/components/ProductInfo';
+import ProductTabs from '@/features/product/components/ProductTabs';
+import RelatedProducts from '@/features/product/components/RelatedProducts';
+import ProductReviews from '@/features/product/components/ProductReviews';
+import ProductFAQ from '@/features/product/components/ProductFAQ';
+import ProductQA from '@/features/product/components/ProductQA';
+import {
+  mockProduct,
+  mockRelatedProducts,
+} from '@/features/product/mocks/productMockData';
+import { generateMetadata as generateSeoMetadata } from '@/utils/seo';
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { slug: string };
+}): Promise<Metadata> {
   // In production, fetch this data from API
-  const product = mockProduct
+  const product = mockProduct;
 
   return generateSeoMetadata({
     title: product.name,
-    description: product.description.replace(/<[^>]*>/g, "").slice(0, 160),
+    description: product.description.replace(/<[^>]*>/g, '').slice(0, 160),
     keywords: product.tags,
     image: product.images[0].url,
-  })
+  });
 }
 
-export default function ProductDetailPage({ params }: { params: { slug: string } }) {
+export default function ProductDetailPage({
+  params,
+}: {
+  params: { slug: string };
+}) {
   // In production, fetch this data from API
-  const product = mockProduct
+  const product = mockProduct;
 
   return (
     <div className="min-h-screen bg-background pb-8 sm:pb-12 pt-4 sm:pt-6">
@@ -35,9 +48,12 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
         <nav aria-label="Breadcrumb">
           <Breadcrumb
             items={[
-              { label: "Trang Chủ", href: "/" },
-              { label: "Sản Phẩm", href: "/products" },
-              { label: product.category?.name || "Danh Mục", href: `/products/category/${product.category?.slug}` },
+              { label: 'Trang Chủ', href: '/' },
+              { label: 'Sản Phẩm', href: '/products' },
+              {
+                label: product.category?.name || 'Danh Mục',
+                href: `/products/category/${product.category?.slug}`,
+              },
               { label: product.name },
             ]}
           />
@@ -63,13 +79,17 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
 
         {/* FAQ Section */}
         <section className="mt-12">
-          <h2 className="text-xl font-bold text-grayscale-90 mb-6">Câu hỏi thường gặp</h2>
+          <h2 className="text-xl font-bold text-grayscale-90 mb-6">
+            Câu hỏi thường gặp
+          </h2>
           <ProductFAQ />
         </section>
 
         {/* Related Products Section */}
         <section className="mt-12">
-          <h2 className="text-xl font-bold text-grayscale-90 mb-6">Sản phẩm liên quan</h2>
+          <h2 className="text-xl font-bold text-grayscale-90 mb-6">
+            Sản phẩm liên quan
+          </h2>
           <Suspense fallback={<LoadingSpinner />}>
             <RelatedProducts products={mockRelatedProducts} />
           </Suspense>
@@ -77,7 +97,9 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
 
         {/* Reviews Section */}
         <section className="mt-12">
-          <h2 className="text-xl font-bold text-grayscale-90 mb-6">Đánh giá sản phẩm</h2>
+          <h2 className="text-xl font-bold text-grayscale-90 mb-6">
+            Đánh giá sản phẩm
+          </h2>
           <Suspense fallback={<LoadingSpinner />}>
             <ProductReviews productId={product.id} />
           </Suspense>
@@ -92,6 +114,5 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
         </section>
       </div>
     </div>
-  )
+  );
 }
-

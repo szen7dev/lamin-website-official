@@ -1,27 +1,28 @@
-import apiClient, { DEFAULT_OPTION_SELLER } from "../api/apiClient"
-import type { CommonQueryParams } from "../types/common"
+import type { CommonQueryParams } from '../types/common';
+
+import apiClient, { DEFAULT_OPTION_SELLER } from '../api/apiClient';
 
 export interface Habit {
-  _id: string
-  contactID: string
-  name: string
-  challenge: string
-  status?: number
-  createdAt: string
-  updatedAt: string
+  _id: string;
+  contactID: string;
+  name: string;
+  challenge: string;
+  status?: number;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface CreateHabitData {
-  optionSeller: number
-  contactID: string
-  name: string
-  challenge: string
-  status?: number
+  optionSeller: number;
+  contactID: string;
+  name: string;
+  challenge: string;
+  status?: number;
 }
 
 export interface HabitQueryParams extends CommonQueryParams {
-  contactID?: string
-  status?: number
+  contactID?: string;
+  status?: number;
 }
 
 class HabitService {
@@ -31,27 +32,32 @@ class HabitService {
       const payload = {
         ...data,
         optionSeller: data.optionSeller || DEFAULT_OPTION_SELLER,
-      }
+      };
 
-      const response = await apiClient.post<Habit>("/api/crm/habit", payload)
-      return response
+      const response = await apiClient.post<Habit>('/api/crm/habit', payload);
+
+      return response;
     } catch (error) {
-      console.error("Error creating habit:", error)
-      throw error
+      console.error('Error creating habit:', error);
+      throw error;
     }
   }
 
   // Update habit
   async updateHabit(
     habitID: string,
-    data: Partial<Omit<CreateHabitData, "optionSeller" | "contactID">>,
+    data: Partial<Omit<CreateHabitData, 'optionSeller' | 'contactID'>>,
   ): Promise<Habit> {
     try {
-      const response = await apiClient.put<Habit>(`/api/crm/habit/${habitID}`, data)
-      return response
+      const response = await apiClient.put<Habit>(
+        `/api/crm/habit/${habitID}`,
+        data,
+      );
+
+      return response;
     } catch (error) {
-      console.error("Error updating habit:", error)
-      throw error
+      console.error('Error updating habit:', error);
+      throw error;
     }
   }
 
@@ -61,19 +67,23 @@ class HabitService {
       const queryParams = {
         optionSeller: DEFAULT_OPTION_SELLER,
         ...params,
-      }
+      };
 
-      const response = await apiClient.get<Habit[]>("/api/crm/habit", queryParams)
-      return response
+      const response = await apiClient.get<Habit[]>(
+        '/api/crm/habit',
+        queryParams,
+      );
+
+      return response;
     } catch (error) {
-      console.error("Error fetching habits:", error)
-      return []
+      console.error('Error fetching habits:', error);
+
+      return [];
     }
   }
 }
 
 // Create and export a singleton instance
-export const habitService = new HabitService()
+export const habitService = new HabitService();
 
-export default habitService
-
+export default habitService;

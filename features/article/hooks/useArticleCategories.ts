@@ -1,12 +1,12 @@
-"use client"
+'use client';
 
-import { useQuery } from "@tanstack/react-query"
-import { articleService } from "../services/articleServiceFactory"
+import { useQuery } from '@tanstack/react-query';
+
+import { articleService } from '../services/articleServiceFactory';
 
 export function useArticleCategories() {
   return useQuery({
-    queryKey: ["articleCategories"],
+    queryKey: ['articleCategories'],
     queryFn: () => articleService.getArticleCategories(),
-  })
+  });
 }
-

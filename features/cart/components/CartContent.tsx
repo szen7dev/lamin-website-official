@@ -1,43 +1,47 @@
-"use client"
+'use client';
 
-import { useState, useEffect } from "react"
-import Link from "next/link"
-import { ChevronLeft } from "lucide-react"
-import { CartItems } from "./CartItems"
-import { CartSummary } from "./CartSummary"
-import { useCart } from "../contexts/CartContext"
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { ChevronLeft } from 'lucide-react';
+
+import { useCart } from '../contexts/CartContext';
+
+import { CartItems } from './CartItems';
+import { CartSummary } from './CartSummary';
 
 export function CartContent() {
-  const { items, updateQuantity, removeItem, updateUnit } = useCart()
-  const [selectedItems, setSelectedItems] = useState<string[]>([])
+  const { items, updateQuantity, removeItem, updateUnit } = useCart();
+  const [selectedItems, setSelectedItems] = useState<string[]>([]);
 
   useEffect(() => {
     if (items.length > 0) {
-      setSelectedItems(items.map((item) => item.id))
+      setSelectedItems(items.map(item => item.id));
     } else {
-      setSelectedItems([])
+      setSelectedItems([]);
     }
-  }, [items])
+  }, [items]);
 
   const handleSelectAll = (checked: boolean) => {
     if (checked) {
-      setSelectedItems(items.map((item) => item.id))
+      setSelectedItems(items.map(item => item.id));
     } else {
-      setSelectedItems([])
+      setSelectedItems([]);
     }
-  }
+  };
 
   const handleSelectItem = (id: string, checked: boolean) => {
     if (checked) {
-      setSelectedItems((prev) => [...prev, id])
+      setSelectedItems(prev => [...prev, id]);
     } else {
-      setSelectedItems((prev) => prev.filter((itemId) => itemId !== id))
+      setSelectedItems(prev => prev.filter(itemId => itemId !== id));
     }
-  }
+  };
 
   return (
     <div className="container mx-auto px-4 py-6">
-      <Link href="/" className="inline-flex items-center text-blue-600 mb-6 hover:underline">
+      <Link
+        className="inline-flex items-center text-blue-600 mb-6 hover:underline"
+        href="/">
         <ChevronLeft className="w-4 h-4 mr-1" />
         Tiếp tục mua sắm
       </Link>
@@ -47,18 +51,20 @@ export function CartContent() {
           <CartItems
             items={items}
             selectedItems={selectedItems}
+            onRemoveItem={removeItem}
             onSelectAll={handleSelectAll}
             onSelectItem={handleSelectItem}
             onUpdateQuantity={updateQuantity}
-            onRemoveItem={removeItem}
             onUpdateUnit={updateUnit}
           />
         </div>
         <div>
-          <CartSummary items={items.filter((item) => selectedItems.includes(item.id))} selectedItems={selectedItems} />
+          <CartSummary
+            items={items.filter(item => selectedItems.includes(item.id))}
+            selectedItems={selectedItems}
+          />
         </div>
       </div>
     </div>
-  )
+  );
 }
-

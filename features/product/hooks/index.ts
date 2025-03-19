@@ -1,2 +1,1 @@
-export * from "./useProductDetail"
-
+export * from './useProductDetail';

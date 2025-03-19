@@ -1,57 +1,64 @@
-"use client"
+'use client';
 
-import { useState, useRef, useEffect } from "react"
-import MegaMenuItem from "./MegaMenuItem"
-import MegaMenuItemLink from "./MegaMenuItemLink"
-import MegaMenuColumn from "./MegaMenuColumn"
-import { useMenu } from "@/features/menu/hooks/useMenu"
-import { ChevronDown, ChevronRight, X } from "lucide-react"
-import Link from "next/link"
-import { useMediaQuery } from "@/hooks/useMediaQuery"
-import Image from "next/image"
+import { useState, useRef, useEffect } from 'react';
+import { ChevronDown, ChevronRight, X } from 'lucide-react';
+import Link from 'next/link';
+import Image from 'next/image';
+
+import MegaMenuItem from './MegaMenuItem';
+import MegaMenuItemLink from './MegaMenuItemLink';
+import MegaMenuColumn from './MegaMenuColumn';
+
+import { useMenu } from '@/features/menu/hooks/useMenu';
+import { useMediaQuery } from '@/hooks/useMediaQuery';
 
 export default function MegaMenu() {
-  const { categories, bestSellingProducts } = useMenu()
-  const [activeCategory, setActiveCategory] = useState(categories.length > 0 ? categories[0].id : "")
-  const [expandedMobileItems, setExpandedMobileItems] = useState<string[]>([])
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const isMobile = useMediaQuery("(max-width: 768px)")
-  const menuRef = useRef<HTMLDivElement>(null)
+  const { categories, bestSellingProducts } = useMenu();
+  const [activeCategory, setActiveCategory] = useState(
+    categories.length > 0 ? categories[0].id : '',
+  );
+  const [expandedMobileItems, setExpandedMobileItems] = useState<string[]>([]);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const isMobile = useMediaQuery('(max-width: 768px)');
+  const menuRef = useRef<HTMLDivElement>(null);
 
-  const activeProducts = categories.find((cat) => cat.id === activeCategory)?.products || []
+  const activeProducts =
+    categories.find(cat => cat.id === activeCategory)?.products || [];
 
   const toggleMobileItem = (id: string) => {
-    if (id === "products") {
-      setMobileMenuOpen(true)
+    if (id === 'products') {
+      setMobileMenuOpen(true);
     } else {
-      setExpandedMobileItems((prev) => (prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]))
+      setExpandedMobileItems(prev =>
+        prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id],
+      );
     }
-  }
+  };
 
   // Close expanded items when switching to desktop
   useEffect(() => {
     if (!isMobile) {
-      setExpandedMobileItems([])
-      setMobileMenuOpen(false)
+      setExpandedMobileItems([]);
+      setMobileMenuOpen(false);
     }
-  }, [isMobile])
+  }, [isMobile]);
 
   // Close menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setMobileMenuOpen(false)
+        setMobileMenuOpen(false);
       }
-    }
+    };
 
     if (mobileMenuOpen) {
-      document.addEventListener("mousedown", handleClickOutside)
+      document.addEventListener('mousedown', handleClickOutside);
     }
 
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside)
-    }
-  }, [mobileMenuOpen])
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [mobileMenuOpen]);
 
   // Desktop menu
   if (!isMobile) {
@@ -60,17 +67,17 @@ export default function MegaMenu() {
         <div className="container mx-auto px-4">
           <ul className="flex space-x-8 py-4">
             <li>
-              <MegaMenuItem label="Sản phẩm" href="/products" hasDropdown>
+              <MegaMenuItem hasDropdown href="/products" label="Sản phẩm">
                 <div className="flex gap-6">
                   {/* Categories */}
                   <div className="w-64 rounded-lg bg-white">
-                    {categories.map((category) => (
+                    {categories.map(category => (
                       <MegaMenuItemLink
                         key={category.id}
                         href={`/categories/${category.id}`}
                         icon={category.icon}
-                        label={category.label}
                         isActive={category.id === activeCategory}
+                        label={category.label}
                         onMouseEnter={() => setActiveCategory(category.id)}
                       />
                     ))}
@@ -78,31 +85,37 @@ export default function MegaMenu() {
 
                   {/* Content */}
                   <div className="flex-1">
-                    <MegaMenuColumn categoryProducts={activeProducts} bestSellingProducts={bestSellingProducts} />
+                    <MegaMenuColumn
+                      bestSellingProducts={bestSellingProducts}
+                      categoryProducts={activeProducts}
+                    />
                   </div>
                 </div>
               </MegaMenuItem>
             </li>
 
             <li>
-              <MegaMenuItem label="Giải Pháp" href="/solutions" />
+              <MegaMenuItem href="/solutions" label="Giải Pháp" />
             </li>
             <li>
-              <MegaMenuItem label="Đo Cao" href="/height-measurement" />
+              <MegaMenuItem href="/height-measurement" label="Đo Cao" />
             </li>
             <li>
-              <MegaMenuItem label="Kiểm Tra Dinh Dưỡng" href="/nutrition-check" />
+              <MegaMenuItem
+                href="/nutrition-check"
+                label="Kiểm Tra Dinh Dưỡng"
+              />
             </li>
             <li>
-              <MegaMenuItem label="Hệ Thống Cửa Hàng" href="/trusted-shops" />
+              <MegaMenuItem href="/trusted-shops" label="Hệ Thống Cửa Hàng" />
             </li>
             <li>
-              <MegaMenuItem label="Liên Hệ" href="/contact" />
+              <MegaMenuItem href="/contact" label="Liên Hệ" />
             </li>
           </ul>
         </div>
       </nav>
-    )
+    );
   }
 
   // Mobile menu
@@ -114,38 +127,47 @@ export default function MegaMenu() {
           <li className="py-2">
             <div
               className="flex items-center justify-between text-white cursor-pointer py-2"
-              onClick={() => toggleMobileItem("products")}
-            >
+              onClick={() => toggleMobileItem('products')}>
               <span className="text-[15px] font-medium">Sản phẩm</span>
               <ChevronDown
-                className={`h-5 w-5 transition-transform ${expandedMobileItems.includes("products") ? "rotate-180" : ""}`}
+                className={`h-5 w-5 transition-transform ${expandedMobileItems.includes('products') ? 'rotate-180' : ''}`}
               />
             </div>
           </li>
 
           {/* Other menu items */}
           <li className="py-2">
-            <Link href="/solutions" className="block py-2 text-[15px] font-medium text-white">
+            <Link
+              className="block py-2 text-[15px] font-medium text-white"
+              href="/solutions">
               Giải Pháp
             </Link>
           </li>
           <li className="py-2">
-            <Link href="/height-measurement" className="block py-2 text-[15px] font-medium text-white">
+            <Link
+              className="block py-2 text-[15px] font-medium text-white"
+              href="/height-measurement">
               Đo Cao
             </Link>
           </li>
           <li className="py-2">
-            <Link href="/nutrition-check" className="block py-2 text-[15px] font-medium text-white">
+            <Link
+              className="block py-2 text-[15px] font-medium text-white"
+              href="/nutrition-check">
               Kiểm Tra Dinh Dưỡng
             </Link>
           </li>
           <li className="py-2">
-            <Link href="/trusted-shops" className="block py-2 text-[15px] font-medium text-white">
+            <Link
+              className="block py-2 text-[15px] font-medium text-white"
+              href="/trusted-shops">
               Hệ Thống Cửa Hàng
             </Link>
           </li>
           <li className="py-2">
-            <Link href="/contact" className="block py-2 text-[15px] font-medium text-white">
+            <Link
+              className="block py-2 text-[15px] font-medium text-white"
+              href="/contact">
               Liên Hệ
             </Link>
           </li>
@@ -159,10 +181,9 @@ export default function MegaMenu() {
           <div className="bg-primary-5 text-white p-4 flex items-center justify-between">
             <h3 className="text-lg font-medium">Danh mục sản phẩm</h3>
             <button
-              onClick={() => setMobileMenuOpen(false)}
-              className="p-1 rounded-full hover:bg-white/10"
               aria-label="Đóng menu"
-            >
+              className="p-1 rounded-full hover:bg-white/10"
+              onClick={() => setMobileMenuOpen(false)}>
               <X className="h-6 w-6" />
             </button>
           </div>
@@ -172,29 +193,30 @@ export default function MegaMenu() {
             {/* Categories sidebar */}
             <div className="w-1/3 bg-grayscale-5 overflow-y-auto">
               <ul className="divide-y divide-grayscale-20">
-                {categories.map((category) => (
+                {categories.map(category => (
                   <li key={category.id}>
                     <button
                       className={`w-full text-left px-4 py-3 flex items-center gap-2 ${
                         category.id === activeCategory
-                          ? "bg-primary-5/10 text-primary-5 font-medium"
-                          : "text-grayscale-70"
+                          ? 'bg-primary-5/10 text-primary-5 font-medium'
+                          : 'text-grayscale-70'
                       }`}
-                      onClick={() => setActiveCategory(category.id)}
-                    >
+                      onClick={() => setActiveCategory(category.id)}>
                       {category.icon && (
                         <div className="flex h-5 w-5 items-center justify-center">
                           <Image
-                            src={category.icon || "/placeholder.svg"}
                             alt=""
-                            width={20}
+                            className={`h-5 w-5 ${category.id === activeCategory ? 'text-primary-40' : 'text-grayscale-50'}`}
                             height={20}
-                            className={`h-5 w-5 ${category.id === activeCategory ? "text-primary-40" : "text-grayscale-50"}`}
+                            src={category.icon || '/placeholder.svg'}
+                            width={20}
                           />
                         </div>
                       )}
                       <span className="text-sm truncate">{category.label}</span>
-                      {category.id === activeCategory && <ChevronRight className="h-4 w-4 ml-auto text-primary-40" />}
+                      {category.id === activeCategory && (
+                        <ChevronRight className="h-4 w-4 ml-auto text-primary-40" />
+                      )}
                     </button>
                   </li>
                 ))}
@@ -207,28 +229,28 @@ export default function MegaMenu() {
                 {/* Category Products Grid */}
                 {activeProducts && activeProducts.length > 0 && (
                   <div className="grid grid-cols-2 gap-3">
-                    {activeProducts.map((product) => (
+                    {activeProducts.map(product => (
                       <Link
                         key={product.id}
-                        href={`/products/${product.id}`}
                         className="flex flex-col items-center gap-2 rounded-lg bg-white p-3 shadow-sm transition-shadow hover:shadow-md text-center"
-                        onClick={() => setMobileMenuOpen(false)}
-                      >
+                        href={`/products/${product.id}`}
+                        onClick={() => setMobileMenuOpen(false)}>
                         <Image
-                          src={product.image || "/placeholder.svg"}
                           alt={product.name}
-                          width={40}
-                          height={40}
                           className="h-10 w-10 object-contain"
+                          height={40}
+                          src={product.image || '/placeholder.svg'}
+                          width={40}
                         />
-                        <span className="text-xs text-grayscale-90">{product.name}</span>
+                        <span className="text-xs text-grayscale-90">
+                          {product.name}
+                        </span>
                       </Link>
                     ))}
                     <Link
-                      href="#"
                       className="flex flex-col items-center justify-center gap-1 rounded-lg bg-white p-3 shadow-sm text-xs text-grayscale-50"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
+                      href="#"
+                      onClick={() => setMobileMenuOpen(false)}>
                       <span>Xem thêm</span>
                       <ChevronRight className="h-4 w-4" />
                     </Link>
@@ -241,34 +263,40 @@ export default function MegaMenu() {
                     <div className="mb-3 flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <div className="flex h-5 w-5 items-center justify-center rounded-full bg-primary-5">
-                          <Image src="/placeholder.svg" alt="" width={16} height={16} className="text-white" />
+                          <Image
+                            alt=""
+                            className="text-white"
+                            height={16}
+                            src="/placeholder.svg"
+                            width={16}
+                          />
                         </div>
-                        <h3 className="text-sm font-medium text-grayscale-90">Bán chạy nhất</h3>
+                        <h3 className="text-sm font-medium text-grayscale-90">
+                          Bán chạy nhất
+                        </h3>
                       </div>
                       <Link
-                        href="#"
                         className="flex items-center gap-1 text-xs text-primary-40 hover:underline"
-                        onClick={() => setMobileMenuOpen(false)}
-                      >
+                        href="#"
+                        onClick={() => setMobileMenuOpen(false)}>
                         Xem tất cả
                         <ChevronRight className="h-3 w-3" />
                       </Link>
                     </div>
 
                     <div className="grid grid-cols-2 gap-3">
-                      {bestSellingProducts.slice(0, 4).map((product) => (
+                      {bestSellingProducts.slice(0, 4).map(product => (
                         <Link
                           key={product.id}
-                          href={`/products/${product.id}`}
                           className="group space-y-1"
-                          onClick={() => setMobileMenuOpen(false)}
-                        >
+                          href={`/products/${product.id}`}
+                          onClick={() => setMobileMenuOpen(false)}>
                           <div className="relative aspect-square overflow-hidden rounded-lg">
                             <Image
-                              src={product.image || "/placeholder.svg"}
-                              alt={product.name}
                               fill
+                              alt={product.name}
                               className="object-contain transition-transform group-hover:scale-105"
+                              src={product.image || '/placeholder.svg'}
                             />
                           </div>
                           <h4 className="line-clamp-2 text-xs text-grayscale-90 group-hover:text-primary-40">
@@ -279,7 +307,9 @@ export default function MegaMenu() {
                               <span className="text-sm font-medium text-primary-5">
                                 {product.price.toLocaleString()}đ
                               </span>
-                              <span className="text-xs text-grayscale-50">/{product.unit}</span>
+                              <span className="text-xs text-grayscale-50">
+                                /{product.unit}
+                              </span>
                             </div>
                             <span className="text-xs text-grayscale-40 line-through">
                               {product.originalPrice.toLocaleString()}đ
@@ -296,6 +326,5 @@ export default function MegaMenu() {
         </div>
       )}
     </div>
-  )
+  );
 }
-

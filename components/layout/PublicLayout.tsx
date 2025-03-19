@@ -1,6 +1,7 @@
-import type React from "react"
-import { Header } from "./Header"
-import { Footer } from "./Footer"
+import type React from 'react';
+
+import { Header } from './Header';
+import { Footer } from './Footer';
 
 export function PublicLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -9,6 +10,5 @@ export function PublicLayout({ children }: { children: React.ReactNode }) {
       <main className="flex-1">{children}</main>
       <Footer />
     </div>
-  )
+  );
 }
-

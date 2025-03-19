@@ -1,18 +1,17 @@
 // Types for search feature
 export interface SearchResult {
-  id: string
-  name: string
-  price: number
-  image: string
-  unit: string
+  id: string;
+  name: string;
+  price: number;
+  image: string;
+  unit: string;
 }
 
 export interface SearchQuery {
-  query: string
-  limit?: number
+  query: string;
+  limit?: number;
 }
 
 export interface SearchService {
-  searchProducts(params: SearchQuery): Promise<SearchResult[]>
+  searchProducts(params: SearchQuery): Promise<SearchResult[]>;
 }
-

@@ -1,16 +1,22 @@
-import type { Metadata } from "next"
-import { siteConfig } from "@/config/siteConfig"
+import type { Metadata } from 'next';
+
+import { siteConfig } from '@/config/siteConfig';
 
 interface SEOProps {
-  title?: string
-  description?: string
-  keywords?: string[]
-  image?: string
+  title?: string;
+  description?: string;
+  keywords?: string[];
+  image?: string;
 }
 
-export function generateMetadata({ title, description, keywords, image }: SEOProps): Metadata {
+export function generateMetadata({
+  title,
+  description,
+  keywords,
+  image,
+}: SEOProps): Metadata {
   // Convert keywords array to comma-separated string if it exists
-  const keywordsString = keywords ? keywords.join(", ") : undefined
+  const keywordsString = keywords ? keywords.join(', ') : undefined;
 
   return {
     title: title ? `${title} | ${siteConfig.name}` : siteConfig.name,
@@ -24,6 +30,5 @@ export function generateMetadata({ title, description, keywords, image }: SEOPro
         keywords: keywordsString,
       },
     }),
-  }
+  };
 }
-

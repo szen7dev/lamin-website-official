@@ -1,4 +1,4 @@
-"use client"
+'use client';
 
 import {
   AlertDialog,
@@ -9,15 +9,19 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
+} from '@/components/ui/alert-dialog';
 
 interface DeleteConfirmDialogProps {
-  open: boolean
-  onOpenChange: (open: boolean) => void
-  onConfirm: () => void
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  onConfirm: () => void;
 }
 
-export function DeleteConfirmDialog({ open, onOpenChange, onConfirm }: DeleteConfirmDialogProps) {
+export function DeleteConfirmDialog({
+  open,
+  onOpenChange,
+  onConfirm,
+}: DeleteConfirmDialogProps) {
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent className="max-w-[400px]">
@@ -29,12 +33,13 @@ export function DeleteConfirmDialog({ open, onOpenChange, onConfirm }: DeleteCon
         </AlertDialogHeader>
         <AlertDialogFooter className="flex gap-2 sm:gap-0">
           <AlertDialogCancel className="m-0 w-full">Đóng</AlertDialogCancel>
-          <AlertDialogAction className="m-0 w-full bg-blue-600 hover:bg-blue-700" onClick={onConfirm}>
+          <AlertDialogAction
+            className="m-0 w-full bg-blue-600 hover:bg-blue-700"
+            onClick={onConfirm}>
             Xóa
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
-  )
+  );
 }
-
