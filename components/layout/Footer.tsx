@@ -173,6 +173,18 @@ export function Footer() {
                   src="/placeholder.svg?height=40&width=100"
                   width={100}
                 />
+                <Image
+                  alt="Certification 1"
+                  height={40}
+                  src="/placeholder.svg?height=40&width=40"
+                  width={40}
+                />
+                <Image
+                  alt="DMCA Protected"
+                  height={40}
+                  src="/placeholder.svg?height=40&width=100"
+                  width={100}
+                />
               </div>
             </div>
 

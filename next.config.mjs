@@ -1,6 +1,6 @@
 let userConfig = undefined
 try {
-  userConfig = await import("./user-next.config")
+  userConfig = await import("./v0-user-next.config")
 } catch (e) {
   // ignore error
 }
@@ -13,13 +13,40 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  images: {
-    unoptimized: true,
-  },
   experimental: {
     webpackBuildWorker: true,
     parallelServerBuildTraces: true,
     parallelServerCompiles: true,
+  },
+  images: {
+    domains: [
+      "images.glints.com",
+      "glints-dashboard.oss-ap-southeast-1.aliyuncs.com",
+      "res.cloudinary.com",
+      "cloudinary.com",
+      "ui-avatars.com",
+      "lh3.googleusercontent.com",
+      "platform-lookaside.fbsbx.com",
+      "randomuser.me",
+      "picsum.photos",
+      "loremflickr.com",
+      "placekitten.com",
+      "placeimg.com",
+      "via.placeholder.com",
+      "source.unsplash.com",
+      "images.unsplash.com",
+      "avatars.githubusercontent.com",
+      "cdn.pixabay.com",
+      "media.istockphoto.com",
+      "i.imgur.com",
+      "imgur.com",
+    ],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "**",
+      },
+    ],
   },
 }
 
