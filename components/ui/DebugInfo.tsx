@@ -18,7 +18,7 @@ export function DebugInfo() {
     const storedMode =
       typeof window !== 'undefined' ? localStorage.getItem('API_MODE') : null;
 
-    setApiMode(storedMode || API_MODE);
+    setApiMode((storedMode as 'mock' | 'real') || API_MODE);
 
     // Log thông tin debug
     if (isDev) {

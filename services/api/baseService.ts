@@ -1,4 +1,5 @@
 import { ApiError, type ApiResponse, ErrorType } from '../types/common';
+
 import apiClient from './apiClient';
 
 export abstract class BaseService {

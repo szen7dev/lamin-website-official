@@ -125,14 +125,14 @@ export default function MegaMenu() {
         <ul className="py-2 divide-y divide-white/10">
           {/* Products with submenu */}
           <li className="py-2">
-            <div
+            <button
               className="flex items-center justify-between text-white cursor-pointer py-2"
               onClick={() => toggleMobileItem('products')}>
               <span className="text-[15px] font-medium">Sản phẩm</span>
               <ChevronDown
                 className={`h-5 w-5 transition-transform ${expandedMobileItems.includes('products') ? 'rotate-180' : ''}`}
               />
-            </div>
+            </button>
           </li>
 
           {/* Other menu items */}

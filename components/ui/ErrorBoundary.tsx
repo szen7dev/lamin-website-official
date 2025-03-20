@@ -88,8 +88,8 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
             {error?.message || 'Đã có lỗi xảy ra. Vui lòng thử lại sau.'}
           </p>
           <button
-            onClick={() => window.location.reload()}
-            className="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90">
+            className="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90"
+            onClick={() => window.location.reload()}>
             Làm mới trang
           </button>
         </div>

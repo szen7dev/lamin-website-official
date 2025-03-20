@@ -3,9 +3,10 @@
 import { useState, useMemo } from 'react';
 import Image from 'next/image';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import dynamic from "next/dynamic"
-import { Button } from "@/components/ui/button"
-import { cn } from "@/utils/helpers"
+import dynamic from 'next/dynamic';
+
+import { Button } from '@/components/ui/button';
+import { cn } from '@/utils/helpers';
 
 // Dynamically import the modal to avoid SSR issues
 const ImageGalleryModal = dynamic(() => import('./ImageGalleryModal'), {
@@ -74,7 +75,7 @@ export default function ProductGallery({ images }: ProductGalleryProps) {
               priority
               alt={processedImages[currentImage].alt}
               className="object-contain"
-              src={processedImages[currentImage].url || "/placeholder.svg"}
+              src={processedImages[currentImage].url || '/placeholder.svg'}
             />
           </div>
 
@@ -85,8 +86,7 @@ export default function ProductGallery({ images }: ProductGalleryProps) {
                 className="h-10 w-10 rounded-full bg-black/30 border-0 backdrop-blur-sm hover:bg-black/40"
                 size="sm"
                 variant="outline"
-                onClick={handlePrevious}
-              >
+                onClick={handlePrevious}>
                 <ChevronLeft className="h-6 w-6 text-white" />
                 <span className="sr-only">Previous image</span>
               </Button>
@@ -94,8 +94,7 @@ export default function ProductGallery({ images }: ProductGalleryProps) {
                 className="h-10 w-10 rounded-full bg-black/30 border-0 backdrop-blur-sm hover:bg-black/40"
                 size="sm"
                 variant="outline"
-                onClick={handleNext}
-              >
+                onClick={handleNext}>
                 <ChevronRight className="h-6 w-6 text-white" />
                 <span className="sr-only">Next image</span>
               </Button>
@@ -111,15 +110,17 @@ export default function ProductGallery({ images }: ProductGalleryProps) {
               <button
                 key={image.id}
                 className={cn(
-                  "relative aspect-square rounded-lg overflow-hidden",
-                  index === currentImage ? "ring-2 ring-primary-5" : "ring-1 ring-grayscale-20",
+                  'relative aspect-square rounded-lg overflow-hidden',
+                  index === currentImage
+                    ? 'ring-2 ring-primary-5'
+                    : 'ring-1 ring-grayscale-20',
                 )}
-                onClick={() => setCurrentImage(index)}
+                onClick={() => setCurrentImage(index)}>
                 <Image
-                  src={image.url || '/placeholder.svg'}
-                  alt={image.alt}
                   fill
+                  alt={image.alt}
                   className="object-contain"
+                  src={image.url || '/placeholder.svg'}
                 />
               </button>
             ))}
@@ -128,8 +129,7 @@ export default function ProductGallery({ images }: ProductGalleryProps) {
             {remainingImagesCount > 0 && (
               <button
                 className="relative aspect-square rounded-lg overflow-hidden bg-grayscale-90"
-                onClick={() => setModalOpen(true)}
-              >
+                onClick={() => setModalOpen(true)}>
                 <div className="absolute inset-0 flex flex-col items-center justify-center text-white">
                   <span className="text-sm font-medium">Xem thêm</span>
                   <span className="text-sm font-medium">
@@ -141,7 +141,9 @@ export default function ProductGallery({ images }: ProductGalleryProps) {
                     fill
                     alt={`Xem thêm ${remainingImagesCount} ảnh`}
                     className="object-cover opacity-50"
-                    src={processedImages[MAX_THUMBNAILS].url || "/placeholder.svg"}
+                    src={
+                      processedImages[MAX_THUMBNAILS].url || '/placeholder.svg'
+                    }
                   />
                 )}
               </button>

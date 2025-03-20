@@ -3,11 +3,12 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { ShoppingCart, Phone, Download, User, Menu, X } from 'lucide-react';
-import { useState, useEffect, useRef } from "react"
-import { Button } from "@/components/ui/button"
-import SearchBar from "@/features/search/components/SearchBar"
-import MegaMenu from "@/features/menu/components/MegaMenu"
-import { CartDropdown } from "@/features/cart/components/CartDropdown"
+import { useState, useEffect } from 'react';
+
+import { Button } from '@/components/ui/button';
+import SearchBar from '@/features/search/components/SearchBar';
+import MegaMenu from '@/features/menu/components/MegaMenu';
+import { CartDropdown } from '@/features/cart/components/CartDropdown';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { useCart } from '@/features/cart/hooks/useCart';
 import { Separator } from '@/components/ui/separator';
@@ -28,17 +29,29 @@ const popularKeywords = [
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [searchOpen, setSearchOpen] = useState(false);
   // Add a state for controlling the login modal visibility
   // Add this inside the Header function component, near the top with other state declarations:
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const isMobile = useMediaQuery('(max-width: 768px)');
   const { totalItems } = useCart();
-  const menuButtonRef = useRef<HTMLButtonElement>(null);
 
   // Inside the Header component, add the hook call before the return statement
   const { data: contactInfo, isLoading: isContactInfoLoading } =
     useContactInfo();
+
+  const getHotline = () => {
+    if (isContactInfoLoading) return 'Đang tải...';
+    if (
+      contactInfo &&
+      Array.isArray(contactInfo) &&
+      contactInfo.length > 0 &&
+      contactInfo[0]?.hotline1
+    ) {
+      return contactInfo[0].hotline1;
+    }
+
+    return '1800 6789';
+  };
 
   // Close mobile menu when screen size changes to desktop
   useEffect(() => {
@@ -58,9 +71,9 @@ export function Header() {
               {/* Mobile Menu Button and Logo - Only visible on small screens */}
               <div className="flex w-full justify-between items-center sm:hidden">
                 <Link
-                  href="/"
+                  aria-label="Elena Pharmacy Home"
                   className="flex items-end gap-2"
-                  aria-label="Elena Pharmacy Home">
+                  href="/">
                   <Image
                     alt="FPT Retail"
                     className="h-8 w-auto"
@@ -76,9 +89,9 @@ export function Header() {
                   </div>
                 </Link>
                 <button
-                  aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+                  aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
                   className="text-white"
-                  onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                  onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
                   {mobileMenuOpen ? (
                     <X className="h-6 w-6" />
                   ) : (
@@ -90,9 +103,9 @@ export function Header() {
               <div className="hidden sm:flex justify-items-start gap-4">
                 {/* Logo */}
                 <Link
-                  href="/"
+                  aria-label="Elena Pharmacy Home"
                   className="flex items-end gap-2"
-                  aria-label="Elena Pharmacy Home">
+                  href="/">
                   <Image
                     alt="FPT Retail"
                     className="h-10 w-auto"
@@ -116,13 +129,7 @@ export function Header() {
                     <Phone className="h-5 w-5 text-white" />
                     <div className="text-white">
                       <span className="mr-1 text-sm">Tư vấn ngay:</span>
-                      <span className="font-medium">
-                        {isContactInfoLoading
-                          ? 'Đang tải...'
-                          : contactInfo && contactInfo[0]?.hotline1
-                            ? contactInfo[0].hotline1
-                            : '1800 6789'}
-                      </span>
+                      <span className="font-medium">{getHotline()}</span>
                     </div>
                   </div>
                   <div className="h-5">
@@ -145,8 +152,7 @@ export function Header() {
                 <Button
                   className="rounded-full bg-white px-3 md:px-6 text-primary hover:bg-white/90 text-xs md:text-sm"
                   variant="secondary"
-                  onClick={() => setLoginModalOpen(true)}
-                >
+                  onClick={() => setLoginModalOpen(true)}>
                   <User className="mr-1 md:mr-2 h-4 md:h-5 w-4 md:w-5" />
                   <span className="font-medium">Đăng Nhập</span>
                 </Button>
@@ -154,8 +160,7 @@ export function Header() {
                 <div className={`relative ${totalItems > 0 ? 'group' : ''}`}>
                   <Link
                     className="flex items-center gap-2 rounded-full bg-primary px-3 md:px-6 py-2 text-white hover:bg-primary/90 text-xs md:text-sm relative"
-                    href="/cart"
-                  >
+                    href="/cart">
                     <ShoppingCart className="mr-1 md:mr-2 h-4 md:h-5 w-4 md:w-5" />
                     <span className="font-medium">Giỏ Hàng</span>
                     {totalItems > 0 && (
@@ -189,8 +194,7 @@ export function Header() {
                 <Link
                   key={keyword.label}
                   className="text-sm text-white decoration-white underline decoration-1 underline-offset-4 hover:text-white/90"
-                  href={keyword.href}
-                >
+                  href={keyword.href}>
                   {keyword.label}
                 </Link>
               ))}
@@ -218,20 +222,16 @@ export function Header() {
 
       {/* Mobile Auth and Cart - Only visible on small screens */}
       <div className="flex sm:hidden justify-between items-center px-4 py-2 bg-white/10">
-        {/* Also update the mobile version of the login button */}
-        {/* Find the mobile login button and replace it with: */}
         <Button
           className="rounded-full bg-white px-4 text-primary hover:bg-white/90 text-xs h-8"
           variant="secondary"
-          onClick={() => setLoginModalOpen(true)}
-        >
+          onClick={() => setLoginModalOpen(true)}>
           <User className="mr-1 h-3 w-3" />
           <span className="font-medium">Đăng Nhập</span>
         </Button>
         <Link
           className="flex items-center gap-2 rounded-full bg-primary px-4 py-1 text-white hover:bg-primary/90 text-xs h-8 relative"
-          href="/cart"
-        >
+          href="/cart">
           <ShoppingCart className="mr-1 h-3 w-3" />
           <span className="font-medium">Giỏ Hàng</span>
           {totalItems > 0 && (
@@ -245,8 +245,7 @@ export function Header() {
       {/* Navigation Menu - Toggle on Mobile */}
       <nav
         aria-label="Main Navigation"
-        className={`border-t border-white/10 bg-white ${mobileMenuOpen || !isMobile ? "block" : "hidden"}`}
-      >
+        className={`border-t border-white/10 bg-white ${mobileMenuOpen || !isMobile ? 'block' : 'hidden'}`}>
         <div className="container mx-auto px-4">
           <MegaMenu />
         </div>
@@ -262,13 +261,7 @@ export function Header() {
               <Phone className="h-5 w-5" />
               <div>
                 <span className="mr-1 text-sm">Tư vấn ngay:</span>
-                <span className="font-medium">
-                  {isContactInfoLoading
-                    ? 'Đang tải...'
-                    : contactInfo && contactInfo[0]?.hotline1
-                      ? contactInfo[0].hotline1
-                      : '1800 6789'}
-                </span>
+                <span className="font-medium">{getHotline()}</span>
               </div>
             </div>
 

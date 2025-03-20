@@ -79,7 +79,7 @@ export function PromotionModal({
               <RadioGroup value={selectedCode} onValueChange={setSelectedCode}>
                 <div className="space-y-3">
                   {vouchers.map(voucher => (
-                    <div
+                    <button
                       key={voucher.code}
                       className="flex items-center space-x-2 border rounded-lg p-3 hover:border-blue-500 cursor-pointer"
                       onClick={() => setSelectedCode(voucher.code)}>
@@ -99,7 +99,7 @@ export function PromotionModal({
                           <span>{formatTimeLeft(voucher.expiryDate)}</span>
                         </div>
                       </div>
-                    </div>
+                    </button>
                   ))}
                 </div>
               </RadioGroup>

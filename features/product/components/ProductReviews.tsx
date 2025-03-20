@@ -14,15 +14,15 @@ interface ProductReviewsProps {
 }
 
 export default function ProductReviews({ productId }: ProductReviewsProps) {
-  const [showReviewForm, setShowReviewForm] = useState(false);
+  // const [showReviewForm, setShowReviewForm] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState<number>(5);
-  const { reviews, isLoading } = useReviews(productId);
+  const { reviews } = useReviews(productId);
 
   const totalReviews = reviews.length;
-  const averageRating =
-    reviews.length > 0
-      ? reviews.reduce((acc, review) => acc + review.rating, 0) / reviews.length
-      : 0;
+  // const averageRating =
+  //   reviews.length > 0
+  //     ? reviews.reduce((acc, review) => acc + review.rating, 0) / reviews.length
+  //     : 0;
 
   // Calculate rating distribution
   const ratingCounts = Array.from({ length: 5 }, (_, i) => {
@@ -48,7 +48,8 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
           </div>
           <Button
             className="w-full bg-primary-5 text-white hover:bg-primary-20"
-            onClick={() => setShowReviewForm(true)}>
+            // onClick={() => setShowReviewForm(true)}
+          >
             Gửi đánh giá
           </Button>
         </div>

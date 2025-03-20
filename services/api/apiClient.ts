@@ -339,6 +339,7 @@ class ApiClient {
     // Thêm token nếu cần
     if (requireAuth) {
       const token = this.getToken() || (requireAuth ? DEFAULT_TOKEN : '');
+
       if (token) {
         headers.Authorization = `Bearer ${token}`;
       }
@@ -346,6 +347,7 @@ class ApiClient {
 
     try {
       const response = await this.instance.delete<T>(url, { headers });
+
       return response.data;
     } catch (error) {
       return this.handleRequestError(error, url);

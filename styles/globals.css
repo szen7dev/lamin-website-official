@@ -23,8 +23,12 @@
   * {
     @apply border-border;
   }
+  html {
+    font-family: var(--font-sans);
+  }
   body {
     @apply bg-background text-foreground;
+    font-family: var(--font-sans);
   }
   h1,
   h2,
@@ -33,9 +37,9 @@
   h5,
   h6 {
     @apply font-semibold text-grayscale-100;
+    font-family: var(--font-heading);
   }
   a {
     @apply text-link hover:underline;
   }
 }
-

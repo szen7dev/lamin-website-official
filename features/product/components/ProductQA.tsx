@@ -7,11 +7,11 @@ import { CommentList, type Comment } from './shared/CommentList';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/utils/helpers';
 
-interface ProductQAProps {
-  productId: string;
-}
+// interface ProductQAProps {
+//   productId: string;
+// }
 
-export default function ProductQA({ productId }: ProductQAProps) {
+export default function ProductQA() {
   const [selectedFilter, setSelectedFilter] = useState<
     'newest' | 'oldest' | 'helpful'
   >('newest');

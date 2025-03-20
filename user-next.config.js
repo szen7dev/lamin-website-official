@@ -2,12 +2,20 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ["elela.vn", "images.unsplash.com"],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'elela.vn',
+      },
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+      },
+    ],
   },
   experimental: {
     serverActions: true,
   },
-}
+};
 
-module.exports = nextConfig
-
+module.exports = nextConfig;

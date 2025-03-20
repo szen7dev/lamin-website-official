@@ -34,26 +34,26 @@ export const LoadingSpinner = ({
         <div className="text-center max-w-md p-4 rounded-lg bg-background shadow-sm">
           <div className="text-destructive mb-2">
             <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
+              className="mx-auto mb-2"
               fill="none"
+              height="24"
               stroke="currentColor"
-              strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
-              className="mx-auto mb-2">
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg">
               <circle cx="12" cy="12" r="10" />
-              <line x1="12" y1="8" x2="12" y2="12" />
-              <line x1="12" y1="16" x2="12.01" y2="16" />
+              <line x1="12" x2="12" y1="8" y2="12" />
+              <line x1="12" x2="12.01" y1="16" y2="16" />
             </svg>
           </div>
           <p className="text-sm text-muted-foreground mb-3">{error}</p>
           {onRetry && (
             <button
-              onClick={onRetry}
-              className="px-3 py-1 text-xs bg-primary text-primary-foreground rounded-md hover:bg-primary/90">
+              className="px-3 py-1 text-xs bg-primary text-primary-foreground rounded-md hover:bg-primary/90"
+              onClick={onRetry}>
               Thử lại
             </button>
           )}

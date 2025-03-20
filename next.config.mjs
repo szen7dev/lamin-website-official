@@ -1,10 +1,3 @@
-let userConfig = undefined
-try {
-  userConfig = await import("./v0-user-next.config")
-} catch (e) {
-  // ignore error
-}
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   eslint: {
@@ -19,54 +12,94 @@ const nextConfig = {
     parallelServerCompiles: true,
   },
   images: {
-    domains: [
-      "images.glints.com",
-      "glints-dashboard.oss-ap-southeast-1.aliyuncs.com",
-      "res.cloudinary.com",
-      "cloudinary.com",
-      "ui-avatars.com",
-      "lh3.googleusercontent.com",
-      "platform-lookaside.fbsbx.com",
-      "randomuser.me",
-      "picsum.photos",
-      "loremflickr.com",
-      "placekitten.com",
-      "placeimg.com",
-      "via.placeholder.com",
-      "source.unsplash.com",
-      "images.unsplash.com",
-      "avatars.githubusercontent.com",
-      "cdn.pixabay.com",
-      "media.istockphoto.com",
-      "i.imgur.com",
-      "imgur.com",
-    ],
     remotePatterns: [
       {
-        protocol: "https",
-        hostname: "**",
+        protocol: 'https',
+        hostname: 'images.glints.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'glints-dashboard.oss-ap-southeast-1.aliyuncs.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'res.cloudinary.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'cloudinary.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'ui-avatars.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'lh3.googleusercontent.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'platform-lookaside.fbsbx.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'randomuser.me',
+      },
+      {
+        protocol: 'https',
+        hostname: 'picsum.photos',
+      },
+      {
+        protocol: 'https',
+        hostname: 'loremflickr.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'placekitten.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'placeimg.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'via.placeholder.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'source.unsplash.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'avatars.githubusercontent.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'cdn.pixabay.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'media.istockphoto.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'i.imgur.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'imgur.com',
+      },
+      // Thêm một pattern chung cho tất cả các hostname
+      {
+        protocol: 'https',
+        hostname: '**',
       },
     ],
   },
-}
+};
 
-mergeConfig(nextConfig, userConfig)
-
-function mergeConfig(nextConfig, userConfig) {
-  if (!userConfig) {
-    return
-  }
-
-  for (const key in userConfig) {
-    if (typeof nextConfig[key] === "object" && !Array.isArray(nextConfig[key])) {
-      nextConfig[key] = {
-        ...nextConfig[key],
-        ...userConfig[key],
-      }
-    } else {
-      nextConfig[key] = userConfig[key]
-    }
-  }
-}
-
-export default nextConfig
+export default nextConfig;

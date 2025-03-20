@@ -110,12 +110,14 @@ export function CartSummary({ items, selectedItems }: CartSummaryProps) {
 
   return (
     <div className="bg-white rounded-lg shadow p-4 space-y-4">
-      <div
-        className="flex items-center justify-between text-blue-600 cursor-pointer hover:underline"
+      <button
+        aria-label="Áp dụng ưu đãi"
+        className="flex w-full items-center justify-between text-blue-600 cursor-pointer hover:underline bg-transparent border-none p-0"
+        type="button"
         onClick={() => setIsPromoModalOpen(true)}>
         <span>Áp dụng ưu đãi để được giảm giá</span>
         <ChevronRight className="w-4 h-4" />
-      </div>
+      </button>
 
       <div className="flex items-center justify-between py-2 border-t">
         <div className="flex items-center gap-2">
@@ -200,11 +202,11 @@ export function CartSummary({ items, selectedItems }: CartSummaryProps) {
 
         <p className="mt-4 text-xs text-center text-gray-500">
           Bằng việc tiến hành đặt mua hàng, bạn đồng ý với{' '}
-          <a className="underline" href="#">
+          <a className="underline" href="/terms-of-service">
             Điều khoản dịch vụ
           </a>{' '}
           và{' '}
-          <a className="underline" href="#">
+          <a className="underline" href="/privacy-policy">
             Chính sách xử lý dữ liệu cá nhân
           </a>{' '}
           của Nhà thuốc Elela

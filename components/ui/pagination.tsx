@@ -57,8 +57,9 @@ const PaginationLink = ({
       }),
       className,
     )}
-    {...props}
-  />
+    {...props}>
+    {props.children}
+  </a>
 );
 
 PaginationLink.displayName = 'PaginationLink';

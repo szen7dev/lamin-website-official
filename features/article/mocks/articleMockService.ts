@@ -531,7 +531,7 @@ export class ArticleMockService implements ArticleService {
 
     return {
       id: `comment-${Date.now()}`,
-      articleId,
+      // articleId,
       ...comment,
       createdAt: new Date().toISOString(),
       likes: 0,

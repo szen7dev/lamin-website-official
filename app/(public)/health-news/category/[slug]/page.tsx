@@ -1,9 +1,6 @@
 import type { Metadata } from 'next';
 
-import { Suspense } from 'react';
-
 import { Breadcrumb } from '@/components/ui/breadcrumb';
-import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import ArticleList from '@/features/article/components/ArticleList';
 import CategoryList from '@/features/article/components/CategoryList';
 import PopularArticles from '@/features/article/components/PopularArticles';
@@ -31,7 +28,6 @@ export async function generateMetadata({
         description:
           category.description ||
           `Những bài viết về ${category.name} từ Elena Pharmacy`,
-        keywords: [category.name, 'sức khỏe', 'dinh dưỡng', 'bài viết y tế'],
       };
     }
   } catch (error) {
@@ -102,15 +98,13 @@ export default async function CategoryPage({
                 id="category-articles">
                 Bài Viết Trong Danh Mục {currentCategory?.name}
               </h2>
-              <Suspense fallback={<LoadingSpinner />}>
-                <ArticleList articles={articles.articles} />
+              <ArticleList articles={articles.articles} />
 
-                {articles.articles.length === 0 && (
-                  <p className="py-8 text-center text-grayscale-60">
-                    Không có bài viết nào trong danh mục này.
-                  </p>
-                )}
-              </Suspense>
+              {articles.articles.length === 0 && (
+                <p className="py-8 text-center text-grayscale-60">
+                  Không có bài viết nào trong danh mục này.
+                </p>
+              )}
             </section>
           </main>
 

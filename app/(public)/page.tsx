@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 
 import dynamic from 'next/dynamic';
-import { Suspense } from 'react';
 
 import SimpleBanner from '@/features/homepage/components/SimpleBanner';
 import GridBanner from '@/features/homepage/components/GridBanner';
@@ -98,12 +97,7 @@ export default function HomePage() {
         <h2 className="sr-only" id="shortcuts-heading">
           Truy cập nhanh
         </h2>
-        <Suspense
-          fallback={
-            <div className="h-24 w-full animate-pulse bg-gray-100 rounded-lg" />
-          }>
-          <FeatureShortcuts />
-        </Suspense>
+        <FeatureShortcuts />
       </section>
 
       {/* Deal Slider - Client Component for carousel */}
@@ -113,14 +107,7 @@ export default function HomePage() {
         <h2 className="sr-only" id="deals-heading">
           Ưu đãi hấp dẫn
         </h2>
-        <Suspense
-          fallback={
-            <div className="rounded-xl overflow-hidden bg-gradient-1 p-4 min-h-[200px] flex items-center justify-center">
-              <LoadingSpinner />
-            </div>
-          }>
-          <DealSlider />
-        </Suspense>
+        <DealSlider />
       </section>
 
       {/* Best Selling Products - Server Component for SEO */}
@@ -140,16 +127,12 @@ export default function HomePage() {
         <h2 className="sr-only" id="coaches-heading">
           Chuyên gia tư vấn
         </h2>
-        <Suspense fallback={<LoadingSpinner />}>
-          <CoachExperts />
-        </Suspense>
+        <CoachExperts />
       </section>
 
       {/* Health News - Server Component for SEO */}
       <section className="container mx-auto px-3 sm:px-4 py-6 sm:py-8">
-        <Suspense fallback={<LoadingSpinner />}>
-          <HealthNews />
-        </Suspense>
+        <HealthNews />
       </section>
 
       {/* Trusted Stores - Client Component for carousel */}
@@ -159,9 +142,7 @@ export default function HomePage() {
         <h2 className="sr-only" id="trusted-stores-heading">
           Cửa hàng uy tín
         </h2>
-        <Suspense fallback={<LoadingSpinner />}>
-          <TrustedStores />
-        </Suspense>
+        <TrustedStores />
       </section>
     </main>
   );

@@ -24,64 +24,79 @@ export interface Config {
 }
 
 export interface ConfigQueryParams {
-  optionSeller?: number;
+  optionSeller: number;
   isInfo?: number;
   type?: number;
 }
 
-export interface ConfigResponse {
+export interface ApiResponse<T> {
   error: boolean;
-  data: Config;
+  data: T;
   status: number;
 }
 
-class ConfigService {
-  // Get contact information (hotline, social, etc.)
-  async getContactInfo(): Promise<Config[]> {
-    try {
-      const params: ConfigQueryParams = {
-        optionSeller: DEFAULT_OPTION_SELLER,
-        isInfo: 1,
-        type: 3,
-      };
+// Hàm để lấy thông tin liên hệ (hotline, mạng xã hội, v.v.)
+export async function getContactInfo(): Promise<Config[]> {
+  try {
+    const params: ConfigQueryParams = {
+      optionSeller: DEFAULT_OPTION_SELLER,
+      isInfo: 1,
+      type: 3,
+    };
 
-      const response = await apiClient.get<ConfigResponse>(
-        '/api/item/configs',
-        params,
-      );
+    const response = await apiClient.get<ApiResponse<Config | Config[]>>(
+      '/api/item/configs',
+      params,
+    );
 
-      // If the response contains a data object, return it as an array for consistency
-      return response.data ? [response.data] : [];
-    } catch (error) {
-      console.error('Error fetching contact info:', error);
+    // Xử lý cả trường hợp response.data là object hoặc array
+    if (!response || !response.data) return [];
 
-      return [];
-    }
-  }
-
-  // Get site configuration by type
-  async getConfigByType(type: number): Promise<Config[]> {
-    try {
-      const params: ConfigQueryParams = {
-        optionSeller: DEFAULT_OPTION_SELLER,
-        type,
-      };
-
-      const response = await apiClient.get<Config[]>(
-        '/api/item/configs',
-        params,
-      );
-
-      return response;
-    } catch (error) {
-      console.error('Error fetching config by type:', error);
-
-      return [];
-    }
+    return Array.isArray(response.data) ? response.data : [response.data];
+  } catch (error: any) {
+    console.error('Error fetching contact info:', error);
+    // Thêm thông tin chi tiết vào error
+    error.context = {
+      service: 'configService',
+      method: 'getContactInfo',
+      params: { optionSeller: DEFAULT_OPTION_SELLER, isInfo: 1, type: 3 },
+    };
+    throw error;
   }
 }
 
-// Create and export a singleton instance
-export const configService = new ConfigService();
+// Hàm để lấy cấu hình trang web theo loại
+export async function getConfigByType(type: number): Promise<Config[]> {
+  try {
+    const params: ConfigQueryParams = {
+      optionSeller: DEFAULT_OPTION_SELLER,
+      type,
+    };
+
+    const response = await apiClient.get<ApiResponse<Config | Config[]>>(
+      '/api/item/configs',
+      params,
+    );
+
+    // Xử lý nhất quán giống getContactInfo
+    if (!response || !response.data) return [];
+
+    return Array.isArray(response.data) ? response.data : [response.data];
+  } catch (error: any) {
+    console.error('Error fetching config by type:', error);
+    error.context = {
+      service: 'configService',
+      method: 'getConfigByType',
+      params: { optionSeller: DEFAULT_OPTION_SELLER, type },
+    };
+    throw error;
+  }
+}
+
+// Export các hàm riêng lẻ
+export const configService = {
+  getContactInfo,
+  getConfigByType,
+};
 
 export default configService;

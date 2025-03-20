@@ -4,6 +4,7 @@ import type { Product } from '@/features/product/types/productTypes';
 
 import { useEffect, useRef, useState } from 'react';
 import { Check, AlertTriangle } from 'lucide-react';
+import Image from 'next/image';
 
 import { cn } from '@/utils/helpers';
 
@@ -240,7 +241,7 @@ export default function ProductTabs({ product }: ProductTabsProps) {
       <div className="border-t border-grayscale-20 p-4">
         <div className="flex items-center gap-4">
           <div className="h-12 w-12 overflow-hidden rounded-full">
-            <img
+            <Image
               alt="Dược sĩ Nguyễn Thanh Hải"
               className="h-full w-full object-cover"
               src="/placeholder.svg?height=48&width=48"

@@ -1,9 +1,6 @@
 import type { Metadata } from 'next';
 
-import { Suspense } from 'react';
-
 import { Breadcrumb } from '@/components/ui/breadcrumb';
-import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import FeaturedArticles from '@/features/article/components/FeaturedArticles';
 import CategoryList from '@/features/article/components/CategoryList';
 import PopularArticles from '@/features/article/components/PopularArticles';
@@ -64,9 +61,7 @@ export default async function HealthNewsPage() {
           <h2 className="sr-only" id="featured-articles">
             Bài Viết Nổi Bật
           </h2>
-          <Suspense fallback={<LoadingSpinner />}>
-            <FeaturedArticles articles={featuredArticles} />
-          </Suspense>
+          <FeaturedArticles articles={featuredArticles} />
         </section>
 
         <div className="grid grid-cols-1 gap-6 sm:gap-8 md:grid-cols-12">

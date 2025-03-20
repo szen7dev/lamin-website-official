@@ -4,7 +4,6 @@ import type React from 'react';
 
 import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
 import { AlertCircle } from 'lucide-react';
 
 interface OTPVerificationProps {
@@ -23,11 +22,10 @@ export function OTPVerification({
   onZaloVerification,
 }: OTPVerificationProps) {
   const [otp, setOtp] = useState<string[]>(Array(6).fill(''));
-  const [activeInput, setActiveInput] = useState(0);
+  // const [activeInput, setActiveInput] = useState(0);
   const [error, setError] = useState('');
   const [countdown, setCountdown] = useState(290); // 4 minutes 50 seconds
   const inputRefs = useRef<(HTMLInputElement | null)[]>(Array(6).fill(null));
-  const router = useRouter();
 
   // Format phone number for display
   const formattedPhone = phoneNumber.replace(
@@ -49,7 +47,6 @@ export function OTPVerification({
   // Format countdown time
   const formatCountdown = () => {
     if (countdown <= 0) return '';
-    const minutes = Math.floor(countdown / 60);
     const seconds = countdown % 60;
 
     return `(${seconds})`;
@@ -79,7 +76,7 @@ export function OTPVerification({
 
     // Move to next input if value is entered
     if (value && index < 5) {
-      setActiveInput(index + 1);
+      // setActiveInput(index + 1);
       inputRefs.current[index + 1]?.focus();
     }
 
@@ -101,15 +98,15 @@ export function OTPVerification({
   ) => {
     // Move to previous input on backspace if current input is empty
     if (e.key === 'Backspace' && !otp[index] && index > 0) {
-      setActiveInput(index - 1);
+      // setActiveInput(index - 1);
       inputRefs.current[index - 1]?.focus();
     }
   };
 
   // Handle input focus
-  const handleFocus = (index: number) => {
-    setActiveInput(index);
-  };
+  // const handleFocus = (index: number) => {
+  //   setActiveInput(index);
+  // };
 
   // Handle paste event
   const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
@@ -131,10 +128,10 @@ export function OTPVerification({
     const nextEmptyIndex = newOtp.findIndex(digit => digit === '');
 
     if (nextEmptyIndex !== -1) {
-      setActiveInput(nextEmptyIndex);
+      // setActiveInput(nextEmptyIndex);
       inputRefs.current[nextEmptyIndex]?.focus();
     } else {
-      setActiveInput(5);
+      // setActiveInput(5);
       inputRefs.current[5]?.focus();
     }
 
@@ -191,7 +188,11 @@ export function OTPVerification({
             {otp.map((digit, index) => (
               <div key={index} className="w-12 h-12">
                 <input
-                  ref={el => (inputRefs.current[index] = el)}
+                  ref={el => {
+                    if (el) {
+                      inputRefs.current[index] = el;
+                    }
+                  }}
                   className={`w-full h-full text-center text-xl font-semibold rounded-full border-2 focus:outline-none ${
                     error
                       ? 'border-red-500 text-red-500'
@@ -204,7 +205,7 @@ export function OTPVerification({
                   type="text"
                   value={digit}
                   onChange={e => handleChange(e, index)}
-                  onFocus={() => handleFocus(index)}
+                  // onFocus={() => handleFocus(index)}
                   onKeyDown={e => handleKeyDown(e, index)}
                   onPaste={index === 0 ? handlePaste : undefined}
                 />

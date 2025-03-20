@@ -1,8 +1,7 @@
-'use client';
-
 import { useQuery } from '@tanstack/react-query';
-import { configService } from '@/services/item/configService';
 import { useState, useEffect } from 'react';
+
+import { configService } from '@/services/item/configService';
 
 export function useContactInfo() {
   // Thêm state để theo dõi lỗi UI
@@ -14,7 +13,6 @@ export function useContactInfo() {
     queryFn: () => configService.getContactInfo(),
     staleTime: 1000 * 60 * 5, // 5 minutes
     refetchOnWindowFocus: false,
-    retry: 2, // Thử lại 2 lần nếu có lỗi
   });
 
   // Sử dụng useEffect để theo dõi thay đổi trong query.error
@@ -24,6 +22,7 @@ export function useContactInfo() {
 
       // Thiết lập thông báo lỗi thân thiện với người dùng
       const error = query.error as any;
+
       if (error.code === 'NETWORK_ERROR' || error.code === 'TIMEOUT_ERROR') {
         setUiError(
           'Không thể kết nối đến máy chủ. Vui lòng kiểm tra kết nối mạng của bạn.',
@@ -48,6 +47,7 @@ export function useContactInfo() {
   // Trả về cả dữ liệu và thông báo lỗi UI
   return {
     ...query,
+    contactInfo: query.data,
     uiError,
   };
 }

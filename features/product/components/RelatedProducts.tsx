@@ -82,18 +82,18 @@ export default function RelatedProducts({
         value: variant.id,
       })) || [];
 
-    let discountPercent;
+    // let discountPercent;
 
-    if (
-      product.currentVariant?.originalPrice &&
-      product.currentVariant?.price
-    ) {
-      discountPercent = Math.round(
-        ((product.currentVariant.originalPrice - product.currentVariant.price) /
-          product.currentVariant.originalPrice) *
-          100,
-      );
-    }
+    // if (
+    //   product.currentVariant?.originalPrice &&
+    //   product.currentVariant?.price
+    // ) {
+    //   discountPercent = Math.round(
+    //     ((product.currentVariant.originalPrice - product.currentVariant.price) /
+    //       product.currentVariant.originalPrice) *
+    //       100,
+    //   );
+    // }
 
     return {
       id: product.id,
@@ -104,8 +104,8 @@ export default function RelatedProducts({
       price: product.currentVariant?.price || 0,
       originalPrice: product.currentVariant?.originalPrice,
       unit: product.unit || product.currentVariant?.name || 'Hộp',
-      packageInfo: product.packageInfo || product.currentVariant?.specification,
-      discount: discountPercent > 0 ? discountPercent : undefined,
+      // packageInfo: product.packageInfo || product.currentVariant?.specification,
+      // discount: discountPercent > 0 ? discountPercent : undefined,
       units: units.length > 0 ? units : undefined,
     };
   });

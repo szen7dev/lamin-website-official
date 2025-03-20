@@ -1,10 +1,13 @@
 'use client';
 
-import type { HeightMeasurementResult as ResultType } from "../types/heightMeasurementTypes"
-import { useEffect, useRef, useState } from "react"
-import { Check } from "lucide-react"
-import Chart from "chart.js/auto"
-import { useHeightMeasurementResult } from "../hooks/useHeightMeasurementMutation"
+import type { HeightMeasurementResult as ResultType } from '../types/heightMeasurementTypes';
+
+import { useEffect, useRef, useState } from 'react';
+import { Check } from 'lucide-react';
+import Chart from 'chart.js/auto';
+
+import { useHeightMeasurementResult } from '../hooks/useHeightMeasurementMutation';
+
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 
 const percentiles = [
@@ -143,12 +146,15 @@ export default function HeightMeasurementResult({
           hasHeightData: !!(data && data.heightData),
         },
       );
+
       return;
     }
 
     const ctx = chartRef.current.getContext('2d');
+
     if (!ctx) {
       console.log('🖥️ Result Component: No canvas context available');
+
       return;
     }
 
@@ -170,7 +176,7 @@ export default function HeightMeasurementResult({
         labels: data.heightData.map(d => d.age),
         datasets: [
           // Percentile lines (mỏng hơn, opacity thấp hơn)
-          ...percentiles.map((p, index) => ({
+          ...percentiles.map(p => ({
             label: p.name,
             data: percentileData[p.name as keyof typeof percentileData],
             borderColor: p.color,
@@ -284,7 +290,8 @@ export default function HeightMeasurementResult({
             const meta = chart.getDatasetMeta(chart.data.datasets.length - 1);
 
             meta.data.forEach((element, index) => {
-              const { x, y } = element.getCenterPoint();
+              const position = element.getProps(['x', 'y']);
+              const { x, y } = position;
               const height = data.heightData[index].height;
 
               ctx.save();
@@ -312,30 +319,32 @@ export default function HeightMeasurementResult({
 
   if (isLoading) {
     console.log('🖥️ Result Component: Rendering loading state');
+
     return (
       <div
-        className="flex items-center justify-center py-8 sm:py-12"
+        aria-busy="true"
         aria-live="polite"
-        aria-busy="true">
+        className="flex items-center justify-center py-8 sm:py-12">
         <div className="flex flex-col items-center gap-3 sm:gap-4">
           <svg
             aria-hidden="true"
             className="animate-spin h-6 w-6 sm:h-8 sm:w-8 text-primary-40"
             fill="none"
             viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
+            xmlns="http://www.w3.org/2000/svg">
             <circle
               className="opacity-25"
               cx="12"
               cy="12"
               r="10"
               stroke="currentColor"
-              strokeWidth="4" />
+              strokeWidth="4"
+            />
             <path
               className="opacity-75"
               d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
               fill="currentColor"
-             />
+            />
           </svg>
           <p className="text-sm sm:text-base text-grayscale-60">
             Đang tải kết quả phân tích...
@@ -349,10 +358,11 @@ export default function HeightMeasurementResult({
     console.log(
       '🖥️ Result Component: No data available, rendering error state',
     );
+
     return (
       <div
-        className="flex items-center justify-center py-8 sm:py-12"
-        aria-live="polite">
+        aria-live="polite"
+        className="flex items-center justify-center py-8 sm:py-12">
         <div className="flex flex-col items-center gap-3 sm:gap-4">
           <p className="text-sm sm:text-base text-grayscale-60">
             Không tìm thấy dữ liệu phân tích. Vui lòng thử lại.
@@ -372,12 +382,14 @@ export default function HeightMeasurementResult({
     const birth = new Date(birthDate);
     let age = today.getFullYear() - birth.getFullYear();
     const m = today.getMonth() - birth.getMonth();
+
     if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) {
       age--;
     }
 
     // Tính số tháng
     let months = today.getMonth() - birth.getMonth();
+
     if (months < 0) {
       months += 12;
     }
@@ -386,14 +398,16 @@ export default function HeightMeasurementResult({
     const days = today.getDate() - birth.getDate();
 
     const result = { years: age, months, days: days > 0 ? days : 0 };
+
     console.log('🖥️ Result Component: Calculated age:', result);
+
     return result;
   };
 
   const age = calculateAge(data.birthDate);
 
   console.log('🖥️ Result Component: Rendering result with data:', {
-    id: data.id,
+    resultId,
     name: data.name,
     gender: data.gender,
     height: data.height,
@@ -403,8 +417,8 @@ export default function HeightMeasurementResult({
 
   return (
     <article
-      className="flex flex-col md:flex-row gap-4 sm:gap-6"
-      aria-labelledby="height-measurement-result-title">
+      aria-labelledby="height-measurement-result-title"
+      className="flex flex-col md:flex-row gap-4 sm:gap-6">
       <h2 className="sr-only" id="height-measurement-result-title">
         Kết quả phân tích đo cao
       </h2>
@@ -439,8 +453,8 @@ export default function HeightMeasurementResult({
       <section className="flex-1 space-y-3 sm:space-y-4 order-1 md:order-2">
         {/* Row 1: Growth Rate */}
         <div
-          className="flex items-center gap-2 sm:gap-4"
-          aria-label="Đường tăng trưởng">
+          aria-label="Đường tăng trưởng"
+          className="flex items-center gap-2 sm:gap-4">
           <div className="whitespace-nowrap text-sm sm:text-base font-medium">
             Đường tăng trưởng: {data.growthRate}
           </div>
@@ -450,15 +464,15 @@ export default function HeightMeasurementResult({
             aria-valuenow={data.growthRate}
             className="h-6 sm:h-8 flex-1 rounded-md bg-primary-5"
             role="progressbar"
-           />
+          />
         </div>
 
         {/* Row 2: Chart Area */}
         <div className="grid grid-cols-1 md:grid-cols-[auto_1fr] gap-2">
           {/* Percentile Legend */}
           <div
-            className="flex md:flex-col flex-wrap gap-1 md:gap-1 py-2 sm:py-4"
-            aria-label="Chú thích biểu đồ">
+            aria-label="Chú thích biểu đồ"
+            className="flex md:flex-col flex-wrap gap-1 md:gap-1 py-2 sm:py-4">
             {[...percentiles, { name: 'Dự đoán', color: '#198754' }].map(
               item => (
                 <div
@@ -466,7 +480,8 @@ export default function HeightMeasurementResult({
                   className="flex items-center gap-1 sm:gap-2 whitespace-nowrap px-1 sm:px-2">
                   <div
                     className="h-0.5 w-3 sm:w-4"
-                    style={{ backgroundColor: item.color }} />
+                    style={{ backgroundColor: item.color }}
+                  />
                   <span className="text-xs sm:text-sm">{item.name}</span>
                 </div>
               ),
@@ -475,9 +490,7 @@ export default function HeightMeasurementResult({
 
           {/* Chart */}
           <figure className="h-[300px] sm:h-[400px] rounded-lg border border-grayscale-20 p-2 sm:p-4">
-            <canvas
-              ref={chartRef}
-              aria-label="Biểu đồ dự đoán chiều cao" />
+            <canvas ref={chartRef} aria-label="Biểu đồ dự đoán chiều cao" />
           </figure>
         </div>
 
@@ -515,14 +528,13 @@ export default function HeightMeasurementResult({
           </p>
           <ul
             aria-label="Khuyến nghị"
-            className="flex flex-wrap items-center gap-x-2 sm:gap-x-4 gap-y-1 sm:gap-y-2 mt-2"
-          >
+            className="flex flex-wrap items-center gap-x-2 sm:gap-x-4 gap-y-1 sm:gap-y-2 mt-2">
             {data.recommendations.map((recommendation, index) => (
               <li key={index} className="flex items-center gap-1 sm:gap-2">
                 <div className="flex h-4 w-4 sm:h-5 sm:w-5 items-center justify-center rounded-full bg-success-5">
                   <Check
-                    className="h-2 w-2 sm:h-3 sm:w-3 text-white"
                     aria-hidden="true"
+                    className="h-2 w-2 sm:h-3 sm:w-3 text-white"
                   />
                 </div>
                 <span className="text-xs sm:text-sm text-grayscale-60">

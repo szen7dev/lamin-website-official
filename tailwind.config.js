@@ -19,8 +19,10 @@ module.exports = {
     },
     extend: {
       backgroundImage: {
-        'gradient-1': 'linear-gradient(90deg, #4173E3 0%, #1250DC 50%, #0E40B0 100%)',
-        'gradient-2': 'linear-gradient(180deg, #4173E3 0%, #1250DC 50%, #0E40B0 100%)',
+        'gradient-1':
+          'linear-gradient(90deg, #4173E3 0%, #1250DC 50%, #0E40B0 100%)',
+        'gradient-2':
+          'linear-gradient(180deg, #4173E3 0%, #1250DC 50%, #0E40B0 100%)',
         'gradient-3':
           'linear-gradient(180deg, rgba(65, 115, 227, 0.8) 0%, rgba(18, 80, 220, 0.8) 50%, rgba(14, 64, 176, 0.8) 100%)',
         'gradient-4': 'linear-gradient(90deg, #1250DC 0%, #0E40B0 100%)',
@@ -207,8 +209,9 @@ module.exports = {
       },
 
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
-        heading: ['Inter', 'system-ui', 'sans-serif'],
+        sans: ['var(--font-sans)'],
+        mono: ['var(--font-mono)'],
+        heading: ['var(--font-heading)'],
       },
 
       fontSize: {
@@ -272,5 +275,4 @@ module.exports = {
     },
   },
   plugins: [require('tailwindcss-animate')],
-}
-
+};

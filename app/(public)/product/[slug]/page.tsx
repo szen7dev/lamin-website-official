@@ -1,9 +1,6 @@
 import type { Metadata } from 'next';
 
-import { Suspense } from 'react';
-
 import { Breadcrumb } from '@/components/ui/breadcrumb';
-import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import ProductGallery from '@/features/product/components/ProductGallery';
 import ProductInfo from '@/features/product/components/ProductInfo';
 import ProductTabs from '@/features/product/components/ProductTabs';
@@ -90,9 +87,7 @@ export default function ProductDetailPage({
           <h2 className="text-xl font-bold text-grayscale-90 mb-6">
             Sản phẩm liên quan
           </h2>
-          <Suspense fallback={<LoadingSpinner />}>
-            <RelatedProducts products={mockRelatedProducts} />
-          </Suspense>
+          <RelatedProducts products={mockRelatedProducts} />
         </section>
 
         {/* Reviews Section */}
@@ -100,17 +95,13 @@ export default function ProductDetailPage({
           <h2 className="text-xl font-bold text-grayscale-90 mb-6">
             Đánh giá sản phẩm
           </h2>
-          <Suspense fallback={<LoadingSpinner />}>
-            <ProductReviews productId={product.id} />
-          </Suspense>
+          <ProductReviews productId={product.id} />
         </section>
 
         {/* Q&A Section */}
         <section className="mt-12">
           <h2 className="text-xl font-bold text-grayscale-90 mb-6">Hỏi đáp</h2>
-          <Suspense fallback={<LoadingSpinner />}>
-            <ProductQA productId={product.id} />
-          </Suspense>
+          <ProductQA productId={product.id} />
         </section>
       </div>
     </div>

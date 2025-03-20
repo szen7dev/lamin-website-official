@@ -2,11 +2,9 @@ import type { Metadata } from 'next';
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { Suspense } from 'react';
 import { Facebook, Check, Quote } from 'lucide-react';
 
 import { Breadcrumb } from '@/components/ui/breadcrumb';
-import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import { articleService } from '@/features/article/services/articleServiceFactory';
 import { formatDate } from '@/utils/format';
 import { Button } from '@/components/ui/button';
@@ -32,8 +30,6 @@ export async function generateMetadata({
       seoData = {
         title: article.title,
         description: article.excerpt,
-        keywords: article.tags,
-        image: article.thumbnailUrl,
       };
     }
   } catch (error) {
@@ -202,9 +198,7 @@ export default async function ArticleDetailPage({
             <h2 className="sr-only" id="related-articles-heading">
               Bài viết liên quan
             </h2>
-            <Suspense fallback={<LoadingSpinner />}>
-              <RelatedArticles articles={relatedArticles} />
-            </Suspense>
+            <RelatedArticles articles={relatedArticles} />
           </section>
         </main>
       </div>

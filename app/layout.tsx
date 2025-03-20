@@ -1,14 +1,12 @@
-import type React from 'react';
+import React from 'react';
+import '@/styles/globals.css';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import clsx from 'clsx';
 
-import { Inter } from 'next/font/google';
-
-import './globals.css';
 import { generateMetadata as generateSeoMetadata } from '@/utils/seo';
-import { QueryProvider } from '@/providers/QueryProvider';
 import { CartProvider } from '@/features/cart/contexts/CartContext';
-import { ThemeProvider } from '@/components/theme-provider';
-
-const inter = Inter({ subsets: ['latin'] });
+import { Providers } from '@/components/providers';
+import { fontSans } from '@/config/fonts';
 
 export const metadata = generateSeoMetadata({
   title: 'Elena Pharmacy',
@@ -24,12 +22,14 @@ export default function RootLayout({
     <html suppressHydrationWarning lang="en">
       <body
         suppressHydrationWarning
-        className={`${inter.className} bg-background text-foreground antialiased`}>
-        <ThemeProvider>
-          <QueryProvider>
-            <CartProvider>{children}</CartProvider>
-          </QueryProvider>
-        </ThemeProvider>
+        className={clsx(
+          'bg-background text-foreground antialiased',
+          fontSans.variable,
+        )}>
+        <Providers themeProps={{ attribute: 'class', defaultTheme: 'light' }}>
+          <CartProvider>{children}</CartProvider>
+          <ReactQueryDevtools initialIsOpen={true} />
+        </Providers>
       </body>
     </html>
   );
