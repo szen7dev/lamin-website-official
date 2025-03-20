@@ -4,10 +4,11 @@ import type { SearchResult } from '@/features/search/types/searchTypes';
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { Search, ChevronRight } from 'lucide-react';
+import { ChevronRight, Search } from 'lucide-react';
 
 interface SearchSuggestionsProps {
   query: string;
+  searchQuery?: string; // The actual query used for search (may differ from display query due to debouncing)
   results: SearchResult[];
   isVisible: boolean;
   onClose: () => void;
@@ -15,11 +16,15 @@ interface SearchSuggestionsProps {
 
 export default function SearchSuggestions({
   query,
+  searchQuery,
   results,
   isVisible,
   onClose,
 }: SearchSuggestionsProps) {
   if (!isVisible) return null;
+
+  // Use searchQuery for the "View All" link if provided, otherwise fall back to query
+  const queryForSearch = searchQuery || query;
 
   return (
     <div className="absolute left-0 right-0 top-full z-50 mt-1 rounded-lg bg-white shadow-lg">
@@ -28,7 +33,7 @@ export default function SearchSuggestions({
         <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary-5/10">
           <Search className="h-4 w-4 text-primary-40" />
         </div>
-        <span className="text-grayscale-90">{query}</span>
+        <span className="text-grayscale-50">{query}</span>
       </div>
 
       {/* Search Results */}
@@ -48,12 +53,12 @@ export default function SearchSuggestions({
                 width={48}
               />
               <div className="flex flex-1 flex-col">
-                <p className="line-clamp-2 text-sm text-grayscale-90">
+                <p className="line-clamp-2 text-sm text-grayscale-50">
                   {result.name}
                 </p>
                 {result.price && (
                   <div className="mt-1">
-                    <span className="font-medium text-grayscale-90">
+                    <span className="font-medium text-grayscale-50">
                       {result.price.toLocaleString()}đ
                     </span>
                     <span className="text-sm text-grayscale-50">
@@ -75,7 +80,7 @@ export default function SearchSuggestions({
       {results.length > 0 && (
         <Link
           className="flex items-center justify-center gap-1 border-t border-grayscale-20 p-3 text-sm text-primary-40 hover:bg-grayscale-5"
-          href={`/search?q=${encodeURIComponent(query)}`}
+          href={`/search?q=${encodeURIComponent(queryForSearch)}`}
           onClick={onClose}>
           Xem tất cả
           <ChevronRight className="h-4 w-4" />

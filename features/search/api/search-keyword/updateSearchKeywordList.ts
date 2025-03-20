@@ -1,5 +1,9 @@
-import apiClient, { DEFAULT_OPTION_SELLER } from '@/services/api/apiClient'
-import type { SearchKeyword, UpdateSearchKeywordParams } from '@/features/search/types/searchKeywordTypes'
+import type {
+  SearchKeyword,
+  UpdateSearchKeywordParams,
+} from '@/features/search/types/searchKeywordTypes';
+
+import apiClient, { DEFAULT_OPTION_SELLER } from '@/services/api/apiClient';
 
 /**
  * Update search keyword by incrementing its count
@@ -9,18 +13,23 @@ import type { SearchKeyword, UpdateSearchKeywordParams } from '@/features/search
  */
 export const updateSearchKeyword = async (
   keyword: string,
-  optionSeller: number = DEFAULT_OPTION_SELLER
+  optionSeller: number = DEFAULT_OPTION_SELLER,
 ): Promise<SearchKeyword | null> => {
   try {
     const params: UpdateSearchKeywordParams = {
       keyword,
-      optionSeller
-    }
-    
-    const response = await apiClient.post<SearchKeyword>('/api/crm/search_keyword', params)
-    return response
+      optionSeller,
+    };
+
+    const response = await apiClient.post<SearchKeyword>(
+      '/api/crm/search_keyword',
+      params,
+    );
+
+    return response;
   } catch (error) {
-    console.error('Error updating search keyword:', error)
-    return null
+    console.error('Error updating search keyword:', error);
+
+    return null;
   }
-}
+};

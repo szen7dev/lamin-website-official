@@ -7,6 +7,7 @@ export interface FileInfo {
   name?: string
   mimetype?: string
   size?: number
+  path?: string
 }
 
 /**
@@ -27,8 +28,9 @@ export interface Goods {
   categoryID?: string
   tags?: string[]
   status: number
-  createdAt: string
-  updatedAt: string
+  createdAt?: string
+  updatedAt?: string
+  thumbnail?: string
 }
 
 /**

@@ -1,11 +1,12 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
-import { Search, X, Mic } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { Mic, Search, X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 import SearchSuggestions from './SearchSuggestions';
+
 import { Button } from '@/components/ui/button';
 
 // Import the new hooks
@@ -39,7 +40,7 @@ export default function SearchBar() {
 
   // Get search results when debounced query changes
   const { goodsList, isLoading: isLoadingResults } = useGetGoodsList(
-    debouncedQuery ? { keyword: debouncedQuery, limit: 5 } : {}
+    debouncedQuery ? { keyword: debouncedQuery, limit: 5 } : {},
   );
 
   // Handle click outside to close suggestions
@@ -61,6 +62,7 @@ export default function SearchBar() {
   // Handle search submission
   const handleSearch = () => {
     if (query.trim()) {
+      console.log('Searching for:', query.trim());
       updateKeyword(query.trim());
       router.push(`/search?q=${encodeURIComponent(query.trim())}`);
       setIsFocused(false);
@@ -81,7 +83,7 @@ export default function SearchBar() {
         <input
           className="h-12 w-full rounded-lg border-none bg-white pl-12 pr-20 text-base text-grayscale-90 shadow-sm placeholder:text-grayscale-40 focus:outline-none focus:ring-2 focus:ring-primary-20"
           placeholder="Tìm tên thuốc, bệnh lý, thực phẩm chức năng..."
-          type="search"
+          type="text"
           value={query}
           onChange={e => setQuery(e.target.value)}
           onFocus={() => setIsFocused(true)}
@@ -120,17 +122,19 @@ export default function SearchBar() {
       {/* Top search keywords */}
       {isFocused && !query && keywords.length > 0 && (
         <div className="absolute left-0 right-0 top-full z-50 mt-1 rounded-lg bg-white p-4 shadow-lg">
-          <div className="mb-3 font-medium text-grayscale-90">Tra cứu hàng đầu</div>
+          <div className="mb-3 font-medium text-grayscale-90">
+            Tra cứu hàng đầu
+          </div>
           <div className="flex flex-wrap gap-2">
-            {keywords.slice(0, 8).map((keyword) => (
+            {keywords.slice(0, 8).map(keyword => (
               <Link
                 key={keyword.keyword}
+                className="rounded-full bg-grayscale-5 px-4 py-2 text-sm text-grayscale-90 hover:bg-grayscale-10"
                 href={`/search?q=${encodeURIComponent(keyword.keyword)}`}
                 onClick={() => {
                   updateKeyword(keyword.keyword);
                   setIsFocused(false);
-                }}
-                className="rounded-full bg-grayscale-5 px-4 py-2 text-sm text-grayscale-90 hover:bg-grayscale-10">
+                }}>
                 {keyword.keyword}
               </Link>
             ))}
@@ -142,20 +146,28 @@ export default function SearchBar() {
       <SearchSuggestions
         isVisible={isFocused && query.length > 0}
         query={query}
+        searchQuery={debouncedQuery || query}
         results={goodsList.map(item => {
           // Safely handle the image URL
           let imageUrl = '';
+
           if (item.images && item.images.length > 0) {
             if (typeof item.images[0] === 'string') {
               // If image is a string, use apiClient.getFileUrl to ensure valid URL
               imageUrl = apiClient.getFileUrl(item.images[0]);
             } else {
-              // If image is an object with url property
+              // If image is an object with path or url property
               const fileInfo = item.images[0] as FileInfo;
-              if (fileInfo && fileInfo.url) {
+
+              if (fileInfo && fileInfo.path) {
+                imageUrl = apiClient.getFileUrl(fileInfo.path);
+              } else if (fileInfo && fileInfo.url) {
                 imageUrl = apiClient.getFileUrl(fileInfo.url);
               }
             }
+          } else if (item.thumbnail) {
+            // Some items may have a thumbnail field instead
+            imageUrl = apiClient.getFileUrl(item.thumbnail);
           }
 
           return {
@@ -163,7 +175,7 @@ export default function SearchBar() {
             name: item.name,
             price: item.sellingUnitprice,
             image: imageUrl || '/placeholder.svg',
-            unit: item.unit || 'Hộp'
+            unit: item.unit || 'Hộp',
           };
         })}
         onClose={() => setIsFocused(false)}
