@@ -33,44 +33,54 @@ export default function SearchSuggestions({
 
       {/* Search Results */}
       <div className="max-h-[400px] overflow-y-auto">
-        {results.map(result => (
-          <Link
-            key={result.id}
-            className="flex items-center gap-4 px-4 py-3 transition-colors hover:bg-grayscale-5"
-            href={`/products/${result.id}`}
-            onClick={onClose}>
-            <Image
-              alt={result.name}
-              className="h-12 w-12 rounded-lg object-cover"
-              height={48}
-              src={result.image || '/placeholder.svg'}
-              width={48}
-            />
-            <div className="flex flex-1 items-center justify-between">
-              <p className="line-clamp-2 flex-1 text-sm text-grayscale-90">
-                {result.name}
-              </p>
-              <div className="ml-4 whitespace-nowrap text-right">
-                <span className="font-medium text-grayscale-90">
-                  {result.price.toLocaleString()}đ
-                </span>
-                <span className="text-sm text-grayscale-50">
-                  /{result.unit}
-                </span>
+        {results.length > 0 ? (
+          results.map(result => (
+            <Link
+              key={result.id}
+              className="flex items-center gap-4 px-4 py-3 transition-colors hover:bg-grayscale-5"
+              href={`/products/${result.id}`}
+              onClick={onClose}>
+              <Image
+                alt={result.name}
+                className="h-12 w-12 rounded-lg object-cover"
+                height={48}
+                src={result.image || '/placeholder.svg'}
+                width={48}
+              />
+              <div className="flex flex-1 flex-col">
+                <p className="line-clamp-2 text-sm text-grayscale-90">
+                  {result.name}
+                </p>
+                {result.price && (
+                  <div className="mt-1">
+                    <span className="font-medium text-grayscale-90">
+                      {result.price.toLocaleString()}đ
+                    </span>
+                    <span className="text-sm text-grayscale-50">
+                      /{result.unit}
+                    </span>
+                  </div>
+                )}
               </div>
-            </div>
-          </Link>
-        ))}
+            </Link>
+          ))
+        ) : (
+          <div className="px-4 py-6 text-center text-grayscale-50">
+            Không tìm thấy kết quả phù hợp
+          </div>
+        )}
       </div>
 
       {/* View All Link */}
-      <Link
-        className="flex items-center justify-center gap-1 border-t border-grayscale-20 p-3 text-sm text-primary-40 hover:bg-grayscale-5"
-        href={`/search?q=${encodeURIComponent(query)}`}
-        onClick={onClose}>
-        Xem tất cả
-        <ChevronRight className="h-4 w-4" />
-      </Link>
+      {results.length > 0 && (
+        <Link
+          className="flex items-center justify-center gap-1 border-t border-grayscale-20 p-3 text-sm text-primary-40 hover:bg-grayscale-5"
+          href={`/search?q=${encodeURIComponent(query)}`}
+          onClick={onClose}>
+          Xem tất cả
+          <ChevronRight className="h-4 w-4" />
+        </Link>
+      )}
     </div>
   );
 }
