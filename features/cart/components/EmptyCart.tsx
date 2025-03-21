@@ -6,11 +6,11 @@ import { Button } from '@/components/ui/button';
 
 export function EmptyCart() {
   return (
-    <div className="flex min-h-[calc(100vh-200px)] flex-col items-center justify-center px-4">
+    <div className="container flex min-h-[calc(100vh-200px)] flex-col items-center ">
       {/* Back button */}
-      <div className="mb-8 self-start">
+      <div className="my-8 self-start">
         <Link
-          className="inline-flex items-center text-blue-600 hover:text-blue-700"
+          className="inline-flex items-center text-blue-600 hover:text-blue-700 hover:no-underline"
           href="/">
           <ChevronLeft className="h-5 w-5" />
           <span>Tiếp tục mua sắm</span>
@@ -18,13 +18,13 @@ export function EmptyCart() {
       </div>
 
       {/* Empty cart illustration */}
-      <div className="mb-6 w-48">
+      <div>
         <Image
           alt="Giỏ hàng trống"
-          className="w-full"
-          height={200}
-          src="/placeholder.svg?height=200&width=200"
-          width={200}
+          className="h-auto w-600"
+          height={600}
+          src="/images/EmptyCart.png"
+          width={213}
         />
       </div>
 
@@ -40,7 +40,9 @@ export function EmptyCart() {
       <Button
         asChild
         className="rounded-full bg-blue-600 px-8 hover:bg-blue-700">
-        <Link href="/">Khám phá ngay</Link>
+        <Link className="text-white hover:no-underline" href="/">
+          Khám phá ngay
+        </Link>
       </Button>
     </div>
   );

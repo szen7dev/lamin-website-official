@@ -22,6 +22,8 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { formatPrice } from '@/utils/format';
+import { PointCoinIcon } from '@/public/icons';
+import Image from 'next/image';
 
 interface CartSummaryProps {
   items: CartItem[];
@@ -112,7 +114,7 @@ export function CartSummary({ items, selectedItems }: CartSummaryProps) {
     <div className="bg-white rounded-lg shadow p-4 space-y-4">
       <button
         aria-label="Áp dụng ưu đãi"
-        className="flex w-full items-center justify-between text-blue-600 cursor-pointer hover:underline bg-transparent border-none p-0"
+        className="flex w-full items-center justify-between bg-[#EAEFFA] p-2 rounded-md text-blue-600 font-medium text-sm cursor-pointer hover:underline bg-transparent border-none p-0"
         type="button"
         onClick={() => setIsPromoModalOpen(true)}>
         <span>Áp dụng ưu đãi để được giảm giá</span>
@@ -121,7 +123,14 @@ export function CartSummary({ items, selectedItems }: CartSummaryProps) {
 
       <div className="flex items-center justify-between py-2 border-t">
         <div className="flex items-center gap-2">
-          <Coins className="w-4 h-4 text-yellow-500" />
+          {/* <Coins className="w-4 h-4 text-yellow-500" /> */}
+          <Image
+            alt="Point Coin"
+            className=""
+            height={16}
+            src="/images/PointCoinImg.png"
+            width={16}
+          />
           <span>Đổi 25.000 điểm (25.000đ)</span>
         </div>
         <Switch checked={usePoints} onCheckedChange={setUsePoints} />
