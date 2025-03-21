@@ -385,12 +385,17 @@ class ApiClient {
 
     try {
       // Make sure we don't double up on slashes
-      const baseUrl = CLOUDFRONT_URL.endsWith('/') ? CLOUDFRONT_URL.slice(0, -1) : CLOUDFRONT_URL;
-      const pathSegment = sanitizedPath.startsWith('/') ? sanitizedPath : `/${sanitizedPath}`;
+      const baseUrl = CLOUDFRONT_URL.endsWith('/')
+        ? CLOUDFRONT_URL.slice(0, -1)
+        : CLOUDFRONT_URL;
+      const pathSegment = sanitizedPath.startsWith('/')
+        ? sanitizedPath
+        : `/${sanitizedPath}`;
 
       return `${baseUrl}${pathSegment}`;
     } catch (error) {
       console.error('Error creating file URL:', error);
+
       return sanitizedPath;
     }
   }

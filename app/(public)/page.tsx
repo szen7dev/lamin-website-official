@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic';
 
 import SimpleBanner from '@/features/homepage/components/SimpleBanner';
 import GridBanner from '@/features/homepage/components/GridBanner';
-import BestSellingProducts from '@/features/homepage/components/BestSellingProducts';
+import BestSellingProducts from '@/features/menu/components/BestSellingProducts';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import { generateMetadata as generateSeoMetadata } from '@/utils/seo';
 

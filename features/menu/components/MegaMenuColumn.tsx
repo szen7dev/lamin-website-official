@@ -62,7 +62,7 @@ export default function MegaMenuColumn({
             <div className="flex items-center gap-2">
               <div className="flex h-5 w-5 items-center justify-center rounded-full bg-primary-5">
                 <Image
-                  alt=""
+                  alt="Plus icon"
                   className="text-white"
                   height={16}
                   src="/placeholder.svg"

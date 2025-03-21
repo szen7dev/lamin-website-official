@@ -2,6 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 
 import { cn } from '@/utils/helpers';
+import apiClient from '@/services/api/apiClient';
 
 interface MegaMenuItemLinkProps {
   href: string;
@@ -32,10 +33,10 @@ export default function MegaMenuItemLink({
       {icon && (
         <div className="flex h-5 w-5 items-center justify-center">
           <Image
-            alt=""
+            alt={label}
             className="h-5 w-5 text-primary-40"
             height={20}
-            src={icon || '/placeholder.svg'}
+            src={icon ? apiClient.getFileUrl(icon) : '/placeholder.svg'}
             width={20}
           />
         </div>
