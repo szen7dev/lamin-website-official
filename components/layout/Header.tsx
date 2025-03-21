@@ -16,6 +16,7 @@ import { Separator } from '@/components/ui/separator';
 import { LoginModal } from '@/components/ui/LoginModal';
 // Add the import for useContactInfo at the top with other imports
 import { useContactInfo } from '@/hooks/useContactInfo';
+import { CartIcon, PhoneIcon, UserIcon } from '@/public/icons';
 
 const popularKeywords = [
   { label: 'Thuốc nhỏ mắt', href: '#' },
@@ -91,8 +92,7 @@ export function Header() {
                 <button
                   aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
                   className="text-white"
-                  onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                >
+                  onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
                   {mobileMenuOpen ? (
                     <X className="h-6 w-6" />
                   ) : (
@@ -123,14 +123,14 @@ export function Header() {
                 </Link>
 
                 {/* Contact and Download - Hidden on mobile, visible on medium screens */}
-                <div className="hidden md:flex items-end gap-4 ml-4">
+                <div className="hidden md:flex items-end gap-4 ml-4 text-sm">
                   {/* Find the hotline display section and replace it with this dynamic version */}
                   {/* Look for the section with <Phone className="h-5 w-5 text-white" /> and replace that div with: */}
                   <div className="flex items-end gap-2">
                     <Phone className="h-5 w-5 text-white" />
                     <div className="text-white">
-                      <span className="mr-1 text-sm">Tư vấn ngay:</span>
-                      <span className="font-medium">{getHotline()}</span>
+                      <span className="mr-1">Tư vấn ngay:</span>
+                      <span className="font-normal">{getHotline()}</span>
                     </div>
                   </div>
                   <div className="h-5">
@@ -140,7 +140,8 @@ export function Header() {
                     />
                   </div>
                   <div className="flex items-end gap-2 text-white">
-                    <Download className="h-5 w-5" />
+                    {/* <Download className="h-5 w-5" /> */}
+                    <PhoneIcon width={12} height={20} />
                     <span>Tải ứng dụng</span>
                   </div>
                 </div>
@@ -154,15 +155,15 @@ export function Header() {
                   className="rounded-full bg-white px-3 md:px-6 text-primary hover:bg-white/90 text-xs md:text-sm"
                   variant="secondary"
                   onClick={() => setLoginModalOpen(true)}>
-                  <User className="mr-1 md:mr-2 h-4 md:h-5 w-4 md:w-5" />
+                  <UserIcon width={24} height={24} />
                   <span className="font-medium">Đăng Nhập</span>
                 </Button>
 
                 <div className={`relative ${totalItems > 0 ? 'group' : ''}`}>
                   <Link
-                    className="flex items-center gap-2 rounded-full bg-primary px-3 md:px-6 py-2 text-white hover:bg-primary/90 text-xs md:text-sm relative"
+                    className="hover:no-underline h-10 flex items-center gap-2 rounded-full bg-primary px-3 md:px-6 py-2 text-white hover:bg-primary/70 text-xs md:text-sm relative"
                     href="/cart">
-                    <ShoppingCart className="mr-1 md:mr-2 h-4 md:h-5 w-4 md:w-5" />
+                    <CartIcon width={17} height={15} />
                     <span className="font-medium">Giỏ Hàng</span>
                     {totalItems > 0 && (
                       <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-error-5 text-xs font-bold text-white">
@@ -203,7 +204,7 @@ export function Header() {
           </div>
 
           {/* QR Code Section - Hidden on mobile */}
-          <div className="hidden md:flex w-[180px] flex-shrink-0 flex-col items-center justify-center rounded-xl bg-[#F37021] self-stretch">
+          <div className="hidden md:flex w-[143px] flex-shrink-0 flex-col items-center justify-center rounded-xl bg-[#F37021] self-stretch">
             <div className="text-center text-white p-2">
               <div className="text-xs font-medium">- Quét Mã QR -</div>
               <div className="text-sm font-bold">Tặng Voucher 1tr</div>
@@ -211,10 +212,10 @@ export function Header() {
             <div className="bg-white p-2 rounded-b-xl w-full flex-1 flex items-center justify-center">
               <Image
                 alt="QR Code"
-                className="h-20 w-20 object-contain"
-                height={80}
-                src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Superqr.svg/1024px-Superqr.svg.png?height=80&width=80"
-                width={80}
+                className="object-contain"
+                height={100}
+                src="/images/qrCode.png"
+                width={99}
               />
             </div>
           </div>

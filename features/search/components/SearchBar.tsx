@@ -79,7 +79,9 @@ export default function SearchBar() {
   return (
     <div ref={searchRef} className="relative w-full">
       <div className="relative">
-        <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-grayscale-50" />
+        {!query && (
+          <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-grayscale-50" />
+        )}
         <input
           className="h-12 w-full rounded-lg border-none bg-white pl-12 pr-20 text-base text-grayscale-90 shadow-sm placeholder:text-grayscale-40 focus:outline-none focus:ring-2 focus:ring-primary-20"
           placeholder="Tìm tên thuốc, bệnh lý, thực phẩm chức năng..."

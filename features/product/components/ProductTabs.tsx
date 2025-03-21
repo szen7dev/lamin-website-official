@@ -245,6 +245,8 @@ export default function ProductTabs({ product }: ProductTabsProps) {
               alt="Dược sĩ Nguyễn Thanh Hải"
               className="h-full w-full object-cover"
               src="/placeholder.svg?height=48&width=48"
+              width={48}
+              height={48}
             />
           </div>
           <div className="flex-1">

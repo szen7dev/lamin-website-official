@@ -33,7 +33,7 @@ export default function SearchSuggestions({
         <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary-5/10">
           <Search className="h-4 w-4 text-primary-40" />
         </div>
-        <span className="text-grayscale-50">{query}</span>
+        <span className="text-primary-50">{query}</span>
       </div>
 
       {/* Search Results */}
@@ -42,26 +42,26 @@ export default function SearchSuggestions({
           results.map(result => (
             <Link
               key={result.id}
-              className="flex items-center gap-4 px-4 py-3 transition-colors hover:bg-grayscale-5"
+              className="flex items-center gap-4 px-4 py-3 transition-colors border-t-2 hover:bg-grayscale-5 hover:no-underline"
               href={`/products/${result.id}`}
               onClick={onClose}>
               <Image
                 alt={result.name}
-                className="h-12 w-12 rounded-lg object-cover"
-                height={48}
+                className="w-24 h-14 rounded-lg object-cover"
+                height={100}
                 src={result.image || '/placeholder.svg'}
-                width={48}
+                width={57}
               />
               <div className="flex flex-1 flex-col">
-                <p className="line-clamp-2 text-sm text-grayscale-50">
+                <p className="line-clamp-2 text-sm font-medium text-grayscale-50">
                   {result.name}
                 </p>
                 {result.price && (
                   <div className="mt-1">
-                    <span className="font-medium text-grayscale-50">
+                    <span className="font-semibold text-base text-grayscale-90">
                       {result.price.toLocaleString()}đ
                     </span>
-                    <span className="text-sm text-grayscale-50">
+                    <span className="text-xs text-grayscale-90">
                       /{result.unit}
                     </span>
                   </div>

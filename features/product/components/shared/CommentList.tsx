@@ -77,6 +77,8 @@ export function CommentList({
                       alt={`Ảnh đại diện của ${reply.author.name}`}
                       className="h-full w-full object-cover"
                       src="/logo.png"
+                      width={32}
+                      height={32}
                     />
                   </div>
 
