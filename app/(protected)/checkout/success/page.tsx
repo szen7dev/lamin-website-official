@@ -26,12 +26,12 @@ export default function CheckoutConfirmationPage() {
         <div className="rounded-lg">
           <div className="flex flex-col justify-between">
             <div>
-              <p className="text-grayscale-50 text-base font-medium">
+              <div className="text-grayscale-50 text-base font-medium">
                 <span>Thời gian nhận hàng dự kiến:</span>
                 <p className="text-grayscale-90 font-medium text-base  mb-4 ">
                   Từ 08:00 - 09:00 ngày 08/03/2025
                 </p>
-              </p>
+              </div>
               <div className="text-grayscale-50 text-base font-medium mb-4">
                 <span>Phương thức thanh toán:</span>
                 <div className="flex gap-2 items-center">
