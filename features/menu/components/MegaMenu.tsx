@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { ChevronDown, ChevronRight, X } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -15,35 +15,99 @@ import { MediaItem } from '@/features/menu/types/mediaTypes';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import apiClient from '@/services/api/apiClient';
 
-// Hard-coded main navigation items matching the design
-const mainNavItems = [
-  { id: 'products', label: 'Sản phẩm', href: '/products', hasDropdown: true },
-  {
-    id: 'solutions',
-    label: 'Giải Pháp',
-    href: '/solutions',
-    hasDropdown: false,
-  },
-  {
-    id: 'height',
-    label: 'Đo Cao',
-    href: '/height-measurement',
-    hasDropdown: false,
-  },
-  {
-    id: 'nutrition',
-    label: 'Kiểm Tra Dinh Dưỡng',
-    href: '/nutrition-check',
-    hasDropdown: false,
-  },
-  {
-    id: 'shops',
-    label: 'Hệ Thống Cửa Hàng',
-    href: '/trusted-shops',
-    hasDropdown: false,
-  },
-  { id: 'contact', label: 'Liên Hệ', href: '/contact', hasDropdown: false },
-];
+// Format menu data based on levels
+interface FormattedMenuData {
+  level1Items: MediaItem[];
+  level2ItemsByParent: Record<string, MediaItem[]>;
+  level3ItemsByParent: Record<string, MediaItem[]>;
+}
+
+function formatMenuData(mediaItems: MediaItem[]): FormattedMenuData {
+  // Sort all items by order
+  const sortedItems = [...mediaItems].sort(
+    (a, b) => (a.order || 0) - (b.order || 0),
+  );
+
+  // Group items by level
+  const level1Items: MediaItem[] = [];
+  const level2Items: MediaItem[] = [];
+  const level3Items: MediaItem[] = [];
+
+  // First pass: identify items by level
+  sortedItems.forEach(item => {
+    if (item.level === 1) {
+      level1Items.push(item);
+    } else if (item.level === 2) {
+      level2Items.push(item);
+    } else if (item.level === 3) {
+      level3Items.push(item);
+    } else if (item.childs?.length) {
+      // If level isn't specified but item has children, treat as level 1
+      level1Items.push(item);
+
+      // Process any children that might be level 2
+      item.childs.forEach(child => {
+        level2Items.push({
+          ...child,
+          parent: item._id, // Ensure parent relationship
+        });
+
+        // Process any level 3 items (grandchildren)
+        if (child.childs?.length) {
+          child.childs.forEach(grandchild => {
+            level3Items.push({
+              ...grandchild,
+              parent: child._id, // Ensure parent relationship
+            });
+          });
+        }
+      });
+    }
+  });
+
+  // Organize level 2 items by their parent
+  const level2ItemsByParent: Record<string, MediaItem[]> = {};
+
+  level2Items.forEach(item => {
+    const parentId = item.parent || '';
+
+    if (!level2ItemsByParent[parentId]) {
+      level2ItemsByParent[parentId] = [];
+    }
+    level2ItemsByParent[parentId].push(item);
+  });
+
+  // Organize level 3 items by their parent
+  const level3ItemsByParent: Record<string, MediaItem[]> = {};
+
+  level3Items.forEach(item => {
+    const parentId = item.parent || '';
+
+    if (!level3ItemsByParent[parentId]) {
+      level3ItemsByParent[parentId] = [];
+    }
+    level3ItemsByParent[parentId].push(item);
+  });
+
+  // Sort items within each group by order
+  Object.keys(level2ItemsByParent).forEach(parentId => {
+    level2ItemsByParent[parentId].sort(
+      (a, b) => (a.order || 0) - (b.order || 0),
+    );
+  });
+
+  Object.keys(level3ItemsByParent).forEach(parentId => {
+    level3ItemsByParent[parentId].sort(
+      (a, b) => (a.order || 0) - (b.order || 0),
+    );
+  });
+
+  return {
+    level1Items,
+    level2ItemsByParent,
+    level3ItemsByParent,
+  };
+}
 
 export default function MegaMenu() {
   // Fetch menu data using our custom hook
@@ -69,32 +133,54 @@ export default function MegaMenu() {
     },
   });
 
-  // Get menu categories (level 2 items that are child of the main "Sản phẩm" category)
-  // In this case, we're looking for items with type = 1, which represent categories
-  const categoryItems = mediaItems.filter((item: MediaItem) => item.type === 1);
+  // Format menu data by levels
+  const formattedMenu = formatMenuData(mediaItems);
 
   // State management
-  const [activeCategory, setActiveCategory] = useState<string | null>(
-    categoryItems.length > 0 ? categoryItems[0]?._id : null,
+  const [activeLevel1Item, setActiveLevel1Item] = useState<string | null>(
+    formattedMenu.level1Items.length > 0
+      ? formattedMenu.level1Items[0]?._id
+      : null,
   );
+
+  const [activeLevel2Item, setActiveLevel2Item] = useState<string | null>(null);
   const [expandedMobileItems, setExpandedMobileItems] = useState<string[]>([]);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const isMobile = useMediaQuery('(max-width: 768px)');
   const menuRef = useRef<HTMLDivElement>(null);
+  const activeTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const [isDropdownHovered, setIsDropdownHovered] = useState(false);
 
-  // Find active category and get its child items (level 3)
-  const activeCategoryItem = categoryItems.find(
-    (item: MediaItem) => item._id === activeCategory,
-  );
-  const subCategoryItems = activeCategoryItem?.childs || [];
+  // Get level 2 items for the active level 1 item
+  const level2Items = activeLevel1Item
+    ? formattedMenu.level2ItemsByParent[activeLevel1Item] || []
+    : [];
 
-  // Map subcategory items to the expected format for MegaMenuColumn
-  const categoryProducts = subCategoryItems.map((item: MediaItem) => ({
+  // Set initial active level 2 item when level 2 items change
+  useEffect(() => {
+    if (level2Items.length > 0 && !activeLevel2Item) {
+      setActiveLevel2Item(level2Items[0]._id);
+    } else if (level2Items.length === 0) {
+      setActiveLevel2Item(null);
+    }
+  }, [level2Items, activeLevel2Item]);
+
+  // Get level 3 items for the active level 2 item
+  const level3Items = activeLevel2Item
+    ? formattedMenu.level3ItemsByParent[activeLevel2Item] || []
+    : [];
+
+  // Map level 3 items to the expected format for MegaMenuColumn
+  const categoryProducts = level3Items.map((item: MediaItem) => ({
     id: item._id,
     name: item.name,
-    image: item.thumbnail
-      ? apiClient.getFileUrl(item.thumbnail)
-      : '/placeholder.svg',
+    image:
+      item.thumbnail &&
+      typeof item.thumbnail === 'object' &&
+      item.thumbnail.path
+        ? apiClient.getFileUrl(item.thumbnail.path)
+        : '/placeholder.svg',
   }));
 
   // Map best sellers to the format expected by MegaMenuColumn
@@ -109,8 +195,40 @@ export default function MegaMenu() {
     unit: product.unit || 'hộp',
   }));
 
+  // Handle level 2 hover with debounce
+  const handleLevel2Hover = useCallback((itemId: string) => {
+    // Clear any existing timer
+    if (activeTimerRef.current) {
+      clearTimeout(activeTimerRef.current);
+    }
+
+    // Set immediately rather than using a timeout
+    setActiveLevel2Item(itemId);
+
+    // Keep setting it after a delay to make sure it sticks
+    activeTimerRef.current = setTimeout(() => {
+      setActiveLevel2Item(itemId);
+    }, 50);
+  }, []);
+
+  // Clean up timer on unmount
+  useEffect(() => {
+    return () => {
+      if (activeTimerRef.current) {
+        clearTimeout(activeTimerRef.current);
+      }
+    };
+  }, []);
+
   const toggleMobileItem = (id: string) => {
-    if (id === 'products') {
+    const isDropdownItem = formattedMenu.level1Items.find(
+      item =>
+        item._id === id &&
+        formattedMenu.level2ItemsByParent[item._id]?.length > 0,
+    );
+
+    if (isDropdownItem) {
+      setActiveLevel1Item(id);
       setMobileMenuOpen(true);
     } else {
       setExpandedMobileItems(prev =>
@@ -144,6 +262,27 @@ export default function MegaMenu() {
     };
   }, [mobileMenuOpen]);
 
+  // When active level 1 item changes, reset active level 2 item
+  useEffect(() => {
+    if (activeLevel1Item) {
+      const level2ItemsForActive =
+        formattedMenu.level2ItemsByParent[activeLevel1Item] || [];
+
+      if (level2ItemsForActive.length > 0) {
+        setActiveLevel2Item(level2ItemsForActive[0]._id);
+      } else {
+        setActiveLevel2Item(null);
+      }
+    }
+  }, [activeLevel1Item, formattedMenu.level2ItemsByParent]);
+
+  // Ensure active level 2 item is never set to null if there are level 2 items available
+  useEffect(() => {
+    if (activeLevel2Item === null && level2Items.length > 0) {
+      setActiveLevel2Item(level2Items[0]._id);
+    }
+  }, [activeLevel2Item, level2Items]);
+
   // Handle loading state
   const isLoading = isLoadingMenu || isLoadingBestSellers;
 
@@ -163,43 +302,82 @@ export default function MegaMenu() {
   // Desktop menu
   if (!isMobile) {
     return (
-      <nav className="border-t border-white/10 bg-gradient-to-r from-blue-600 to-blue-500">
+      <nav className="border-b border-grayscale-20 bg-white">
         <div className="container mx-auto px-4">
           <ul className="flex space-x-8 py-4">
-            {/* Render hard-coded main navigation items */}
-            {mainNavItems.map(item => (
-              <li key={item.id}>
-                {item.hasDropdown ? (
-                  <MegaMenuItem hasDropdown href={item.href} label={item.label}>
-                    <div className="flex gap-6">
-                      {/* Category sidebar */}
-                      <div className="w-64 rounded-lg bg-white">
-                        {categoryItems.map((category: MediaItem) => (
-                          <MegaMenuItemLink
-                            key={category._id}
-                            href={`/categories/${category.slug}`}
-                            icon={category.thumbnail}
-                            isActive={category._id === activeCategory}
-                            label={category.name}
-                            onMouseEnter={() => setActiveCategory(category._id)}
-                          />
-                        ))}
-                      </div>
+            {/* Render level 1 items (top navigation) */}
+            {formattedMenu.level1Items.map(item => {
+              const hasDropdown =
+                formattedMenu.level2ItemsByParent[item._id]?.length > 0;
 
-                      {/* Content area */}
-                      <div className="flex-1">
-                        <MegaMenuColumn
-                          bestSellingProducts={bestSellingProducts}
-                          categoryProducts={categoryProducts}
-                        />
+              return (
+                <li key={item._id} className="relative">
+                  <MegaMenuItem
+                    hasDropdown={hasDropdown}
+                    href={`/${item.slug}`}
+                    isActive={item._id === activeLevel1Item}
+                    label={item.name}>
+                    {hasDropdown && (
+                      <div
+                        ref={dropdownRef}
+                        className="flex gap-6 pb-2"
+                        onMouseEnter={() => {
+                          setIsDropdownHovered(true);
+                          // Ensure we have an active level 2 item when entering the dropdown
+                          if (
+                            activeLevel2Item === null &&
+                            level2Items.length > 0
+                          ) {
+                            setActiveLevel2Item(level2Items[0]._id);
+                          }
+                        }}
+                        onMouseLeave={() => setIsDropdownHovered(false)}>
+                        {/* Level 2 items (sidebar) */}
+                        <div className="w-64 bg-white rounded-l-lg border-r border-grayscale-10">
+                          {(
+                            formattedMenu.level2ItemsByParent[item._id] || []
+                          ).map((category: MediaItem) => (
+                            <MegaMenuItemLink
+                              key={category._id}
+                              href={`/categories/${category.slug}`}
+                              icon={
+                                category.thumbnail &&
+                                typeof category.thumbnail === 'object'
+                                  ? category.thumbnail.path
+                                  : category.thumbnail
+                              }
+                              isActive={category._id === activeLevel2Item}
+                              label={category.name}
+                              onMouseEnter={() =>
+                                handleLevel2Hover(category._id)
+                              }
+                            />
+                          ))}
+                        </div>
+
+                        {/* Content area with level 3 items and best sellers */}
+                        <div
+                          className="flex-1 pl-2"
+                          onMouseEnter={() => {
+                            // Ensure active level 2 item stays selected when hovering content area
+                            if (
+                              activeLevel2Item === null &&
+                              level2Items.length > 0
+                            ) {
+                              setActiveLevel2Item(level2Items[0]._id);
+                            }
+                          }}>
+                          <MegaMenuColumn
+                            bestSellingProducts={bestSellingProducts}
+                            categoryProducts={categoryProducts}
+                          />
+                        </div>
                       </div>
-                    </div>
+                    )}
                   </MegaMenuItem>
-                ) : (
-                  <MegaMenuItem href={item.href} label={item.label} />
-                )}
-              </li>
-            ))}
+                </li>
+              );
+            })}
           </ul>
         </div>
       </nav>
@@ -208,34 +386,49 @@ export default function MegaMenu() {
 
   // Mobile menu
   return (
-    <div
-      ref={menuRef}
-      className="border-t border-white/10 bg-gradient-to-r from-blue-600 to-blue-500">
+    <div ref={menuRef} className="border-t border-grayscale-20 bg-white">
       <div className="container mx-auto px-4">
-        <ul className="py-2 divide-y divide-white/10">
-          {/* Render mobile main menu items */}
-          {mainNavItems.map(item => (
-            <li key={item.id} className="py-2">
-              {item.hasDropdown ? (
-                <button
-                  className="flex items-center justify-between text-white cursor-pointer py-2 w-full text-left"
-                  onClick={() => toggleMobileItem(item.id)}>
-                  <span className="text-[15px] font-medium">{item.label}</span>
-                  <ChevronDown
-                    className={`h-5 w-5 transition-transform ${
-                      expandedMobileItems.includes(item.id) ? 'rotate-180' : ''
-                    }`}
-                  />
-                </button>
-              ) : (
-                <Link
-                  className="block py-2 text-[15px] font-medium text-white"
-                  href={item.href}>
-                  {item.label}
-                </Link>
-              )}
-            </li>
-          ))}
+        <ul className="py-2 divide-y divide-grayscale-20">
+          {/* Render level 1 items */}
+          {formattedMenu.level1Items.map(item => {
+            const hasDropdown =
+              formattedMenu.level2ItemsByParent[item._id]?.length > 0;
+
+            return (
+              <li key={item._id} className="py-2">
+                {hasDropdown ? (
+                  <button
+                    className="flex items-center justify-between text-grayscale-90 cursor-pointer py-2 w-full text-left"
+                    onClick={() => toggleMobileItem(item._id)}>
+                    <div className="flex items-center">
+                      <div className="flex h-6 w-6 items-center justify-center rounded-full bg-green-500 text-white mr-2">
+                        <span className="text-sm">G</span>
+                      </div>
+                      <span className="text-[15px] font-medium">
+                        {item.name}
+                      </span>
+                    </div>
+                    <ChevronDown
+                      className={`h-5 w-5 transition-transform ${
+                        expandedMobileItems.includes(item._id)
+                          ? 'rotate-180'
+                          : ''
+                      }`}
+                    />
+                  </button>
+                ) : (
+                  <Link
+                    className="flex items-center py-2 text-[15px] font-medium text-grayscale-90"
+                    href={`/${item.slug}`}>
+                    <div className="flex h-6 w-6 items-center justify-center rounded-full bg-green-500 text-white mr-2">
+                      <span className="text-sm">G</span>
+                    </div>
+                    {item.name}
+                  </Link>
+                )}
+              </li>
+            );
+          })}
         </ul>
       </div>
 
@@ -244,7 +437,11 @@ export default function MegaMenu() {
         <div className="fixed inset-0 bg-white z-50 overflow-hidden flex flex-col">
           {/* Header */}
           <div className="bg-primary-5 text-white p-4 flex items-center justify-between">
-            <h3 className="text-lg font-medium">Danh mục sản phẩm</h3>
+            <h3 className="text-lg font-medium">
+              {formattedMenu.level1Items.find(
+                item => item._id === activeLevel1Item,
+              )?.name || 'Danh mục sản phẩm'}
+            </h3>
             <button
               aria-label="Đóng menu"
               className="p-1 rounded-full hover:bg-white/10"
@@ -255,31 +452,39 @@ export default function MegaMenu() {
 
           {/* Content */}
           <div className="flex flex-1 overflow-hidden">
-            {/* Categories sidebar */}
+            {/* Level 2 items (categories sidebar) */}
             <div className="w-1/3 bg-grayscale-5 overflow-y-auto">
               <ul className="divide-y divide-grayscale-20">
-                {categoryItems.map((category: MediaItem) => (
+                {(
+                  formattedMenu.level2ItemsByParent[activeLevel1Item || ''] ||
+                  []
+                ).map((category: MediaItem) => (
                   <li key={category._id}>
                     <button
                       className={`w-full text-left px-4 py-3 flex items-center gap-2 ${
-                        category._id === activeCategory
+                        category._id === activeLevel2Item
                           ? 'bg-primary-5/10 text-primary-5 font-medium'
                           : 'text-grayscale-70'
                       }`}
-                      onClick={() => setActiveCategory(category._id)}>
+                      onClick={() => setActiveLevel2Item(category._id)}>
                       {category.thumbnail && (
                         <div className="flex h-5 w-5 items-center justify-center">
                           <Image
                             alt={category.name}
-                            className={`h-5 w-5 ${category._id === activeCategory ? 'text-primary-40' : 'text-grayscale-50'}`}
+                            className={`h-5 w-5 ${category._id === activeLevel2Item ? 'text-primary-40' : 'text-grayscale-50'}`}
                             height={20}
-                            src={apiClient.getFileUrl(category.thumbnail)}
+                            src={
+                              typeof category.thumbnail !== 'string' &&
+                              category.thumbnail?.path
+                                ? apiClient.getFileUrl(category.thumbnail.path)
+                                : '/placeholder.svg'
+                            }
                             width={20}
                           />
                         </div>
                       )}
                       <span className="text-sm truncate">{category.name}</span>
-                      {category._id === activeCategory && (
+                      {category._id === activeLevel2Item && (
                         <ChevronRight className="h-4 w-4 ml-auto text-primary-40" />
                       )}
                     </button>
@@ -291,7 +496,7 @@ export default function MegaMenu() {
             {/* Content area */}
             <div className="w-2/3 overflow-y-auto p-4">
               <div className="space-y-4">
-                {/* Category Products Grid */}
+                {/* Level 3 products grid */}
                 {categoryProducts.length > 0 && (
                   <div className="grid grid-cols-2 gap-3">
                     {categoryProducts.map(
@@ -338,7 +543,7 @@ export default function MegaMenu() {
                             alt="Bán chạy nhất"
                             className="text-white"
                             height={16}
-                            src="/icons/top-products.svg"
+                            src="top-products.svg"
                             width={16}
                           />
                         </div>
@@ -367,6 +572,7 @@ export default function MegaMenu() {
                               fill
                               alt={product.name}
                               className="object-contain transition-transform group-hover:scale-105"
+                              sizes="(max-width: 768px) 100vw, 150px"
                               src={product.image}
                             />
                           </div>

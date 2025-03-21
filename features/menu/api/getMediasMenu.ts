@@ -61,8 +61,9 @@ export const getMediasMenu = async (
   try {
     // Default populates object for efficient data loading
     const defaultPopulatesObject = {
-      path: 'childs images',
-      select: 'media_menu',
+      path: 'thumbnail childs',
+      select: 'name slug path childs thumbnail',
+      populate: { path: 'childs', select: 'name slug thumbnail' },
     };
 
     // Prepare query parameters with sensible defaults
@@ -70,15 +71,12 @@ export const getMediasMenu = async (
       // Include essential fields based on the screenshot
       select:
         params.select ||
-        'name slug order parent childs type company status order thumbnail',
+        'name slug order parent childs type company status level thumbnail',
       optionSeller: params.optionSeller ?? DEFAULT_OPTION_SELLER,
       status: params.status ?? 1,
       populates: params.populates || JSON.stringify(defaultPopulatesObject),
       ...params, // Allow overriding with custom params
     };
-
-    // Log request (dev-only, can be conditionally compiled for production)
-    console.log('Fetching media menu with params:', queryParams);
 
     // Make API request
     const response = await apiClient.get<MediaMenuResponse>(
