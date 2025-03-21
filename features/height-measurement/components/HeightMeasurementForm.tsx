@@ -5,12 +5,12 @@ import { useForm } from 'react-hook-form';
 import { AlertCircle } from 'lucide-react';
 import { useEffect } from 'react';
 
-import { useHeightMeasurementMutation } from '../hooks/useHeightMeasurementMutation';
+import { useHeightMeasurementMutation } from '../hooks/usePostHeightMeasurement';
 
 import { Button } from '@/components/ui/button';
 
 export default function HeightMeasurementForm() {
-  const { mutate, isPending, error, isSuccess, data } =
+  const { createHeightMeasurement, isPending, error, isSuccess, data } =
     useHeightMeasurementMutation();
 
   useEffect(() => {
@@ -31,19 +31,20 @@ export default function HeightMeasurementForm() {
   } = useForm<HeightMeasurementFormData>({
     defaultValues: {
       name: '',
-      birthDate: '',
+      birthDate: '' as unknown as Date,
       weight: '',
       height: '',
       phone: '',
-      gender: 'male',
+      gender: 1,
+      note: 'Đo chiều cao từ website',
     },
   });
 
-  const onSubmit = (data: HeightMeasurementFormData) => {
-    console.log('🖥️ Form Component: Form submitted with data:', data);
+  const onSubmit = (formData: HeightMeasurementFormData) => {
+    console.log('🖥️ Form Component: Form submitted with data:', formData);
 
     // Đảm bảo số điện thoại đúng định dạng
-    if (!/^[0-9]{10,11}$/.test(data.phone)) {
+    if (!/^[0-9]{10,11}$/.test(formData.phone)) {
       console.log('🖥️ Form Component: Invalid phone number format');
       setError('phone', {
         type: 'manual',
@@ -53,8 +54,33 @@ export default function HeightMeasurementForm() {
       return;
     }
 
-    console.log('🖥️ Form Component: Submitting data to API');
-    mutate(data);
+    try {
+      // Chuyển đổi birthDate từ string sang Date
+      if (typeof formData.birthDate === 'string') {
+        formData.birthDate = new Date(formData.birthDate);
+      }
+
+      // Chuyển đổi height/weight sang số
+      formData.height = Number(formData.height);
+      formData.weight = Number(formData.weight);
+
+      // Đảm bảo gender là số
+      formData.gender = Number(formData.gender);
+
+      // Thêm note mặc định nếu không có
+      if (!formData.note) {
+        formData.note = 'Đo chiều cao từ website';
+      }
+
+      console.log('🖥️ Form Component: Processed data:', formData);
+      createHeightMeasurement(formData);
+    } catch (err) {
+      console.error('🖥️ Form Component: Error processing form data:', err);
+      setError('root', {
+        type: 'manual',
+        message: 'Có lỗi xảy ra khi xử lý dữ liệu. Vui lòng thử lại.',
+      });
+    }
   };
 
   const handleReset = () => {
@@ -253,7 +279,7 @@ export default function HeightMeasurementForm() {
               className="h-4 w-4 accent-primary-5 disabled:opacity-70"
               disabled={isPending}
               type="radio"
-              value="male"
+              value={1}
               {...register('gender', { required: 'Vui lòng chọn giới tính' })}
             />
             <span className="text-xs sm:text-sm text-grayscale-90">Nam</span>
@@ -263,7 +289,7 @@ export default function HeightMeasurementForm() {
               className="h-4 w-4 accent-primary-5 disabled:opacity-70"
               disabled={isPending}
               type="radio"
-              value="female"
+              value={2}
               {...register('gender')}
             />
             <span className="text-xs sm:text-sm text-grayscale-90">Nữ</span>

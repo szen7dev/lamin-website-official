@@ -110,7 +110,7 @@ class ApiClient {
           data: response.data,
         });
 
-        return response.data; // Trả về data trực tiếp
+        return response; // Ngoài response.data, 1 số api trả thêm các dữ liệu khác cần truy vấn, api call cần trả về response.data
       },
       error => {
         // Xử lý lỗi chung
@@ -385,12 +385,17 @@ class ApiClient {
 
     try {
       // Make sure we don't double up on slashes
-      const baseUrl = CLOUDFRONT_URL.endsWith('/') ? CLOUDFRONT_URL.slice(0, -1) : CLOUDFRONT_URL;
-      const pathSegment = sanitizedPath.startsWith('/') ? sanitizedPath : `/${sanitizedPath}`;
+      const baseUrl = CLOUDFRONT_URL.endsWith('/')
+        ? CLOUDFRONT_URL.slice(0, -1)
+        : CLOUDFRONT_URL;
+      const pathSegment = sanitizedPath.startsWith('/')
+        ? sanitizedPath
+        : `/${sanitizedPath}`;
 
       return `${baseUrl}${pathSegment}`;
     } catch (error) {
       console.error('Error creating file URL:', error);
+
       return sanitizedPath;
     }
   }

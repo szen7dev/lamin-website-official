@@ -3,14 +3,18 @@ import { notFound } from 'next/navigation';
 import HeightMeasurementResult from '@/features/height-measurement/components/HeightMeasurementResult';
 import { Breadcrumb } from '@/components/ui/breadcrumb';
 
+interface PageProps {
+  params: {
+    id: string;
+  };
+}
+
 export default async function HeightMeasurementResultsPage({
-  searchParams,
-}: {
-  searchParams: { [key: string]: string | undefined };
-}) {
-  // Await the searchParams object to satisfy Next.js strict checking
-  const params = await searchParams;
-  const resultId = params.id;
+  params,
+}: PageProps) {
+  // Đảm bảo đã await params trước khi sử dụng
+  const resolvedParams = await Promise.resolve(params);
+  const resultId = resolvedParams.id;
 
   // Validate required parameter
   if (!resultId) {
