@@ -7,6 +7,19 @@ const DEFAULT_TIMEOUT = Number.parseInt(
 ); // 30 giây là giá trị kỹ thuật thông thường
 const CLOUDFRONT_URL = process.env.NEXT_PUBLIC_CLOUDFRONT_URL || '';
 
+// Helper function to safely parse URLs
+function sanitizeUrl(url: string): string {
+  if (!url) return '';
+
+  // Check if URL already has a protocol
+  if (!/^https?:\/\//i.test(url) && !url.startsWith('/')) {
+    // Add a default protocol if missing
+    url = '/' + url;
+  }
+
+  return url;
+}
+
 // Token mặc định cho các request không cần xác thực
 const DEFAULT_TOKEN = process.env.NEXT_PUBLIC_DEFAULT_TOKEN || '';
 
@@ -68,6 +81,7 @@ class ApiClient {
         console.log('🚀 API Request:', {
           method: config.method?.toUpperCase(),
           url: config.url,
+          baseURL: config.baseURL,
           params: config.params,
           data: config.data,
           headers: config.headers,
@@ -357,15 +371,28 @@ class ApiClient {
   // Helper cho URL file - Kiểm tra URL hợp lệ trước khi sử dụng
   public getFileUrl(path: string): string {
     if (!path) return '';
+
+    // Sanitize the path to ensure it's a valid URL
+    const sanitizedPath = sanitizeUrl(path);
+
     if (!CLOUDFRONT_URL) {
       console.warn(
         'CLOUDFRONT_URL is not configured. Media files may not load correctly.',
       );
 
-      return path;
+      return sanitizedPath;
     }
 
-    return `${CLOUDFRONT_URL}${path}`;
+    try {
+      // Make sure we don't double up on slashes
+      const baseUrl = CLOUDFRONT_URL.endsWith('/') ? CLOUDFRONT_URL.slice(0, -1) : CLOUDFRONT_URL;
+      const pathSegment = sanitizedPath.startsWith('/') ? sanitizedPath : `/${sanitizedPath}`;
+
+      return `${baseUrl}${pathSegment}`;
+    } catch (error) {
+      console.error('Error creating file URL:', error);
+      return sanitizedPath;
+    }
   }
 }
 
