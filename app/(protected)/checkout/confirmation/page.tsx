@@ -1,5 +1,5 @@
 'use client';
-import { DownloadIcon, InfoIcon } from '@/public/icons';
+import { DownloadIcon } from '@/public/icons';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';

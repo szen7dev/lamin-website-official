@@ -22,7 +22,6 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { formatPrice } from '@/utils/format';
-import { PointCoinIcon } from '@/public/icons';
 import Image from 'next/image';
 
 interface CartSummaryProps {
