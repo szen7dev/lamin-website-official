@@ -1,12 +1,10 @@
 'use client';
 
-import type { HeightMeasurementResult as ResultType } from '../types/heightMeasurementTypes';
-
 import { useEffect, useRef, useState } from 'react';
-import { Check } from 'lucide-react';
+import { AlertCircle, Check } from 'lucide-react';
 import Chart from 'chart.js/auto';
 
-import { useHeightMeasurementResult } from '../hooks/useHeightMeasurementMutation';
+import { useGetHeightMeasurementInfo } from '../hooks/useGetHeightMeasurementInfo';
 
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 
@@ -21,46 +19,6 @@ const percentiles = [
   { name: 'P95', color: '#DC3545' },
   { name: 'P97', color: '#FFC107' },
 ];
-
-// Dữ liệu percentile cố định
-const percentileData = {
-  P3: [
-    110, 111, 117, 123, 128, 133, 139, 146, 152, 156, 157, 158, 159, 160, 161,
-    162,
-  ],
-  P5: [
-    111, 112, 118, 124, 129, 134, 140, 147, 153, 157, 158, 159, 160, 161, 162,
-    163,
-  ],
-  P10: [
-    111.5, 112.5, 118.5, 124.5, 129.5, 134.5, 140.5, 147.5, 153.5, 157.5, 158.5,
-    159.5, 160.5, 161.5, 162.5, 163.5,
-  ],
-  P25: [
-    112, 113, 119, 125, 130, 135, 141, 148, 154, 158, 159, 160, 161, 162, 163,
-    164,
-  ],
-  P50: [
-    112.5, 113.5, 119.5, 125.5, 130.5, 135.5, 141.5, 148.5, 154.5, 158.5, 159.5,
-    160.5, 161.5, 162.5, 163.5, 164.5,
-  ],
-  P75: [
-    113, 114, 120, 126, 131, 136, 142, 149, 155, 159, 160, 161, 162, 163, 164,
-    165,
-  ],
-  P90: [
-    113.5, 114.5, 120.5, 126.5, 131.5, 136.5, 142.5, 149.5, 155.5, 159.5, 160.5,
-    161.5, 162.5, 163.5, 164.5, 165.5,
-  ],
-  P95: [
-    114, 115, 121, 127, 132, 137, 143, 150, 156, 160, 161, 162, 163, 164, 165,
-    166,
-  ],
-  P97: [
-    114.5, 115.5, 121.5, 127.5, 132.5, 137.5, 143.5, 150.5, 156.5, 160.5, 161.5,
-    162.5, 163.5, 164.5, 165.5, 166.5,
-  ],
-};
 
 // Fallback data khi không có dữ liệu từ API
 const fallbackData = {
@@ -83,9 +41,9 @@ const fallbackData = {
     { age: 20, height: 164 },
   ],
   name: 'Nguyễn Văn A',
-  gender: 'male',
+  gender: 1,
   birthDate: '2019-04-12',
-  height: '112',
+  height: 112,
   predictedHeight: 161,
   growthRate: 36,
   analysisDate: '2025-03-11',
@@ -98,87 +56,132 @@ const fallbackData = {
 };
 
 interface HeightMeasurementResultProps {
-  resultId?: string;
+  resultId: string;
 }
 
 export default function HeightMeasurementResult({
   resultId,
 }: HeightMeasurementResultProps) {
-  console.log('🖥️ Result Component: Initializing with resultId:', resultId);
-
   const chartRef = useRef<HTMLCanvasElement>(null);
   const chartInstance = useRef<Chart | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
   const isMobile = useMediaQuery('(max-width: 768px)');
 
-  // Lấy dữ liệu từ React Query cache
-  const resultData = useHeightMeasurementResult(resultId);
+  // Lấy dữ liệu từ API qua React Query
+  const {
+    data: apiResponse,
+    isLoading,
+    error,
+  } = useGetHeightMeasurementInfo(resultId);
 
-  console.log('🖥️ Result Component: Data from hook:', resultData);
+  const [processedData, setProcessedData] = useState<
+    typeof fallbackData | null
+  >(null);
 
-  // Sử dụng dữ liệu từ cache hoặc fallback data
-  const data: ResultType | typeof fallbackData = resultData || fallbackData;
-
-  console.log('🖥️ Result Component: Using data:', {
-    source: resultData ? 'API/CACHE' : 'FALLBACK',
-    data,
-  });
-
+  // Xử lý dữ liệu từ API
   useEffect(() => {
-    // Giả lập thời gian loading
-    console.log('🖥️ Result Component: Starting loading timer');
-    const timer = setTimeout(() => {
-      console.log('🖥️ Result Component: Loading complete');
-      setIsLoading(false);
-    }, 500);
+    if (!apiResponse) return;
 
-    return () => clearTimeout(timer);
-  }, []);
+    try {
+      console.log('🌐 Xử lý dữ liệu từ API:', apiResponse);
 
+      // Thông tin cá nhân từ API
+      const userData = apiResponse.data || {};
+      const growTrackData = apiResponse.growTrack || {};
+
+      // Tạo dữ liệu chiều cao theo tuổi từ ageHeightNow hoặc hdfs
+      let heightData = [];
+
+      if (
+        growTrackData.ageHeightNow &&
+        Array.isArray(growTrackData.ageHeightNow)
+      ) {
+        // Sử dụng dữ liệu ageHeightNow nếu có
+        heightData = growTrackData.ageHeightNow;
+      } else if (growTrackData.hdfs && Array.isArray(growTrackData.hdfs)) {
+        // Sử dụng dữ liệu hdfs nếu có
+        heightData = growTrackData.hdfs.map((item: any) => ({
+          age: item.age,
+          height: item.height,
+        }));
+      } else {
+        heightData = fallbackData.heightData;
+      }
+
+      const predictedHeight =
+        growTrackData.ageHeightP50 && growTrackData.ageHeightP50.length > 0
+          ? Math.round(
+              growTrackData.ageHeightP50[growTrackData.ageHeightP50.length - 1]
+                .height,
+            )
+          : userData.gender === 1
+            ? 170
+            : 160;
+
+      // Tạo kết quả
+      setProcessedData({
+        heightData,
+        name: userData.name || 'Chưa có tên',
+        gender: userData.gender || 1,
+        birthDate: userData.birthday || new Date().toISOString(),
+        height: userData.height || 0,
+        predictedHeight,
+        growthRate: 50, // Giá trị mặc định
+        analysisDate: userData.createAt || new Date().toISOString(),
+        coach: 'Chuyên gia Elela',
+        recommendations: [
+          'Ngủ trước 10h tối',
+          'Chơi các môn thể thao kéo dãn như Bơi, Xà, Nhảy Dây',
+          'Bổ sung Protein, Canxi, D3, K2',
+        ],
+      });
+    } catch (error) {
+      console.error('❌ Lỗi khi xử lý dữ liệu:', error);
+    }
+  }, [apiResponse]);
+
+  // Tạo biểu đồ
   useEffect(() => {
-    if (isLoading || !chartRef.current || !data || !data.heightData) {
-      console.log(
-        '🖥️ Result Component: Skipping chart creation - conditions not met',
-        {
-          isLoading,
-          hasChartRef: !!chartRef.current,
-          hasData: !!data,
-          hasHeightData: !!(data && data.heightData),
-        },
-      );
-
+    if (!chartRef.current || !processedData || !processedData.heightData) {
       return;
     }
 
     const ctx = chartRef.current.getContext('2d');
 
     if (!ctx) {
-      console.log('🖥️ Result Component: No canvas context available');
-
       return;
     }
 
     // Hủy chart cũ nếu có
     if (chartInstance.current) {
-      console.log('🖥️ Result Component: Destroying existing chart');
       chartInstance.current.destroy();
     }
-
-    console.log('🖥️ Result Component: Creating new chart with data:', {
-      ages: data.heightData.map(d => d.age),
-      heights: data.heightData.map(d => d.height),
-    });
 
     // Tạo chart mới
     chartInstance.current = new Chart(ctx, {
       type: 'line',
       data: {
-        labels: data.heightData.map(d => d.age),
+        labels: processedData.heightData.map(d => d.age),
         datasets: [
           // Percentile lines (mỏng hơn, opacity thấp hơn)
           ...percentiles.map(p => ({
             label: p.name,
-            data: percentileData[p.name as keyof typeof percentileData],
+            data: Array(processedData.heightData.length)
+              .fill(0)
+              .map((_, idx) => {
+                // Lấy giá trị từ P3, P5, v.v. nếu có
+                if (apiResponse?.growTrack) {
+                  const pData =
+                    apiResponse.growTrack[
+                      `ageHeight${p.name}` as keyof typeof apiResponse.growTrack
+                    ];
+
+                  return Array.isArray(pData) && idx < pData.length
+                    ? pData[idx].height
+                    : null;
+                }
+
+                return null;
+              }),
             borderColor: p.color,
             borderWidth: 0.5,
             borderDash: [5, 5],
@@ -189,7 +192,7 @@ export default function HeightMeasurementResult({
           // Prediction line (đậm và nổi bật hơn)
           {
             label: 'Dự đoán',
-            data: data.heightData.map(d => d.height),
+            data: processedData.heightData.map(d => d.height),
             borderColor: '#198754',
             backgroundColor: '#198754',
             borderWidth: 2.5,
@@ -292,7 +295,7 @@ export default function HeightMeasurementResult({
             meta.data.forEach((element, index) => {
               const position = element.getProps(['x', 'y']);
               const { x, y } = position;
-              const height = data.heightData[index].height;
+              const height = processedData.heightData[index].height;
 
               ctx.save();
               ctx.textAlign = 'center';
@@ -307,19 +310,14 @@ export default function HeightMeasurementResult({
       ],
     });
 
-    console.log('🖥️ Result Component: Chart created successfully');
-
     return () => {
       if (chartInstance.current) {
-        console.log('🖥️ Result Component: Cleaning up chart');
         chartInstance.current.destroy();
       }
     };
-  }, [isLoading, data, isMobile]);
+  }, [processedData, isMobile, apiResponse]);
 
   if (isLoading) {
-    console.log('🖥️ Result Component: Rendering loading state');
-
     return (
       <div
         aria-busy="true"
@@ -354,11 +352,27 @@ export default function HeightMeasurementResult({
     );
   }
 
-  if (!data || !data.heightData) {
-    console.log(
-      '🖥️ Result Component: No data available, rendering error state',
+  if (error) {
+    return (
+      <div className="rounded-lg bg-error-5/10 p-6 text-error-5 flex flex-col items-center gap-3">
+        <AlertCircle aria-hidden="true" className="h-10 w-10 shrink-0" />
+        <h2 className="text-lg font-semibold">Lỗi khi tải dữ liệu</h2>
+        <p className="text-center">
+          {error instanceof Error
+            ? error.message
+            : 'Không thể tải kết quả đo chiều cao'}
+        </p>
+        <button
+          className="mt-2 px-4 py-2 bg-primary-5 text-white rounded-lg hover:bg-primary-20"
+          type="button"
+          onClick={() => (window.location.href = '/height-measurement')}>
+          Thử lại
+        </button>
+      </div>
     );
+  }
 
+  if (!processedData) {
     return (
       <div
         aria-live="polite"
@@ -374,10 +388,6 @@ export default function HeightMeasurementResult({
 
   // Tính tuổi từ ngày sinh
   const calculateAge = (birthDate: string) => {
-    console.log(
-      '🖥️ Result Component: Calculating age from birthDate:',
-      birthDate,
-    );
     const today = new Date();
     const birth = new Date(birthDate);
     let age = today.getFullYear() - birth.getFullYear();
@@ -397,23 +407,10 @@ export default function HeightMeasurementResult({
     // Tính số ngày
     const days = today.getDate() - birth.getDate();
 
-    const result = { years: age, months, days: days > 0 ? days : 0 };
-
-    console.log('🖥️ Result Component: Calculated age:', result);
-
-    return result;
+    return { years: age, months, days: days > 0 ? days : 0 };
   };
 
-  const age = calculateAge(data.birthDate);
-
-  console.log('🖥️ Result Component: Rendering result with data:', {
-    resultId,
-    name: data.name,
-    gender: data.gender,
-    height: data.height,
-    predictedHeight: data.predictedHeight,
-    heightDataPoints: data.heightData.length,
-  });
+  const age = calculateAge(processedData.birthDate);
 
   return (
     <article
@@ -433,11 +430,13 @@ export default function HeightMeasurementResult({
             <div className="px-2 sm:px-4 py-2">Chiều cao (cm)</div>
           </header>
           <div className="max-h-[300px] md:max-h-[600px] overflow-y-auto">
-            {data.heightData.map((item, index) => (
+            {processedData.heightData.map((item, index) => (
               <div
                 key={item.age}
                 className={`grid grid-cols-2 border-t border-grayscale-20 text-center text-xs sm:text-sm ${
-                  index === data.heightData.length - 1 ? 'text-error-5' : ''
+                  index === processedData.heightData.length - 1
+                    ? 'text-error-5'
+                    : ''
                 }`}>
                 <div className="border-r border-grayscale-20 px-2 sm:px-4 py-2">
                   {item.age}
@@ -456,12 +455,12 @@ export default function HeightMeasurementResult({
           aria-label="Đường tăng trưởng"
           className="flex items-center gap-2 sm:gap-4">
           <div className="whitespace-nowrap text-sm sm:text-base font-medium">
-            Đường tăng trưởng: {data.growthRate}
+            Đường tăng trưởng: {processedData.growthRate}
           </div>
           <div
             aria-valuemax={100}
             aria-valuemin={0}
-            aria-valuenow={data.growthRate}
+            aria-valuenow={processedData.growthRate}
             className="h-6 sm:h-8 flex-1 rounded-md bg-primary-5"
             role="progressbar"
           />
@@ -497,21 +496,27 @@ export default function HeightMeasurementResult({
         {/* Row 3: Analysis Text */}
         <div className="space-y-1 sm:space-y-2 text-xs sm:text-sm">
           <p>
-            • Chiều cao: {data.height}cm. Đạt chuẩn. Bé thấp hơn so với chiều
-            cao trung bình là 2,156cm. Chuẩn WHO: 114,156cm
+            • Chiều cao: {processedData.height}cm. Bé{' '}
+            {apiResponse?.growTrack.hdfs > 0 ? 'cao' : 'thấp'} hơn so với chiều
+            cao trung bình là {Math.abs(apiResponse?.growTrack.hdfs)}cm. Chuẩn
+            WHO: {processedData.height - apiResponse?.growTrack.hdfs}cm
           </p>
           <p>
-            • Bé {data.gender === 'male' ? 'Nam' : 'Nữ'}, {data.name}, sinh ngày{' '}
-            {new Date(data.birthDate).toLocaleDateString('vi-VN')} - {age.years}{' '}
-            tuổi, {age.months} tháng, {age.days} ngày
+            • Bé {processedData.gender === 1 ? 'Nam' : 'Nữ'},{' '}
+            {processedData.name}, sinh ngày{' '}
+            {new Date(processedData.birthDate).toLocaleDateString('vi-VN')} -{' '}
+            {age.years} tuổi, {age.months} tháng, {age.days} ngày
           </p>
           <p className="flex flex-wrap items-center gap-1">
             •{' '}
             <span className="text-error-5">
-              Dự đoán chiều cao khi trưởng thành: {data.predictedHeight}cm
+              Dự đoán chiều cao khi trưởng thành:{' '}
+              {processedData.predictedHeight}cm
             </span>
             <span className="text-grayscale-60">
-              | Ngày: {data.analysisDate} - Coach: {data.coach}
+              | Ngày:{' '}
+              {new Date(processedData.analysisDate).toLocaleDateString('vi-VN')}{' '}
+              - Coach: {processedData.coach}
             </span>
           </p>
           <p>
@@ -529,7 +534,7 @@ export default function HeightMeasurementResult({
           <ul
             aria-label="Khuyến nghị"
             className="flex flex-wrap items-center gap-x-2 sm:gap-x-4 gap-y-1 sm:gap-y-2 mt-2">
-            {data.recommendations.map((recommendation, index) => (
+            {processedData.recommendations.map((recommendation, index) => (
               <li key={index} className="flex items-center gap-1 sm:gap-2">
                 <div className="flex h-4 w-4 sm:h-5 sm:w-5 items-center justify-center rounded-full bg-success-5">
                   <Check

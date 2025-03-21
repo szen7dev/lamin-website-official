@@ -146,7 +146,6 @@ export default function SearchBar() {
       <SearchSuggestions
         isVisible={isFocused && query.length > 0}
         query={query}
-        searchQuery={debouncedQuery || query}
         results={goodsList.map(item => {
           // Safely handle the image URL
           let imageUrl = '';
@@ -178,6 +177,7 @@ export default function SearchBar() {
             unit: item.unit || 'Hộp',
           };
         })}
+        searchQuery={debouncedQuery || query}
         onClose={() => setIsFocused(false)}
       />
     </div>

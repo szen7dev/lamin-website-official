@@ -1,39 +1,44 @@
 // Types cho tính năng đo cao
 export interface HeightMeasurementFormData {
   name: string;
-  birthDate: string;
-  weight: string;
-  height: string;
+  birthDate: Date;
+  weight: string | number;
+  height: string | number;
   phone: string;
-  gender: 'male' | 'female';
+  gender: number;
+  note?: string;
+  optionSeller?: number;
 }
 
-export interface HeightMeasurementResult {
-  id: string;
+export interface HeightMeasurementResultData {
+  status: number;
+  type: number;
+  gender: number;
+  height: number;
+  weight: number;
+  images: any[];
+  state: number;
+  _id: string;
+  company: string;
+  userCreate: string;
+  birthday: string;
   name: string;
-  birthDate: string;
-  weight: string;
-  height: string;
   phone: string;
-  gender: 'male' | 'female';
-  predictedHeight: number;
-  growthRate: number;
-  percentile: number;
-  analysisDate: string;
-  coach: string;
-  recommendations: string[];
-  heightData: Array<{ age: number; height: number }>;
+  namecv: string;
+  modifyAt: string;
+  createAt: string;
+  __v: number;
 }
 
-export interface HeightMeasurementService {
-  submitHeightMeasurement(
-    data: HeightMeasurementFormData,
-  ): Promise<HeightMeasurementResult>;
-  getHeightMeasurementById(id: string): Promise<HeightMeasurementResult>;
-  getHeightMeasurementsByContact(
-    contactID: string,
-  ): Promise<HeightMeasurementResult[]>;
-}
+// export interface HeightMeasurementService {
+//   submitHeightMeasurement(
+//     data: HeightMeasurementFormData,
+//   ): Promise<HeightMeasurementResult>;
+//   getHeightMeasurementById(id: string): Promise<HeightMeasurementResult>;
+//   getHeightMeasurementsByContact(
+//     contactID: string,
+//   ): Promise<HeightMeasurementResult[]>;
+// }
 
 // API Response Types
 export interface GrowTrackApiResponse {
