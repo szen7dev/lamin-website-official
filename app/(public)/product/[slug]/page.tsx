@@ -101,7 +101,9 @@ export default function ProductDetailPage({
         {/* Q&A Section */}
         <section className="mt-12">
           <h2 className="text-xl font-bold text-grayscale-90 mb-6">Hỏi đáp</h2>
-          <ProductQA productId={product.id} />
+          <ProductQA
+          //  productId={product.id}
+          />
         </section>
       </div>
     </div>
