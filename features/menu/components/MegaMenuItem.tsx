@@ -73,9 +73,17 @@ export default function MegaMenuItem({
           'flex items-center gap-1 text-[15px] font-medium text-grayscale-90 hover:text-primary-50',
           isActive && 'text-primary-50',
         )}
-        href={href}>
+        href={href}
+        style={{ textDecoration: 'none' }}>
         {label}
-        {hasDropdown && <ChevronDown className="h-4 w-4" />}
+        {hasDropdown && (
+          <ChevronDown
+            className={cn(
+              'h-4 w-4 transition-transform duration-200',
+              isHovered && 'rotate-180',
+            )}
+          />
+        )}
       </Link>
 
       {hasDropdown && isHovered && (

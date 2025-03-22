@@ -157,15 +157,6 @@ export default function MegaMenu() {
     ? formattedMenu.level2ItemsByParent[activeLevel1Item] || []
     : [];
 
-  // Set initial active level 2 item when level 2 items change
-  useEffect(() => {
-    if (level2Items.length > 0 && !activeLevel2Item) {
-      setActiveLevel2Item(level2Items[0]._id);
-    } else if (level2Items.length === 0) {
-      setActiveLevel2Item(null);
-    }
-  }, [level2Items, activeLevel2Item]);
-
   // Get level 3 items for the active level 2 item
   const level3Items = activeLevel2Item
     ? formattedMenu.level3ItemsByParent[activeLevel2Item] || []
@@ -197,18 +188,8 @@ export default function MegaMenu() {
 
   // Handle level 2 hover with debounce
   const handleLevel2Hover = useCallback((itemId: string) => {
-    // Clear any existing timer
-    if (activeTimerRef.current) {
-      clearTimeout(activeTimerRef.current);
-    }
-
     // Set immediately rather than using a timeout
     setActiveLevel2Item(itemId);
-
-    // Keep setting it after a delay to make sure it sticks
-    activeTimerRef.current = setTimeout(() => {
-      setActiveLevel2Item(itemId);
-    }, 50);
   }, []);
 
   // Clean up timer on unmount
@@ -320,7 +301,7 @@ export default function MegaMenu() {
                     {hasDropdown && (
                       <div
                         ref={dropdownRef}
-                        className="flex gap-6 pb-2"
+                        className="flex pb-2"
                         onMouseEnter={() => {
                           setIsDropdownHovered(true);
                           // Ensure we have an active level 2 item when entering the dropdown
@@ -357,7 +338,7 @@ export default function MegaMenu() {
 
                         {/* Content area with level 3 items and best sellers */}
                         <div
-                          className="flex-1 pl-2"
+                          className="flex-1 bg-[#F1F4FD] p-3"
                           onMouseEnter={() => {
                             // Ensure active level 2 item stays selected when hovering content area
                             if (
