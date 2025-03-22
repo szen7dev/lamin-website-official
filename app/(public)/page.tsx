@@ -74,9 +74,6 @@ export default function HomePage() {
     <main className="flex min-h-screen flex-col bg-background">
       {/* Hero Section with Banner - Server Component for immediate display */}
       <section aria-labelledby="hero-heading" className="w-full">
-        <h2 className="sr-only" id="hero-heading">
-          Khuyến mãi đặc biệt
-        </h2>
         <SimpleBanner />
       </section>
 

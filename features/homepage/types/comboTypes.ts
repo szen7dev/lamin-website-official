@@ -1,0 +1,48 @@
+export interface ComboProduct {
+  _id: string;
+  sellingUnitprice: number;
+  listedUnitprice: number;
+  name: string;
+  unit: string;
+  expired?: string;
+  unitNote?: string;
+  slug: string;
+  thumbnail: {
+    _id: string;
+    path: string;
+  };
+}
+
+export interface Combo {
+  _id: string;
+  status: number;
+  type: number;
+  products: ComboProduct[];
+  images: string[];
+  state: number;
+  userCreate: string;
+  company: string;
+  name: string;
+  slug: string;
+  note: string;
+  expired: Date;
+  modifyAt: string;
+  createAt: string;
+  __v: number;
+  thumbnail: string;
+  userUpdate: string;
+}
+
+export interface GetSaledComboParams {
+  limit?: number;
+  optionSeller?: number;
+  status?: number;
+  populates?: {
+    path: string;
+    select: string;
+    populate?: {
+      path: string;
+      select: string;
+    };
+  };
+}

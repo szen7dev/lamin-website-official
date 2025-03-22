@@ -2,10 +2,11 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
 
 import { useCart } from '@/features/cart/hooks/useCart';
 import { cn } from '@/lib/utils';
+import { ComboProduct } from '@/features/homepage/types/comboTypes';
+import { apiClient } from '@/services/api/apiClient';
 
 export interface ProductUnit {
   label: string;
@@ -13,81 +14,109 @@ export interface ProductUnit {
 }
 
 export interface ProductCardProps {
-  product: {
-    id: number | string;
-    slug: string;
-    image?: string;
-    name: string;
-    price: string | number;
-    originalPrice?: string | number;
-    unit?: string;
-    packageInfo?: string;
-    discount?: string | number;
-    units?: ProductUnit[];
-  };
+  product: ComboProduct;
   variant?: 'default' | 'simple';
   className?: string;
+  error?: unknown;
+  isLoading?: boolean;
 }
 
 export default function ProductCard({
   product,
   variant = 'default',
   className,
+  error,
+  isLoading,
 }: ProductCardProps) {
   const { addItem } = useCart();
-  const [selectedUnit, setSelectedUnit] = useState(
-    product.units?.[0]?.value || 'hop',
-  );
 
   const handleAddToCart = () => {
     if (!product) return;
 
     const priceAsNumber =
-      typeof product.price === 'string'
-        ? Number.parseFloat(product.price.replace(/[^\d]/g, ''))
-        : product.price;
+      typeof product.listedUnitprice === 'string'
+        ? Number.parseFloat(product.listedUnitprice)
+        : product.listedUnitprice;
 
-    const originalPriceAsNumber = product.originalPrice
-      ? typeof product.originalPrice === 'string'
-        ? Number.parseFloat(product.originalPrice.replace(/[^\d]/g, ''))
-        : product.originalPrice
+    const originalPriceAsNumber = product.sellingUnitprice
+      ? typeof product.sellingUnitprice === 'string'
+        ? Number.parseFloat(product.sellingUnitprice)
+        : product.sellingUnitprice
       : undefined;
 
     addItem({
-      id: `${product.id}-${selectedUnit}`,
+      id: `${product._id}`,
       name: product.name,
       price: priceAsNumber || 0,
       originalPrice: originalPriceAsNumber,
       quantity: 1,
       unit: product.unit || 'Hộp',
-      image: product.image,
+      image: product.thumbnail?.path
+        ? apiClient.getFileUrl(product.thumbnail.path)
+        : '/placeholder.svg',
     });
   };
 
-  if (!product) return null;
-
-  const formatPrice = (price: string | number | undefined) => {
-    if (price === undefined) return '0đ';
-
-    if (typeof price === 'number') {
-      return `${price.toLocaleString()}đ`;
-    }
-
-    if (typeof price === 'string' && price.includes('đ')) return price;
-
-    const numericPrice =
-      typeof price === 'string'
-        ? Number.parseFloat(price.replace(/[^\d]/g, ''))
-        : price;
-
-    return isNaN(numericPrice) ? '0đ' : `${numericPrice.toLocaleString()}đ`;
+  // Format price with Vietnamese currency
+  const formatPrice = (price: number) => {
+    return new Intl.NumberFormat('vi-VN', {
+      style: 'currency',
+      currency: 'VND',
+    }).format(price);
   };
 
-  const discountText = product.discount
-    ? typeof product.discount === 'string' && product.discount.includes('%')
-      ? product.discount
-      : `-${product.discount}%`
-    : undefined;
+  const discountText =
+    product?.listedUnitprice && product?.sellingUnitprice
+      ? `-${(((product.listedUnitprice - product.sellingUnitprice) / product.listedUnitprice) * 100).toFixed(0)}%`
+      : undefined;
+
+  // Loading state
+  if (isLoading) {
+    return (
+      <div
+        className={cn(
+          'flex h-full flex-col rounded-lg p-3 bg-white shadow-sm animate-pulse',
+          className,
+        )}>
+        <div className="mb-3 aspect-square w-full bg-gray-200 rounded" />
+        <div className="h-4 bg-gray-200 rounded w-3/4 mb-2" />
+        <div className="h-4 bg-gray-200 rounded w-1/2 mb-4" />
+        <div className="h-6 bg-gray-200 rounded w-1/3 mb-2" />
+        <div className="mt-auto h-10 bg-gray-200 rounded w-full" />
+      </div>
+    );
+  }
+
+  // Error state
+  if (error || !product) {
+    return (
+      <div
+        className={cn(
+          'flex h-full flex-col rounded-lg p-3 bg-white shadow-sm',
+          className,
+        )}>
+        <div className="mb-3 aspect-square w-full bg-gray-100 flex items-center justify-center">
+          <svg
+            className="h-12 w-12 text-gray-400"
+            fill="none"
+            stroke="currentColor"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </div>
+        <p className="text-sm text-gray-500 text-center">
+          Không thể tải sản phẩm
+        </p>
+        <button className="mt-auto w-full rounded-full bg-gray-200 text-gray-500 py-2 px-4 text-center text-sm font-medium">
+          Thử lại
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div
@@ -107,13 +136,16 @@ export default function ProductCard({
       {/* Product Image */}
       <Link
         className="block mb-3 hover:no-underline"
-        href={`/product/${product.slug}`}>
+        href={`/product/${product._id}`}>
         <div className="relative mb-1 aspect-square">
           <Image
             fill
             alt={product.name}
             className="object-contain"
-            src={product.image || '/placeholder.svg?height=200&width=200'}
+            src={
+              apiClient.getFileUrl(product.thumbnail.path) ||
+              '/placeholder.svg?height=200&width=200'
+            }
           />
         </div>
 
@@ -124,10 +156,10 @@ export default function ProductCard({
       </Link>
 
       {/* Unit Selection */}
-      {product.units && product.units.length > 0 && (
+      {/* {product.unit && (
         <div className="mb-3">
           <div className="flex w-full rounded-lg border border-grayscale-20 overflow-hidden">
-            {product.units.map(unit => (
+            {product.unit.map(unit => (
               <button
                 key={unit.value}
                 className={`flex-1 py-1 text-xs sm:text-sm ${
@@ -141,13 +173,13 @@ export default function ProductCard({
             ))}
           </div>
         </div>
-      )}
+      )} */}
 
       {/* Price */}
       <div className="mb-2">
         <div className="flex items-baseline gap-2">
           <span className="text-base sm:text-lg font-bold text-primary">
-            {formatPrice(product.price)}
+            {formatPrice(product.sellingUnitprice)}
           </span>
           {product.unit && (
             <span className="text-xs sm:text-sm text-grayscale-50">
@@ -155,18 +187,18 @@ export default function ProductCard({
             </span>
           )}
         </div>
-        {product.originalPrice && (
+        {product.listedUnitprice && (
           <span className="text-xs sm:text-sm text-grayscale-40 line-through">
-            {formatPrice(product.originalPrice)}
+            {formatPrice(product.listedUnitprice)}
           </span>
         )}
       </div>
 
       {/* Package Info */}
-      {product.packageInfo && (
-        <p className="mb-3 text-[10px] sm:text-xs text-grayscale-50">
-          {product.packageInfo}
-        </p>
+      {product.unitNote && (
+        <div className="mb-3 text-[10px] sm:text-xs text-grayscale-90 bg-[#f5f5f5] rounded-lg w-max px-2 py-1">
+          {product.unitNote}
+        </div>
       )}
 
       {/* Buy Button */}
@@ -179,7 +211,7 @@ export default function ProductCard({
       ) : (
         <Link
           className="mt-auto w-full rounded-full bg-primary hover:bg-primary-60 text-white py-2 px-4 text-center text-sm sm:text-base font-medium transition-colors no-underline"
-          href={`/product/${product.slug}`}>
+          href={`/product/${product._id}`}>
           Chọn Mua
         </Link>
       )}

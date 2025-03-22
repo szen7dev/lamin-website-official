@@ -7,6 +7,8 @@ import { useState, useEffect } from 'react';
 import { ThemeProvider as NextThemesProvider } from 'next-themes';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
+import { Toaster } from '@/components/ui/toaster';
+
 export interface ProvidersProps {
   children: React.ReactNode;
   themeProps?: ThemeProviderProps;
@@ -41,7 +43,10 @@ export function Providers({ children, themeProps }: ProvidersProps) {
         defaultTheme="system"
         {...themeProps}>
         {mounted ? (
-          children
+          <>
+            {children}
+            <Toaster />
+          </>
         ) : (
           <div style={{ visibility: 'hidden' }}>{children}</div>
         )}
