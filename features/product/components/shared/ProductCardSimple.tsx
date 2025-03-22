@@ -4,7 +4,27 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 
-export default function ProductCardSimple({ product }) {
+interface ProductUnit {
+  label: string;
+  value: string;
+}
+
+interface ProductCardSimpleProps {
+  product: {
+    id?: number | string;
+    slug: string;
+    image?: string;
+    name: string;
+    price: string | number;
+    originalPrice?: string | number;
+    unit?: string;
+    packageInfo?: string;
+    discount?: string | number;
+    units: ProductUnit[];
+  };
+}
+
+export default function ProductCardSimple({ product }: ProductCardSimpleProps) {
   const [selectedUnit, setSelectedUnit] = useState(product.units[0].value);
 
   return (
@@ -21,12 +41,16 @@ export default function ProductCardSimple({ product }) {
       {/* Product Image */}
       <Link
         className="block mb-3 hover:no-underline"
-        href={`/product/${product.slug}`}>
+        href={{
+          pathname: `/product/${product.slug}`,
+          query: { goodsId: product.id },
+        }}>
         <div className="relative mb-1 aspect-square">
           <Image
             fill
             alt={product.name}
             className="object-contain"
+            sizes="(min-width: 768px) 33vw, (min-width: 1024px) 25vw, 50vw"
             src={product.image || '/placeholder.svg'}
           />
         </div>
@@ -40,7 +64,7 @@ export default function ProductCardSimple({ product }) {
       {/* Unit Selection */}
       <div className="mb-3">
         <div className="flex w-full rounded-lg border border-grayscale-20 overflow-hidden">
-          {product.units.map(unit => (
+          {product.units.map((unit: ProductUnit) => (
             <button
               key={unit.value}
               className={`flex-1 py-1 text-xs sm:text-sm ${
@@ -80,7 +104,10 @@ export default function ProductCardSimple({ product }) {
       {/* Buy Button */}
       <Link
         className="mt-auto w-full rounded-full bg-primary hover:bg-primary-60 text-white py-2 px-4 text-center text-sm sm:text-base font-medium transition-colors no-underline"
-        href={`/product/${product.slug}`}>
+        href={{
+          pathname: `/product/${product.slug}`,
+          query: { goodsId: product.id },
+        }}>
         Chọn Mua
       </Link>
     </div>

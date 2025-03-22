@@ -3,10 +3,11 @@
 import type { Product } from '@/features/product/types/productTypes';
 
 import { useEffect, useRef, useState } from 'react';
-import { Check, AlertTriangle } from 'lucide-react';
+import { AlertTriangle, Check } from 'lucide-react';
 import Image from 'next/image';
 
 import { cn } from '@/utils/helpers';
+import apiClient from '@/services/api/apiClient';
 
 interface ProductTabsProps {
   product: Product;
@@ -94,9 +95,7 @@ export default function ProductTabs({ product }: ProductTabsProps) {
         <div className="flex-1 p-6">
           {/* Header with Text Size Controls */}
           <div className="mb-6 flex items-center justify-between">
-            <h1 className="text-lg font-bold text-gray-900">
-              Hỗn dịch uống Enterogermina Gut Defense
-            </h1>
+            <h1 className="text-lg font-bold text-gray-900">{product.name}</h1>
             <div className="flex items-center gap-2 rounded-full bg-gray-100 p-1">
               {textSizes.map(size => (
                 <button
@@ -126,62 +125,54 @@ export default function ProductTabs({ product }: ProductTabsProps) {
             {/* Description Section */}
             <section id="description">
               <h2 className="mb-4 text-xl font-bold text-gray-900">
-                Hỗn dịch uống Enterogermina Gut Defense là gì?
+                {product.name} là gì?
               </h2>
-              <h3 className="mb-3 text-lg font-semibold text-gray-800">
-                Sự hợp tác chiến lược giữa VNH và thiết bị y tế OMRON
-              </h3>
-              <p className="mb-4 text-gray-700">
-                Tại Việt Nam, ngày càng nhiều trẻ nhỏ gặp vấn đề về tiêu hóa,
-                với tỷ lệ mắc bệnh lên tới 40%. Trong giai đoạn đầu đời, hệ tiêu
-                hóa của trẻ rất nhạy cảm và dễ bị tác động bởi nhiều yếu tố...
-              </p>
+              <p className="mb-4 text-gray-700">{product.description}</p>
             </section>
+
+            {/* features Section */}
+            {product.features && (
+              <section className="mt-8" id="features">
+                <h2 className="mb-4 text-xl font-bold text-gray-900">
+                  Đặc điểm nổi bật của {product.name}
+                </h2>
+                <div className="mt-4 overflow-hidden border-gray-200">
+                  <p className="text-gray-700">{product.features}</p>
+                </div>
+              </section>
+            )}
 
             {/* Ingredients Section */}
-            <section className="mt-8" id="ingredients">
-              <h2 className="mb-4 text-xl font-bold text-gray-900">
-                Thành phần của Hỗn dịch uống Enterogermina Gut Defense
-              </h2>
-              <p className="mb-2 text-sm text-gray-600">Thành phần cho 1 ống</p>
-
-              <div className="mt-4 overflow-hidden rounded-lg border border-gray-200">
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-100">
-                    <tr>
-                      <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">
-                        Thông tin thành phần
-                      </th>
-                      <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">
-                        Hàm lượng
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-200 bg-white">
-                    <tr>
-                      <td className="px-6 py-4 text-sm text-gray-900">
-                        Bacillus clausii
-                      </td>
-                      <td className="px-6 py-4 text-sm text-gray-900">
-                        2×10^9cfu
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </section>
+            {product.ingredients && (
+              <section className="mt-8" id="ingredients">
+                <h2 className="mb-4 text-xl font-bold text-gray-900">
+                  Thành phần của {product.name}
+                </h2>
+                <div className="mt-4 overflow-hiddenborder-gray-200">
+                  <p className="text-gray-700">{product.ingredients}</p>
+                </div>
+              </section>
+            )}
 
             {/* Usage Section */}
-            <section className="mt-8" id="usage">
-              <h2 className="mb-4 text-xl font-bold text-gray-900">
-                Cách dùng Hỗn dịch uống Enterogermina Gut Defense
-              </h2>
-              <p className="mb-2 text-gray-700">Uống trực tiếp.</p>
-              <ul className="ml-5 list-disc space-y-1 text-gray-700">
-                <li>Cho trẻ 0 - 12 tuổi: 1 - 2 ống mỗi ngày.</li>
-                <li>Trẻ trên 12 tuổi và người lớn: 2 - 3 ống mỗi ngày.</li>
-              </ul>
-            </section>
+            {product.usage && (
+              <section className="mt-8" id="usage">
+                <h2 className="mb-4 text-xl font-bold text-gray-900">
+                  Cách dùng {product.name}
+                </h2>
+                <p className="mb-2 text-gray-700">{product.usage}</p>
+              </section>
+            )}
+
+            {/* SideEffect Section */}
+            {product.usage && (
+              <section className="mt-8" id="sideEffects">
+                <h2 className="mb-4 text-xl font-bold text-gray-900">
+                  Tác dụng phụ
+                </h2>
+                <p className="mb-2 text-gray-700">{product.sideEffects}</p>
+              </section>
+            )}
 
             {/* Warnings Section */}
             <section className="mt-8" id="warnings">
@@ -201,8 +192,6 @@ export default function ProductTabs({ product }: ProductTabsProps) {
                         con bú cần tham khảo ý kiến chuyên gia y tế trước khi sử
                         dụng.
                       </li>
-                      <li>Chỉ được uống, không được tiêm.</li>
-                      <li>Không dùng quá liều khuyến cáo.</li>
                       <li>
                         Sản phẩm này không phải là thuốc và không có tác dụng
                         thay thế thuốc chữa bệnh.
@@ -215,16 +204,14 @@ export default function ProductTabs({ product }: ProductTabsProps) {
             </section>
 
             {/* Storage Section */}
-            <section className="mt-8" id="storage">
-              <h2 className="mb-4 text-xl font-bold text-gray-900">Bảo quản</h2>
-              <ul className="ml-5 list-disc space-y-1 text-gray-700">
-                <li>
-                  Bảo quản nơi khô ráo, thoáng mát, nhiệt độ không quá 30 độ C,
-                  tránh ánh sáng.
-                </li>
-                <li>Để xa tầm tay trẻ em.</li>
-              </ul>
-            </section>
+            {product.storage && (
+              <section className="mt-8" id="storage">
+                <h2 className="mb-4 text-xl font-bold text-gray-900">
+                  Bảo quản
+                </h2>
+                <p className="text-gray-700">{product.storage}</p>
+              </section>
+            )}
           </div>
         </div>
       </div>
@@ -244,15 +231,19 @@ export default function ProductTabs({ product }: ProductTabsProps) {
             <Image
               alt="Dược sĩ Nguyễn Thanh Hải"
               className="h-full w-full object-cover"
-              src="/placeholder.svg?height=48&width=48"
-              width={48}
               height={48}
+              src={
+                apiClient.getFileUrl(
+                  `files/db/users/${product.userUpdate?.image}`,
+                ) || '/placeholder.svg'
+              }
+              width={48}
             />
           </div>
           <div className="flex-1">
             <div className="flex items-center gap-4">
               <h3 className="font-medium text-gray-900">
-                Dược sĩ Đại học Nguyễn Thanh Hải
+                {product.userUpdate?.fullname || 'Dược sĩ Nguyễn Thanh Hải'}
               </h3>
               <div className="flex items-center gap-1 rounded-full bg-green-50 px-3 py-1">
                 <Check className="h-4 w-4 text-green-600" />

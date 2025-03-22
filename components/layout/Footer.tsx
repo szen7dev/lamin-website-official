@@ -168,24 +168,28 @@ export function Footer() {
                   height={40}
                   src="/placeholder.svg?height=40&width=40"
                   width={40}
+                  style={{ width: 'auto' }}
                 />
                 <Image
                   alt="DMCA Protected"
                   height={40}
                   src="/placeholder.svg?height=40&width=100"
                   width={100}
+                  style={{ width: 'auto' }}
                 />
                 <Image
                   alt="Certification 1"
                   height={40}
                   src="/placeholder.svg?height=40&width=40"
                   width={40}
+                  style={{ width: 'auto' }}
                 />
                 <Image
                   alt="DMCA Protected"
                   height={40}
                   src="/placeholder.svg?height=40&width=100"
                   width={100}
+                  style={{ width: 'auto' }}
                 />
               </div>
             </div>
@@ -215,6 +219,7 @@ export function Footer() {
                     height={32}
                     src="/placeholder.svg?height=32&width=32"
                     width={32}
+                    style={{ width: 'auto' }}
                   />
                 </Link>
                 <Link aria-label="Zalo" className="hover:opacity-80" href="#">
@@ -223,6 +228,7 @@ export function Footer() {
                     height={32}
                     src="/placeholder.svg?height=32&width=32"
                     width={32}
+                    style={{ width: 'auto' }}
                   />
                 </Link>
               </div>
@@ -256,6 +262,7 @@ export function Footer() {
                       height={32}
                       src="/placeholder.svg?height=32&width=48"
                       width={48}
+                      style={{ width: 'auto' }}
                     />
                   ),
                 )}
@@ -281,6 +288,7 @@ export function Footer() {
                 height={120}
                 src="/placeholder.svg?height=120&width=120"
                 width={120}
+                style={{ width: 'auto' }}
               />
             </div>
           </section>

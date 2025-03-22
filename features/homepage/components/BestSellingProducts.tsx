@@ -2,7 +2,7 @@ import ProductCard from '@/features/product/components/ProductCard';
 
 const products = [
   {
-    id: 1,
+    id: '67b2a307af90b400131ad107',
     image: '/placeholder.svg?height=200&width=200',
     name: 'Hỗn dịch viên uống men vi sinh Enterogermina gut defense Sanofi tăng cường miễn dịch',
     price: '165.000đ',
@@ -18,7 +18,7 @@ const products = [
     slug: 'enterogermina-gut-defense',
   },
   {
-    id: 2,
+    id: '67b2a0e5374f5b0012255891',
     image: '/placeholder.svg?height=200&width=200',
     name: 'Hộp Telfor 60 DHG điều trị triệu chứng viêm mũi dị ứng trẻ em dưới 12 tuổi',
     price: '100.000đ',

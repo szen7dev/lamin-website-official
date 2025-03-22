@@ -261,7 +261,10 @@ export default function DealSlider() {
                   {/* Buy Button */}
                   <Link
                     className="block w-full rounded-md bg-primary py-2 text-center text-sm font-medium text-white hover:bg-primary-60"
-                    href={`/product/${deal.slug}`}>
+                    href={{
+                      pathname: `/product/${deal.slug}`,
+                      query: { goodsId: deal.id },
+                    }}>
                     Chọn Mua
                   </Link>
                 </div>
@@ -331,7 +334,10 @@ export default function DealSlider() {
                     {/* Buy Button */}
                     <Link
                       className="block w-full rounded-md bg-primary py-1.5 text-center text-sm font-medium text-white hover:bg-primary-60"
-                      href={`/product/${deal.slug}`}>
+                      href={{
+                        pathname: `/product/${deal.slug}`,
+                        query: { goodsId: deal.id },
+                      }}>
                       Chọn Mua
                     </Link>
                   </div>

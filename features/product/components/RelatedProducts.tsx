@@ -1,15 +1,15 @@
 'use client';
 
-import type { Product } from '@/features/product/types/productTypes';
-
-import { useRef, useState, useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 import ProductCard from '@/features/product/components/ProductCard';
 import { cn } from '@/lib/utils';
+import apiClient from '@/services/api/apiClient';
+import { Goods } from '@/features/search/types/goodsTypes';
 
 interface RelatedProductsProps {
-  products: Product[];
+  products: Goods[];
   showTitle?: boolean;
 }
 
@@ -79,7 +79,7 @@ export default function RelatedProducts({
     const units =
       product.variants?.map(variant => ({
         label: variant.name,
-        value: variant.id,
+        value: variant._id,
       })) || [];
 
     // let discountPercent;
@@ -96,12 +96,13 @@ export default function RelatedProducts({
     // }
 
     return {
-      id: product.id,
+      id: product._id,
       slug: product.slug,
       image:
-        product.images?.[0]?.url || '/placeholder.svg?height=200&width=200',
+        apiClient.getFileUrl(product.images?.[0]?.path || '/placeholder.svg') ||
+        '/placeholder.svg?height=200&width=200',
       name: product.name,
-      price: product.currentVariant?.price || 0,
+      price: product.sellingUnitprice || 0,
       originalPrice: product.currentVariant?.originalPrice,
       unit: product.unit || product.currentVariant?.name || 'Hộp',
       // packageInfo: product.packageInfo || product.currentVariant?.specification,

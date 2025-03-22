@@ -14,7 +14,7 @@ export interface ProductUnit {
 
 export interface ProductCardProps {
   product: {
-    id: number | string;
+    id?: number | string;
     slug: string;
     image?: string;
     name: string;
@@ -107,12 +107,16 @@ export default function ProductCard({
       {/* Product Image */}
       <Link
         className="block mb-3 hover:no-underline"
-        href={`/product/${product.slug}`}>
+        href={{
+          pathname: `/product/${product.slug}`,
+          query: { goodsId: product.id },
+        }}>
         <div className="relative mb-1 aspect-square">
           <Image
             fill
             alt={product.name}
             className="object-contain"
+            sizes={`(min-width: 1024px) 50vw, 100vw`}
             src={product.image || '/placeholder.svg?height=200&width=200'}
           />
         </div>
@@ -179,7 +183,10 @@ export default function ProductCard({
       ) : (
         <Link
           className="mt-auto w-full rounded-full bg-primary hover:bg-primary-60 text-white py-2 px-4 text-center text-sm sm:text-base font-medium transition-colors no-underline"
-          href={`/product/${product.slug}`}>
+          href={{
+            pathname: `/product/${product.slug}`,
+            query: { goodsId: product.id },
+          }}>
           Chọn Mua
         </Link>
       )}

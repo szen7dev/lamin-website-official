@@ -18,8 +18,6 @@ export const getGoodsList = async (
       ...params,
     };
 
-    console.log('Fetching goods list with params:', queryParams);
-
     // Our API client should already handle unwrapping data.data.listRecords
     // But let's add additional logic to be safe
     const response = await apiClient.get<any>('/api/item/goods', queryParams);

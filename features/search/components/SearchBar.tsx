@@ -62,7 +62,6 @@ export default function SearchBar() {
   // Handle search submission
   const handleSearch = () => {
     if (query.trim()) {
-      console.log('Searching for:', query.trim());
       updateKeyword(query.trim());
       router.push(`/search?q=${encodeURIComponent(query.trim())}`);
       setIsFocused(false);
