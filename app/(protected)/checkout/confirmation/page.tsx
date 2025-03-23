@@ -14,8 +14,8 @@ export default function CheckoutConfirmationPage() {
     return () => clearInterval(timer);
   }, []);
 
-  const getHours = date => date.getHours().toString().padStart(2, '0');
-  const getMinutes = date => date.getMinutes().toString().padStart(2, '0');
+  const getHours = (date: Date) => date.getHours().toString().padStart(2, '0');
+  const getMinutes = (date: Date) => date.getMinutes().toString().padStart(2, '0');
 
   return (
     <div className="bg-white my-10 p-6 max-w-2xl mx-auto rounded-xl">
