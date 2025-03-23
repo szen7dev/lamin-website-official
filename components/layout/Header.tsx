@@ -81,6 +81,7 @@ export function Header() {
                     height={32}
                     src="https://images.glints.com/unsafe/glints-dashboard.oss-ap-southeast-1.aliyuncs.com/company-logo/fd3ef04e572c6436a8580539e7555fd0.jpg"
                     width={32}
+                    style={{ width: 'auto' }}
                   />
                   <div className="text-white">
                     <div className="text-xs font-medium">NHÀ THUỐC</div>
@@ -113,6 +114,7 @@ export function Header() {
                     height={40}
                     src="https://images.glints.com/unsafe/glints-dashboard.oss-ap-southeast-1.aliyuncs.com/company-logo/fd3ef04e572c6436a8580539e7555fd0.jpg"
                     width={40}
+                    style={{ width: 'auto' }}
                   />
                   <div className="text-white">
                     <div className="text-xs font-medium">NHÀ THUỐC</div>
@@ -215,7 +217,8 @@ export function Header() {
                 className="object-contain"
                 height={100}
                 src="/images/qrCode.png"
-                width={99}
+                width={100}
+                priority
               />
             </div>
           </div>

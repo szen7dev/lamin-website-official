@@ -1,12 +1,13 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import Image from 'next/image';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import dynamic from 'next/dynamic';
 
 import { Button } from '@/components/ui/button';
 import { cn } from '@/utils/helpers';
+import apiClient from '@/services/api/apiClient';
 
 // Dynamically import the modal to avoid SSR issues
 const ImageGalleryModal = dynamic(() => import('./ImageGalleryModal'), {
@@ -31,7 +32,7 @@ export default function ProductGallery({ images }: ProductGalleryProps) {
       ...image,
       id: image.id || `img-${index}-${Date.now()}`,
       url:
-        image.url ||
+        apiClient.getFileUrl(image.url) ||
         `/placeholder.svg?height=400&width=400&unique=${index}-${Date.now()}`,
       alt: image.alt || `Product image ${index + 1}`,
     }));
@@ -75,6 +76,7 @@ export default function ProductGallery({ images }: ProductGalleryProps) {
               priority
               alt={processedImages[currentImage].alt}
               className="object-contain"
+              sizes={`(min-width: 1024px) 50vw, 100vw`}
               src={processedImages[currentImage].url || '/placeholder.svg'}
             />
           </div>
@@ -120,6 +122,7 @@ export default function ProductGallery({ images }: ProductGalleryProps) {
                   fill
                   alt={image.alt}
                   className="object-contain"
+                  sizes={`(min-width: 1024px) 50vw, 100vw`}
                   src={image.url || '/placeholder.svg'}
                 />
               </button>

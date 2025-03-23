@@ -7,6 +7,7 @@ export interface CartItem {
   quantity: number;
   unit: string;
   discount?: number;
+  slug?: string;
 }
 
 export interface CartState {

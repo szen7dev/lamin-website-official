@@ -160,25 +160,29 @@ export function Footer() {
                   height={40}
                   src="/placeholder.svg?height=40&width=40"
                   width={40}
+                  style={{ width: 'auto' }}
                 />
                 <Image
                   alt="DMCA Protected"
                   height={40}
                   src="/placeholder.svg?height=40&width=100"
                   width={100}
+                  style={{ width: 'auto' }}
                 />
                 <Image
                   alt="Certification 1"
                   height={40}
                   src="/placeholder.svg?height=40&width=40"
                   width={40}
+                  style={{ width: 'auto' }}
                 />
                 <Image
                   alt="DMCA Protected"
                   height={40}
                   src="/placeholder.svg?height=40&width=100"
                   width={100}
-                /> */}
+                  style={{ width: 'auto' }}
+                />
               </div>
             </div>
 
@@ -253,6 +257,7 @@ export function Footer() {
                       height={32}
                       src={method}
                       width={48}
+                      style={{ width: 'auto' }}
                     />
                   </div>
                 ))}
@@ -278,6 +283,7 @@ export function Footer() {
                 height={120}
                 src="/images/qrCode.png"
                 width={120}
+                style={{ width: 'auto' }}
               />
             </div>
           </section>

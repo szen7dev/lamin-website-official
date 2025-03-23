@@ -65,6 +65,7 @@ function CartItem({
           fill
           alt={item.name}
           className="object-cover rounded-md"
+          sizes="64px"
           src={item.image || '/placeholder.svg?height=64&width=64'}
         />
       </div>
@@ -72,7 +73,10 @@ function CartItem({
       <div className="flex-1 min-w-0">
         <Link
           className="text-sm text-grayscale-90 line-clamp-2 hover:text-primary"
-          href={`/product/${item.slug}`}>
+          href={{
+            pathname: `/product/${item.slug}`,
+            query: { goodsId: item.id },
+          }}>
           {item.name}
         </Link>
         <div className="mt-1 flex items-baseline gap-2">
