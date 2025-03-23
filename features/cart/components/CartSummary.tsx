@@ -113,14 +113,14 @@ export function CartSummary({ items, selectedItems }: CartSummaryProps) {
     <div className="bg-white rounded-lg shadow p-4 space-y-4">
       <button
         aria-label="Áp dụng ưu đãi"
-        className="flex w-full items-center justify-between bg-[#EAEFFA] rounded-md text-blue-600 font-medium text-sm cursor-pointer hover:underline bg-transparent border-none p-0"
+        className="flex w-full items-center justify-between bg-[#eaeffa] rounded-md text-blue-600 font-medium text-sm cursor-pointer bg-transparent border-none p-3"
         type="button"
         onClick={() => setIsPromoModalOpen(true)}>
         <span>Áp dụng ưu đãi để được giảm giá</span>
         <ChevronRight className="w-4 h-4" />
       </button>
 
-      <div className="flex items-center justify-between py-2 border-t">
+      <div className="flex items-center justify-between py-2">
         <div className="flex items-center gap-2">
           {/* <Coins className="w-4 h-4 text-yellow-500" /> */}
           <Image
@@ -130,26 +130,30 @@ export function CartSummary({ items, selectedItems }: CartSummaryProps) {
             src="/images/PointCoinImg.png"
             width={16}
           />
-          <span>Đổi 25.000 điểm (25.000đ)</span>
+          <span className="font-normal text-sm">Đổi 25.000 điểm (25.000đ)</span>
         </div>
         <Switch checked={usePoints} onCheckedChange={setUsePoints} />
       </div>
 
-      <div className="space-y-2 text-sm">
+      <div className="space-y-2 text-sm text-[#4A4F63]">
         <div className="flex justify-between">
           <span>Tổng tiền</span>
-          <span>{formatPrice(summary.subtotal)}</span>
+          <span className="text-black">{formatPrice(summary.subtotal)}</span>
         </div>
 
         <div className="flex justify-between text-blue-600">
           <span>Giảm giá trực tiếp</span>
-          <span>-{formatPrice(summary.directDiscount)}</span>
+          <span className="text-black">
+            -{formatPrice(summary.directDiscount)}
+          </span>
         </div>
 
         {usePoints && (
           <div className="flex justify-between text-blue-600">
             <span>Trừ tích điểm</span>
-            <span>-{formatPrice(summary.pointsDiscount)}</span>
+            <span className="text-black">
+              -{formatPrice(summary.pointsDiscount)}
+            </span>
           </div>
         )}
 
@@ -167,11 +171,13 @@ export function CartSummary({ items, selectedItems }: CartSummaryProps) {
               </Tooltip>
             </TooltipProvider>
           </div>
-          <span>{formatPrice(summary.voucherDiscount)}</span>
+          <span className="text-black">
+            {formatPrice(summary.voucherDiscount)}
+          </span>
         </div>
 
-        <div className="flex justify-between">
-          <span>Phí vận chuyển</span>
+        <div>
+          <span>Phí vận chuyển </span>
           <span className="text-blue-600">(miễn phí)</span>
         </div>
       </div>
@@ -201,7 +207,7 @@ export function CartSummary({ items, selectedItems }: CartSummaryProps) {
         </div>
 
         <Button
-          className="w-full"
+          className="w-full text-white rounded-full"
           disabled={selectedItems.length === 0}
           size="lg"
           onClick={handleCheckout}>

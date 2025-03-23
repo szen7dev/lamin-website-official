@@ -143,7 +143,7 @@ export default function ProductCard({
             alt={product.name}
             className="object-contain"
             src={
-              apiClient.getFileUrl(product.thumbnail.path) ||
+              apiClient.getFileUrl(product?.thumbnail?.path) ||
               '/placeholder.svg?height=200&width=200'
             }
           />
