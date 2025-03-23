@@ -88,8 +88,8 @@ export function Header() {
                     className="h-8 w-auto"
                     height={32}
                     src="https://images.glints.com/unsafe/glints-dashboard.oss-ap-southeast-1.aliyuncs.com/company-logo/fd3ef04e572c6436a8580539e7555fd0.jpg"
-                    width={32}
                     style={{ width: 'auto' }}
+                    width={32}
                   />
                   <div className="text-white">
                     <div className="text-xs font-medium">NHÀ THUỐC</div>
@@ -121,8 +121,8 @@ export function Header() {
                     className="h-10 w-auto"
                     height={40}
                     src="https://images.glints.com/unsafe/glints-dashboard.oss-ap-southeast-1.aliyuncs.com/company-logo/fd3ef04e572c6436a8580539e7555fd0.jpg"
-                    width={40}
                     style={{ width: 'auto' }}
+                    width={40}
                   />
                   <div className="text-white">
                     <div className="text-xs font-medium">NHÀ THUỐC</div>
@@ -176,7 +176,7 @@ export function Header() {
                     <CartIcon height={15} width={17} />
                     <span className="font-medium">Giỏ Hàng</span>
                     {totalItems > 0 && (
-                      <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-error-5 text-xs font-bold text-white">
+                      <span className="absolute left-8 top-1 flex h-4 w-4 items-center justify-center rounded-full bg-error-30 text-xs font-bold text-white">
                         {totalItems}
                       </span>
                     )}
@@ -224,12 +224,12 @@ export function Header() {
             </div>
             <div className="bg-white p-2 rounded-b-xl w-full flex-1 flex items-center justify-center">
               <Image
+                priority
                 alt="QR Code"
                 className="object-contain"
                 height={100}
                 src="/images/qrCode.png"
                 width={100}
-                priority
               />
             </div>
           </div>

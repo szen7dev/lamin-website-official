@@ -1,6 +1,6 @@
 'use client';
 
-import type { CartItem } from '../types';
+import type { CartItem } from '../types/cartTypes';
 
 import Image from 'next/image';
 import { Minus, Plus, Trash2 } from 'lucide-react';
@@ -18,6 +18,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { formatPrice } from '@/utils/format';
+import { useCart } from '@/features/cart/hooks/useCart';
 
 interface CartItemsProps {
   items: CartItem[];
@@ -26,8 +27,8 @@ interface CartItemsProps {
   onSelectItem: (id: string, checked: boolean) => void;
   onUpdateQuantity: (id: string, quantity: number) => void;
   onRemoveItem: (id: string) => void;
-  onUpdateUnit: (id: string, unit: string) => void; // Add this line
-  readOnly?: boolean; // Thêm prop này
+  onUpdateUnit: (id: string, unit: string) => void;
+  readOnly?: boolean;
 }
 
 export function CartItems({
@@ -37,15 +38,30 @@ export function CartItems({
   onSelectItem,
   onUpdateQuantity,
   onRemoveItem,
-  onUpdateUnit, // Add this line
+  onUpdateUnit,
   readOnly = false,
 }: CartItemsProps) {
   const [itemToDelete, setItemToDelete] = useState<string | null>(null);
+  const { removeItem } = useCart();
 
-  const handleQuantityChange = (id: string, newQuantity: number) => {
-    const validQuantity = Math.max(1, Math.floor(newQuantity) || 1);
+  const handleIncreaseQuantity = (id: string, currentQuantity: number) => {
+    const newQuantity = Math.max(1, currentQuantity + 1);
 
-    onUpdateQuantity(id, validQuantity);
+    onUpdateQuantity(id, newQuantity);
+  };
+
+  const handleDecreaseQuantity = (id: string, currentQuantity: number) => {
+    const newQuantity = Math.max(1, currentQuantity - 1);
+
+    onUpdateQuantity(id, newQuantity);
+  };
+
+  const handleQuantityChange = (id: string, value: string) => {
+    const parsedValue = parseInt(value, 10);
+    const newQuantity =
+      !isNaN(parsedValue) && parsedValue > 0 ? parsedValue : 1;
+
+    onUpdateQuantity(id, newQuantity);
   };
 
   const handleDeleteClick = (id: string) => {
@@ -54,6 +70,7 @@ export function CartItems({
 
   const handleConfirmDelete = () => {
     if (itemToDelete) {
+      removeItem(itemToDelete);
       onRemoveItem(itemToDelete);
       setItemToDelete(null);
     }
@@ -62,131 +79,170 @@ export function CartItems({
   return (
     <div className="bg-white rounded-lg shadow">
       <div className="p-4 border-b">
-        <div className="flex items-center gap-2">
-          <Checkbox
-            checked={items.length > 0 && selectedItems.length === items.length}
-            id="select-all"
-            onCheckedChange={(checked: boolean) => onSelectAll(checked)}
-          />
-          <label className="text-sm font-medium" htmlFor="select-all">
-            Chọn tất cả ({items.length})
-          </label>
+        <div className="grid grid-cols-12 items-center">
+          <div className="col-span-6 flex items-center gap-2">
+            <Checkbox
+              checked={
+                items.length > 0 && selectedItems.length === items.length
+              }
+              id="select-all"
+              onCheckedChange={(checked: boolean) => onSelectAll(checked)}
+            />
+            <label className="text-sm font-medium" htmlFor="select-all">
+              Chọn tất cả ({items.length})
+            </label>
+          </div>
+          <div className="col-span-2 text-sm font-medium">Giá thành</div>
+          <div className="col-span-2 text-sm font-medium text-center">
+            Số lượng
+          </div>
+          <div className="col-span-2 text-sm font-medium text-center">
+            Đơn vị
+          </div>
         </div>
       </div>
 
       <div className="divide-y">
         {items.map(item => (
-          <div key={item.id} className="p-4 flex items-start gap-4">
-            <div className="flex items-center h-20">
-              <Checkbox
-                checked={selectedItems.includes(item.id)}
-                id={`item-${item.id}`}
-                onCheckedChange={(checked: boolean) =>
-                  onSelectItem(item.id, checked)
-                }
-              />
-            </div>
+          <div key={item.id} className="p-4">
+            <div className="grid grid-cols-12 items-center">
+              <div className="col-span-6 flex items-center gap-4">
+                <Checkbox
+                  checked={selectedItems.includes(item.id)}
+                  id={`item-${item.id}`}
+                  onCheckedChange={(checked: boolean) =>
+                    onSelectItem(item.id, checked)
+                  }
+                />
 
-            <div className="w-20 h-20 relative">
-              <Image
-                fill
-                alt={item.name}
-                className="object-cover rounded"
-                src={item.image || '/placeholder.svg?height=80&width=80'}
-              />
-            </div>
+                <div className="w-20 h-20 relative flex-shrink-0">
+                  <Image
+                    fill
+                    alt={item.name}
+                    className="object-cover rounded"
+                    src={item.image || '/placeholder.svg?height=80&width=80'}
+                  />
+                </div>
 
-            <div className="flex-1">
-              <h3 className="font-medium">{item.name}</h3>
-              <div className="mt-2 flex items-center gap-2">
-                <span className="text-lg font-semibold text-blue-600">
-                  {formatPrice(item.price)}
-                </span>
-                {item.originalPrice && item.originalPrice > item.price && (
-                  <span className="text-sm text-gray-500 line-through">
-                    {formatPrice(item.originalPrice)}
-                  </span>
-                )}
+                <div className="min-w-0 align-middle">
+                  <div className={'mt-2 w-[160px] h-[60px] relative'}>
+                    <p className="text-sm font-semibold line-clamp-2 text-ellipsis">
+                      {item.name}
+                    </p>
+                  </div>
+                  <div className="mt-1 hidden">
+                    <span className="text-sm font-semibold text-blue-600">
+                      {formatPrice(item.price * item.quantity)}
+                    </span>
+                    {item.originalPrice && item.originalPrice > item.price && (
+                      <span className="text-sm text-gray-500 line-through ml-2">
+                        {formatPrice(item.originalPrice * item.quantity)}
+                      </span>
+                    )}
+                  </div>
+
+                  {item.discount && (
+                    <div className="mt-2 inline-flex items-center gap-1 bg-blue-50 text-blue-600 px-2 py-1 rounded text-sm">
+                      <span className="text-xs">%</span>
+                      Giảm ngay {item.discount}% áp dụng đến 16/03
+                    </div>
+                  )}
+                </div>
               </div>
 
-              {item.discount && (
-                <div className="mt-2 inline-flex items-center gap-1 bg-blue-50 text-blue-600 px-2 py-1 rounded text-sm">
-                  <span className="text-xs">%</span>
-                  Giảm ngay {item.discount}% áp dụng đến 16/03
+              <div className="col-span-2">
+                <div className="flex flex-col">
+                  <span className="text-lg font-semibold text-blue-600">
+                    {formatPrice(item.price * item.quantity)}
+                  </span>
+                  {item.originalPrice && item.originalPrice > item.price && (
+                    <span className="text-sm text-gray-500 line-through">
+                      {formatPrice(item.originalPrice * item.quantity)}
+                    </span>
+                  )}
                 </div>
-              )}
-            </div>
+              </div>
 
-            <div className="flex items-center gap-4">
-              {!readOnly && (
-                <>
-                  <div className="flex items-center gap-2">
+              <div className="col-span-2 flex justify-center">
+                {!readOnly && (
+                  <div className="flex items-center">
                     <Button
                       aria-label="Giảm số lượng"
+                      className="h-8 w-10 rounded-l-2xl rounded-r-none border-gray-300 bg-white"
                       disabled={item.quantity <= 1}
                       size="icon"
                       variant="outline"
                       onClick={() =>
-                        handleQuantityChange(item.id, item.quantity - 1)
+                        handleDecreaseQuantity(item.id, item.quantity)
                       }>
                       <Minus className="w-4 h-4" />
                     </Button>
                     <input
                       aria-label="Số lượng"
-                      className="w-12 text-center border rounded p-1"
+                      className="w-12 h-8 text-center border-y border-x-0 border-gray-300 focus:ring-0 focus:outline-none"
                       min="1"
                       type="number"
                       value={item.quantity}
                       onBlur={e => {
-                        const value = Number.parseInt(e.target.value);
+                        const value = e.target.value;
 
-                        if (!value || value < 1) {
-                          handleQuantityChange(item.id, 1);
+                        if (!value || parseInt(value, 10) < 1) {
+                          onUpdateQuantity(item.id, 1);
                         }
                       }}
                       onChange={e => {
                         const value = e.target.value;
 
-                        if (/^\d+$/.test(value) || value === '') {
-                          handleQuantityChange(
-                            item.id,
-                            Number.parseInt(value) || 1,
-                          );
+                        if (/^\d*$/.test(value)) {
+                          handleQuantityChange(item.id, value);
                         }
                       }}
                     />
                     <Button
                       aria-label="Tăng số lượng"
+                      className="h-8 w-10 rounded-r-2xl rounded-l-none border-gray-300 bg-white"
                       size="icon"
                       variant="outline"
                       onClick={() =>
-                        handleQuantityChange(item.id, item.quantity + 1)
+                        handleIncreaseQuantity(item.id, item.quantity)
                       }>
                       <Plus className="w-4 h-4" />
                     </Button>
                   </div>
+                )}
+              </div>
 
-                  <Select
-                    value={item.unit}
-                    onValueChange={value => onUpdateUnit(item.id, value)}>
-                    <SelectTrigger className="w-24">
-                      <SelectValue>{item.unit || 'Đơn vị'}</SelectValue>
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Hộp">Hộp</SelectItem>
-                      <SelectItem value="Viên">Viên</SelectItem>
-                    </SelectContent>
-                  </Select>
+              <div className="col-span-2 flex items-center justify-between  ml-3">
+                {!readOnly ? (
+                  <>
+                    <Select
+                      value={item.unit}
+                      onValueChange={value => onUpdateUnit(item.id, value)}>
+                      <SelectTrigger className="h-8 w-28 rounded-2xl border-gray-300 bg-white">
+                        <SelectValue>{item.unit || 'Đơn vị'}</SelectValue>
+                      </SelectTrigger>
+                      <SelectContent>
+                        {typeof item.unit === 'string' && (
+                          <SelectItem key={item.unit} value={item.unit}>
+                            {item.unit}
+                          </SelectItem>
+                        )}
+                      </SelectContent>
+                    </Select>
 
-                  <Button
-                    aria-label="Xóa sản phẩm"
-                    size="icon"
-                    variant="ghost"
-                    onClick={() => handleDeleteClick(item.id)}>
-                    <Trash2 className="w-4 h-4 text-red-500" />
-                  </Button>
-                </>
-              )}
+                    <Button
+                      aria-label="Xóa sản phẩm"
+                      className="text-red-500 hover:text-red-700 hover:bg-transparent"
+                      size="icon"
+                      variant="ghost"
+                      onClick={() => handleDeleteClick(item.id)}>
+                      <Trash2 className="w-6 h-6" />
+                    </Button>
+                  </>
+                ) : (
+                  <span>{item.unit || 'Đơn vị'}</span>
+                )}
+              </div>
             </div>
           </div>
         ))}

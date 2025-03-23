@@ -1,15 +1,15 @@
 'use client';
 
-import type { CartItem } from '../types';
+import type { CartItem } from '../types/cartTypes';
 
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ChevronRight, HelpCircle, Coins } from 'lucide-react';
+import { ChevronRight, Coins, HelpCircle } from 'lucide-react';
 import Image from 'next/image';
 
 import {
-  validateVoucher,
   calculateVoucherDiscount,
+  validateVoucher,
 } from '../mocks/voucherMockData';
 
 import { PromotionModal } from './PromotionModal';
@@ -27,9 +27,14 @@ import { formatPrice } from '@/utils/format';
 interface CartSummaryProps {
   items: CartItem[];
   selectedItems: string[];
+  onCheckout?: () => void;
 }
 
-export function CartSummary({ items, selectedItems }: CartSummaryProps) {
+export function CartSummary({
+  items,
+  selectedItems,
+  onCheckout,
+}: CartSummaryProps) {
   const router = useRouter();
   const [usePoints, setUsePoints] = useState(false);
   const [isPromoModalOpen, setIsPromoModalOpen] = useState(false);
@@ -106,7 +111,11 @@ export function CartSummary({ items, selectedItems }: CartSummaryProps) {
   };
 
   const handleCheckout = () => {
-    router.push('/checkout');
+    if (onCheckout) {
+      onCheckout();
+    } else {
+      router.push('/checkout');
+    }
   };
 
   return (
@@ -201,7 +210,7 @@ export function CartSummary({ items, selectedItems }: CartSummaryProps) {
         </div>
 
         <Button
-          className="w-full"
+          className="w-full text-white"
           disabled={selectedItems.length === 0}
           size="lg"
           onClick={handleCheckout}>

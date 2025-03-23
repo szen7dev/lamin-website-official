@@ -5,6 +5,7 @@ export interface ComboProduct {
     name: string;
     slug: string;
   };
+  quantity: number;
   sellingUnitprice: number;
   listedUnitprice: number;
   name: string;
