@@ -1,7 +1,4 @@
-import {
-  Product,
-  ProductResponse,
-} from '@/features/product/types/productTypes';
+import { Product } from '@/features/product/types/productTypes';
 import apiClient from '@/services/api/apiClient';
 
 export const getGoodsInfo = async (goodsId: string): Promise<Product> => {
@@ -17,12 +14,12 @@ export const getGoodsInfo = async (goodsId: string): Promise<Product> => {
       goodsID: goodsId,
     };
 
-    const response = await apiClient.get<ProductResponse>(
+    const response = await apiClient.get<Product>(
       `/api/item/goods`,
       queryParams,
     );
 
-    return response.data as Product;
+    return response as Product;
   } catch (error) {
     console.error('Error fetching goods info:', error);
     throw error;

@@ -21,7 +21,9 @@ export default function ProductDetailPage({
   searchParams,
 }: {
   params: { slug: string } | Promise<{ slug: string }>;
-  searchParams: { goodsId?: string } | Promise<{ goodsId?: string }>;
+  searchParams:
+    | { goodsId?: string; categoryId?: string }
+    | Promise<{ goodsId?: string; categoryId?: string }>;
 }) {
   // Unwrap params using React.use() to handle the Promise
   const unwrappedParams = params instanceof Promise ? use(params) : params;
@@ -34,6 +36,9 @@ export default function ProductDetailPage({
   // We'll use this state to store the goodsId once we look it up or get it from the API
   const [goodsId, setGoodsId] = useState<string>(
     unwrappedSearchParams.goodsId || '',
+  );
+  const [categoryId, setCategoryId] = useState<string>(
+    unwrappedSearchParams.categoryId || '',
   );
   const [isLoadingId, setIsLoadingId] = useState(
     !unwrappedSearchParams.goodsId,
@@ -70,7 +75,7 @@ export default function ProductDetailPage({
   // Fetch good list by category ID
   const { goodsList: relatedProductList, isLoading: isLoadingGoodsList } =
     useGetGoodsList({
-      categoryID: '67c385469929f7001273993b',
+      categoryID: categoryId,
       limit: 5,
       page: 1,
     });

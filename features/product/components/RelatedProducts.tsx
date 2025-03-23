@@ -96,7 +96,7 @@ export default function RelatedProducts({
     // }
 
     return {
-      id: product._id,
+      _id: product._id,
       slug: product.slug,
       image:
         apiClient.getFileUrl(product.images?.[0]?.path || '/placeholder.svg') ||
@@ -104,10 +104,18 @@ export default function RelatedProducts({
       name: product.name,
       price: product.sellingUnitprice || 0,
       originalPrice: product.currentVariant?.originalPrice,
+      sellingUnitPrice: product.sellingUnitprice,
+      listUnitPrice: product.listedUnitprice,
+      thumbnail: product.thumbnail,
       unit: product.unit || product.currentVariant?.name || 'Hộp',
       // packageInfo: product.packageInfo || product.currentVariant?.specification,
       // discount: discountPercent > 0 ? discountPercent : undefined,
       units: units.length > 0 ? units : undefined,
+      category: {
+        _id: product.category?._id || '',
+        name: product.category?.name || 'Danh mục',
+        slug: product.category?.slug || 'all',
+      },
     };
   });
 
@@ -151,8 +159,8 @@ export default function RelatedProducts({
         ref={containerRef}
         aria-live="polite"
         className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-        {visibleProducts.map((product, index) => (
-          <div key={`${product.id}-${index}`} className="w-full">
+        {products.map((product, index) => (
+          <div key={`${product._id}-${index}`} className="w-full">
             <ProductCard product={product} variant="simple" />
           </div>
         ))}

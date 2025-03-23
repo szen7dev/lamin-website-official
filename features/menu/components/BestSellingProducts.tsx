@@ -1,8 +1,7 @@
 'use client';
 
-import { useGetBestSellingCombo } from '../hooks/combo/useGetBestSellingCombo';
-
 import ProductCard from '@/features/product/components/ProductCard';
+import { useGetBestSellingCombo } from '@/features/homepage/hooks/combo/useGetBestSellingCombo';
 
 export default function BestSellingProducts() {
   const { combos: products, isLoading, error } = useGetBestSellingCombo();

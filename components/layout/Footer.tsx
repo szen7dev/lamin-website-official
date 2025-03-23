@@ -10,8 +10,6 @@ import { FacebookIcon, ZaloIcon } from '@/components/icons';
 export function Footer() {
   const { data: contactInfo } = useContactInfo();
 
-  console.log('contactInfo', contactInfo);
-
   return (
     <footer className="bg-white">
       <div className="container mx-auto px-4 py-8">
@@ -155,34 +153,20 @@ export function Footer() {
               </div>
 
               <div className="flex space-x-4">
-                {/* <Image
-                  alt="Certification 1"
-                  height={40}
-                  src="/placeholder.svg?height=40&width=40"
-                  width={40}
-                  style={{ width: 'auto' }}
-                />
-                <Image
-                  alt="DMCA Protected"
-                  height={40}
-                  src="/placeholder.svg?height=40&width=100"
-                  width={100}
-                  style={{ width: 'auto' }}
-                />
-                <Image
-                  alt="Certification 1"
-                  height={40}
-                  src="/placeholder.svg?height=40&width=40"
-                  width={40}
-                  style={{ width: 'auto' }}
-                />
-                <Image
-                  alt="DMCA Protected"
-                  height={40}
-                  src="/placeholder.svg?height=40&width=100"
-                  width={100}
-                  style={{ width: 'auto' }}
-                />
+                {['/images/JCB.png', '/images/mastercard.png', '/images/visa.png', '/images/VNpay.png', '/images/zalopay.png', '/images/Momo.png'].map(method => (
+                  <div
+                    key={method}
+                    className="border border-grayscale-10 px-1 py-2 rounded-sm">
+                    <Image
+                      alt={method}
+                      className="object-contain"
+                      height={32}
+                      src={method}
+                      width={48}
+                      style={{ width: 'auto' }}
+                    />
+                  </div>
+                ))}
               </div>
             </div>
 
@@ -292,14 +276,11 @@ export function Footer() {
         {/* Copyright Section */}
         <div className="mt-8 pt-8 border-t border-grayscale-20 text-sm text-grayscale-50">
           <p>
-            &copy; 2025 - {new Date().getFullYear()} {contactInfo?.name} |{' '}
+            &copy; {new Date().getFullYear()} {contactInfo?.name} |{' '}
             {contactInfo?.registration}
           </p>
           <address className="mt-2 not-italic">
-            • Địa chỉ: {contactInfo?.address} • Số điện thoại:
-            {contactInfo?.phone} • Email: {contactInfo?.email} • Người quản lý
-            nội dung:
-            {contactInfo?.content}
+            • Địa chỉ: {contactInfo?.address} • Số điện thoại: {' '}{contactInfo?.phone} • Email: {' '}{contactInfo?.email} • Người quản lý nội dung: {' '}{contactInfo?.content}
           </address>
         </div>
       </div>

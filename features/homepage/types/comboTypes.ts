@@ -1,5 +1,10 @@
 export interface ComboProduct {
   _id: string;
+  category: {
+    _id: string;
+    name: string;
+    slug: string;
+  };
   sellingUnitprice: number;
   listedUnitprice: number;
   name: string;

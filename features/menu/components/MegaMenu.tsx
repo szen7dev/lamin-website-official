@@ -176,10 +176,10 @@ export default function MegaMenu() {
 
   // Map best sellers to the format expected by MegaMenuColumn
   const bestSellingProducts = bestSellers.map(product => ({
-    id: product._id,
+    _id: product._id,
     name: product.name,
     image: product.thumbnail?.path
-      ? apiClient.getFileUrl(product.thumbnail.path)
+      ? apiClient.getFileUrl(product.thumbnail?.path)
       : '/placeholder.svg',
     price: product.sellingUnitprice,
     originalPrice: Math.round(product.sellingUnitprice * 1.2), // Estimate original price as 20% higher if not provided
@@ -544,9 +544,9 @@ export default function MegaMenu() {
                     <div className="grid grid-cols-2 gap-3">
                       {bestSellingProducts.slice(0, 4).map(product => (
                         <Link
-                          key={product.id}
+                          key={product._id}
                           className="group space-y-1"
-                          href={`/products/${product.id}`}
+                          href={`/products/${product._id}`}
                           onClick={() => setMobileMenuOpen(false)}>
                           <div className="relative aspect-square overflow-hidden rounded-lg">
                             <Image

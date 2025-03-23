@@ -138,18 +138,22 @@ export default function ProductCard({
         className="block mb-3 hover:no-underline"
         href={{
           pathname: `/product/${product.slug}`,
-          query: { goodsId: product.id },
+          query: {
+            goodsId: product._id,
+            categoryId: product.category?._id,
+          },
         }}>
         <div className="relative mb-1 aspect-square">
           <Image
             fill
             alt={product.name}
             className="object-contain"
-            src={
-              apiClient.getFileUrl(product.thumbnail.path) ||
-              '/placeholder.svg?height=200&width=200'
-            }
             sizes={`(min-width: 1024px) 50vw, 100vw`}
+            src={
+              product.thumbnail?.path
+                ? apiClient.getFileUrl(product.thumbnail.path)
+                : '/placeholder.svg?height=200&width=200'
+            }
           />
         </div>
 
@@ -217,7 +221,10 @@ export default function ProductCard({
           className="mt-auto w-full rounded-full bg-primary hover:bg-primary-60 text-white py-2 px-4 text-center text-sm sm:text-base font-medium transition-colors no-underline"
           href={{
             pathname: `/product/${product.slug}`,
-            query: { goodsId: product.id },
+            query: {
+              goodsId: product._id,
+              categoryId: product.category?._id,
+            },
           }}>
           Chọn Mua
         </Link>

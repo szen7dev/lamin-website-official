@@ -6,8 +6,11 @@ export const getGoodsList = async (
 ): Promise<Goods[]> => {
   try {
     const populatesObject = {
-      path: 'parent project category userUpdate convert images',
-      populate: { path: 'author', select: 'fullname bizfullname image' },
+      path: 'parent project category userUpdate convert images thumbnail',
+      populate: {
+        path: 'author',
+        select: 'fullname bizfullname image name slug',
+      },
     };
 
     const queryParams = {
@@ -18,9 +21,9 @@ export const getGoodsList = async (
       ...params,
     };
 
-    // Our API client should already handle unwrapping data.data.listRecords
-    // But let's add additional logic to be safe
-    const response = await apiClient.get<any>('/api/item/goods', queryParams);
+    // The apiClient.get method now handles response normalization internally
+    // It will automatically extract listRecords from any level of nesting
+    const goods = await apiClient.get<Goods[]>('/api/item/goods', queryParams);
 
     return goods || [];
   } catch (error) {

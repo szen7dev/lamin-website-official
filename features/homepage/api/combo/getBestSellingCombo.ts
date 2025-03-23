@@ -13,11 +13,12 @@ export const getBestSellingCombo = async (
   // Set default parameters if not provided
   const queryParams = {
     optionSeller: params.optionSeller ?? DEFAULT_OPTION_SELLER,
-    select: 'name sign unit sellingUnitprice listedUnitprice unitNote slug',
+    select:
+      'name sign unit sellingUnitprice listedUnitprice unitNote slug thumbnail category',
     populates: JSON.stringify(
       params.populates ?? {
-        path: 'thumbnail',
-        select: 'path',
+        path: 'thumbnail category',
+        select: 'path name slug',
       },
     ),
   };

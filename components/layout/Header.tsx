@@ -2,8 +2,8 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { ShoppingCart, Phone, Download, User, Menu, X } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { Download, Menu, Phone, ShoppingCart, User, X } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import SearchBar from '@/features/search/components/SearchBar';
@@ -17,6 +17,8 @@ import { LoginModal } from '@/components/ui/LoginModal';
 // Add the import for useContactInfo at the top with other imports
 import { useContactInfo } from '@/hooks/useContactInfo';
 import { CartIcon, PhoneIcon, UserIcon } from '@/components/icons';
+import { useGetSearchKeywordList } from '@/features/search/hooks/keyword/useGetSearchKeywordList';
+import { useUpdateSearchKeyword } from '@/features/search/hooks/keyword/useUpdateSearchKeyword';
 
 const popularKeywords = [
   { label: 'Thuốc nhỏ mắt', href: '#' },
@@ -29,6 +31,12 @@ const popularKeywords = [
 ];
 
 export function Header() {
+  // Get top search keywords
+  const { keywords } = useGetSearchKeywordList();
+
+  // Update keyword popularity when user searches
+  const { updateKeyword } = useUpdateSearchKeyword();
+
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   // Add a state for controlling the login modal visibility
   // Add this inside the Header function component, near the top with other state declarations:
@@ -194,12 +202,15 @@ export function Header() {
             {/* Popular Keywords - Hidden on smallest screens */}
             <div className="hidden sm:flex flex-wrap gap-x-4 gap-y-1 pb-1">
               <span className="text-sm text-white/80">Từ khóa phổ biến:</span>
-              {popularKeywords.map(keyword => (
+              {keywords.map(keyword => (
                 <Link
-                  key={keyword.label}
+                  key={keyword._id}
                   className="text-sm text-white decoration-white underline decoration-1 underline-offset-4 hover:text-white/90"
-                  href={keyword.href}>
-                  {keyword.label}
+                  href={`/search?q=${encodeURIComponent(keyword.keyword)}`}
+                  onClick={() => {
+                    updateKeyword(keyword.keyword);
+                  }}>
+                  {keyword.keyword}
                 </Link>
               ))}
             </div>
