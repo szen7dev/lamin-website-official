@@ -27,6 +27,7 @@ build-docker-prod:
       cat <<EOF > .env
       NEXT_PUBLIC_API_URL=https://api.trixgo.com
       NEXT_PUBLIC_CLOUDFRONT_URL=https://dntdurzwr12tp.cloudfront.net
+      NEXT_PUBLIC_API_MODE=real
       EOF
   tags:
     - docker-xlarge
