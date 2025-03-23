@@ -9,12 +9,17 @@ interface CategoryProduct {
 }
 
 interface BestSellingProduct {
-  id: string;
+  _id: string;
   name: string;
   image: string;
   price: number;
   originalPrice: number;
   unit: string;
+  category: {
+    _id: string;
+    name: string;
+  };
+  slug: string;
 }
 
 interface MegaMenuColumnProps {
@@ -80,9 +85,15 @@ export default function MegaMenuColumn({
           <div className="grid grid-cols-5 gap-6">
             {bestSellingProducts.map(product => (
               <Link
-                key={product.id}
+                key={product._id}
                 className="group space-y-1"
-                href={`/products/${product.id}`}
+                href={{
+                  pathname: `/product/${product.category.slug}`,
+                  query: {
+                    goodsId: product._id,
+                    categoryId: product.category?._id,
+                  },
+                }}
                 style={{ textDecoration: 'none' }}>
                 <div className="relative aspect-square overflow-hidden rounded-lg">
                   <Image

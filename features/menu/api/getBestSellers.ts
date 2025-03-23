@@ -64,8 +64,8 @@ export const getBestSellers = async (
   try {
     // Default populates object for efficient data loading
     const defaultPopulatesObject = {
-      path: 'thumbnail',
-      select: '_id path',
+      path: 'thumbnail category',
+      select: '_id path slug name',
     };
 
     // Prepare query parameters with sensible defaults

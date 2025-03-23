@@ -10,6 +10,12 @@ export interface BestSellerItem {
     _id: string;
     path: string;
   };
+  slug: string;
+  category: {
+    _id: string;
+    name: string;
+    slug: string;
+  };
 }
 
 /**
