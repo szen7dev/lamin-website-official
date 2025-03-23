@@ -1,0 +1,31 @@
+include:
+  - project: "trixgo-vn/devops/gitlab-ci-template"
+    file: "/.Docker.gitlab-ci.yml"
+
+build-docker-staging:
+  extends: .build-docker-template
+  before_script:
+    - _DOCKER_CACHE_IMAGE_TAG=`echo $CI_COMMIT_REF_NAME | sed -E 's/[^a-z0-9._-]+/__/g'`
+    - _DOCKER_RELEASE_IMAGE_TAG="$_DOCKER_CACHE_IMAGE_TAG-`printf %010d $CI_PIPELINE_ID`-$CI_COMMIT_SHORT_SHA"
+    - |
+      cat <<EOF > .env
+      EOF
+  tags:
+    - docker-xlarge
+  only:
+    refs:
+      - staging
+
+build-docker-prod:
+  extends: .build-docker-template
+  before_script:
+    - _DOCKER_CACHE_IMAGE_TAG=`echo $CI_COMMIT_REF_NAME | sed -E 's/[^a-z0-9._-]+/__/g'`
+    - _DOCKER_RELEASE_IMAGE_TAG="$_DOCKER_CACHE_IMAGE_TAG-`printf %010d $CI_PIPELINE_ID`-$CI_COMMIT_SHORT_SHA"
+    - |
+      cat <<EOF > .env
+      EOF
+  tags:
+    - docker-xlarge
+  only:
+    refs:
+      - main
