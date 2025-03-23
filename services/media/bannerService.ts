@@ -2,23 +2,34 @@ import type { CommonQueryParams } from '../types/common';
 
 import apiClient, { DEFAULT_OPTION_SELLER } from '../api/apiClient';
 
+interface Thumbnail {
+  _id: string;
+  path: string;
+}
+
 export interface Banner {
   _id: string;
-  title: string;
-  description?: string;
-  image?: string;
-  imageID?: string;
-  link?: string;
   type: number; // 1-5: Static banners, 6: Slide, 7: Features, 8-11: Footer columns
-  order?: number;
+  name: string;
+  state?: number;
+  userCreate?: string;
+  userUpdate?: string;
+  company?: string;
+  images?: string[];
+  link: string;
   status: number;
   createdAt: string;
-  updatedAt: string;
+  modifiedAt: string;
+  thumbnail: Thumbnail;
+  __v: number;
+  slug?: string;
 }
 
 export interface BannerQueryParams extends CommonQueryParams {
   type?: number;
   status?: number;
+  limit?: number;
+  select?: string;
 }
 
 class BannerService {

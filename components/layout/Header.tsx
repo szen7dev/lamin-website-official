@@ -16,7 +16,7 @@ import { Separator } from '@/components/ui/separator';
 import { LoginModal } from '@/components/ui/LoginModal';
 // Add the import for useContactInfo at the top with other imports
 import { useContactInfo } from '@/hooks/useContactInfo';
-import { CartIcon, PhoneIcon, UserIcon } from '@/public/icons';
+import { CartIcon, PhoneIcon, UserIcon } from '@/components/icons';
 
 const popularKeywords = [
   { label: 'Thuốc nhỏ mắt', href: '#' },
@@ -141,7 +141,7 @@ export function Header() {
                   </div>
                   <div className="flex items-end gap-2 text-white">
                     {/* <Download className="h-5 w-5" /> */}
-                    <PhoneIcon width={12} height={20} />
+                    <PhoneIcon height={20} width={12} />
                     <span>Tải ứng dụng</span>
                   </div>
                 </div>
@@ -155,7 +155,7 @@ export function Header() {
                   className="rounded-full bg-white px-3 md:px-6 text-primary hover:bg-white/90 text-xs md:text-sm"
                   variant="secondary"
                   onClick={() => setLoginModalOpen(true)}>
-                  <UserIcon width={24} height={24} />
+                  <UserIcon height={24} width={24} />
                   <span className="font-medium">Đăng Nhập</span>
                 </Button>
 
@@ -163,7 +163,7 @@ export function Header() {
                   <Link
                     className="hover:no-underline h-10 flex items-center gap-2 rounded-full bg-primary px-3 md:px-6 py-2 text-white hover:bg-primary/70 text-xs md:text-sm relative"
                     href="/cart">
-                    <CartIcon width={17} height={15} />
+                    <CartIcon height={15} width={17} />
                     <span className="font-medium">Giỏ Hàng</span>
                     {totalItems > 0 && (
                       <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-error-5 text-xs font-bold text-white">

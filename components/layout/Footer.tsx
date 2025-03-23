@@ -4,7 +4,14 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Dot } from 'lucide-react';
 
+import { useContactInfo } from '@/hooks/useContactInfo';
+import { FacebookIcon, ZaloIcon } from '@/components/icons';
+
 export function Footer() {
+  const { data: contactInfo } = useContactInfo();
+
+  console.log('contactInfo', contactInfo);
+
   return (
     <footer className="bg-white">
       <div className="container mx-auto px-4 py-8">
@@ -22,26 +29,11 @@ export function Footer() {
               <h4 className="font-semibold text-lg mb-4">VỀ CHÚNG TÔI</h4>
             </div>
 
-            <ul className="space-y-2">
-              {[
-                'Giới thiệu',
-                'Hệ thống cửa hàng',
-                'Giấy phép kinh doanh',
-                'Quy chế hoạt động',
-                'Chính sách đặt cọc',
-                'Chính sách nội dung',
-                'Chính sách giao hàng',
-                'Chính sách thanh toán',
-              ].map((item, index) => (
-                <li key={index} className="flex items-center">
-                  <Link
-                    className="text-grayscale-40 hover:text-primary -ml-1"
-                    href="#">
-                    {item}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            <Link
+              className="text-grayscale-40 hover:text-primary -ml-1"
+              href="#">
+              {contactInfo?.name}
+            </Link>
           </div>
 
           {/* Learn More Column */}
@@ -131,19 +123,19 @@ export function Footer() {
                 <li>
                   <p className="text-grayscale-40">Tư vấn mua hàng</p>
                   <p className="font-normal text-primary">
-                    1900 6789 (Nhánh 1)
+                    {contactInfo?.hotline1}
                   </p>
                 </li>
                 <li>
                   <p className="text-grayscale-40">Trung tâm Vắc Xin</p>
                   <p className="font-normal text-primary">
-                    1900 6789 (Nhánh 2)
+                    {contactInfo?.hotline2}
                   </p>
                 </li>
                 <li>
                   <p className="text-grayscale-40">Góp ý - Khiếu nại</p>
                   <p className="font-normal text-primary">
-                    1900 6789 (Nhánh 3)
+                    {contactInfo?.hotline3}
                   </p>
                 </li>
               </ul>
@@ -163,7 +155,7 @@ export function Footer() {
               </div>
 
               <div className="flex space-x-4">
-                <Image
+                {/* <Image
                   alt="Certification 1"
                   height={40}
                   src="/placeholder.svg?height=40&width=40"
@@ -186,7 +178,7 @@ export function Footer() {
                   height={40}
                   src="/placeholder.svg?height=40&width=100"
                   width={100}
-                />
+                /> */}
               </div>
             </div>
 
@@ -209,21 +201,18 @@ export function Footer() {
                 <Link
                   aria-label="Facebook"
                   className="hover:opacity-80"
-                  href="#">
-                  <Image
-                    alt="Facebook"
-                    height={32}
-                    src="/placeholder.svg?height=32&width=32"
-                    width={32}
-                  />
+                  href={contactInfo?.facebook || '#'}
+                  rel="noopener noreferrer"
+                  target="_blank">
+                  <FacebookIcon />
                 </Link>
-                <Link aria-label="Zalo" className="hover:opacity-80" href="#">
-                  <Image
-                    alt="Zalo"
-                    height={32}
-                    src="/placeholder.svg?height=32&width=32"
-                    width={32}
-                  />
+                <Link
+                  aria-label="Zalo"
+                  className="hover:opacity-80"
+                  href={contactInfo?.zalo || '#'}
+                  rel="noopener noreferrer"
+                  target="_blank">
+                  <ZaloIcon />
                 </Link>
               </div>
             </div>
@@ -247,18 +236,26 @@ export function Footer() {
               </div>
 
               <div className="grid grid-cols-3 gap-2">
-                {['JCB', 'Mastercard', 'Visa', 'VNPay', 'ZaloPay', 'MoMo'].map(
-                  method => (
+                {[
+                  '/images/JCB.png',
+                  '/images/mastercard.png',
+                  '/images/visa.png',
+                  '/images/VNpay.png',
+                  '/images/zalopay.png',
+                  '/images/Momo.png',
+                ].map(method => (
+                  <div
+                    key={method}
+                    className="border border-grayscale-10 px-1 py-2 rounded-sm">
                     <Image
-                      key={method}
                       alt={method}
                       className="object-contain"
                       height={32}
-                      src="/placeholder.svg?height=32&width=48"
+                      src={method}
                       width={48}
                     />
-                  ),
-                )}
+                  </div>
+                ))}
               </div>
             </div>
 
@@ -279,7 +276,7 @@ export function Footer() {
                 alt="QR Code"
                 className="rounded-lg"
                 height={120}
-                src="/placeholder.svg?height=120&width=120"
+                src="/images/qrCode.png"
                 width={120}
               />
             </div>
@@ -289,13 +286,14 @@ export function Footer() {
         {/* Copyright Section */}
         <div className="mt-8 pt-8 border-t border-grayscale-20 text-sm text-grayscale-50">
           <p>
-            © 2023 - 2024 Công ty Cổ Phần Elena | Số ĐKKD 000000000 cấp ngày
-            17/09/2023 tại Sở Kế hoạch Đầu tư TPHN
+            &copy; 2025 - {new Date().getFullYear()} {contactInfo?.name} |{' '}
+            {contactInfo?.registration}
           </p>
           <address className="mt-2 not-italic">
-            • Địa chỉ: 30 Vĩnh Phúc, Ba Đình, Hà Nội • Số điện thoại:
-            (084)00000000 • Email: sale@elena.com.vn • Người quản lý nội dung:
-            Elena
+            • Địa chỉ: {contactInfo?.address} • Số điện thoại:
+            {contactInfo?.phone} • Email: {contactInfo?.email} • Người quản lý
+            nội dung:
+            {contactInfo?.content}
           </address>
         </div>
       </div>

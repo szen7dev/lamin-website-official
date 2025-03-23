@@ -1,71 +1,63 @@
+'use client';
+
 import Image from 'next/image';
 import Link from 'next/link';
 import { ChevronRight, Newspaper } from 'lucide-react';
 
-const categories = [
-  { id: 1, label: 'Dinh dưỡng', href: '/health-news/category/dinh-duong' },
-  {
-    id: 2,
-    label: 'Phòng chữa bệnh',
-    href: '/health-news/category/phong-chua-benh',
-  },
-  { id: 3, label: 'Khỏe đẹp', href: '/health-news/category/khoe-dep' },
-  { id: 4, label: 'Mẹ và bé', href: '/health-news/category/me-va-be' },
-  { id: 5, label: 'Giới tính', href: '/health-news/category/gioi-tinh' },
-  { id: 6, label: 'Khuyến mãi', href: '/health-news/category/khuyen-mai' },
-];
+import { useGetNews } from '../hooks/news/useGetNews';
 
-const mainArticle = {
-  id: 1,
-  image: '/placeholder.svg?height=400&width=600',
-  title:
-    'Chính thức: Tiêm chủng Elela thông tin về kết quả kiểm tra của trẻ em và đánh giá an toàn tiêm chủng cho toàn dân',
-  date: '27/10/2023',
-  category: 'Truyền Thông',
-  slug: 'tiem-chung-elela-ket-qua-kiem-tra',
-  href: '/health-news/article/tiem-chung-elela-ket-qua-kiem-tra',
-};
-
-const relatedArticles = [
-  {
-    id: 2,
-    image: '/placeholder.svg?height=100&width=150',
-    title: 'Tiêm chủng Elela thông tin về kết quả kiểm tra của trẻ em',
-    date: '26/10/2023',
-    category: 'Truyền Thông',
-    slug: 'tiem-chung-elela-ket-qua-kiem-tra-tre-em',
-    href: '/health-news/article/tiem-chung-elela-ket-qua-kiem-tra-tre-em',
-  },
-  {
-    id: 3,
-    image: '/placeholder.svg?height=100&width=150',
-    title: 'Tiêm chủng Elela thông tin về kết quả kiểm tra của trẻ em',
-    date: '25/10/2023',
-    category: 'Truyền Thông',
-    slug: 'tiem-chung-elela-ket-qua-kiem-tra-tre-em-2',
-    href: '/health-news/article/tiem-chung-elela-ket-qua-kiem-tra-tre-em-2',
-  },
-  {
-    id: 4,
-    image: '/placeholder.svg?height=100&width=150',
-    title: 'Tiêm chủng Elela thông tin về kết quả kiểm tra của trẻ em',
-    date: '24/10/2023',
-    category: 'Truyền Thông',
-    slug: 'tiem-chung-elela-ket-qua-kiem-tra-tre-em-3',
-    href: '/health-news/article/tiem-chung-elela-ket-qua-kiem-tra-tre-em-3',
-  },
-  {
-    id: 5,
-    image: '/placeholder.svg?height=100&width=150',
-    title: 'Tiêm chủng Elela thông tin về kết quả kiểm tra của trẻ em',
-    date: '23/10/2023',
-    category: 'Truyền Thông',
-    slug: 'tiem-chung-elela-ket-qua-kiem-tra-tre-em-4',
-    href: '/health-news/article/tiem-chung-elela-ket-qua-kiem-tra-tre-em-4',
-  },
-];
+import { apiClient } from '@/services/api/apiClient';
 
 export default function HealthNews() {
+  const { news, isLoading } = useGetNews();
+
+  // Separate main article (first item) from related articles
+  const mainArticle = news && news.length > 0 ? news[0] : null;
+  const relatedArticles = news && news.length > 1 ? news.slice(1) : [];
+
+  // Helper function to get image URL
+  const getImageUrl = (thumbnail?: { path?: string }) => {
+    if (!thumbnail?.path) return '/placeholder.svg';
+
+    return apiClient.getFileUrl(thumbnail.path);
+  };
+
+  // Helper function to create article URL
+  const getArticleUrl = (article: any) => {
+    return article?.slug
+      ? `/health-news/article/${article.slug}`
+      : '/health-news';
+  };
+
+  if (isLoading) {
+    return (
+      <section aria-labelledby="health-news-title" className="animate-pulse">
+        <div className="mb-6 flex items-center justify-between">
+          <div className="h-8 w-40 rounded bg-gray-200" />
+          <div className="h-6 w-20 rounded bg-gray-200" />
+        </div>
+        <div className="grid gap-6 md:grid-cols-3">
+          <div className="md:col-span-2">
+            <div className="aspect-[16/9] w-full rounded-lg bg-gray-200" />
+            <div className="mt-4 h-6 w-32 rounded bg-gray-200" />
+            <div className="mt-2 h-8 w-full rounded bg-gray-200" />
+          </div>
+          <div className="space-y-4">
+            {[1, 2, 3, 4].map(i => (
+              <div key={i} className="flex gap-4">
+                <div className="h-24 w-36 rounded-lg bg-gray-200" />
+                <div className="flex-1">
+                  <div className="h-4 w-20 rounded bg-gray-200" />
+                  <div className="mt-2 h-10 w-full rounded bg-gray-200" />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section aria-labelledby="health-news-title">
       {/* Header */}
@@ -86,76 +78,70 @@ export default function HealthNews() {
         </Link>
       </div>
 
-      {/* Categories */}
-      <nav aria-label="Danh mục sức khỏe" className="mb-6 flex flex-wrap gap-2">
-        {categories.map(category => (
-          <Link
-            key={category.id}
-            className="rounded-full border border-grayscale-30 px-4 py-2 text-sm text-grayscale-70 transition-colors hover:bg-primary-5 hover:text-primary-50"
-            href={category.href}>
-            {category.label}
-          </Link>
-        ))}
-      </nav>
-
       {/* Content Grid */}
       <div className="grid gap-6 md:grid-cols-3">
         {/* Main Article */}
-        <article className="md:col-span-2">
-          <Link className="group block" href={mainArticle.href}>
-            <figure className="relative mb-4 aspect-[16/9] overflow-hidden rounded-lg">
-              <Image
-                fill
-                alt={mainArticle.title}
-                className="object-cover transition-transform duration-300 group-hover:scale-105"
-                src={mainArticle.image || '/placeholder.svg'}
-              />
-            </figure>
-            <div className="mb-2 flex items-center gap-3">
-              <span className="rounded bg-primary-5/10 px-2 py-1 text-xs font-medium text-primary-40">
-                {mainArticle.category}
-              </span>
-              <time
-                className="text-sm text-grayscale-50"
-                dateTime={mainArticle.date}>
-                {mainArticle.date}
-              </time>
-            </div>
-            <h3 className="text-xl font-semibold text-grayscale-90 group-hover:text-primary-40">
-              {mainArticle.title}
-            </h3>
-          </Link>
-        </article>
+        {mainArticle ? (
+          <article className="md:col-span-2 decoration-transparent">
+            <Link className="group block" href={getArticleUrl(mainArticle)}>
+              <figure className="relative mb-4 aspect-[16/9] overflow-hidden rounded-lg">
+                <Image
+                  fill
+                  alt={mainArticle.title}
+                  className="object-cover transition-transform duration-300 group-hover:scale-105"
+                  src={getImageUrl(mainArticle.thumbnail)}
+                />
+              </figure>
+              <div className="mb-2 flex items-center gap-3">
+                {mainArticle.category && (
+                  <span className="rounded-full bg-[#f0f0f0] px-2 py-2 text-xs font-medium text-grayscale-40">
+                    {mainArticle.category.name}
+                  </span>
+                )}
+              </div>
+              <h3 className="text-xl font-semibold text-grayscale-90 group-hover:text-primary-40">
+                {mainArticle.title}
+              </h3>
+            </Link>
+          </article>
+        ) : (
+          <div className="md:col-span-2">
+            <p className="text-grayscale-50">Không có bài viết nào</p>
+          </div>
+        )}
 
         {/* Related Articles */}
         <aside className="space-y-4">
-          {relatedArticles.map(article => (
-            <article key={article.id} className="group">
-              <Link className="flex gap-4" href={article.href}>
-                <figure className="relative h-24 w-36 flex-shrink-0 overflow-hidden rounded-lg">
-                  <Image
-                    fill
-                    alt={article.title}
-                    className="object-cover transition-transform duration-300 group-hover:scale-105"
-                    src={article.image || '/placeholder.svg'}
-                  />
-                </figure>
-                <div className="flex-1">
-                  <span className="mb-2 inline-block rounded bg-primary-5/10 px-2 py-1 text-xs font-medium text-primary-40">
-                    {article.category}
-                  </span>
-                  <h3 className="line-clamp-2 text-sm font-medium text-grayscale-90 group-hover:text-primary-40">
-                    {article.title}
-                  </h3>
-                  <time
-                    className="mt-1 text-xs text-grayscale-50"
-                    dateTime={article.date}>
-                    {article.date}
-                  </time>
-                </div>
-              </Link>
-            </article>
-          ))}
+          {relatedArticles.length > 0 ? (
+            relatedArticles.map(article => (
+              <article
+                key={article._id}
+                className="group decoration-transparent">
+                <Link className="flex gap-3" href={getArticleUrl(article)}>
+                  <figure className="relative h-20 w-32 flex-shrink-0 overflow-hidden rounded-lg">
+                    <Image
+                      fill
+                      alt={article.title}
+                      className="object-cover transition-transform duration-300 group-hover:scale-105"
+                      src={getImageUrl(article.thumbnail)}
+                    />
+                  </figure>
+                  <div className="flex-1">
+                    {article.category && (
+                      <span className="mb-1 inline-block rounded-full bg-[#f0f0f0] px-2 py-1 text-xs font-medium text-grayscale-40">
+                        {article.category.name}
+                      </span>
+                    )}
+                    <h3 className="line-clamp-2 text-sm font-medium text-grayscale-90 group-hover:text-primary-40">
+                      {article.title}
+                    </h3>
+                  </div>
+                </Link>
+              </article>
+            ))
+          ) : (
+            <p className="text-grayscale-50">Không có bài viết liên quan</p>
+          )}
         </aside>
       </div>
     </section>
