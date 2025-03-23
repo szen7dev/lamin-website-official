@@ -260,6 +260,56 @@ class ApiClient {
     return DEFAULT_TOKEN;
   }
 
+  // Normalize API response to handle different response structures
+  private normalizeResponse<T = any>(response: any): T {
+    if (!response) return response;
+
+    // If response is already an array, return it directly
+    if (Array.isArray(response)) {
+      return response as unknown as T;
+    }
+
+    // Check if this is a standard response object with error, data, and status
+    if (typeof response === 'object') {
+      // Case 1: Standard API response with data field
+      if (response.data !== undefined) {
+        // If data is what we want directly
+        if (!response.error || response.status === 200) {
+          // Check if data contains listRecords
+          if (response.data.listRecords !== undefined) {
+            return response.data.listRecords as unknown as T;
+          }
+
+          // Check if data.data contains listRecords (nested case)
+          if (
+            response.data.data &&
+            response.data.data.listRecords !== undefined
+          ) {
+            return response.data.data.listRecords as unknown as T;
+          }
+
+          // Return data directly if no listRecords found
+          return response.data as unknown as T;
+        }
+        // Error case
+        throw {
+          type: ERROR_TYPES.SERVER,
+          message: response.message || 'Server error',
+          status: response.status,
+          data: response.data,
+        };
+      }
+
+      // Case 2: Direct object with listRecords
+      if (response.listRecords !== undefined) {
+        return response.listRecords as unknown as T;
+      }
+    }
+
+    // Default: return the original response if none of the patterns match
+    return response as unknown as T;
+  }
+
   // Phương thức GET
   public async get<T = any>(
     url: string,
@@ -280,9 +330,9 @@ class ApiClient {
     }
 
     try {
-      const response = await this.instance.get<T>(url, { params, headers });
+      const response = await this.instance.get(url, { params, headers });
 
-      return response.data;
+      return this.normalizeResponse<T>(response.data);
     } catch (error) {
       return this.handleRequestError(error, url);
     }
@@ -308,9 +358,9 @@ class ApiClient {
     }
 
     try {
-      const response = await this.instance.post<T>(url, data, { headers });
+      const response = await this.instance.post(url, data, { headers });
 
-      return response.data;
+      return this.normalizeResponse<T>(response.data);
     } catch (error) {
       return this.handleRequestError(error, url);
     }
@@ -336,9 +386,9 @@ class ApiClient {
     }
 
     try {
-      const response = await this.instance.put<T>(url, data, { headers });
+      const response = await this.instance.put(url, data, { headers });
 
-      return response.data;
+      return this.normalizeResponse<T>(response.data);
     } catch (error) {
       return this.handleRequestError(error, url);
     }
@@ -362,7 +412,7 @@ class ApiClient {
     try {
       const response = await this.instance.delete<T>(url, { headers });
 
-      return response.data;
+      return this.normalizeResponse<T>(response.data);
     } catch (error) {
       return this.handleRequestError(error, url);
     }
@@ -395,6 +445,78 @@ class ApiClient {
       return `${baseUrl}${pathSegment}`;
     } catch (error) {
       console.error('Error creating file URL:', error);
+
+      return sanitizedPath;
+    }
+  }
+
+  /**
+   * Get URL for contact images (customers, doctors, etc.)
+   * @param path Image path
+   * @returns Full URL to the contact image
+   */
+  public getContactImageUrl(path: string): string {
+    if (!path) return '';
+
+    // Sanitize the path to ensure it's a valid URL
+    const sanitizedPath = sanitizeUrl(path);
+
+    if (!CLOUDFRONT_URL) {
+      console.warn(
+        'CLOUDFRONT_URL is not configured. Contact images may not load correctly.',
+      );
+
+      return sanitizedPath;
+    }
+
+    try {
+      // Make sure we don't double up on slashes
+      const baseUrl = CLOUDFRONT_URL.endsWith('/')
+        ? `${CLOUDFRONT_URL.slice(0, -1)}/files/db/contacts`
+        : `${CLOUDFRONT_URL}/files/db/contacts`;
+      const pathSegment = sanitizedPath.startsWith('/')
+        ? sanitizedPath
+        : `/${sanitizedPath}`;
+
+      return `${baseUrl}${pathSegment}`;
+    } catch (error) {
+      console.error('Error creating contact image URL:', error);
+
+      return sanitizedPath;
+    }
+  }
+
+  /**
+   * Get URL for user images
+   * @param path Image path
+   * @returns Full URL to the user image
+   */
+  public getUserImageUrl(path: string): string {
+    if (!path) return '';
+
+    // Sanitize the path to ensure it's a valid URL
+    const sanitizedPath = sanitizeUrl(path);
+
+    if (!CLOUDFRONT_URL) {
+      console.warn(
+        'CLOUDFRONT_URL is not configured. User images may not load correctly.',
+      );
+
+      return sanitizedPath;
+    }
+
+    try {
+      // Make sure we don't double up on slashes
+      const baseUrl = CLOUDFRONT_URL.endsWith('/')
+        ? `${CLOUDFRONT_URL.slice(0, -1)}/files/db/users`
+        : `${CLOUDFRONT_URL}/files/db/users`;
+      const pathSegment = sanitizedPath.startsWith('/')
+        ? sanitizedPath
+        : `/${sanitizedPath}`;
+
+      return `${baseUrl}${pathSegment}`;
+    } catch (error) {
+      console.error('Error creating user image URL:', error);
 
       return sanitizedPath;
     }

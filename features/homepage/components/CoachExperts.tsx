@@ -3,33 +3,15 @@
 import Image from 'next/image';
 import { ChevronRight } from 'lucide-react';
 
-import { Button } from '@/components/ui/button';
+import { useGetCoach } from '../hooks/coach/useGetCoach';
 
-const coaches = [
-  {
-    id: 1,
-    name: 'Nguyễn Anh Tuấn',
-    title: 'Bác sĩ chuyên khoa 1',
-    experience: '10 năm kinh nghiệm',
-    image: '/placeholder.svg?height=120&width=120',
-  },
-  {
-    id: 2,
-    name: 'Nguyễn Anh Tuấn',
-    title: 'Bác sĩ chuyên khoa 1',
-    experience: '10 năm kinh nghiệm',
-    image: '/placeholder.svg?height=120&width=120',
-  },
-  {
-    id: 3,
-    name: 'Nguyễn Anh Tuấn',
-    title: 'Bác sĩ chuyên khoa 1',
-    experience: '10 năm kinh nghiệm',
-    image: '/placeholder.svg?height=120&width=120',
-  },
-];
+import { Button } from '@/components/ui/button';
+import { apiClient } from '@/services/api/apiClient';
 
 export default function CoachExperts() {
+  const { coaches, isLoading } = useGetCoach();
+  const currentYear = new Date().getFullYear();
+
   return (
     <section
       aria-labelledby="coaches-heading"
@@ -52,26 +34,50 @@ export default function CoachExperts() {
       </header>
 
       <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {coaches.map(coach => (
-          <li key={coach.id} className="rounded-xl bg-white p-4">
-            <article className="flex items-center gap-4">
-              <Image
-                alt={coach.name}
-                className="rounded-full"
-                height={80}
-                src={coach.image || '/placeholder.svg'}
-                width={80}
-              />
-              <div>
-                <span className="text-sm text-grayscale-40">{coach.title}</span>
-                <h3 className="text-lg font-semibold text-grayscale-90">
-                  {coach.name}
-                </h3>
-                <p className="text-sm text-primary">{coach.experience}</p>
-              </div>
-            </article>
+        {isLoading ? (
+          <li className="rounded-xl bg-white p-4">
+            <p className="text-grayscale-40">Đang tải...</p>
           </li>
-        ))}
+        ) : coaches.length > 0 ? (
+          coaches.map(coach => {
+            // Calculate experience based on graduation year
+            const experience = coach.graduationYear
+              ? `${currentYear - coach.graduationYear} năm kinh nghiệm`
+              : 'Chuyên gia';
+
+            // Get image URL using apiClient.getContactImageUrl
+            const imageUrl = coach.image
+              ? apiClient.getContactImageUrl(coach.image)
+              : '/placeholder.svg';
+
+            return (
+              <li key={coach._id} className="rounded-xl bg-white p-4">
+                <article className="flex items-center gap-4">
+                  <Image
+                    alt={coach.name}
+                    className="rounded-full"
+                    height={80}
+                    src={imageUrl}
+                    width={80}
+                  />
+                  <div>
+                    <span className="text-sm text-grayscale-40">
+                      Bác sĩ chuyên khoa
+                    </span>
+                    <h3 className="text-lg font-semibold text-grayscale-90">
+                      {coach.name}
+                    </h3>
+                    <p className="text-sm text-primary">{experience}</p>
+                  </div>
+                </article>
+              </li>
+            );
+          })
+        ) : (
+          <li className="rounded-xl bg-white p-4">
+            <p className="text-grayscale-40">Không có dữ liệu coach</p>
+          </li>
+        )}
       </ul>
     </section>
   );

@@ -1,19 +1,21 @@
 'use client';
-import { DownloadIcon } from '@/public/icons';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
+
+import { DownloadIcon } from '@/components/icons';
 
 export default function CheckoutConfirmationPage() {
   const [currentTime, setCurrentTime] = useState(new Date());
 
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
+
     return () => clearInterval(timer);
   }, []);
 
-  const getHours = date => date.getHours().toString().padStart(2, '0');
-  const getMinutes = date => date.getMinutes().toString().padStart(2, '0');
+  const getHours = (date: Date) => date.getHours().toString().padStart(2, '0');
+  const getMinutes = (date: Date) => date.getMinutes().toString().padStart(2, '0');
 
   return (
     <div className="bg-white my-10 p-6 max-w-2xl mx-auto rounded-xl">
@@ -39,27 +41,27 @@ export default function CheckoutConfirmationPage() {
             <strong>Ví điện tử</strong>
           </p>
           <Link
-            href="#"
-            className="flex justify-center items-center space-x-2 font-medium text-sm text-primary-50">
+            className="flex justify-center items-center space-x-2 font-medium text-sm text-primary-50"
+            href="#">
             <Image
               alt="QR Code"
+              height={20}
               src="/images/icons8-info-100-1.png"
               width={20}
-              height={20}
             />
             <span>Hướng dẫn sử dụng</span>
           </Link>
           <div className="flex justify-center my-4">
             <Image
               alt="QR Code"
+              height={232}
               src="/images/qrcode-checkout.png"
               width={232}
-              height={232}
             />
           </div>
 
           <button className="w-32 border-primary-50 border-[1px] hover:bg-primary-50 hover:text-white transform transition ease-in-out duration-200 text-primary-50 py-2 rounded-3xl mt-2 flex items-center justify-center gap-1">
-            <DownloadIcon width={15} height={15} />
+            <DownloadIcon height={15} width={15} />
             Tải xuống
           </button>
         </div>

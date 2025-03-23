@@ -5,6 +5,7 @@ import type { CartItem } from '../types';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { ChevronRight, HelpCircle, Coins } from 'lucide-react';
+import Image from 'next/image';
 
 import {
   validateVoucher,
@@ -22,7 +23,6 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { formatPrice } from '@/utils/format';
-import Image from 'next/image';
 
 interface CartSummaryProps {
   items: CartItem[];
@@ -113,7 +113,7 @@ export function CartSummary({ items, selectedItems }: CartSummaryProps) {
     <div className="bg-white rounded-lg shadow p-4 space-y-4">
       <button
         aria-label="Áp dụng ưu đãi"
-        className="flex w-full items-center justify-between bg-[#EAEFFA] p-2 rounded-md text-blue-600 font-medium text-sm cursor-pointer hover:underline bg-transparent border-none p-0"
+        className="flex w-full items-center justify-between bg-[#EAEFFA] rounded-md text-blue-600 font-medium text-sm cursor-pointer hover:underline bg-transparent border-none p-0"
         type="button"
         onClick={() => setIsPromoModalOpen(true)}>
         <span>Áp dụng ưu đãi để được giảm giá</span>

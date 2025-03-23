@@ -20,40 +20,11 @@ export const getGoodsList = async (
 
     console.log('Fetching goods list with params:', queryParams);
 
-    // Our API client should already handle unwrapping data.data.listRecords
-    // But let's add additional logic to be safe
-    const response = await apiClient.get<any>('/api/item/goods', queryParams);
+    // The apiClient.get method now handles response normalization internally
+    // It will automatically extract listRecords from any level of nesting
+    const goods = await apiClient.get<Goods[]>('/api/item/goods', queryParams);
 
-    // Handle different response structures
-    if (response && typeof response === 'object') {
-      // Case 1: Direct access to listRecords
-      if (Array.isArray(response.listRecords)) {
-        return response.listRecords;
-      }
-
-      // Case 2: Nested in data.listRecords
-      if (response.data && Array.isArray(response.data.listRecords)) {
-        return response.data.listRecords;
-      }
-
-      // Case 3: Nested deeply in data.data.listRecords
-      if (
-        response.data &&
-        response.data.data &&
-        Array.isArray(response.data.data.listRecords)
-      ) {
-        return response.data.data.listRecords;
-      }
-
-      // Case 4: Response is the array itself
-      if (Array.isArray(response)) {
-        return response;
-      }
-    }
-
-    console.warn('Unexpected response structure from goods API:', response);
-
-    return [];
+    return goods || [];
   } catch (error) {
     console.error('Error fetching goods list:', error);
 

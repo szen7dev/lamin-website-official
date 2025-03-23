@@ -2,6 +2,10 @@ import React from 'react';
 import '@/styles/globals.css';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import clsx from 'clsx';
+import 'swiper/css';
+import 'swiper/css/zoom';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 
 import { generateMetadata as generateSeoMetadata } from '@/utils/seo';
 import { CartProvider } from '@/features/cart/contexts/CartContext';

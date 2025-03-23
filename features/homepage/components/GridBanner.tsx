@@ -5,27 +5,19 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
-// Import Swiper styles
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
+import { useGetMediasHomepage } from '../hooks/banner/useGetMediasHomepage';
 
-const leftSlides = [
-  {
-    id: 1,
-    image:
-      'https://cdn.nhathuoclongchau.com.vn/unsafe/828x0/filters:quality(90)/https://cms-prod.s3-sgn09.fptcloud.com/Vitabiotic_totchomebaut2_Homepage_PC_1610x492_db075dc88c.jpg',
-    alt: 'Pharmaton Kiddi promotion 20% off',
-  },
-  {
-    id: 2,
-    image:
-      'https://cdn.nhathuoclongchau.com.vn/unsafe/828x0/filters:quality(90)/https://cms-prod.s3-sgn09.fptcloud.com/Banner_Web_PC_1610x492_5d06ac70b8.png',
-    alt: 'Pharmaton Kiddi promotion special offer',
-  },
-];
+import { apiClient } from '@/services/api/apiClient';
 
 export default function GridBanner() {
+  const { banners: leftSlides } = useGetMediasHomepage({
+    type: 2,
+  });
+
+  const { banners: rightSlides } = useGetMediasHomepage({
+    type: 3,
+  });
+
   return (
     <div className="container mx-auto px-4 py-6">
       <div className="grid grid-cols-1 md:grid-cols-5 gap-4 md:gap-5">
@@ -49,16 +41,16 @@ export default function GridBanner() {
               bulletClass:
                 'inline-block w-2 h-2 rounded-full bg-grayscale-30 opacity-70 mx-1 cursor-pointer transition-all',
             }}>
-            {leftSlides.map(slide => (
-              <SwiperSlide key={slide.id} className="h-full">
+            {leftSlides?.map(slide => (
+              <SwiperSlide key={slide._id} className="h-full">
                 <div className="relative h-full">
                   <Image
                     fill
                     priority
-                    alt={slide.alt}
+                    alt={slide.name}
                     className="object-cover"
                     sizes="(max-width: 768px) 100vw, 60vw"
-                    src={slide.image || '/placeholder.svg'}
+                    src={apiClient.getFileUrl(slide.thumbnail.path)}
                   />
                 </div>
               </SwiperSlide>
@@ -86,7 +78,11 @@ export default function GridBanner() {
               alt="Top right image"
               className="object-cover"
               sizes="(max-width: 768px) 100vw, 40vw"
-              src="https://cdn.nhathuoclongchau.com.vn/unsafe/425x0/filters:quality(90)/https://cms-prod.s3-sgn09.fptcloud.com/399x117_1_3d5f4d9c5d.png"
+              src={
+                rightSlides?.[0]?.thumbnail?.path
+                  ? apiClient.getFileUrl(rightSlides?.[0].thumbnail.path)
+                  : '/placeholder.svg'
+              }
             />
           </div>
 
@@ -97,7 +93,11 @@ export default function GridBanner() {
               alt="Bottom right image"
               className="object-cover"
               sizes="(max-width: 768px) 100vw, 40vw"
-              src="https://cdn.nhathuoclongchau.com.vn/unsafe/425x0/filters:quality(90)/https://cms-prod.s3-sgn09.fptcloud.com/PC_3d7805381e.png"
+              src={
+                rightSlides?.[1]?.thumbnail?.path
+                  ? apiClient.getFileUrl(rightSlides?.[1].thumbnail.path)
+                  : '/placeholder.svg'
+              }
             />
           </div>
         </div>

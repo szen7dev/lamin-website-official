@@ -2,12 +2,9 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { Mic, Search, X } from 'lucide-react';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 import SearchSuggestions from './SearchSuggestions';
-
-import { Button } from '@/components/ui/button';
 
 // Import the new hooks
 import { useGetSearchKeywordList } from '@/features/search/hooks/keyword/useGetSearchKeywordList';
@@ -15,16 +12,16 @@ import { useUpdateSearchKeyword } from '@/features/search/hooks/keyword/useUpdat
 import { useGetGoodsList } from '@/features/search/hooks/goods/useGetGoodsList';
 import { FileInfo } from '@/features/search/types/goodsTypes';
 import apiClient from '@/services/api/apiClient';
+import { Button } from '@/components/ui/button';
 
 export default function SearchBar() {
-  const router = useRouter();
   const [isFocused, setIsFocused] = useState(false);
   const [query, setQuery] = useState('');
   const [debouncedQuery, setDebouncedQuery] = useState('');
   const searchRef = useRef<HTMLDivElement>(null);
 
   // Get top search keywords
-  const { keywords, isLoading: isLoadingKeywords } = useGetSearchKeywordList();
+  const { keywords } = useGetSearchKeywordList();
 
   // Update keyword popularity when user searches
   const { updateKeyword } = useUpdateSearchKeyword();
@@ -59,23 +56,6 @@ export default function SearchBar() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Handle search submission
-  const handleSearch = () => {
-    if (query.trim()) {
-      console.log('Searching for:', query.trim());
-      updateKeyword(query.trim());
-      router.push(`/search?q=${encodeURIComponent(query.trim())}`);
-      setIsFocused(false);
-    }
-  };
-
-  // Handle key press (Enter to search)
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      handleSearch();
-    }
-  };
-
   return (
     <div ref={searchRef} className="relative w-full">
       <div className="relative">
@@ -89,7 +69,6 @@ export default function SearchBar() {
           value={query}
           onChange={e => setQuery(e.target.value)}
           onFocus={() => setIsFocused(true)}
-          onKeyPress={handleKeyPress}
         />
 
         <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2">
