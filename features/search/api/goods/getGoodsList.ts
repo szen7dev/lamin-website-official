@@ -18,11 +18,9 @@ export const getGoodsList = async (
       ...params,
     };
 
-    console.log('Fetching goods list with params:', queryParams);
-
-    // The apiClient.get method now handles response normalization internally
-    // It will automatically extract listRecords from any level of nesting
-    const goods = await apiClient.get<Goods[]>('/api/item/goods', queryParams);
+    // Our API client should already handle unwrapping data.data.listRecords
+    // But let's add additional logic to be safe
+    const response = await apiClient.get<any>('/api/item/goods', queryParams);
 
     return goods || [];
   } catch (error) {
