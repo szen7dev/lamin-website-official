@@ -31,30 +31,30 @@ export default function ProductCard({
   const { addItem } = useCart();
 
   const handleAddToCart = () => {
-    if (!product) return;
-
-    const priceAsNumber =
-      typeof product.listedUnitprice === 'string'
-        ? Number.parseFloat(product.listedUnitprice)
-        : product.listedUnitprice;
-
-    const originalPriceAsNumber = product.sellingUnitprice
-      ? typeof product.sellingUnitprice === 'string'
-        ? Number.parseFloat(product.sellingUnitprice)
-        : product.sellingUnitprice
-      : undefined;
-
-    addItem({
-      id: `${product._id}`,
-      name: product.name,
-      price: priceAsNumber || 0,
-      originalPrice: originalPriceAsNumber,
-      quantity: 1,
-      unit: product.unit || 'Hộp',
-      image: product.thumbnail?.path
-        ? apiClient.getFileUrl(product.thumbnail.path)
-        : '/placeholder.svg',
-    });
+    // if (!product) return;
+    //
+    // const priceAsNumber =
+    //   typeof product.listedUnitprice === 'string'
+    //     ? Number.parseFloat(product.listedUnitprice)
+    //     : product.listedUnitprice;
+    //
+    // const originalPriceAsNumber = product.sellingUnitprice
+    //   ? typeof product.sellingUnitprice === 'string'
+    //     ? Number.parseFloat(product.sellingUnitprice)
+    //     : product.sellingUnitprice
+    //   : undefined;
+    //
+    // addItem({
+    //   id: `${product._id}`,
+    //   name: product.name,
+    //   price: priceAsNumber || 0,
+    //   originalPrice: originalPriceAsNumber,
+    //   quantity: product.quantity || 1,
+    //   unit: product.unit || 'Hộp',
+    //   image: product.thumbnail?.path
+    //     ? apiClient.getFileUrl(product.thumbnail.path)
+    //     : '/placeholder.svg',
+    // });
   };
 
   // Format price with Vietnamese currency
@@ -158,7 +158,7 @@ export default function ProductCard({
         </div>
 
         {/* Product Name */}
-        <h3 className="mb-2 line-clamp-2 min-h-[2.5rem] text-sm font-medium text-grayscale-90">
+        <h3 className="my-2 line-clamp-2 min-h-[2.5rem] text-sm font-medium text-grayscale-90">
           {product.name}
         </h3>
       </Link>
@@ -190,7 +190,7 @@ export default function ProductCard({
             {formatPrice(product.sellingUnitprice)}
           </span>
           {product.unit && (
-            <span className="text-xs sm:text-sm text-grayscale-50">
+            <span className="text-xs sm:text-sm text-primary-50">
               / {product.unit}
             </span>
           )}

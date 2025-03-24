@@ -2,12 +2,13 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { ChevronRight, Newspaper } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 
 import { useGetNews } from '../hooks/news/useGetNews';
 
 import { apiClient } from '@/services/api/apiClient';
-
+import { NewspaperIcon } from '@/components/icons';
+import { Separator } from '@/components/ui/separator';
 export default function HealthNews() {
   const { news, isLoading } = useGetNews();
 
@@ -61,17 +62,24 @@ export default function HealthNews() {
   return (
     <section aria-labelledby="health-news-title">
       {/* Header */}
-      <div className="mb-6 flex items-center justify-between">
+      <div className="mb-6 flex items-center gap-2">
         <div className="flex items-center gap-2">
-          <Newspaper className="h-6 w-6 text-primary-40" />
+          <NewspaperIcon />
+
           <h2
             className="text-lg font-semibold text-grayscale-90"
             id="health-news-title">
             Góc Sức Khỏe
           </h2>
         </div>
+        <div className="h-5">
+          <Separator
+            className="h-full bg-grayscale-30"
+            orientation="vertical"
+          />
+        </div>
         <Link
-          className="flex items-center gap-1 text-primary-40 text-sm hover:underline"
+          className="flex items-center gap-1 text-primary-40 font-normal text-sm hover:underline"
           href="/health-news">
           Xem thêm
           <ChevronRight className="h-4 w-4" />

@@ -2,17 +2,20 @@
 
 import type React from 'react';
 import type { User } from '@/features/auth/types/authTypes';
+import type { LoginResponse } from '@/features/auth/api/login';
 
-import { createContext, useState, useEffect } from 'react';
+import { createContext, useCallback, useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
-import { authService } from '@/features/auth/services/authServiceFactory';
+import { login as loginApi } from '@/features/auth/api/login';
+import { apiClient } from '@/services/api/apiClient';
 
 type AuthContextType = {
   user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  login: (email: string, password: string) => Promise<void>;
-  register: (email: string, password: string, name: string) => Promise<void>;
+  login: (email: string, password: string) => Promise<LoginResponse>;
+  loginWithOTP: (phone: string, otp: string) => Promise<LoginResponse>;
   logout: () => Promise<void>;
 };
 
@@ -23,22 +26,42 @@ export const AuthContext = createContext<AuthContextType | undefined>(
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const router = useRouter();
 
+  // Check authentication status when the component mounts
   useEffect(() => {
-    // Check if user is logged in
     const checkAuth = async () => {
       try {
-        const token = localStorage.getItem('auth-token');
+        // Check if token exists in localStorage
+        const token = localStorage.getItem('auth_token');
 
         if (token) {
-          // Fetch user profile
-          const userProfile = await authService.getProfile();
+          // Set token in apiClient
+          apiClient.setToken(token);
 
-          setUser(userProfile);
+          // Get user data from localStorage
+          const userId = localStorage.getItem('user_id') || '';
+          const userName = localStorage.getItem('user_name') || '';
+          const userPhone = localStorage.getItem('user_phone') || '';
+          const userEmail = localStorage.getItem('user_email') || '';
+          const userImage = localStorage.getItem('user_image') || '';
+          const userFullname = localStorage.getItem('user_fullname') || '';
+
+          // Try to reconstruct user object from localStorage
+          setUser({
+            id: userId,
+            name: userName,
+            phone: userPhone,
+            email: userEmail,
+            image: userImage,
+            fullname: userFullname,
+          });
         }
       } catch (error) {
-        console.error('Auth check failed:', error);
-        localStorage.removeItem('auth-token');
+        console.error('Authentication check failed:', error);
+        // Clear auth data on error
+        clearUserData();
+        apiClient.clearToken();
       } finally {
         setIsLoading(false);
       }
@@ -47,36 +70,97 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     checkAuth();
   }, []);
 
-  const login = async (email: string, password: string) => {
+  // Clear all user data from localStorage
+  const clearUserData = () => {
+    localStorage.removeItem('auth_token');
+    localStorage.removeItem('user_id');
+    localStorage.removeItem('user_name');
+    localStorage.removeItem('user_phone');
+    localStorage.removeItem('user_email');
+    localStorage.removeItem('user_image');
+    localStorage.removeItem('user_fullname');
+    // Add any other user properties that were stored
+  };
+
+  // Store user data in localStorage
+  const storeUserData = useCallback((userData: User) => {
+    if (userData.id) localStorage.setItem('user_id', userData.id);
+    if (userData.name) localStorage.setItem('user_name', userData.name);
+    if (userData.phone) localStorage.setItem('user_phone', userData.phone);
+    if (userData.email)
+      localStorage.setItem('user_email', userData.email || '');
+    if (userData.image) localStorage.setItem('user_image', userData.image);
+    if (userData.fullname)
+      localStorage.setItem('user_fullname', userData.fullname);
+    // Store additional user properties as needed
+  }, []);
+
+  // Login with email/password
+  const login = async (
+    email: string,
+    password: string,
+  ): Promise<LoginResponse> => {
     setIsLoading(true);
     try {
-      const response = await authService.login(email, password);
+      const response = await loginApi({ email, password });
 
-      localStorage.setItem('auth-token', response.token);
-      setUser(response.user);
+      if (response.success && response.token) {
+        // Store token
+        localStorage.setItem('auth_token', response.token);
+        apiClient.setToken(response.token);
+
+        // Store user data
+        if (response.user) {
+          setUser(response.user);
+          storeUserData(response.user);
+        }
+      }
+
+      return response;
     } finally {
       setIsLoading(false);
     }
   };
 
-  const register = async (email: string, password: string, name: string) => {
+  // Login with phone and OTP
+  const loginWithOTP = async (
+    phone: string,
+    otp: string,
+  ): Promise<LoginResponse> => {
     setIsLoading(true);
     try {
-      const response = await authService.register(email, password, name);
+      // Use the login function with phone as email and OTP as password
+      const response = await loginApi({ email: phone, password: otp });
 
-      localStorage.setItem('auth-token', response.token);
-      setUser(response.user);
+      if (response.success && response.token) {
+        // Store token
+        localStorage.setItem('auth_token', response.token);
+        apiClient.setToken(response.token);
+
+        // Store user data
+        if (response.user) {
+          setUser(response.user);
+          storeUserData(response.user);
+        }
+      }
+
+      return response;
     } finally {
       setIsLoading(false);
     }
   };
 
+  // Logout function
   const logout = async () => {
     setIsLoading(true);
     try {
-      await authService.logout();
-      localStorage.removeItem('auth-token');
+      // Clear auth data
+      clearUserData();
+      apiClient.clearToken();
       setUser(null);
+
+      // Redirect to login page
+      router.push('/auth/login');
     } finally {
       setIsLoading(false);
     }
@@ -89,7 +173,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         isAuthenticated: !!user,
         isLoading,
         login,
-        register,
+        loginWithOTP,
         logout,
       }}>
       {children}

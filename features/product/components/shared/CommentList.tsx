@@ -53,17 +53,17 @@ export function CommentList({
               <h3 className="font-medium">{comment.author.name}</h3>
               {showRating && comment.rating && (
                 <div className="flex items-center gap-1 mt-1">
-                  <Star className="h-4 w-4 fill-warning-5 text-warning-5" />
+                  <Star className="h-4 w-4 fill-[#FFB200] text-[#FFB200]" />
                   <span className="text-sm">{comment.rating}.0</span>
                 </div>
               )}
-              <p className="mt-1 text-gray-600">{comment.content}</p>
+              <p className="mt-1 text-grayscale-90">{comment.content}</p>
               <div className="flex items-center gap-2 mt-2 text-sm">
                 <span className="text-gray-500">
                   {formatDate(comment.createdAt)}
                 </span>
                 <span className="text-gray-300">•</span>
-                <button className="text-primary-5 hover:underline">
+                <button className="text-primary-50 hover:underline">
                   Trả lời
                 </button>
               </div>
@@ -77,7 +77,7 @@ export function CommentList({
                       alt={`Ảnh đại diện của ${reply.author.name}`}
                       className="h-full w-full object-cover"
                       height={32}
-                      src="/logo.png"
+                      src="/public/placeholder-user.jpg"
                       width={32}
                     />
                   </div>
@@ -86,12 +86,12 @@ export function CommentList({
                     <div className="flex items-center gap-2">
                       <span className="font-medium">{reply.author.name}</span>
                       {reply.author.isStaff && (
-                        <span className="text-primary-5 text-sm">
-                          (Được sĩ)
+                        <span className="text-primary-50 text-sm">
+                          (Dược sĩ)
                         </span>
                       )}
                     </div>
-                    <p className="mt-1 text-gray-600 whitespace-pre-line">
+                    <p className="mt-1 text-grayscale-90 whitespace-pre-line">
                       {reply.content}
                     </p>
                     <div className="flex items-center gap-2 mt-2 text-sm">
@@ -99,7 +99,7 @@ export function CommentList({
                         {formatDate(reply.createdAt)}
                       </span>
                       <span className="text-gray-300">•</span>
-                      <button className="text-primary-5 hover:underline">
+                      <button className="text-primary-50 hover:underline">
                         Trả lời
                       </button>
                     </div>

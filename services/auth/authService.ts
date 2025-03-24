@@ -1,6 +1,8 @@
 // This is a mock service that simulates API calls
 // Later, this can be replaced with actual API calls
 
+import { login as loginApi } from '@/features/auth/api/login';
+import { getPhoneOTP } from '@/features/auth/api/getPhoneOTP';
 import { sleep } from '@/utils/helpers';
 
 export interface AuthResponse {
@@ -11,40 +13,62 @@ export interface AuthResponse {
 
 class AuthService {
   async sendOTP(phoneNumber: string): Promise<AuthResponse> {
-    // Simulate API call
-    await sleep(1000);
+    try {
+      // Use the real API endpoint
+      const otp = await getPhoneOTP({
+        phone: phoneNumber,
+        optionSeller: false,
+      });
 
-    return {
-      success: true,
-      message: 'OTP sent successfully',
-      data: {
-        expiresIn: 290, // 4 minutes 50 seconds
-      },
-    };
+      return {
+        success: true,
+        message: 'OTP sent successfully',
+        data: {
+          expiresIn: 290, // 4 minutes 50 seconds
+        },
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message:
+          error instanceof Error
+            ? error.message
+            : 'Failed to send OTP. Please try again.',
+      };
+    }
   }
 
   async verifyOTP(phoneNumber: string, otp: string): Promise<AuthResponse> {
-    // Simulate API call
-    await sleep(1000);
+    try {
+      // Use the real login API endpoint with phone/OTP
+      const response = await loginApi({
+        email: phoneNumber, // Use phone number as email
+        password: otp, // Use OTP as password
+      });
 
-    // For demo purposes, 111111 is valid, 000000 is invalid
-    if (otp === '111111') {
-      return {
-        success: true,
-        message: 'OTP verified successfully',
-        data: {
-          token: 'mock-jwt-token',
-          user: {
-            id: 'user-123',
-            phoneNumber,
-            name: 'Demo User',
+      if (response.success) {
+        return {
+          success: true,
+          message: 'OTP verified successfully',
+          data: {
+            token: response.token,
+            user: response.user,
           },
-        },
-      };
-    } else {
+        };
+      } else {
+        return {
+          success: false,
+          message:
+            response.message || 'Xác thực không thành công. Mã OTP không đúng',
+        };
+      }
+    } catch (error) {
       return {
         success: false,
-        message: `Xác thực không thành công: ${phoneNumber}, Mã OTP không đúng`,
+        message:
+          error instanceof Error
+            ? error.message
+            : 'Verification failed. Please try again.',
       };
     }
   }

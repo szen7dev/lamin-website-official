@@ -2,8 +2,10 @@
 
 import Link from 'next/link';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation } from 'swiper/modules';
-import { Star, ChevronRight, AlertCircle } from 'lucide-react';
+import { Autoplay, Navigation, Pagination } from 'swiper/modules';
+import { Star, ChevronRight, AlertCircle, ChevronLeft } from 'lucide-react';
+import { useRef, useState } from 'react';
+import { Swiper as SwiperClass } from 'swiper';
 
 import { useGetTrustedStore } from '../hooks/stores/useGetTrustedStore';
 
@@ -115,6 +117,28 @@ export default function TrustedStores() {
     </section>
   );
 
+  const swiperRef = useRef<SwiperClass | null>(null);
+
+  const [slidesPerView, setSlidesPerView] = useState(4);
+
+  const handleSwiper = (swiper: SwiperClass) => {
+    swiperRef.current = swiper;
+
+    const updateNavState = () => {
+      setSlidesPerView(swiper.params.slidesPerView as number);
+    };
+
+    updateNavState();
+    swiper.on('slideChange', updateNavState);
+    swiper.on('resize', updateNavState);
+
+    swiper.on('breakpoint', () => {
+      setTimeout(() => {
+        setSlidesPerView(swiper.params.slidesPerView as number);
+      }, 50);
+    });
+  };
+
   return (
     <div className="space-y-8 sm:space-y-12">
       {/* Trusted Stores Section */}
@@ -148,16 +172,23 @@ export default function TrustedStores() {
 
           <div className="relative">
             <Swiper
-              navigation
               breakpoints={{
                 640: { slidesPerView: 2 },
                 768: { slidesPerView: 3 },
                 1024: { slidesPerView: 4 },
               }}
               className="trusted-stores-swiper"
-              modules={[Navigation]}
+              // modules={[Navigation]}
+              modules={[Navigation, Pagination, Autoplay]}
+              pagination={{
+                clickable: true,
+                bulletActiveClass: 'bg-primary opacity-100',
+                bulletClass:
+                  'inline-block w-2 h-2 rounded-full bg-grayscale-30 opacity-70 mx-1 cursor-pointer transition-all',
+              }}
               slidesPerView={1}
-              spaceBetween={8}>
+              spaceBetween={8}
+              onSwiper={handleSwiper}>
               {trustedStore && trustedStore.length > 0 ? (
                 trustedStore.map(store => (
                   <SwiperSlide key={store._id}>
@@ -167,9 +198,9 @@ export default function TrustedStores() {
                       </div>
 
                       <div>
-                        <h3 className="font-medium text-sm sm:text-base text-grayscale-90">
+                        <p className="font-medium text-sm sm:text-base text-grayscale-90 truncate text-ellipsis overflow-hidden">
                           {store.name}
-                        </h3>
+                        </p>
                         <div className="flex items-center gap-1.5">
                           <div className="flex">
                             <Star className="h-3 w-3 sm:h-4 sm:w-4 fill-yellow-400 text-yellow-400" />
@@ -193,6 +224,22 @@ export default function TrustedStores() {
                     <p className="text-grayscale-50">Không có nhà thuốc nào</p>
                   </div>
                 </SwiperSlide>
+              )}
+              {/* Custom Navigation Buttons - Refined positioning and styling */}
+              {trustedStore && trustedStore.length > slidesPerView && (
+                <>
+                  <button
+                    className="absolute top-1/2 left-1 -translate-y-1/2 bg-black/50 text-white p-1 rounded-full z-10 hover:bg-grayscale-50/60"
+                    onClick={() => swiperRef.current?.slidePrev()}>
+                    <ChevronLeft className="w-5 h-5 text-white stroke-[1.5]" />
+                  </button>
+
+                  <button
+                    className="absolute top-1/2 right-1 -translate-y-1/2 bg-black/50 text-white p-1 rounded-full z-10 hover:bg-grayscale-50/60"
+                    onClick={() => swiperRef.current?.slideNext()}>
+                    <ChevronRight className="w-5 h-5 text-white stroke-[1.5]" />
+                  </button>
+                </>
               )}
             </Swiper>
           </div>

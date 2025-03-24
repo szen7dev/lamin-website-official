@@ -1,6 +1,6 @@
 'use client';
 
-import type { CartItem } from '../types';
+import type { CartItem } from '../types/cartTypes';
 
 import Image from 'next/image';
 import { Minus, Plus, Trash2 } from 'lucide-react';
@@ -18,34 +18,50 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { formatPrice } from '@/utils/format';
+import { useCart } from '@/features/cart/hooks/useCart';
 
 interface CartItemsProps {
   items: CartItem[];
-  onRemoveItem: (id: string) => void;
+  selectedItems: string[];
   onSelectAll: (checked: boolean) => void;
   onSelectItem: (id: string, checked: boolean) => void;
   onUpdateQuantity: (id: string, quantity: number) => void;
+  onRemoveItem: (id: string) => void;
   onUpdateUnit: (id: string, unit: string) => void;
   readOnly?: boolean;
-  selectedItems: string[];
 }
 
 export function CartItems({
   items,
-  onRemoveItem,
+  selectedItems,
   onSelectAll,
   onSelectItem,
   onUpdateQuantity,
+  onRemoveItem,
   onUpdateUnit,
   readOnly = false,
-  selectedItems,
 }: CartItemsProps) {
   const [itemToDelete, setItemToDelete] = useState<string | null>(null);
+  const { removeItem } = useCart();
 
-  const handleQuantityChange = (id: string, newQuantity: number) => {
-    const validQuantity = Math.max(1, Math.floor(newQuantity) || 1);
+  const handleIncreaseQuantity = (id: string, currentQuantity: number) => {
+    const newQuantity = Math.max(1, currentQuantity + 1);
 
-    onUpdateQuantity(id, validQuantity);
+    onUpdateQuantity(id, newQuantity);
+  };
+
+  const handleDecreaseQuantity = (id: string, currentQuantity: number) => {
+    const newQuantity = Math.max(1, currentQuantity - 1);
+
+    onUpdateQuantity(id, newQuantity);
+  };
+
+  const handleQuantityChange = (id: string, value: string) => {
+    const parsedValue = parseInt(value, 10);
+    const newQuantity =
+      !isNaN(parsedValue) && parsedValue > 0 ? parsedValue : 1;
+
+    onUpdateQuantity(id, newQuantity);
   };
 
   const handleDeleteClick = (id: string) => {
@@ -54,6 +70,7 @@ export function CartItems({
 
   const handleConfirmDelete = () => {
     if (itemToDelete) {
+      removeItem(itemToDelete);
       onRemoveItem(itemToDelete);
       setItemToDelete(null);
     }
@@ -61,47 +78,43 @@ export function CartItems({
 
   return (
     <div className="bg-white rounded-lg shadow">
-      {/* Header row with column titles */}
-      <div className="grid grid-cols-[2fr_1fr_1fr_1fr_20px] items-center justify-items-center p-4 border-b">
-        <div className="flex items-center gap-2 text-white justify-self-start">
-          <Checkbox
-            checked={items.length > 0 && selectedItems.length === items.length}
-            className="data-[state=checked]:bg-blue-600 rounded-full border-gray-300"
-            id="select-all"
-            onCheckedChange={(checked: boolean) => onSelectAll(checked)}
-          />
-          <label
-            className="text-sm font-medium text-black"
-            htmlFor="select-all">
-            Chọn tất cả ({items.length})
-          </label>
-        </div>
-        <div className="w-full text-center">
-          <span className="text-sm font-medium text-gray-500">Giá thành</span>
-        </div>
-        <div className="w-full text-center">
-          <span className="text-sm font-medium text-gray-500">Số lượng</span>
-        </div>
-        <div className="w-full text-center">
-          <span className="text-sm font-medium text-gray-500">Đơn vị</span>
+      <div className="p-4 border-b">
+        <div className="grid grid-cols-12 items-center">
+          <div className="col-span-6 flex items-center gap-2">
+            <Checkbox
+              checked={
+                items.length > 0 && selectedItems.length === items.length
+              }
+              id="select-all"
+              onCheckedChange={(checked: boolean) => onSelectAll(checked)}
+            />
+            <label className="text-sm font-medium" htmlFor="select-all">
+              Chọn tất cả ({items.length})
+            </label>
+          </div>
+          <div className="col-span-2 text-sm font-medium">Giá thành</div>
+          <div className="col-span-2 text-sm font-medium text-center">
+            Số lượng
+          </div>
+          <div className="col-span-2 text-sm font-medium text-center">
+            Đơn vị
+          </div>
         </div>
       </div>
 
-      <div>
+      <div className="divide-y">
         {items.map(item => (
-          <div
-            key={item.id}
-            className="grid grid-cols-[2fr_1fr_1fr_1fr_20px] items-center justify-items-start p-4 border-b">
-            <div className="flex items-center h-20 text-white justify-self-start w-full">
-              <Checkbox
-                checked={selectedItems.includes(item.id)}
-                className="data-[state=checked]:bg-blue-600 rounded-full border-gray-300"
-                onCheckedChange={(checked: boolean) =>
-                  onSelectItem(item.id, checked)
-                }
-              />
+          <div key={item.id} className="p-4">
+            <div className="grid grid-cols-12 items-center">
+              <div className="col-span-6 flex items-center gap-4">
+                <Checkbox
+                  checked={selectedItems.includes(item.id)}
+                  id={`item-${item.id}`}
+                  onCheckedChange={(checked: boolean) =>
+                    onSelectItem(item.id, checked)
+                  }
+                />
 
-              <div className="flex items-center gap-4 ml-2">
                 <div className="w-20 h-20 relative flex-shrink-0">
                   <Image
                     fill
@@ -111,10 +124,23 @@ export function CartItems({
                   />
                 </div>
 
-                <div className="flex-1">
-                  <h3 className="font-normal text-sm line-clamp-2 max-w-[180px]">
-                    {item.name}
-                  </h3>
+                <div className="min-w-0 align-middle">
+                  <div className={'mt-2 w-[160px] h-[60px] relative'}>
+                    <p className="text-sm font-semibold line-clamp-2 text-ellipsis">
+                      {item.name}
+                    </p>
+                  </div>
+                  <div className="mt-1 hidden">
+                    <span className="text-sm font-semibold text-blue-600">
+                      {formatPrice(item.price * item.quantity)}
+                    </span>
+                    {item.originalPrice && item.originalPrice > item.price && (
+                      <span className="text-sm text-gray-500 line-through ml-2">
+                        {formatPrice(item.originalPrice * item.quantity)}
+                      </span>
+                    )}
+                  </div>
+
                   {item.discount && (
                     <div className="mt-2 inline-flex items-center gap-1 bg-blue-50 text-blue-600 px-2 py-1 rounded text-sm">
                       <span className="text-xs">%</span>
@@ -123,85 +149,100 @@ export function CartItems({
                   )}
                 </div>
               </div>
-            </div>
 
-            <div className="flex flex-col text-right w-max justify-self-center">
-              <span className="text-sm font-semibold text-blue-600">
-                {formatPrice(item.price)}
-              </span>
-              {item.originalPrice && item.originalPrice > item.price && (
-                <span className="text-xs font-medium text-gray-500 line-through">
-                  {formatPrice(item.originalPrice)}
-                </span>
-              )}
-            </div>
+              <div className="col-span-2">
+                <div className="flex flex-col">
+                  <span className="text-lg font-semibold text-blue-600">
+                    {formatPrice(item.price * item.quantity)}
+                  </span>
+                  {item.originalPrice && item.originalPrice > item.price && (
+                    <span className="text-sm text-gray-500 line-through">
+                      {formatPrice(item.originalPrice * item.quantity)}
+                    </span>
+                  )}
+                </div>
+              </div>
 
-            <div className="flex justify-center w-full justify-self-center">
-              {!readOnly && (
-                <div className="flex items-center">
-                  <div className="flex rounded-md overflow-hidden">
+              <div className="col-span-2 flex justify-center">
+                {!readOnly && (
+                  <div className="flex items-center">
                     <Button
                       aria-label="Giảm số lượng"
-                      className="h-9 w-9 rounded-tl-full rounded-bl-full bg-white border-[#C1C8D1] hover:bg-gray-50 !opacity-100"
+                      className="h-8 w-10 rounded-l-2xl rounded-r-none border-gray-300 bg-white"
                       disabled={item.quantity <= 1}
                       size="icon"
                       variant="outline"
                       onClick={() =>
-                        handleQuantityChange(item.id, item.quantity - 1)
+                        handleDecreaseQuantity(item.id, item.quantity)
                       }>
-                      <Minus
-                        className={`w-4 h-4 text-gray-500 ${item.quantity <= 1 ? 'opacity-40' : ''}`}
-                      />
+                      <Minus className="w-4 h-4" />
                     </Button>
                     <input
-                      readOnly
                       aria-label="Số lượng"
-                      className="w-9 h-9 text-center border-y border-[#C1C8D1] text-xs [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                      className="w-12 h-8 text-center border-y border-x-0 border-gray-300 focus:ring-0 focus:outline-none"
                       min="1"
                       type="number"
                       value={item.quantity}
+                      onBlur={e => {
+                        const value = e.target.value;
+
+                        if (!value || parseInt(value, 10) < 1) {
+                          onUpdateQuantity(item.id, 1);
+                        }
+                      }}
+                      onChange={e => {
+                        const value = e.target.value;
+
+                        if (/^\d*$/.test(value)) {
+                          handleQuantityChange(item.id, value);
+                        }
+                      }}
                     />
                     <Button
                       aria-label="Tăng số lượng"
-                      className="h-9 w-9 rounded-tr-full rounded-br-full bg-white border-[#C1C8D1] hover:bg-gray-50"
+                      className="h-8 w-10 rounded-r-2xl rounded-l-none border-gray-300 bg-white"
                       size="icon"
                       variant="outline"
                       onClick={() =>
-                        handleQuantityChange(item.id, item.quantity + 1)
+                        handleIncreaseQuantity(item.id, item.quantity)
                       }>
-                      <Plus className="w-4 h-4 text-gray-500" />
+                      <Plus className="w-4 h-4" />
                     </Button>
                   </div>
-                </div>
-              )}
-            </div>
+                )}
+              </div>
 
-            <div className="flex items-center justify-center w-full justify-self-center">
-              {!readOnly && (
-                <>
-                  <Select
-                    value={item.unit}
-                    onValueChange={value => onUpdateUnit(item.id, value)}>
-                    <SelectTrigger className="w-24 h-9 bg-white rounded-full border-[#C1C8D1]">
-                      <SelectValue>{item.unit || 'Đơn vị'}</SelectValue>
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Hộp">Hộp</SelectItem>
-                      <SelectItem value="Viên">Viên</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </>
-              )}
-            </div>
-            <div className="flex justify-center items-center w-full">
-              <Button
-                aria-label="Xóa sản phẩm"
-                className="text-red-500"
-                size="icon"
-                variant="ghost"
-                onClick={() => handleDeleteClick(item.id)}>
-                <Trash2 className="w-5 h-5" />
-              </Button>
+              <div className="col-span-2 flex items-center justify-between  ml-3">
+                {!readOnly ? (
+                  <>
+                    <Select
+                      value={item.unit}
+                      onValueChange={value => onUpdateUnit(item.id, value)}>
+                      <SelectTrigger className="h-8 w-28 rounded-2xl border-gray-300 bg-white">
+                        <SelectValue>{item.unit || 'Đơn vị'}</SelectValue>
+                      </SelectTrigger>
+                      <SelectContent>
+                        {typeof item.unit === 'string' && (
+                          <SelectItem key={item.unit} value={item.unit}>
+                            {item.unit}
+                          </SelectItem>
+                        )}
+                      </SelectContent>
+                    </Select>
+
+                    <Button
+                      aria-label="Xóa sản phẩm"
+                      className="text-red-500 hover:text-red-700 hover:bg-transparent"
+                      size="icon"
+                      variant="ghost"
+                      onClick={() => handleDeleteClick(item.id)}>
+                      <Trash2 className="w-6 h-6" />
+                    </Button>
+                  </>
+                ) : (
+                  <span>{item.unit || 'Đơn vị'}</span>
+                )}
+              </div>
             </div>
           </div>
         ))}

@@ -1,8 +1,37 @@
 // Types for auth feature
 export interface User {
   id: string;
+  _id?: string; // Backend ID
   name: string;
-  email: string;
+  email?: string;
+  phone?: string;
+  role?: string;
+  // Additional properties from the API response
+  birthDay?: string | null;
+  bizfullname?: string;
+  company?: {
+    name?: string;
+    phone?: string;
+    sign?: string;
+    _id?: string;
+  };
+  contacts?: Array<{
+    balance?: number;
+    company?: string;
+    email?: string;
+    image?: string;
+    name?: string;
+    phone?: string;
+    remainLoyaltyPoints?: number;
+    _id?: string;
+  }>;
+  fullname?: string;
+  gender?: number;
+  image?: string;
+  lang?: string;
+  level?: number;
+  signature?: string;
+  status?: number;
 }
 
 export interface LoginCredentials {

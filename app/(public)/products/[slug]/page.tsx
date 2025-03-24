@@ -122,14 +122,14 @@ export default function ProductDetailPage({
 
   return (
     <div className="min-h-screen bg-background pb-8 sm:pb-12 pt-4 sm:pt-6">
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-4 bg-white">
         {/* Breadcrumb */}
         <nav aria-label="Breadcrumb">
           <DynamicBreadcrumb />
         </nav>
 
         {/* Product Detail Section */}
-        <div className="mt-6 grid grid-cols-1 gap-8 lg:grid-cols-2">
+        <div className="mt-6 grid grid-cols-1 gap-8 lg:grid-cols-2 ">
           {/* Left Column - Product Gallery */}
           <div>
             <ProductGallery

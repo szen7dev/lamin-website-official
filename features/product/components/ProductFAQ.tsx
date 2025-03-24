@@ -63,16 +63,17 @@ export default function ProductFAQ({
   isLoading = false,
 }: ProductFAQProps) {
   const [openId, setOpenId] = useState<string | null>('1');
-  
+
   // Convert API questions to the FAQ format if available
-  const mappedQuestions: FAQ[] = questions && questions.length > 0
-    ? questions.map(q => ({
-        id: q._id,
-        question: q.name,
-        answer: q.note,
-      }))
-    : defaultFaqs;
-  
+  const mappedQuestions: FAQ[] =
+    questions && questions.length > 0
+      ? questions.map(q => ({
+          id: q._id,
+          question: q.name,
+          answer: q.note,
+        }))
+      : defaultFaqs;
+
   // Use the mapped questions if available, otherwise use default FAQs
   const faqs = mappedQuestions.length > 0 ? mappedQuestions : defaultFaqs;
 
@@ -106,7 +107,7 @@ export default function ProductFAQ({
                   className="flex w-full items-center justify-between p-4 text-left"
                   onClick={() => setOpenId(openId === faq.id ? null : faq.id)}>
                   <div className="flex items-center gap-3">
-                    <div className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-primary-40 text-white">
+                    <div className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-grayscale-50 text-white">
                       <span className="text-sm">?</span>
                     </div>
                     <span className="font-medium text-grayscale-80">
