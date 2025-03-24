@@ -9,7 +9,7 @@ import { cn } from '@/utils/helpers';
 
 // interface ProductQAProps {
 //   productId: string;
-// }
+// }/
 
 export default function ProductQA() {
   const [selectedFilter, setSelectedFilter] = useState<
