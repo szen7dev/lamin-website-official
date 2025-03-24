@@ -5,22 +5,17 @@ interface GetPhoneOTPParams {
   optionSeller: boolean;
 }
 
-interface GetPhoneOTPResponse {
-  message: string;
-  error: boolean;
-}
-
 /**
  * Sends OTP to user's phone number
  * @param params Object containing the phone number and optionSeller flag
- * @returns Promise with the response containing message and error status
+ * @returns Promise with the OTP string
  */
 
 export const getPhoneOTP = async (
   params: GetPhoneOTPParams,
-): Promise<GetPhoneOTPResponse> => {
+): Promise<string> => {
   try {
-    const response = await apiClient.post<GetPhoneOTPResponse>(
+    const response = await apiClient.post<string>(
       '/api/auth/users/get-phone-otp',
       {
         phone: params.phone,
@@ -29,17 +24,13 @@ export const getPhoneOTP = async (
       false, // Don't require auth for this endpoint
     );
 
-    return {
-      message: response.message,
-      error: response.error,
-    };
+    return response;
   } catch (error) {
     console.error('Error sending OTP to phone:', error);
 
     // Return a standardized error response
-    return {
-      message: 'Không thể gửi mã OTP, hãy kiểm tra lại số điện thoại của bạn',
-      error: true,
-    };
+    throw new Error(
+      'Không thể gửi mã OTP, hãy kiểm tra lại số điện thoại của bạn',
+    );
   }
 };

@@ -31,30 +31,30 @@ export default function ProductCard({
   const { addItem } = useCart();
 
   const handleAddToCart = () => {
-    if (!product) return;
-
-    const priceAsNumber =
-      typeof product.listedUnitprice === 'string'
-        ? Number.parseFloat(product.listedUnitprice)
-        : product.listedUnitprice;
-
-    const originalPriceAsNumber = product.sellingUnitprice
-      ? typeof product.sellingUnitprice === 'string'
-        ? Number.parseFloat(product.sellingUnitprice)
-        : product.sellingUnitprice
-      : undefined;
-
-    addItem({
-      id: `${product._id}`,
-      name: product.name,
-      price: priceAsNumber || 0,
-      originalPrice: originalPriceAsNumber,
-      quantity: product.quantity || 1,
-      unit: product.unit || 'Hộp',
-      image: product.thumbnail?.path
-        ? apiClient.getFileUrl(product.thumbnail.path)
-        : '/placeholder.svg',
-    });
+    // if (!product) return;
+    //
+    // const priceAsNumber =
+    //   typeof product.listedUnitprice === 'string'
+    //     ? Number.parseFloat(product.listedUnitprice)
+    //     : product.listedUnitprice;
+    //
+    // const originalPriceAsNumber = product.sellingUnitprice
+    //   ? typeof product.sellingUnitprice === 'string'
+    //     ? Number.parseFloat(product.sellingUnitprice)
+    //     : product.sellingUnitprice
+    //   : undefined;
+    //
+    // addItem({
+    //   id: `${product._id}`,
+    //   name: product.name,
+    //   price: priceAsNumber || 0,
+    //   originalPrice: originalPriceAsNumber,
+    //   quantity: product.quantity || 1,
+    //   unit: product.unit || 'Hộp',
+    //   image: product.thumbnail?.path
+    //     ? apiClient.getFileUrl(product.thumbnail.path)
+    //     : '/placeholder.svg',
+    // });
   };
 
   // Format price with Vietnamese currency

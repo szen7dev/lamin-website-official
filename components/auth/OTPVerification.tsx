@@ -2,7 +2,7 @@
 
 import type React from 'react';
 
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { AlertCircle } from 'lucide-react';
 
@@ -79,7 +79,7 @@ export function OTPVerification({
     }
 
     // Check if all inputs are filled
-    if (newOtp.every(digit => digit !== '') && newOtp.join('') === '111111') {
+    if (newOtp.every(digit => digit !== '')) {
       onVerify(newOtp.join(''));
     } else if (
       newOtp.every(digit => digit !== '') &&

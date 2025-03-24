@@ -13,8 +13,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { TermsModal } from '@/components/auth/TermsModal';
 import { OTPVerification } from '@/components/auth/OTPVerification';
-import { authService } from '@/services/auth/authService';
 import { useToast } from '@/components/ui/use-toast';
+import { useAuth } from '@/hooks/useAuth';
 
 enum LoginStep {
   PHONE_INPUT = 0,
@@ -29,12 +29,19 @@ export default function LoginPage() {
   const [currentStep, setCurrentStep] = useState<LoginStep>(
     LoginStep.PHONE_INPUT,
   );
+  // Store the OTP response data
+  const [otpData, setOtpData] = useState<string>('');
+
   const router = useRouter();
   const { toast } = useToast();
+  const auth = useAuth();
 
   // Initialize the get phone OTP mutation
   const getPhoneOTPMutation = useGetPhoneOTP({
-    onSuccess: () => {
+    onSuccess: otp => {
+      // Store the OTP string
+      setOtpData(otp);
+
       setIsLoading(false);
       setCurrentStep(LoginStep.OTP_VERIFICATION);
     },
@@ -49,6 +56,8 @@ export default function LoginPage() {
     onUserExists: () => {
       // User exists, skip terms and go straight to OTP verification
       setIsLoading(true);
+
+      // Get OTP for existing user
       getPhoneOTPMutation.mutate({
         phone: phoneNumber,
         optionSeller: false,
@@ -57,6 +66,9 @@ export default function LoginPage() {
     onUserNotExists: () => {
       // User doesn't exist, move to terms agreement step
       setCurrentStep(LoginStep.TERMS_AGREEMENT);
+
+      // Reset loading state
+      setIsLoading(false);
     },
   });
 
@@ -83,10 +95,11 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      // Check if user exists
+      // Check if user exists - this will trigger onUserExists or onUserNotExists
       checkUserExistsMutation.mutate(phoneNumber);
-    } catch {
+    } catch (error) {
       // Handle error silently but set error message for user
+      console.error('Error checking if user exists:', error);
       setError('Có lỗi xảy ra. Vui lòng thử lại sau.');
       setIsLoading(false);
     }
@@ -105,21 +118,39 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      const response = await authService.verifyOTP(phoneNumber, otp);
-
-      if (response.success) {
-        // OTP verified successfully, redirect to home
+      // Check if we have stored OTP data to compare with
+      if (otpData && otp === otpData) {
+        // Show intermediate success message
         toast({
-          title: 'Đăng nhập thành công',
-          description: 'Bạn đã đăng nhập thành công vào hệ thống',
+          title: 'Xác thực thành công',
+          description: 'Mã OTP khớp với mã đã gửi. Đang đăng nhập...',
         });
-        router.push('/');
+
+        // Use AuthContext to login with OTP
+        const response = await auth.loginWithOTP(phoneNumber, otp);
+
+        if (response.success) {
+          // Login successful, redirect to home or dashboard page
+          toast({
+            title: 'Đăng nhập thành công',
+            description: 'Bạn đã đăng nhập thành công vào hệ thống',
+          });
+
+          router.push('/');
+        } else {
+          // Login failed, show error message
+          setError(
+            response.message || 'Đăng nhập không thành công. Vui lòng thử lại.',
+          );
+          setIsLoading(false);
+        }
       } else {
-        setError(response.message || 'Mã OTP không đúng. Vui lòng thử lại.');
+        // OTP doesn't match
+        setError('Mã OTP không đúng. Vui lòng thử lại.');
+        setIsLoading(false);
       }
-    } catch {
+    } catch (error) {
       setError('Có lỗi xảy ra. Vui lòng thử lại sau.');
-    } finally {
       setIsLoading(false);
     }
   };
@@ -135,6 +166,7 @@ export default function LoginPage() {
   const resetToPhoneInput = () => {
     setCurrentStep(LoginStep.PHONE_INPUT);
     setError('');
+    setOtpData(''); // Clear stored OTP data
   };
 
   // Render the appropriate step

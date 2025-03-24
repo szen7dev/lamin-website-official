@@ -5,7 +5,7 @@ import { getPhoneOTP } from '../api/getPhoneOTP';
 import { useToast } from '@/components/ui/use-toast';
 
 interface UseGetPhoneOTPParams {
-  onSuccess?: () => void;
+  onSuccess?: (otp: string) => void;
   onError?: () => void;
 }
 
@@ -21,37 +21,23 @@ export const useGetPhoneOTP = (params?: UseGetPhoneOTPParams) => {
   return useMutation({
     mutationFn: (data: { phone: string; optionSeller: boolean }) =>
       getPhoneOTP(data),
-    onSuccess: response => {
-      if (response.error) {
-        // Show error toast
-        toast({
-          title: 'Lỗi',
-          description:
-            response.message ||
-            'Không thể gửi mã OTP, hãy kiểm tra lại số điện thoại của bạn',
-          variant: 'destructive',
-        });
+    onSuccess: (otp: string) => {
+      // Show success toast
+      toast({
+        title: 'Thành công',
+        description: 'Đã xác nhận số điện thoại và gửi mã OTP thành công',
+        variant: 'default',
+      });
 
-        // Call error callback if provided
-        if (onError) onError();
-      } else {
-        // Show success toast
-        toast({
-          title: 'Thành công',
-          description: 'Đã xác nhận số điện thoại và gửi mã OTP thành công',
-          variant: 'default',
-        });
-
-        // Call success callback if provided
-        if (onSuccess) onSuccess();
-      }
+      // Call success callback if provided with the OTP string
+      if (onSuccess) onSuccess(otp);
     },
-    onError: () => {
+    onError: (error) => {
       // Show error toast
       toast({
         title: 'Lỗi',
         description:
-          'Không thể gửi mã OTP, hãy kiểm tra lại số điện thoại của bạn',
+          error instanceof Error ? error.message : 'Không thể gửi mã OTP, hãy kiểm tra lại số điện thoại của bạn',
         variant: 'destructive',
       });
 

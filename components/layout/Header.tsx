@@ -2,7 +2,16 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { Download, Menu, Phone, ShoppingCart, User, X } from 'lucide-react';
+import {
+  ChevronDown,
+  Download,
+  LogOut,
+  Menu,
+  Phone,
+  ShoppingCart,
+  User,
+  X,
+} from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
@@ -12,13 +21,20 @@ import { CartDropdown } from '@/features/cart/components/CartDropdown';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { useCart } from '@/features/cart/hooks/useCart';
 import { Separator } from '@/components/ui/separator';
-// Import the LoginModal component at the top of the file
 import { LoginModal } from '@/components/ui/LoginModal';
-// Add the import for useContactInfo at the top with other imports
 import { useContactInfo } from '@/hooks/useContactInfo';
 import { CartIcon, PhoneIcon, UserIcon } from '@/components/icons';
 import { useGetSearchKeywordList } from '@/features/search/hooks/keyword/useGetSearchKeywordList';
 import { useUpdateSearchKeyword } from '@/features/search/hooks/keyword/useUpdateSearchKeyword';
+import { useAuth } from '@/hooks/useAuth';
+import { apiClient } from '@/services/api/apiClient';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 export function Header() {
   // Get top search keywords
@@ -29,10 +45,10 @@ export function Header() {
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   // Add a state for controlling the login modal visibility
-  // Add this inside the Header function component, near the top with other state declarations:
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const isMobile = useMediaQuery('(max-width: 768px)');
   const { totalItems } = useCart();
+  const { user, isAuthenticated, logout } = useAuth();
 
   // Inside the Header component, add the hook call before the return statement
   const { data: contactInfo, isLoading: isContactInfoLoading } =
@@ -58,6 +74,92 @@ export function Header() {
       setMobileMenuOpen(false);
     }
   }, [isMobile, mobileMenuOpen]);
+
+  // Handle logout
+  const handleLogout = async () => {
+    await logout();
+  };
+
+  // User profile component that shows when logged in
+  const UserProfile = () => (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button
+          className="rounded-full bg-primary-blue px-3 md:px-4 text-white hover:bg-primary-blue/90 text-xs md:text-sm"
+          variant="default">
+          <div className="flex items-center gap-2">
+            <div className="relative h-8 w-8 overflow-hidden rounded-full bg-gray-200">
+              <Image
+                fill
+                alt={user?.name || 'User'}
+                className="object-cover"
+                sizes="32px"
+                src={
+                  user?.image
+                    ? apiClient.getUserImageUrl(user.image)
+                    : '/images/default-avatar.png'
+                }
+              />
+            </div>
+            <div className="flex flex-col items-start text-left">
+              <span className="font-semibold text-sm leading-tight">
+                {user?.fullname || user?.name || 'Anh A'}
+              </span>
+              <span className="text-xs leading-tight">
+                {user?.phone || '0123456789'}
+              </span>
+            </div>
+            <ChevronDown className="h-4 w-4" />
+          </div>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-56">
+        <DropdownMenuItem asChild>
+          <Link href="/profile">Tài khoản của tôi</Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link href="/orders">Đơn hàng của tôi</Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link href="/favorites">Danh sách yêu thích</Link>
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem className="text-red-500" onClick={handleLogout}>
+          <LogOut className="mr-2 h-4 w-4" />
+          <span>Đăng xuất</span>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+
+  // Mobile user profile component
+  const MobileUserProfile = () => (
+    <Button
+      className="rounded-full bg-primary-blue px-4 text-white hover:bg-primary-blue/90 text-xs h-8"
+      variant="default"
+      onClick={() => setMobileMenuOpen(true)}>
+      <div className="flex items-center gap-2">
+        <div className="relative h-5 w-5 overflow-hidden rounded-full bg-gray-200">
+          <Image
+            fill
+            alt={user?.name || 'User'}
+            className="object-cover"
+            sizes="20px"
+            src={
+              user?.image
+                ? apiClient.getUserImageUrl(user.image)
+                : '/images/default-avatar.png'
+            }
+          />
+        </div>
+        <span className="font-medium">
+          {user?.fullname?.split(' ').pop() ||
+            user?.name?.split(' ').pop() ||
+            'Tài khoản'}
+        </span>
+      </div>
+    </Button>
+  );
 
   return (
     <header className="w-full bg-gradient-3">
@@ -124,8 +226,6 @@ export function Header() {
 
                 {/* Contact and Download - Hidden on mobile, visible on medium screens */}
                 <div className="hidden md:flex items-end gap-4 ml-4 text-sm">
-                  {/* Find the hotline display section and replace it with this dynamic version */}
-                  {/* Look for the section with <Phone className="h-5 w-5 text-white" /> and replace that div with: */}
                   <div className="flex items-end gap-2">
                     <Phone className="h-5 w-5 text-white" />
                     <div className="text-white">
@@ -140,7 +240,6 @@ export function Header() {
                     />
                   </div>
                   <div className="flex items-end gap-2 text-white">
-                    {/* <Download className="h-5 w-5" /> */}
                     <PhoneIcon height={20} width={12} />
                     <span>Tải ứng dụng</span>
                   </div>
@@ -149,15 +248,18 @@ export function Header() {
 
               {/* Auth and Cart */}
               <div className="hidden sm:flex items-center gap-2 md:gap-4 mt-4 sm:mt-0">
-                {/* Update the Button for login to open the modal when clicked */}
-                {/* Find the existing login button and replace it with: */}
-                <Button
-                  className="rounded-full bg-white px-3 md:px-6 text-primary hover:bg-white/90 text-xs md:text-sm"
-                  variant="secondary"
-                  onClick={() => setLoginModalOpen(true)}>
-                  <UserIcon height={24} width={24} />
-                  <span className="font-medium">Đăng Nhập</span>
-                </Button>
+                {/* Conditionally show user profile or login button */}
+                {isAuthenticated ? (
+                  <UserProfile />
+                ) : (
+                  <Button
+                    className="rounded-full bg-white px-3 md:px-6 text-primary hover:bg-white/90 text-xs md:text-sm"
+                    variant="secondary"
+                    onClick={() => setLoginModalOpen(true)}>
+                    <UserIcon height={24} width={24} />
+                    <span className="font-medium">Đăng Nhập</span>
+                  </Button>
+                )}
 
                 <div className={`relative ${totalItems > 0 ? 'group' : ''}`}>
                   <Link
@@ -228,13 +330,18 @@ export function Header() {
 
       {/* Mobile Auth and Cart - Only visible on small screens */}
       <div className="flex sm:hidden justify-between items-center px-4 py-2 bg-white/10">
-        <Button
-          className="rounded-full bg-white px-4 text-primary hover:bg-white/90 text-xs h-8"
-          variant="secondary"
-          onClick={() => setLoginModalOpen(true)}>
-          <User className="mr-1 h-3 w-3" />
-          <span className="font-medium">Đăng Nhập</span>
-        </Button>
+        {/* Conditionally show mobile user profile or login button */}
+        {isAuthenticated ? (
+          <MobileUserProfile />
+        ) : (
+          <Button
+            className="rounded-full bg-white px-4 text-primary hover:bg-white/90 text-xs h-8"
+            variant="secondary"
+            onClick={() => setLoginModalOpen(true)}>
+            <User className="mr-1 h-3 w-3" />
+            <span className="font-medium">Đăng Nhập</span>
+          </Button>
+        )}
         <Link
           className="flex items-center gap-2 rounded-full bg-primary px-4 py-1 text-white hover:bg-primary/90 text-xs h-8 relative"
           href="/cart">
@@ -275,6 +382,17 @@ export function Header() {
               <Download className="h-5 w-5" />
               <span>Tải ứng dụng</span>
             </div>
+
+            {/* Add logout button to mobile menu when logged in */}
+            {isAuthenticated && (
+              <Button
+                className="flex items-center gap-2 rounded-full border border-white/20 px-4 py-2 text-white w-full justify-center bg-transparent hover:bg-white/10"
+                variant="ghost"
+                onClick={handleLogout}>
+                <LogOut className="h-5 w-5" />
+                <span>Đăng xuất</span>
+              </Button>
+            )}
           </div>
         </div>
       )}

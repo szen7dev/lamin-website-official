@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react';
 import { Loader2, Minus, Plus, Star } from 'lucide-react';
 import Image from 'next/image';
 
+import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/features/cart/hooks/useCart';
 import { cn } from '@/utils/helpers';
@@ -32,6 +33,7 @@ export default function ProductInfo({
     null,
   );
   const { addItem, isLoading: isAddingToCart } = useCart();
+  const { user } = useAuth();
 
   // Create variants from the goods info
   const createVariantsFromGoodsInfo = () => {
