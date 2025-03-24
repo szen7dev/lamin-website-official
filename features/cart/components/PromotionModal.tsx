@@ -1,10 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Clock } from 'lucide-react';
 
-import { vouchers } from '../mocks/voucherMockData';
+import { useGetVoucher } from '../hooks/useGetVoucher';
+import { type Voucher } from '../types/voucherTypes';
 
+import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   Dialog,
   DialogContent,
@@ -12,121 +15,161 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Label } from '@/components/ui/label';
+import { Separator } from '@/components/ui/separator';
+import { VoucherIcon } from '@/components/icons';
+import { AuthContext } from '@/contexts/AuthContext';
 
 interface PromotionModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onApply: (code: string) => void;
+  onApplyPromotion: (code: string) => void;
 }
+
+const formatTimeLeft = (expiryDate: Date): string => {
+  const now = new Date();
+  const diffTime = expiryDate.getTime() - now.getTime();
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+  if (diffDays <= 0) {
+    return 'Hết hạn';
+  } else if (diffDays === 1) {
+    return 'Còn 1 ngày';
+  } else {
+    return `Còn ${diffDays} ngày`;
+  }
+};
+
+const formatDescription = (voucher: Voucher): string => {
+  let description = '';
+
+  if (voucher.salesoffAmount > 0) {
+    description = `Giảm ${voucher.salesoffAmount.toLocaleString()}đ`;
+  } else if (voucher.salesoffRate > 0) {
+    description = `Giảm ${voucher.salesoffRate}%`;
+  }
+
+  if (voucher.minOrderAmount > 0) {
+    description += ` - Đơn tối thiểu ${voucher.minOrderAmount.toLocaleString()}đ`;
+  }
+
+  return description;
+};
 
 export function PromotionModal({
   isOpen,
   onClose,
-  onApply,
+  onApplyPromotion,
 }: PromotionModalProps) {
   const [manualCode, setManualCode] = useState('');
   const [selectedCode, setSelectedCode] = useState('');
+  const auth = useContext(AuthContext);
+
+  // Only fetch vouchers if user is logged in
+  const customerId = auth?.user?.id || '';
+  const { data: vouchers = [], isLoading } = useGetVoucher({
+    customerID: customerId,
+  });
 
   const handleApply = () => {
-    if (selectedCode) {
-      onApply(selectedCode);
-    } else if (manualCode) {
-      onApply(manualCode);
+    const codeToApply = selectedCode || manualCode.trim();
+
+    if (codeToApply) {
+      onApplyPromotion(codeToApply);
+      onClose();
     }
-  };
-
-  const formatTimeLeft = (expiryDate: string) => {
-    const hours = Math.floor(
-      (new Date(expiryDate).getTime() - new Date().getTime()) /
-        (1000 * 60 * 60),
-    );
-
-    if (hours < 24) {
-      return `${hours}h`;
-    }
-    const days = Math.floor(hours / 24);
-
-    return `${days} ngày`;
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle className="text-center text-lg font-semibold">
-            Ưu đãi dành cho bạn
-          </DialogTitle>
+          <DialogTitle>Mã khuyến mãi</DialogTitle>
         </DialogHeader>
 
-        <div className="mt-4">
-          <div className="flex gap-2">
-            <Input
-              className="flex-1"
-              placeholder="Nhập mã giảm giá"
-              value={manualCode}
-              onChange={e => setManualCode(e.target.value)}
-            />
-            <Button variant="secondary" onClick={handleApply}>
-              Xác nhận
-            </Button>
+        {!auth?.isAuthenticated ? (
+          <div className="py-4 text-center">
+            Vui lòng đăng nhập để sử dụng mã khuyến mãi
           </div>
-
-          {vouchers.length > 0 ? (
-            <div className="mt-4">
-              <RadioGroup value={selectedCode} onValueChange={setSelectedCode}>
-                <div className="space-y-3">
-                  {vouchers.map(voucher => (
-                    <button
-                      key={voucher.code}
-                      className="flex items-center space-x-2 border rounded-lg p-3 hover:border-blue-500 cursor-pointer"
-                      onClick={() => setSelectedCode(voucher.code)}>
-                      <RadioGroupItem id={voucher.code} value={voucher.code} />
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2">
-                          <span className="font-medium">{voucher.code}</span>
-                          <span className="text-xs px-2 py-0.5 bg-green-100 text-green-700 rounded">
-                            {voucher.type}
-                          </span>
-                        </div>
-                        <Label className="font-normal" htmlFor={voucher.code}>
-                          {voucher.description}
-                        </Label>
-                        <div className="text-sm text-gray-500 mt-1 flex items-center gap-1">
-                          <Clock className="w-4 h-4" />
-                          <span>{formatTimeLeft(voucher.expiryDate)}</span>
-                        </div>
-                      </div>
-                    </button>
-                  ))}
-                </div>
-              </RadioGroup>
-
-              <Button className="w-full mt-4" onClick={handleApply}>
-                Áp dụng
+        ) : (
+          <>
+            <div className="relative">
+              <Input
+                className="pr-24"
+                placeholder="Nhập mã khuyến mãi"
+                value={manualCode}
+                onChange={e => setManualCode(e.target.value)}
+              />
+              <Button
+                className="absolute right-0 top-0 h-full rounded-l-none bg-[#DCDFEA] text-[#7D89B0] disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled={!manualCode.trim()}
+                onClick={handleApply}>
+                Xác nhận
               </Button>
             </div>
-          ) : (
-            <div className="mt-8 text-center">
-              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 mb-4">
-                <svg fill="none" height="32" viewBox="0 0 24 24" width="32">
-                  <path
-                    d="M21 6H3a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1zm-1 10H4V8h16v8z"
-                    fill="currentColor"
-                  />
-                </svg>
+
+            {isLoading ? (
+              <div className="py-4 text-center">Đang tải mã khuyến mãi...</div>
+            ) : vouchers.length > 0 ? (
+              <div className="mt-4">
+                <div className="space-y-0">
+                  {vouchers.map((voucher, index) => (
+                    <React.Fragment key={voucher.sign}>
+                      <div className="w-full rounded-lg py-3 px-3">
+                        <div className="flex items-center space-x-3">
+                          <VoucherIcon className="flex-shrink-0" />
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2">
+                              <span className="font-medium">
+                                {voucher.sign}
+                              </span>
+                              <span className="text-xs px-2 py-0.5 bg-green-100 text-green-700 rounded">
+                                {voucher.name}
+                              </span>
+                            </div>
+                            <div className="font-normal text-sm">
+                              {formatDescription(voucher)}
+                            </div>
+                            <div className="text-sm text-gray-500 mt-1 flex items-center gap-1">
+                              <Clock className="w-4 h-4" />
+                              <span>
+                                {formatTimeLeft(new Date(voucher.expired))}
+                              </span>
+                            </div>
+                          </div>
+                          <Checkbox
+                            checked={selectedCode === voucher.sign}
+                            className="data-[state=checked]:bg-blue-600 rounded-full border-gray-300 h-5 w-5 data-[state=checked]:text-white"
+                            id={voucher.sign}
+                            onCheckedChange={() => {
+                              setSelectedCode(
+                                selectedCode === voucher.sign
+                                  ? ''
+                                  : voucher.sign,
+                              );
+                            }}
+                          />
+                        </div>
+                      </div>
+                      {index < vouchers.length - 1 && (
+                        <Separator className="bg-grayscale-20 w-full mx-0" />
+                      )}
+                    </React.Fragment>
+                  ))}
+                </div>
+
+                <Button
+                  className="w-full h-12 mt-4 rounded-full text-white"
+                  onClick={handleApply}>
+                  Áp dụng
+                </Button>
               </div>
-              <p className="text-gray-600">
-                Bạn hiện tại chưa có mã ưu đãi nào
-              </p>
-              <p className="text-sm text-gray-500 mt-1">
-                Nhập mã giảm giá để được áp dụng những ưu đãi
-              </p>
-            </div>
-          )}
-        </div>
+            ) : (
+              <div className="py-4 text-center">
+                Không có mã khuyến mãi nào khả dụng
+              </div>
+            )}
+          </>
+        )}
       </DialogContent>
     </Dialog>
   );

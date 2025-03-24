@@ -20,16 +20,6 @@ import { CartIcon, PhoneIcon, UserIcon } from '@/components/icons';
 import { useGetSearchKeywordList } from '@/features/search/hooks/keyword/useGetSearchKeywordList';
 import { useUpdateSearchKeyword } from '@/features/search/hooks/keyword/useUpdateSearchKeyword';
 
-const popularKeywords = [
-  { label: 'Thuốc nhỏ mắt', href: '#' },
-  { label: 'Men vi sinh', href: '#' },
-  { label: 'Bột hòa tan', href: '#' },
-  { label: 'Omega 3', href: '#' },
-  { label: 'Siro ho', href: '#' },
-  { label: 'Canxi', href: '#' },
-  { label: 'Kẽm', href: '#' },
-];
-
 export function Header() {
   // Get top search keywords
   const { keywords } = useGetSearchKeywordList();
@@ -88,8 +78,8 @@ export function Header() {
                     className="h-8 w-auto"
                     height={32}
                     src="https://images.glints.com/unsafe/glints-dashboard.oss-ap-southeast-1.aliyuncs.com/company-logo/fd3ef04e572c6436a8580539e7555fd0.jpg"
-                    width={32}
                     style={{ width: 'auto' }}
+                    width={32}
                   />
                   <div className="text-white">
                     <div className="text-xs font-medium">NHÀ THUỐC</div>
@@ -121,8 +111,8 @@ export function Header() {
                     className="h-10 w-auto"
                     height={40}
                     src="https://images.glints.com/unsafe/glints-dashboard.oss-ap-southeast-1.aliyuncs.com/company-logo/fd3ef04e572c6436a8580539e7555fd0.jpg"
-                    width={40}
                     style={{ width: 'auto' }}
+                    width={40}
                   />
                   <div className="text-white">
                     <div className="text-xs font-medium">NHÀ THUỐC</div>
@@ -224,12 +214,12 @@ export function Header() {
             </div>
             <div className="bg-white p-2 rounded-b-xl w-full flex-1 flex items-center justify-center">
               <Image
+                priority
                 alt="QR Code"
                 className="object-contain"
                 height={100}
                 src="/images/qrCode.png"
                 width={100}
-                priority
               />
             </div>
           </div>

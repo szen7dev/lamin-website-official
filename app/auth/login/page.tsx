@@ -7,18 +7,19 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { AlertCircle } from 'lucide-react';
 
+import { useCheckUserExists } from '@/features/auth/hooks/useCheckUserExists';
+import { useGetPhoneOTP } from '@/features/auth/hooks/useGetPhoneOTP';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { TermsModal } from '@/components/auth/TermsModal';
-import { VerificationMethodModal } from '@/components/auth/VerificationMethodModal';
 import { OTPVerification } from '@/components/auth/OTPVerification';
 import { authService } from '@/services/auth/authService';
+import { useToast } from '@/components/ui/use-toast';
 
 enum LoginStep {
   PHONE_INPUT = 0,
   TERMS_AGREEMENT = 1,
-  VERIFICATION_METHOD = 2,
-  OTP_VERIFICATION = 3,
+  OTP_VERIFICATION = 2,
 }
 
 export default function LoginPage() {
@@ -29,6 +30,35 @@ export default function LoginPage() {
     LoginStep.PHONE_INPUT,
   );
   const router = useRouter();
+  const { toast } = useToast();
+
+  // Initialize the get phone OTP mutation
+  const getPhoneOTPMutation = useGetPhoneOTP({
+    onSuccess: () => {
+      setIsLoading(false);
+      setCurrentStep(LoginStep.OTP_VERIFICATION);
+    },
+    onError: () => {
+      setIsLoading(false);
+      // Error toast is handled by the hook
+    },
+  });
+
+  // Initialize the check user exists mutation
+  const checkUserExistsMutation = useCheckUserExists({
+    onUserExists: () => {
+      // User exists, skip terms and go straight to OTP verification
+      setIsLoading(true);
+      getPhoneOTPMutation.mutate({
+        phone: phoneNumber,
+        optionSeller: false,
+      });
+    },
+    onUserNotExists: () => {
+      // User doesn't exist, move to terms agreement step
+      setCurrentStep(LoginStep.TERMS_AGREEMENT);
+    },
+  });
 
   const validatePhoneNumber = (phone: string) => {
     // Vietnamese phone number validation
@@ -50,35 +80,25 @@ export default function LoginPage() {
 
     // Clear error if validation passes
     setError('');
-
-    // Move to terms agreement step
-    setCurrentStep(LoginStep.TERMS_AGREEMENT);
-  };
-
-  const handleTermsAccept = () => {
-    setCurrentStep(LoginStep.VERIFICATION_METHOD);
-  };
-
-  const handleVerificationMethod = async (method: 'zalo' | 'sms') => {
     setIsLoading(true);
 
     try {
-      // Call the appropriate service method
-      const response =
-        method === 'zalo'
-          ? await authService.loginWithZalo(phoneNumber)
-          : await authService.loginWithSMS(phoneNumber);
-
-      if (response.success) {
-        setCurrentStep(LoginStep.OTP_VERIFICATION);
-      } else {
-        setError(response.message || 'Có lỗi xảy ra. Vui lòng thử lại sau.');
-      }
-    } catch (error) {
+      // Check if user exists
+      checkUserExistsMutation.mutate(phoneNumber);
+    } catch {
+      // Handle error silently but set error message for user
       setError('Có lỗi xảy ra. Vui lòng thử lại sau.');
-    } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleTermsAccept = () => {
+    // Terms accepted, now send OTP and move to OTP verification
+    setIsLoading(true);
+    getPhoneOTPMutation.mutate({
+      phone: phoneNumber,
+      optionSeller: false,
+    });
   };
 
   const handleOTPVerify = async (otp: string) => {
@@ -88,15 +108,16 @@ export default function LoginPage() {
       const response = await authService.verifyOTP(phoneNumber, otp);
 
       if (response.success) {
-        // In a real app, you would store the token and user data
-        // localStorage.setItem('token', response.data.token)
-
-        // Redirect to home or dashboard after successful verification
+        // OTP verified successfully, redirect to home
+        toast({
+          title: 'Đăng nhập thành công',
+          description: 'Bạn đã đăng nhập thành công vào hệ thống',
+        });
         router.push('/');
       } else {
         setError(response.message || 'Mã OTP không đúng. Vui lòng thử lại.');
       }
-    } catch (error) {
+    } catch {
       setError('Có lỗi xảy ra. Vui lòng thử lại sau.');
     } finally {
       setIsLoading(false);
@@ -105,26 +126,10 @@ export default function LoginPage() {
 
   const handleResendOTP = async () => {
     setIsLoading(true);
-
-    try {
-      const response = await authService.sendOTP(phoneNumber);
-
-      if (!response.success) {
-        setError(
-          response.message || 'Không thể gửi lại mã OTP. Vui lòng thử lại sau.',
-        );
-      }
-    } catch (error) {
-      setError('Có lỗi xảy ra. Vui lòng thử lại sau.');
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPhoneNumber(e.target.value);
-    // Clear error when user starts typing again
-    if (error) setError('');
+    getPhoneOTPMutation.mutate({
+      phone: phoneNumber,
+      optionSeller: false,
+    });
   };
 
   const resetToPhoneInput = () => {
@@ -132,80 +137,83 @@ export default function LoginPage() {
     setError('');
   };
 
-  // Render different steps based on current step
+  // Render the appropriate step
   const renderStep = () => {
     switch (currentStep) {
       case LoginStep.PHONE_INPUT:
         return (
-          <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 p-4">
-            <div className="w-full max-w-md">
-              {/* Logo */}
-              <div className="flex justify-center mb-10">
-                <div className="flex flex-col items-center">
-                  <Image
-                    alt="FPT Retail"
-                    className="h-14 w-auto mb-2"
-                    height={60}
-                    src="https://images.glints.com/unsafe/glints-dashboard.oss-ap-southeast-1.aliyuncs.com/company-logo/fd3ef04e572c6436a8580539e7555fd0.jpg"
-                    width={60}
-                  />
-                  <div className="text-center">
-                    <div className="text-sm font-medium text-primary">
-                      NHÀ THUỐC
-                    </div>
-                    <div className="text-xl font-bold text-primary leading-tight">
-                      LONG CHÂU
-                    </div>
-                  </div>
+          <div className="w-full max-w-md space-y-3 p-8 bg-white rounded-lg">
+            <div className="text-center">
+              <div className="flex items-center justify-center">
+                <Image
+                  alt="FPT Retail"
+                  className="h-12 w-auto"
+                  height={48}
+                  src="https://images.glints.com/unsafe/glints-dashboard.oss-ap-southeast-1.aliyuncs.com/company-logo/fd3ef04e572c6436a8580539e7555fd0.jpg"
+                  width={48}
+                />
+                <div className="text-left font-extrabold text-[#034EA2]">
+                  <div className="text-sm">NHÀ THUỐC</div>
+                  <div className="text-xl leading-tight">LONG CHÂU</div>
                 </div>
               </div>
 
-              {/* Login Form */}
-              <div className="bg-white p-8 rounded-lg shadow-sm">
-                <h1 className="text-xl font-semibold text-center mb-6">
-                  Vui lòng nhập số điện thoại
-                </h1>
-
-                <form className="space-y-6" onSubmit={handlePhoneSubmit}>
-                  <div>
-                    <Input
-                      required
-                      className={`w-full p-3 border rounded-md ${error ? 'border-red-500 focus:ring-red-500' : ''}`}
-                      disabled={isLoading}
-                      placeholder="Số điện thoại *"
-                      type="tel"
-                      value={phoneNumber}
-                      onChange={handlePhoneChange}
-                    />
-
-                    {error && (
-                      <div className="flex items-center mt-2 text-red-500 text-sm">
-                        <AlertCircle className="h-4 w-4 mr-1" />
-                        <span>{error}</span>
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="flex gap-4">
-                    <Button
-                      className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 border-gray-300"
-                      disabled={isLoading}
-                      type="button"
-                      variant="outline"
-                      onClick={() => router.push('/')}>
-                      Thoát
-                    </Button>
-
-                    <Button
-                      className="flex-1 bg-primary hover:bg-primary/90 text-white"
-                      disabled={isLoading}
-                      type="submit">
-                      {isLoading ? 'Đang xử lý...' : 'Tiếp tục'}
-                    </Button>
-                  </div>
-                </form>
-              </div>
+              <h2 className="mt-6 text-center text-xl font-semibold tracking-tight text-gray-900">
+                Vui lòng nhập số điện thoại
+              </h2>
             </div>
+
+            <form className="space-y-6" onSubmit={handlePhoneSubmit}>
+              <div>
+                <div className="mt-1">
+                  <Input
+                    required
+                    aria-label="Số điện thoại"
+                    autoComplete="tel"
+                    className="block w-full appearance-none rounded-lg border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm bg-transparent"
+                    id="phone"
+                    name="phone"
+                    placeholder="Số điện thoại *"
+                    type="tel"
+                    value={phoneNumber}
+                    onChange={e => setPhoneNumber(e.target.value)}
+                  />
+                </div>
+              </div>
+
+              {error && (
+                <div>
+                  <div className="flex">
+                    <div className="flex-shrink-0">
+                      <AlertCircle
+                        aria-hidden="true"
+                        className="h-5 w-5 text-[#FF0000]"
+                      />
+                    </div>
+                    <div className="ml-3">
+                      <h3 className="text-sm font-medium text-[#FF0000]">
+                        {error}
+                      </h3>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              <div className="flex items-center justify-end gap-2">
+                <Button
+                  className="w-[120px] rounded-full bg-primary-5 text-primary"
+                  variant="default">
+                  Thoát
+                </Button>
+                <Button
+                  className="w-[120px] rounded-full bg-primary text-white"
+                  disabled={isLoading}
+                  type="submit"
+                  variant="default">
+                  {isLoading ? 'Đang xử lý...' : 'Tiếp tục'}
+                </Button>
+              </div>
+            </form>
           </div>
         );
 
@@ -216,7 +224,6 @@ export default function LoginPage() {
             onCancel={resetToPhoneInput}
             onResend={handleResendOTP}
             onVerify={handleOTPVerify}
-            onZaloVerification={() => handleVerificationMethod('zalo')}
           />
         );
 
@@ -226,22 +233,15 @@ export default function LoginPage() {
   };
 
   return (
-    <>
+    <div className="flex min-h-screen flex-col items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       {renderStep()}
 
       <TermsModal
         isOpen={currentStep === LoginStep.TERMS_AGREEMENT}
+        phone={phoneNumber}
         onAccept={handleTermsAccept}
         onClose={resetToPhoneInput}
       />
-
-      <VerificationMethodModal
-        isOpen={currentStep === LoginStep.VERIFICATION_METHOD}
-        phoneNumber={phoneNumber}
-        onClose={resetToPhoneInput}
-        onSelectSMS={() => handleVerificationMethod('sms')}
-        onSelectZalo={() => handleVerificationMethod('zalo')}
-      />
-    </>
+    </div>
   );
 }
