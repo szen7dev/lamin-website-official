@@ -1,11 +1,11 @@
 import type { Metadata } from 'next';
 
-import { Breadcrumb } from '@/components/ui/breadcrumb';
 import ArticleList from '@/features/article/components/ArticleList';
 import CategoryList from '@/features/article/components/CategoryList';
 import PopularArticles from '@/features/article/components/PopularArticles';
 import { articleService } from '@/features/article/services/articleServiceFactory';
 import { generateMetadata as generateSeoMetadata } from '@/utils/seo';
+import { DynamicBreadcrumb } from '@/components/dynamic-breadcrumb';
 
 export async function generateMetadata({
   params,
@@ -58,15 +58,7 @@ export default async function CategoryPage({
     <div className="min-h-screen bg-background pb-12 pt-6">
       <div className="container mx-auto px-4">
         {/* Breadcrumb */}
-        <nav aria-label="Breadcrumb">
-          <Breadcrumb
-            items={[
-              { label: 'Trang Chủ', href: '/' },
-              { label: 'Góc Sức Khỏe', href: '/health-news' },
-              { label: currentCategory?.name || 'Danh Mục' },
-            ]}
-          />
-        </nav>
+        <DynamicBreadcrumb />
 
         {/* Title Section */}
         <header className="mb-8">

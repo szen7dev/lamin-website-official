@@ -4,15 +4,10 @@ import { useState } from 'react';
 
 import { CheckoutForm } from './CheckoutForm';
 
-import { Breadcrumb } from '@/components/ui/breadcrumb';
+import { DynamicBreadcrumb } from '@/components/dynamic-breadcrumb';
 import { CartItems } from '@/features/cart/components/CartItems';
 import { CartSummary } from '@/features/cart/components/CartSummary';
 import { useCart } from '@/features/cart/contexts/CartContext';
-
-const breadcrumbItems = [
-  { label: 'Giỏ hàng', href: '/cart' },
-  { label: 'Thanh toán', href: '/checkout' },
-];
 
 export function CheckoutLayout() {
   const { items } = useCart();
@@ -32,7 +27,7 @@ export function CheckoutLayout() {
 
   return (
     <div className="container mx-auto py-8">
-      <Breadcrumb items={breadcrumbItems} />
+      <DynamicBreadcrumb />
 
       <div className="mt-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 space-y-8">

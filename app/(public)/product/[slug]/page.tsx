@@ -3,7 +3,6 @@
 import { use, useEffect, useState } from 'react';
 import { Loader2 } from 'lucide-react';
 
-import { Breadcrumb } from '@/components/ui/breadcrumb';
 import ProductGallery from '@/features/product/components/ProductGallery';
 import ProductInfo from '@/features/product/components/ProductInfo';
 import ProductTabs from '@/features/product/components/ProductTabs';
@@ -15,6 +14,7 @@ import { mockProduct } from '@/features/product/mocks/productMockData';
 import { useGetGoodsInfo, useGetQuestionList } from '@/features/product/hooks';
 import { Product, ProductImage } from '@/features/product/types/productTypes';
 import { useGetGoodsList } from '@/features/search/hooks/goods/useGetGoodsList';
+import { DynamicBreadcrumb } from '@/components/dynamic-breadcrumb';
 
 export default function ProductDetailPage({
   params,
@@ -144,20 +144,7 @@ export default function ProductDetailPage({
       <div className="container mx-auto px-4">
         {/* Breadcrumb */}
         <nav aria-label="Breadcrumb">
-          <Breadcrumb
-            items={[
-              { label: 'Trang Chủ', href: '/' },
-              { label: 'Sản Phẩm', href: '/products' },
-              {
-                label:
-                  typeof product.category.name === 'string'
-                    ? product.category.name
-                    : 'Danh Mục',
-                href: `/products/category/${typeof product.category.name === 'string' ? product.category.name : 'all'}`,
-              },
-              { label: product.name },
-            ]}
-          />
+          <DynamicBreadcrumb />
         </nav>
 
         {/* Product Detail Section */}

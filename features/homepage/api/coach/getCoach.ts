@@ -13,6 +13,10 @@ export const getCoach = async (
   // Set default parameters if not provided
   const queryParams: Record<string, any> = {
     optionSeller: params.optionSeller ?? DEFAULT_OPTION_SELLER,
+    populates: JSON.stringify({
+      path: 'field',
+      select: 'name',
+    }),
     limit: params.limit ?? 3,
   };
 

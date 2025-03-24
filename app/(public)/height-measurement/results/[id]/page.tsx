@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 
 import HeightMeasurementResult from '@/features/height-measurement/components/HeightMeasurementResult';
-import { Breadcrumb } from '@/components/ui/breadcrumb';
+import { DynamicBreadcrumb } from '@/components/dynamic-breadcrumb';
 
 interface PageProps {
   params: {
@@ -26,13 +26,7 @@ export default async function HeightMeasurementResultsPage({
       <div className="container mx-auto px-4">
         <div className="max-w-[1000px] mx-auto">
           {/* Breadcrumb */}
-          <Breadcrumb
-            items={[
-              { label: 'Trang Chủ', href: '/' },
-              { label: 'Đo Cao', href: '/height-measurement' },
-              { label: 'Kết quả phân tích' },
-            ]}
-          />
+          <DynamicBreadcrumb />
 
           {/* Main Content - Wider container for the chart */}
           <div className="rounded-lg bg-white p-4 sm:p-6 shadow-sm">

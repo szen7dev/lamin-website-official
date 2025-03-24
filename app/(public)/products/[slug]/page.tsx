@@ -3,7 +3,7 @@
 import { use, useEffect, useState } from 'react';
 import { Loader2 } from 'lucide-react';
 
-import { Breadcrumb } from '@/components/ui/breadcrumb';
+import { DynamicBreadcrumb } from '@/components/dynamic-breadcrumb';
 import ProductGallery from '@/features/product/components/ProductGallery';
 import ProductInfo from '@/features/product/components/ProductInfo';
 import ProductTabs from '@/features/product/components/ProductTabs';
@@ -125,20 +125,7 @@ export default function ProductDetailPage({
       <div className="container mx-auto px-4">
         {/* Breadcrumb */}
         <nav aria-label="Breadcrumb">
-          <Breadcrumb
-            items={[
-              { label: 'Trang Chủ', href: '/' },
-              { label: 'Sản Phẩm', href: '/products' },
-              {
-                label:
-                  typeof productInfo.category === 'string'
-                    ? productInfo.category
-                    : 'Danh Mục',
-                href: `/products/category/${typeof productInfo.category === 'string' ? productInfo.category : 'all'}`,
-              },
-              { label: productInfo.name },
-            ]}
-          />
+          <DynamicBreadcrumb />
         </nav>
 
         {/* Product Detail Section */}

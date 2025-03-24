@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import { ChevronRight } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 import { useGetCoach } from '../hooks/coach/useGetCoach';
 
@@ -11,6 +12,11 @@ import { apiClient } from '@/services/api/apiClient';
 export default function CoachExperts() {
   const { coaches, isLoading } = useGetCoach();
   const currentYear = new Date().getFullYear();
+  const router = useRouter();
+
+  const navigateCoachList = () => {
+    router.push('/coach-experts');
+  };
 
   return (
     <section
@@ -27,7 +33,8 @@ export default function CoachExperts() {
         </p>
         <Button
           className="flex items-center gap-2 rounded-full bg-white text-primary hover:bg-white/90"
-          variant="secondary">
+          variant="secondary"
+          onClick={navigateCoachList}>
           Tìm hiểu thêm
           <ChevronRight aria-hidden="true" className="h-4 w-4" />
         </Button>
@@ -60,11 +67,17 @@ export default function CoachExperts() {
                     src={imageUrl}
                     width={80}
                   />
-                  <div>
+                  <div className="min-w-0 flex-1">
                     <span className="text-sm text-grayscale-40">
-                      Bác sĩ chuyên khoa
+                      {coach.field &&
+                      typeof coach.field === 'object' &&
+                      coach.field.name
+                        ? coach.field.name
+                        : typeof coach.field === 'string'
+                          ? coach.field
+                          : 'Bác sĩ chuyên khoa'}
                     </span>
-                    <h3 className="text-lg font-semibold text-grayscale-90">
+                    <h3 className="text-lg font-semibold text-grayscale-90 truncate">
                       {coach.name}
                     </h3>
                     <p className="text-sm text-primary">{experience}</p>

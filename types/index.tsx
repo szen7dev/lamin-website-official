@@ -5,3 +5,8 @@ export type IconSvgProps = SVGProps<SVGSVGElement> & {
   fill?: string;
   stroke?: string;
 };
+
+export interface Populate {
+  path: string;
+  select: string;
+}

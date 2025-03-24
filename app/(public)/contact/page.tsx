@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 
-import { Breadcrumb } from '@/components/ui/breadcrumb';
 import { ContactForm } from '@/features/contact/components/ContactForm';
 import { generateMetadata as generateSeoMetadata } from '@/utils/seo';
+import { DynamicBreadcrumb } from '@/components/dynamic-breadcrumb';
 
 export const metadata: Metadata = generateSeoMetadata({
   title: 'Liên Hệ - Elena Pharmacy',
@@ -14,9 +14,7 @@ export default function ContactPage() {
     <div className="min-h-screen bg-[#F8F9FE] pb-12 pt-6">
       <div className="container mx-auto px-4">
         {/* Breadcrumb */}
-        <Breadcrumb
-          items={[{ label: 'Trang Chủ', href: '/' }, { label: 'Liên Hệ' }]}
-        />
+        <DynamicBreadcrumb />
 
         {/* Main Content */}
         <div className="mx-auto max-w-2xl">
