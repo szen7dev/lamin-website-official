@@ -198,9 +198,9 @@ export default function TrustedStores() {
                       </div>
 
                       <div>
-                        <h3 className="font-medium text-sm sm:text-base text-grayscale-90">
+                        <p className="font-medium text-sm sm:text-base text-grayscale-90 truncate text-ellipsis overflow-hidden">
                           {store.name}
-                        </h3>
+                        </p>
                         <div className="flex items-center gap-1.5">
                           <div className="flex">
                             <Star className="h-3 w-3 sm:h-4 sm:w-4 fill-yellow-400 text-yellow-400" />
