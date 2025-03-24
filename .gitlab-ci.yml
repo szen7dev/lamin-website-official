@@ -13,6 +13,7 @@ build-docker-staging:
       NEXT_PUBLIC_API_URL=https://api.trixgo.com
       NEXT_PUBLIC_API_TIMEOUT=30000
       NEXT_PUBLIC_CLOUDFRONT_URL=https://dntdurzwr12tp.cloudfront.net
+      NEXT_PUBLIC_IMAGE_PREFIX=https://dntdurzwr12tp.cloudfront.net
       NEXT_PUBLIC_DEFAULT_TOKEN=$NEXT_PUBLIC_DEFAULT_TOKEN
       EOF
   tags:
@@ -32,6 +33,7 @@ build-docker-prod:
       NEXT_PUBLIC_API_URL=https://api.trixgo.com
       NEXT_PUBLIC_API_TIMEOUT=30000
       NEXT_PUBLIC_CLOUDFRONT_URL=https://dntdurzwr12tp.cloudfront.net
+      NEXT_PUBLIC_IMAGE_PREFIX=https://dntdurzwr12tp.cloudfront.net
       NEXT_PUBLIC_DEFAULT_TOKEN=$NEXT_PUBLIC_DEFAULT_TOKEN
       EOF
   tags:
