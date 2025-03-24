@@ -22,7 +22,7 @@ import { useCart } from '@/features/cart/hooks/useCart';
 
 interface CartItemsProps {
   items: CartItem[];
-  onRemoveItem: (id: string) => void;
+  selectedItems: string[];
   onSelectAll: (checked: boolean) => void;
   onSelectItem: (id: string, checked: boolean) => void;
   onUpdateQuantity: (id: string, quantity: number) => void;
@@ -33,14 +33,13 @@ interface CartItemsProps {
 
 export function CartItems({
   items,
-  onRemoveItem,
+  selectedItems,
   onSelectAll,
   onSelectItem,
   onUpdateQuantity,
   onRemoveItem,
   onUpdateUnit,
   readOnly = false,
-  selectedItems,
 }: CartItemsProps) {
   const [itemToDelete, setItemToDelete] = useState<string | null>(null);
   const { removeItem } = useCart();
@@ -101,18 +100,9 @@ export function CartItems({
             Đơn vị
           </div>
         </div>
-        <div className="w-full text-center">
-          <span className="text-sm font-medium text-gray-500">Giá thành</span>
-        </div>
-        <div className="w-full text-center">
-          <span className="text-sm font-medium text-gray-500">Số lượng</span>
-        </div>
-        <div className="w-full text-center">
-          <span className="text-sm font-medium text-gray-500">Đơn vị</span>
-        </div>
       </div>
 
-      <div>
+      <div className="divide-y">
         {items.map(item => (
           <div key={item.id} className="p-4">
             <div className="grid grid-cols-12 items-center">
@@ -185,12 +175,9 @@ export function CartItems({
                       onClick={() =>
                         handleDecreaseQuantity(item.id, item.quantity)
                       }>
-                      <Minus
-                        className={`w-4 h-4 text-gray-500 ${item.quantity <= 1 ? 'opacity-40' : ''}`}
-                      />
+                      <Minus className="w-4 h-4" />
                     </Button>
                     <input
-                      readOnly
                       aria-label="Số lượng"
                       className="w-12 h-8 text-center border-y border-x-0 border-gray-300 focus:ring-0 focus:outline-none"
                       min="1"
@@ -219,7 +206,7 @@ export function CartItems({
                       onClick={() =>
                         handleIncreaseQuantity(item.id, item.quantity)
                       }>
-                      <Plus className="w-4 h-4 text-gray-500" />
+                      <Plus className="w-4 h-4" />
                     </Button>
                   </div>
                 )}
@@ -256,16 +243,6 @@ export function CartItems({
                   <span>{item.unit || 'Đơn vị'}</span>
                 )}
               </div>
-            </div>
-            <div className="flex justify-center items-center w-full">
-              <Button
-                aria-label="Xóa sản phẩm"
-                className="text-red-500"
-                size="icon"
-                variant="ghost"
-                onClick={() => handleDeleteClick(item.id)}>
-                <Trash2 className="w-5 h-5" />
-              </Button>
             </div>
           </div>
         ))}
