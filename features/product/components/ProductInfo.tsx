@@ -21,6 +21,7 @@ import { Button } from '@/components/ui/button';
 import { useCart } from '@/features/cart/hooks/useCart';
 import { cn } from '@/utils/helpers';
 import apiClient from '@/services/api/apiClient';
+import { useToast } from '@/hooks/use-toast';
 
 interface ProductInfoProps {
   product: Product;
@@ -75,18 +76,56 @@ export default function ProductInfo({
     setSelectedVariant(variant);
   };
 
-  const handleAddToCart = () => {
-    if (!product || !selectedVariant) return;
+  const { toast } = useToast();
 
-    addItem({
-      id: `${product._id}-${selectedVariant.id}`,
-      name: product.name,
-      price: selectedVariant.price,
-      originalPrice: selectedVariant.originalPrice,
-      quantity,
-      unit: selectedVariant.name,
-      image: apiClient.getFileUrl(product.images?.[0].path) || '',
-    });
+  const handleAddToCart = () => {
+    if (!product || !selectedVariant) {
+      toast({
+        title: 'Lỗi khi thêm vào giỏ hàng',
+        description: 'Đã xảy ra lỗi, vui lòng thử lại sau.',
+        variant: 'destructive',
+      });
+
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      });
+
+      return;
+    }
+
+    try {
+      addItem({
+        id: `${product._id}-${selectedVariant.id}`,
+        name: product.name,
+        price: selectedVariant.price,
+        originalPrice: selectedVariant.originalPrice,
+        quantity,
+        unit: selectedVariant.name,
+        image: apiClient.getFileUrl(product.images?.[0].path) || '',
+      });
+
+      toast({
+        title: 'Thêm vào giỏ hàng thành công',
+        description: `Sản phẩm đã được thêm vào giỏ hàng.`,
+        variant: 'success',
+      });
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      });
+    } catch (error) {
+      toast({
+        title: 'Lỗi khi thêm vào giỏ hàng',
+        description: 'Đã xảy ra lỗi, vui lòng thử lại sau.',
+        variant: 'destructive',
+      });
+
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      });
+    }
   };
 
   if (isLoading) {
