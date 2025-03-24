@@ -11,7 +11,6 @@ interface OTPVerificationProps {
   onVerify: (otp: string) => void;
   onResend: () => void;
   onCancel: () => void;
-  onZaloVerification: () => void;
 }
 
 export function OTPVerification({
@@ -19,7 +18,6 @@ export function OTPVerification({
   onVerify,
   onResend,
   onCancel,
-  onZaloVerification,
 }: OTPVerificationProps) {
   const [otp, setOtp] = useState<string[]>(Array(6).fill(''));
   // const [activeInput, setActiveInput] = useState(0);
@@ -205,7 +203,6 @@ export function OTPVerification({
                   type="text"
                   value={digit}
                   onChange={e => handleChange(e, index)}
-                  // onFocus={() => handleFocus(index)}
                   onKeyDown={e => handleKeyDown(e, index)}
                   onPaste={index === 0 ? handlePaste : undefined}
                 />
@@ -228,15 +225,6 @@ export function OTPVerification({
               onClick={onResend}>
               Gửi lại mã OTP cho tôi {formatCountdown()}
             </button>
-
-            <div className="mt-2 text-sm">
-              Hoặc có thể{' '}
-              <button
-                className="text-blue-600 hover:underline"
-                onClick={onZaloVerification}>
-                nhận mã qua Zalo
-              </button>
-            </div>
           </div>
 
           {/* Exit Button */}
