@@ -79,7 +79,7 @@ export default function ProductQA() {
           <h2 className="text-xl font-bold text-grayscale-90">Hỏi đáp</h2>
           <span className="text-gray-500">({questions.length} bình luận)</span>
         </div>
-        <Button className="mt-4 bg-primary-5 text-white hover:bg-primary-20">
+        <Button className="mt-4 bg-primary-50 text-white hover:bg-primary-50/80 rounded-full text-sm font-medium px-5">
           Gửi bình luận
         </Button>
       </div>
@@ -98,7 +98,7 @@ export default function ProductQA() {
               className={cn(
                 'px-4 py-1.5 rounded-full text-sm transition-colors',
                 selectedFilter === filter.id
-                  ? 'bg-primary-5 text-white'
+                  ? 'border-primary-50 border-[1px] text-primary-50'
                   : 'bg-white text-gray-600 border border-gray-200 hover:border-primary-5',
               )}
               onClick={() =>
