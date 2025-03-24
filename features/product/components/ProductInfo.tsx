@@ -17,6 +17,7 @@ import {
   Truck,
 } from 'lucide-react';
 
+import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/features/cart/hooks/useCart';
 import { cn } from '@/utils/helpers';
@@ -38,6 +39,7 @@ export default function ProductInfo({
     null,
   );
   const { addItem, isLoading: isAddingToCart } = useCart();
+  const { user } = useAuth();
 
   // Create variants from the goods info
   const createVariantsFromGoodsInfo = () => {

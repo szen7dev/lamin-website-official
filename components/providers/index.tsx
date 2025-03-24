@@ -8,6 +8,7 @@ import { ThemeProvider as NextThemesProvider } from 'next-themes';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import { Toaster } from '@/components/ui/toaster';
+import { AuthProvider } from '@/contexts/AuthContext';
 
 export interface ProvidersProps {
   children: React.ReactNode;
@@ -42,14 +43,16 @@ export function Providers({ children, themeProps }: ProvidersProps) {
         attribute="class"
         defaultTheme="system"
         {...themeProps}>
-        {mounted ? (
-          <>
-            {children}
-            <Toaster />
-          </>
-        ) : (
-          <div style={{ visibility: 'hidden' }}>{children}</div>
-        )}
+        <AuthProvider>
+          {mounted ? (
+            <>
+              {children}
+              <Toaster />
+            </>
+          ) : (
+            <div style={{ visibility: 'hidden' }}>{children}</div>
+          )}
+        </AuthProvider>
       </NextThemesProvider>
     </QueryClientProvider>
   );
