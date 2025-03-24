@@ -9,8 +9,11 @@ build-docker-staging:
     - _DOCKER_RELEASE_IMAGE_TAG="$_DOCKER_CACHE_IMAGE_TAG-`printf %010d $CI_PIPELINE_ID`-$CI_COMMIT_SHORT_SHA"
     - |
       cat <<EOF > .env
+      NEXT_PUBLIC_API_MODE=mock
       NEXT_PUBLIC_API_URL=https://api.trixgo.com
+      NEXT_PUBLIC_API_TIMEOUT=30000
       NEXT_PUBLIC_CLOUDFRONT_URL=https://dntdurzwr12tp.cloudfront.net
+      NEXT_PUBLIC_DEFAULT_TOKEN=$NEXT_PUBLIC_DEFAULT_TOKEN
       EOF
   tags:
     - docker-xlarge
@@ -25,10 +28,11 @@ build-docker-prod:
     - _DOCKER_RELEASE_IMAGE_TAG="$_DOCKER_CACHE_IMAGE_TAG-`printf %010d $CI_PIPELINE_ID`-$CI_COMMIT_SHORT_SHA"
     - |
       cat <<EOF > .env
+      NEXT_PUBLIC_API_MODE=mock
       NEXT_PUBLIC_API_URL=https://api.trixgo.com
+      NEXT_PUBLIC_API_TIMEOUT=30000
       NEXT_PUBLIC_CLOUDFRONT_URL=https://dntdurzwr12tp.cloudfront.net
-      NEXT_PUBLIC_API_MODE=real
-      NEXT_PUBLIC_IMAGE_PREFIX=https://dntdurzwr12tp.cloudfront.net
+      NEXT_PUBLIC_DEFAULT_TOKEN=$NEXT_PUBLIC_DEFAULT_TOKEN
       EOF
   tags:
     - docker-xlarge
