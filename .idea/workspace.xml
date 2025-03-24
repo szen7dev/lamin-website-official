@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="ce555863-eb36-4404-8eb6-b7c676607f00" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/components/layout/Header.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/layout/Header.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/features/menu/components/BestSellingProducts.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/features/menu/components/BestSellingProducts.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/features/menu/hooks/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/features/menu/hooks/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/features/product/components/ProductCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/features/product/components/ProductCard.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/features/search/api/goods/getGoodsList.ts" beforeDir="false" afterPath="$PROJECT_DIR$/features/search/api/goods/getGoodsList.ts" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitToolBoxStore">
+    <option name="recentBranches">
+      <RecentBranches>
+        <option name="branchesForRepo">
+          <list>
+            <RecentBranchesForRepo>
+              <option name="branches">
+                <list>
+                  <RecentBranch>
+                    <option name="branchName" value="main" />
+                    <option name="lastUsedInstant" value="1742699270" />
+                  </RecentBranch>
+                  <RecentBranch>
+                    <option name="branchName" value="feat/integrate-menu-api" />
+                    <option name="lastUsedInstant" value="1742665629" />
+                  </RecentBranch>
+                  <RecentBranch>
+                    <option name="branchName" value="feat/integrate-product-api" />
+                    <option name="lastUsedInstant" value="1742665553" />
+                  </RecentBranch>
+                  <RecentBranch>
+                    <option name="branchName" value="feat/integrate-survey-api" />
+                    <option name="lastUsedInstant" value="1742502685" />
+                  </RecentBranch>
+                  <RecentBranch>
+                    <option name="branchName" value="feat/integrate-api-search" />
+                    <option name="lastUsedInstant" value="1742485920" />
+                  </RecentBranch>
+                </list>
+              </option>
+              <option name="repositoryRootUrl" value="file://$PROJECT_DIR$" />
+            </RecentBranchesForRepo>
+          </list>
+        </option>
+      </RecentBranches>
+    </option>
+  </component>
+  <component name="OptimizeOnSaveOptions">
+    <option name="myRunOnSave" value="true" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 6
+}</component>
+  <component name="ProjectId" id="2uWkKFyRz0SKydtmjoNL2hK7MYP" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/mesto/Projects/elela&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.standard&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.stylelint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.standard&quot;: &quot;&quot;,
+    &quot;node.js.selected.package.stylelint&quot;: &quot;&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;yarn&quot;,
+    &quot;prettierjs.PrettierConfiguration.Package&quot;: &quot;/Users/mesto/Projects/elela/node_modules/prettier&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;actions.on.save&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;/Users/mesto/Projects/elela/node_modules/typescript/lib&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/features/menu/components" />
+      <recent name="$PROJECT_DIR$/features/menu/types" />
+      <recent name="$PROJECT_DIR$/features/menu/hooks" />
+      <recent name="$PROJECT_DIR$/features/menu" />
+      <recent name="$PROJECT_DIR$/features/homepage/components" />
+    </key>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-deb605915726-JavaScript-WS-243.22562.112" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="ce555863-eb36-4404-8eb6-b7c676607f00" name="Changes" comment="" />
+      <created>1742371651824</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1742371651824</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

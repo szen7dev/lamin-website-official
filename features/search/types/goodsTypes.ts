@@ -19,11 +19,13 @@ export interface Goods {
   slug: string;
   description?: string;
   content?: string;
+  variants?: GoodsVariant[];
+  currentVariant?: GoodsVariant;
   sign?: string;
   unit?: string;
   sellingUnitprice: number;
   listedUnitprice?: number;
-  images?: FileInfo[] | string[]; // Can be either FileInfo objects or image URLs/IDs
+  images?: FileInfo[]; // Can be either FileInfo objects or image URLs/IDs
   category?: any;
   categoryID?: string;
   tags?: string[];
@@ -31,6 +33,15 @@ export interface Goods {
   createdAt?: string;
   updatedAt?: string;
   thumbnail?: string;
+}
+
+export interface GoodsVariant {
+  _id: string;
+  name: string;
+  price: number;
+  originalPrice?: number;
+  inStock: boolean;
+  specification?: string;
 }
 
 /**

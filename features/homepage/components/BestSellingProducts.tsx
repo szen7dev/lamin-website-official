@@ -1,12 +1,42 @@
-'use client';
-
-import { useGetBestSellingCombo } from '../hooks/combo/useGetBestSellingCombo';
-
 import ProductCard from '@/features/product/components/ProductCard';
 
-export default function BestSellingProducts() {
-  const { combos: products, isLoading, error } = useGetBestSellingCombo();
+const products = [
+  {
+    id: '67b2a307af90b400131ad107',
+    image: '/placeholder.svg?height=200&width=200',
+    name: 'Hỗn dịch viên uống men vi sinh Enterogermina gut defense Sanofi tăng cường miễn dịch',
+    price: '165.000đ',
+    originalPrice: '200.000đ',
+    unit: 'Hộp',
+    packageInfo: 'Hộp 2 Vỉ x 10 Ống',
+    discount: '-25%',
+    units: [
+      { label: 'Hộp', value: 'hop' },
+      { label: 'Ống', value: 'ong' },
+      { label: 'Vỉ', value: 'vi' },
+    ],
+    slug: 'enterogermina-gut-defense',
+  },
+  {
+    id: '67b2a0e5374f5b0012255891',
+    image: '/placeholder.svg?height=200&width=200',
+    name: 'Hộp Telfor 60 DHG điều trị triệu chứng viêm mũi dị ứng trẻ em dưới 12 tuổi',
+    price: '100.000đ',
+    originalPrice: '150.000đ',
+    unit: 'Hộp',
+    packageInfo: 'Hộp 5 Vỉ x 10 Viên',
+    discount: '-25%',
+    units: [
+      { label: 'Hộp', value: 'hop' },
+      { label: 'Ống', value: 'ong' },
+      { label: 'Viên', value: 'vien' },
+    ],
+    slug: 'hop-telfor-60-dhg-dieu-tri',
+  },
+  // Add more products as needed
+];
 
+export default function BestSellingProducts() {
   return (
     <section aria-labelledby="bestselling-title" className="py-4 sm:py-6">
       {/* Section Title */}
@@ -20,14 +50,9 @@ export default function BestSellingProducts() {
 
       {/* Products Grid */}
       <ul className="grid grid-cols-2 gap-3 sm:gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
-        {products?.map(product => (
-          <li key={product._id}>
-            <ProductCard
-              error={error}
-              isLoading={isLoading}
-              product={product}
-              variant="simple"
-            />
+        {products.map(product => (
+          <li key={product.id}>
+            <ProductCard product={product} variant="simple" />
           </li>
         ))}
       </ul>

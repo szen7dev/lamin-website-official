@@ -1,15 +1,15 @@
 'use client';
 
-import type { Product } from '@/features/product/types/productTypes';
-
-import { useRef, useState, useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 import ProductCard from '@/features/product/components/ProductCard';
 import { cn } from '@/lib/utils';
+import apiClient from '@/services/api/apiClient';
+import { Goods } from '@/features/search/types/goodsTypes';
 
 interface RelatedProductsProps {
-  products: Product[];
+  products: Goods[];
   showTitle?: boolean;
 }
 
@@ -79,7 +79,7 @@ export default function RelatedProducts({
     const units =
       product.variants?.map(variant => ({
         label: variant.name,
-        value: variant.id,
+        value: variant._id,
       })) || [];
 
     // let discountPercent;
@@ -96,17 +96,26 @@ export default function RelatedProducts({
     // }
 
     return {
-      id: product.id,
+      _id: product._id,
       slug: product.slug,
       image:
-        product.images?.[0]?.url || '/placeholder.svg?height=200&width=200',
+        apiClient.getFileUrl(product.images?.[0]?.path || '/placeholder.svg') ||
+        '/placeholder.svg?height=200&width=200',
       name: product.name,
-      price: product.currentVariant?.price || 0,
+      price: product.sellingUnitprice || 0,
       originalPrice: product.currentVariant?.originalPrice,
+      sellingUnitPrice: product.sellingUnitprice,
+      listUnitPrice: product.listedUnitprice,
+      thumbnail: product.thumbnail,
       unit: product.unit || product.currentVariant?.name || 'Hộp',
       // packageInfo: product.packageInfo || product.currentVariant?.specification,
       // discount: discountPercent > 0 ? discountPercent : undefined,
       units: units.length > 0 ? units : undefined,
+      category: {
+        _id: product.category?._id || '',
+        name: product.category?.name || 'Danh mục',
+        slug: product.category?.slug || 'all',
+      },
     };
   });
 
@@ -150,8 +159,8 @@ export default function RelatedProducts({
         ref={containerRef}
         aria-live="polite"
         className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-        {visibleProducts.map((product, index) => (
-          <div key={`${product.id}-${index}`} className="w-full">
+        {products.map((product, index) => (
+          <div key={`${product._id}-${index}`} className="w-full">
             <ProductCard product={product} variant="simple" />
           </div>
         ))}

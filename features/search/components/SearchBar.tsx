@@ -56,6 +56,22 @@ export default function SearchBar() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  // Handle search submission
+  const handleSearch = () => {
+    if (query.trim()) {
+      updateKeyword(query.trim());
+      router.push(`/search?q=${encodeURIComponent(query.trim())}`);
+      setIsFocused(false);
+    }
+  };
+
+  // Handle key press (Enter to search)
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      handleSearch();
+    }
+  };
+
   return (
     <div ref={searchRef} className="relative w-full">
       <div className="relative">

@@ -6,8 +6,11 @@ export const getGoodsList = async (
 ): Promise<Goods[]> => {
   try {
     const populatesObject = {
-      path: 'parent project category userUpdate convert images',
-      populate: { path: 'author', select: 'fullname bizfullname image' },
+      path: 'parent project category userUpdate convert images thumbnail',
+      populate: {
+        path: 'author',
+        select: 'fullname bizfullname image name slug',
+      },
     };
 
     const queryParams = {
@@ -17,8 +20,6 @@ export const getGoodsList = async (
       isListParentOfListChilds: 1,
       ...params,
     };
-
-    console.log('Fetching goods list with params:', queryParams);
 
     // The apiClient.get method now handles response normalization internally
     // It will automatically extract listRecords from any level of nesting

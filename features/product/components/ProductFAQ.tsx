@@ -1,9 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import { ChevronUp, ChevronDown } from 'lucide-react';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 
 import { cn } from '@/utils/helpers';
+import { Product } from '@/features/product/types/productTypes';
+import { Question } from '@/features/product/types/questionTypes';
 
 interface FAQ {
   id: string;
@@ -13,9 +15,13 @@ interface FAQ {
 
 interface ProductFAQProps {
   showTitle?: boolean;
+  product: Product;
+  questions?: Question[];
+  isLoading?: boolean;
 }
 
-const faqs: FAQ[] = [
+// Default FAQs to show when no questions are provided from the API
+const defaultFaqs: FAQ[] = [
   {
     id: '1',
     question:
@@ -50,8 +56,25 @@ const faqs: FAQ[] = [
   },
 ];
 
-export default function ProductFAQ({ showTitle = false }: ProductFAQProps) {
+export default function ProductFAQ({
+  showTitle = false,
+  product,
+  questions = [],
+  isLoading = false,
+}: ProductFAQProps) {
   const [openId, setOpenId] = useState<string | null>('1');
+  
+  // Convert API questions to the FAQ format if available
+  const mappedQuestions: FAQ[] = questions && questions.length > 0
+    ? questions.map(q => ({
+        id: q._id,
+        question: q.name,
+        answer: q.note,
+      }))
+    : defaultFaqs;
+  
+  // Use the mapped questions if available, otherwise use default FAQs
+  const faqs = mappedQuestions.length > 0 ? mappedQuestions : defaultFaqs;
 
   return (
     <div className="rounded-lg">
@@ -63,43 +86,49 @@ export default function ProductFAQ({ showTitle = false }: ProductFAQProps) {
         </div>
       )}
 
-      <div className="divide-y divide-grayscale-10">
-        {faqs.map(faq => {
-          const isOpen = openId === faq.id;
+      {isLoading ? (
+        <div className="p-6 text-center text-grayscale-60">
+          Đang tải câu hỏi...
+        </div>
+      ) : (
+        <div className="divide-y divide-grayscale-10">
+          {faqs.map(faq => {
+            const isOpen = openId === faq.id;
 
-          return (
-            <div
-              key={faq.id}
-              className={cn(
-                'transition-all duration-200',
-                isOpen ? 'bg-grayscale-5' : 'bg-white',
-              )}>
-              <button
-                className="flex w-full items-center justify-between p-4 text-left"
-                onClick={() => setOpenId(openId === faq.id ? null : faq.id)}>
-                <div className="flex items-center gap-3">
-                  <div className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-primary-40 text-white">
-                    <span className="text-sm">?</span>
+            return (
+              <div
+                key={faq.id}
+                className={cn(
+                  'transition-all duration-200',
+                  isOpen ? 'bg-grayscale-5' : 'bg-white',
+                )}>
+                <button
+                  className="flex w-full items-center justify-between p-4 text-left"
+                  onClick={() => setOpenId(openId === faq.id ? null : faq.id)}>
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-primary-40 text-white">
+                      <span className="text-sm">?</span>
+                    </div>
+                    <span className="font-medium text-grayscale-80">
+                      {faq.question}
+                    </span>
                   </div>
-                  <span className="font-medium text-grayscale-80">
-                    {faq.question}
-                  </span>
-                </div>
-                {isOpen ? (
-                  <ChevronUp className="h-5 w-5 flex-shrink-0 text-grayscale-60" />
-                ) : (
-                  <ChevronDown className="h-5 w-5 flex-shrink-0 text-grayscale-60" />
+                  {isOpen ? (
+                    <ChevronUp className="h-5 w-5 flex-shrink-0 text-grayscale-60" />
+                  ) : (
+                    <ChevronDown className="h-5 w-5 flex-shrink-0 text-grayscale-60" />
+                  )}
+                </button>
+                {isOpen && (
+                  <div className="px-4 pb-4 pl-[3.25rem]">
+                    <p className="text-grayscale-60">{faq.answer}</p>
+                  </div>
                 )}
-              </button>
-              {isOpen && (
-                <div className="px-4 pb-4 pl-[3.25rem]">
-                  <p className="text-grayscale-60">{faq.answer}</p>
-                </div>
-              )}
-            </div>
-          );
-        })}
-      </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }

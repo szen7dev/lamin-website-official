@@ -229,7 +229,7 @@ export function CartSummary({ items, selectedItems }: CartSummaryProps) {
 
       <PromotionModal
         isOpen={isPromoModalOpen}
-        onApply={handleApplyPromoCode}
+        onApplyPromotion={handleApplyPromoCode}
         onClose={() => setIsPromoModalOpen(false)}
       />
     </div>

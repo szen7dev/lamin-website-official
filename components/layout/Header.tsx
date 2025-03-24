@@ -2,8 +2,8 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { ShoppingCart, Phone, Download, User, Menu, X } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { Download, Menu, Phone, ShoppingCart, User, X } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import SearchBar from '@/features/search/components/SearchBar';
@@ -17,18 +17,16 @@ import { LoginModal } from '@/components/ui/LoginModal';
 // Add the import for useContactInfo at the top with other imports
 import { useContactInfo } from '@/hooks/useContactInfo';
 import { CartIcon, PhoneIcon, UserIcon } from '@/components/icons';
-
-const popularKeywords = [
-  { label: 'Thuốc nhỏ mắt', href: '#' },
-  { label: 'Men vi sinh', href: '#' },
-  { label: 'Bột hòa tan', href: '#' },
-  { label: 'Omega 3', href: '#' },
-  { label: 'Siro ho', href: '#' },
-  { label: 'Canxi', href: '#' },
-  { label: 'Kẽm', href: '#' },
-];
+import { useGetSearchKeywordList } from '@/features/search/hooks/keyword/useGetSearchKeywordList';
+import { useUpdateSearchKeyword } from '@/features/search/hooks/keyword/useUpdateSearchKeyword';
 
 export function Header() {
+  // Get top search keywords
+  const { keywords } = useGetSearchKeywordList();
+
+  // Update keyword popularity when user searches
+  const { updateKeyword } = useUpdateSearchKeyword();
+
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   // Add a state for controlling the login modal visibility
   // Add this inside the Header function component, near the top with other state declarations:
@@ -80,6 +78,7 @@ export function Header() {
                     className="h-8 w-auto"
                     height={32}
                     src="https://images.glints.com/unsafe/glints-dashboard.oss-ap-southeast-1.aliyuncs.com/company-logo/fd3ef04e572c6436a8580539e7555fd0.jpg"
+                    style={{ width: 'auto' }}
                     width={32}
                   />
                   <div className="text-white">
@@ -112,6 +111,7 @@ export function Header() {
                     className="h-10 w-auto"
                     height={40}
                     src="https://images.glints.com/unsafe/glints-dashboard.oss-ap-southeast-1.aliyuncs.com/company-logo/fd3ef04e572c6436a8580539e7555fd0.jpg"
+                    style={{ width: 'auto' }}
                     width={40}
                   />
                   <div className="text-white">
@@ -192,12 +192,15 @@ export function Header() {
             {/* Popular Keywords - Hidden on smallest screens */}
             <div className="hidden sm:flex flex-wrap gap-x-4 gap-y-1 pb-1">
               <span className="text-sm text-white/80">Từ khóa phổ biến:</span>
-              {popularKeywords.map(keyword => (
+              {keywords.map(keyword => (
                 <Link
-                  key={keyword.label}
+                  key={keyword._id}
                   className="text-sm text-white decoration-white underline decoration-1 underline-offset-4 hover:text-white/90"
-                  href={keyword.href}>
-                  {keyword.label}
+                  href={`/search?q=${encodeURIComponent(keyword.keyword)}`}
+                  onClick={() => {
+                    updateKeyword(keyword.keyword);
+                  }}>
+                  {keyword.keyword}
                 </Link>
               ))}
             </div>
@@ -211,11 +214,12 @@ export function Header() {
             </div>
             <div className="bg-white p-2 rounded-b-xl w-full flex-1 flex items-center justify-center">
               <Image
+                priority
                 alt="QR Code"
                 className="object-contain"
                 height={100}
                 src="/images/qrCode.png"
-                width={99}
+                width={100}
               />
             </div>
           </div>

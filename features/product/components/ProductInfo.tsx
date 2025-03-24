@@ -5,33 +5,65 @@ import type {
   ProductVariant,
 } from '@/features/product/types/productTypes';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
+  Loader2,
   Minus,
-  Plus,
-  Share2,
-  Gift,
-  Star,
-  Percent,
-  RotateCcw,
-  Truck,
   Pill,
+  Plus,
+  RotateCcw,
+  Share2,
+  Star,
+  Truck,
 } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/features/cart/hooks/useCart';
 import { cn } from '@/utils/helpers';
+import apiClient from '@/services/api/apiClient';
 
 interface ProductInfoProps {
   product: Product;
+  isLoading: boolean;
+  error: any;
 }
 
-export default function ProductInfo({ product }: ProductInfoProps) {
+export default function ProductInfo({
+  product,
+  isLoading,
+  error,
+}: ProductInfoProps) {
   const [quantity, setQuantity] = useState(1);
-  const [selectedVariant, setSelectedVariant] = useState<ProductVariant>(
-    product.currentVariant || product.variants[0],
+  const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(
+    null,
   );
-  const { addItem, isLoading } = useCart();
+  const { addItem, isLoading: isAddingToCart } = useCart();
+
+  // Create variants from the goods info
+  const createVariantsFromGoodsInfo = () => {
+    if (!product) return [];
+
+    // Default variant using the product's main price
+    const defaultVariant: ProductVariant = {
+      id: '1',
+      name: product.unit || 'Đơn vị',
+      price: product.sellingUnitprice || 0,
+      originalPrice: product.listedUnitprice,
+      inStock: product.status === 1,
+      specification: product.unitNote || '',
+    };
+
+    return [defaultVariant];
+  };
+
+  const variants = createVariantsFromGoodsInfo();
+
+  // Update selected variant when goods info changes
+  useEffect(() => {
+    if (variants.length > 0) {
+      setSelectedVariant(variants[0]);
+    }
+  }, [product]);
 
   const handleQuantityChange = (value: number) => {
     if (value >= 1) {
@@ -44,33 +76,56 @@ export default function ProductInfo({ product }: ProductInfoProps) {
   };
 
   const handleAddToCart = () => {
+    if (!product || !selectedVariant) return;
+
     addItem({
-      id: `${product.id}-${selectedVariant.id}`,
+      id: `${product._id}-${selectedVariant.id}`,
       name: product.name,
       price: selectedVariant.price,
       originalPrice: selectedVariant.originalPrice,
       quantity,
       unit: selectedVariant.name,
-      image: product.images?.[0]?.url,
+      image: apiClient.getFileUrl(product.images?.[0].path) || '',
     });
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex h-96 items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-[#0D6EFD]" />
+        <span className="ml-2 text-lg text-[#6B7280]">
+          Đang tải thông tin sản phẩm...
+        </span>
+      </div>
+    );
+  }
+
+  if (error || !product) {
+    return (
+      <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-red-600">
+        <p className="text-lg font-semibold">
+          Không thể tải thông tin sản phẩm
+        </p>
+        <p className="mt-2">Vui lòng thử lại sau hoặc liên hệ hỗ trợ.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
       {/* Brand & Title */}
       <div>
         <div className="text-sm text-[#0D6EFD]">
-          Thương hiệu: <span className="font-medium">{product.brand}</span>
+          Thương hiệu:{' '}
+          <span className="font-medium">{product.company?.name}</span>
         </div>
         <h1 className="mt-2 text-2xl font-bold text-[#111827]">
           {product.name}
         </h1>
-        <p className="mt-2 text-sm text-[#6B7280]">
-          {product.shortDescription}
-        </p>
+        <p className="mt-2 text-sm text-[#6B7280]">{product.description}</p>
 
         <div className="mt-4 flex flex-wrap items-center gap-4">
-          <span className="text-sm text-[#6B7280]">{product.code}</span>
+          <span className="text-sm text-[#6B7280]">{product._id}</span>
           <div className="flex items-center gap-2">
             <div className="flex items-center gap-1">
               <Star className="h-4 w-4 fill-[#FFA800] text-[#FFA800]" />
@@ -79,10 +134,10 @@ export default function ProductInfo({ product }: ProductInfoProps) {
               </span>
             </div>
             <span className="text-[#FFA800]">
-              ({product.reviewCount} đánh giá)
+              ({product.numberOfRating} đánh giá)
             </span>
             <span className="text-[#0D6EFD]">
-              • {product.commentCount} bình luận
+              • {product.amountComment} bình luận
             </span>
           </div>
           <Button
@@ -99,13 +154,13 @@ export default function ProductInfo({ product }: ProductInfoProps) {
       <div className="flex items-baseline gap-3">
         <div className="flex items-baseline gap-2">
           <span className="text-[28px] font-bold text-[#0D6EFD]">
-            {selectedVariant.price.toLocaleString()}đ
+            {selectedVariant?.price.toLocaleString()}đ
           </span>
           <span className="text-sm text-[#6B7280]">
-            / {selectedVariant.name}
+            / {selectedVariant?.name}
           </span>
         </div>
-        {selectedVariant.originalPrice && (
+        {selectedVariant?.originalPrice && (
           <span className="text-sm text-[#9CA3AF] line-through">
             {selectedVariant.originalPrice.toLocaleString()}đ
           </span>
@@ -113,86 +168,72 @@ export default function ProductInfo({ product }: ProductInfoProps) {
       </div>
 
       {/* Unit Selection */}
-      <div className="flex items-center gap-6">
-        <span className="text-sm text-[#111827]">Chọn đơn vị tính</span>
-        <div className="flex gap-2">
-          {product.variants.map(variant => (
-            <button
-              key={variant.id}
-              className={cn(
-                'h-9 rounded-full px-6 text-sm font-medium transition-all',
-                selectedVariant.id === variant.id
-                  ? 'bg-[#0D6EFD] text-white'
-                  : 'border border-[#E5E7EB] bg-white text-[#6B7280] hover:border-[#0D6EFD]',
-              )}
-              onClick={() => handleVariantChange(variant)}>
-              {variant.name}
-            </button>
-          ))}
+      {variants.length > 1 && (
+        <div className="flex items-center gap-6">
+          <span className="text-sm text-[#111827]">Chọn đơn vị tính</span>
+          <div className="flex gap-2">
+            {variants.map(variant => (
+              <button
+                key={variant.id}
+                className={cn(
+                  'h-9 rounded-full px-6 text-sm font-medium transition-all',
+                  selectedVariant?.id === variant.id
+                    ? 'bg-[#0D6EFD] text-white'
+                    : 'border border-[#E5E7EB] bg-white text-[#6B7280] hover:border-[#0D6EFD]',
+                )}
+                onClick={() => handleVariantChange(variant)}>
+                {variant.name}
+              </button>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Product Details */}
       <div className="grid grid-cols-5 gap-x-8 gap-y-3 text-sm">
-        <div className="col-span-2 text-[#6B7280]">Danh mục</div>
-        <div className="col-span-3 text-[#0D6EFD]">
-          {product.category?.name}
-        </div>
-
-        <div className="col-span-2 text-[#6B7280]">Dạng bào chế</div>
-        <div className="col-span-3 text-[#111827]">{product.dosageForm}</div>
-
-        <div className="col-span-2 text-[#6B7280]">Quy cách</div>
-        <div className="col-span-3 text-[#111827]">
-          {selectedVariant.specification}
-        </div>
-
-        <div className="col-span-2 text-[#6B7280]">Xuất xứ thương hiệu</div>
-        <div className="col-span-3 text-[#111827]">{product.origin}</div>
-
-        <div className="col-span-2 text-[#6B7280]">Nhà sản xuất</div>
-        <div className="col-span-3 text-[#111827]">{product.manufacturer}</div>
-
-        <div className="col-span-2 text-[#6B7280]">Nước sản xuất</div>
-        <div className="col-span-3 text-[#111827]">
-          {product.manufacturingCountry}
-        </div>
-
-        <div className="col-span-2 text-[#6B7280]">Thành phần</div>
-        <div className="col-span-3 space-y-1">
-          <div className="text-[#111827]">{product.ingredients}</div>
-          <div className="text-[#6B7280]">{product.ingredientsDescription}</div>
-        </div>
-
-        <div className="col-span-2 text-[#6B7280]">Số đăng ký</div>
-        <div className="col-span-3 text-[#111827]">
-          {product.registrationNumber}
-        </div>
-      </div>
-
-      {/* Promotions */}
-      {product.promotions && product.promotions.length > 0 && (
-        <div className="overflow-hidden rounded-lg border border-[#E5E7EB]">
-          <div className="flex items-center gap-2 bg-[#FFF5F0] p-3">
-            <Gift className="h-5 w-5 text-[#FF5C00]" />
-            <h3 className="font-medium text-[#111827]">
-              Khuyến mãi được áp dụng
-            </h3>
-          </div>
-          {product.promotions.map(promo => (
-            <div key={promo.id} className="p-3">
-              <div className="flex items-center gap-2">
-                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#0D6EFD]">
-                  <Percent className="h-4 w-4 text-white" />
-                </div>
-                <p className="text-sm text-[#6B7280]">
-                  Giảm ngay {promo.discountPercent}% {promo.description}
-                </p>
-              </div>
+        {product.category && (
+          <>
+            <div className="col-span-2 text-[#6B7280]">Danh mục</div>
+            <div className="col-span-3 text-[#0D6EFD]">
+              {product.category.name}
             </div>
-          ))}
-        </div>
-      )}
+          </>
+        )}
+
+        {selectedVariant?.specification && (
+          <>
+            <div className="col-span-2 text-[#6B7280]">Quy cách</div>
+            <div className="col-span-3 text-[#111827]">
+              {selectedVariant.specification}
+            </div>
+          </>
+        )}
+
+        {product.ingredients && (
+          <>
+            <div className="col-span-2 text-[#6B7280]">Thành phần</div>
+            <div className="col-span-3 space-y-1">
+              <div className="text-[#111827]">{product.ingredients}</div>
+            </div>
+          </>
+        )}
+
+        {product.instructions && (
+          <>
+            <div className="col-span-2 text-[#6B7280]">Cách dùng</div>
+            <div className="col-span-3 text-[#111827]">
+              {product.instructions}
+            </div>
+          </>
+        )}
+
+        {product.storage && (
+          <>
+            <div className="col-span-2 text-[#6B7280]">Bảo quản</div>
+            <div className="col-span-3 text-[#111827]">{product.storage}</div>
+          </>
+        )}
+      </div>
 
       {/* Quantity Selector */}
       <div className="flex items-center gap-4">
@@ -227,9 +268,16 @@ export default function ProductInfo({ product }: ProductInfoProps) {
       <div className="flex gap-3">
         <Button
           className="flex-1 rounded-[100px] bg-[#0D6EFD] py-3 text-base font-medium text-white hover:bg-[#0D6EFD]/90 disabled:bg-[#0D6EFD]/70"
-          disabled={isLoading}
+          disabled={isAddingToCart}
           onClick={handleAddToCart}>
-          Chọn mua
+          {isAddingToCart ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Đang thêm...
+            </>
+          ) : (
+            'Chọn mua'
+          )}
         </Button>
         <Button
           className="flex-1 rounded-[100px] border-0 bg-[#F8F9FA] py-3 text-base font-medium text-[#0D6EFD] hover:bg-[#F8F9FA]/80"
