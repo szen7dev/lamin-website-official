@@ -158,7 +158,7 @@ export default function ProductCard({
         </div>
 
         {/* Product Name */}
-        <h3 className="mb-2 line-clamp-2 min-h-[2.5rem] text-sm font-medium text-grayscale-90">
+        <h3 className="my-2 line-clamp-2 min-h-[2.5rem] text-sm font-medium text-grayscale-90">
           {product.name}
         </h3>
       </Link>
@@ -190,7 +190,7 @@ export default function ProductCard({
             {formatPrice(product.sellingUnitprice)}
           </span>
           {product.unit && (
-            <span className="text-xs sm:text-sm text-grayscale-50">
+            <span className="text-xs sm:text-sm text-primary-50">
               / {product.unit}
             </span>
           )}

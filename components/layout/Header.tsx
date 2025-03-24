@@ -176,19 +176,19 @@ export function Header() {
                   className="flex items-end gap-2"
                   href="/">
                   <Image
-                    alt="FPT Retail"
+                    alt="Logo"
                     className="h-8 w-auto"
                     height={32}
-                    src="https://images.glints.com/unsafe/glints-dashboard.oss-ap-southeast-1.aliyuncs.com/company-logo/fd3ef04e572c6436a8580539e7555fd0.jpg"
+                    src="/images/KhaiTruongWinggo.svg"
                     style={{ width: 'auto' }}
                     width={32}
                   />
-                  <div className="text-white">
+                  {/* <div className="text-white">
                     <div className="text-xs font-medium">NHÀ THUỐC</div>
                     <div className="text-base font-bold leading-none">
                       LONG CHÂU
                     </div>
-                  </div>
+                  </div> */}
                 </Link>
                 <button
                   aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
@@ -202,26 +202,26 @@ export function Header() {
                 </button>
               </div>
 
-              <div className="hidden sm:flex justify-items-start gap-4">
+              <div className="hidden flex items-center sm:flex justify-items-start gap-4">
                 {/* Logo */}
                 <Link
                   aria-label="Elena Pharmacy Home"
                   className="flex items-end gap-2"
                   href="/">
                   <Image
-                    alt="FPT Retail"
-                    className="h-10 w-auto"
+                    alt="Logo"
+                    className="h-20 w-auto"
                     height={40}
-                    src="https://images.glints.com/unsafe/glints-dashboard.oss-ap-southeast-1.aliyuncs.com/company-logo/fd3ef04e572c6436a8580539e7555fd0.jpg"
+                    src="/images/KhaiTruongWinggo.svg"
                     style={{ width: 'auto' }}
                     width={40}
                   />
-                  <div className="text-white">
+                  {/* <div className="text-white">
                     <div className="text-xs font-medium">NHÀ THUỐC</div>
                     <div className="text-lg font-bold leading-none">
                       LONG CHÂU
                     </div>
-                  </div>
+                  </div> */}
                 </Link>
 
                 {/* Contact and Download - Hidden on mobile, visible on medium screens */}

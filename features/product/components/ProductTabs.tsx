@@ -3,7 +3,7 @@
 import type { Product } from '@/features/product/types/productTypes';
 
 import { useEffect, useRef, useState } from 'react';
-import { AlertTriangle, Check } from 'lucide-react';
+import { AlertTriangle } from 'lucide-react';
 import Image from 'next/image';
 
 import { cn } from '@/utils/helpers';
@@ -94,22 +94,28 @@ export default function ProductTabs({ product }: ProductTabsProps) {
         {/* Right Column - Content */}
         <div className="flex-1 p-6">
           {/* Header with Text Size Controls */}
-          <div className="mb-6 flex items-center justify-between">
-            <h1 className="text-lg font-bold text-gray-900">{product.name}</h1>
-            <div className="flex items-center gap-2 rounded-full bg-gray-100 p-1">
-              {textSizes.map(size => (
-                <button
-                  key={size.id}
-                  className={cn(
-                    'rounded-full px-4 py-1 text-sm font-medium transition-colors',
-                    textSize === size.id
-                      ? 'bg-blue-600 text-white'
-                      : 'text-gray-600 hover:text-gray-900',
-                  )}
-                  onClick={() => setTextSize(size.id as 'default' | 'large')}>
-                  {size.label}
-                </button>
-              ))}
+          <div className="mb-6 flex items-center justify-between border-b-2 pb-4">
+            <h1 className="text-xl font-bold text-gray-900">{product.name}</h1>
+            <div className="flex items-center gap-2">
+              <span className="font-normal text-sm text-grayscale-50">
+                Kích thước chữ
+              </span>
+
+              <div className="flex items-center gap-2 rounded-full bg-gray-100 p-1">
+                {textSizes.map(size => (
+                  <button
+                    key={size.id}
+                    className={cn(
+                      'rounded-full px-4 py-1 text-sm font-medium transition-colors',
+                      textSize === size.id
+                        ? 'bg-primary-50 text-white'
+                        : 'text-gray-600 hover:text-gray-900',
+                    )}
+                    onClick={() => setTextSize(size.id as 'default' | 'large')}>
+                    {size.label}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
 
@@ -165,13 +171,24 @@ export default function ProductTabs({ product }: ProductTabsProps) {
             )}
 
             {/* SideEffect Section */}
-            {product.usage && (
+            {product.sideEffects ? (
               <section className="mt-8" id="sideEffects">
                 <h2 className="mb-4 text-xl font-bold text-gray-900">
                   Tác dụng phụ
                 </h2>
                 <p className="mb-2 text-gray-700">{product.sideEffects}</p>
               </section>
+            ) : (
+              <>
+                <section className="mt-8" id="sideEffects">
+                  <h2 className="mb-4 text-xl font-bold text-gray-900">
+                    Tác dụng phụ
+                  </h2>
+                  <p className="mb-2 text-gray-700">
+                    Chưa có thông tin về tác dụng phụ của sản phẩm
+                  </p>
+                </section>
+              </>
             )}
 
             {/* Warnings Section */}
@@ -227,32 +244,38 @@ export default function ProductTabs({ product }: ProductTabsProps) {
       {/* Author Info */}
       <div className="border-t border-grayscale-20 p-4">
         <div className="flex items-center gap-4">
-          <div className="h-12 w-12 overflow-hidden rounded-full">
+          <div className="h-10 w-10 overflow-hidden rounded-full">
             <Image
               alt="Dược sĩ Nguyễn Thanh Hải"
               className="h-full w-full object-cover"
-              height={48}
+              height={40}
               src={
                 apiClient.getFileUrl(
                   `files/db/users/${product.userUpdate?.image}`,
                 ) || '/placeholder.svg'
               }
-              width={48}
+              width={40}
             />
           </div>
           <div className="flex-1">
-            <div className="flex items-center gap-4">
-              <h3 className="font-medium text-gray-900">
+            <div className="flex items-center justify-between gap-4">
+              <h3 className="font-normal text-gray-900">
                 {product.userUpdate?.fullname || 'Dược sĩ Nguyễn Thanh Hải'}
               </h3>
-              <div className="flex items-center gap-1 rounded-full bg-green-50 px-3 py-1">
-                <Check className="h-4 w-4 text-green-600" />
-                <span className="text-sm font-medium text-green-600">
+              <div className="flex items-center gap-1 rounded-full  px-3 py-1">
+                <Image
+                  alt="đã kiểm duyệt"
+                  className="h-4 w-4 object-cover"
+                  height={20}
+                  src="/icons/success-icon.svg"
+                  width={20}
+                />
+                <span className="text-sm font-medium italic text-green-600">
                   Đã kiểm duyệt nội dung
                 </span>
               </div>
             </div>
-            <p className="mt-1 text-sm text-gray-600">
+            <p className="text-sm text-grayscale-50">
               Tốt nghiệp Đại học Dược Hà Nội, với hơn 10 năm kinh nghiệm trong
               lĩnh vực Dược phẩm
             </p>

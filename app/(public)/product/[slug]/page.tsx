@@ -161,7 +161,7 @@ export default function ProductDetailPage({
         </nav>
 
         {/* Product Detail Section */}
-        <div className="mt-6 grid grid-cols-1 gap-8 lg:grid-cols-2">
+        <div className="mt-6 grid grid-cols-1 gap-8 lg:grid-cols-2 bg-white p-6 rounded-lg">
           {/* Left Column - Product Gallery */}
           <div>
             <ProductGallery
@@ -184,12 +184,12 @@ export default function ProductDetailPage({
         </div>
 
         {/* Product Tabs Section */}
-        <section className="mt-12">
+        <section className="mt-12 bg-white p-6 rounded-lg">
           <ProductTabs product={adaptedProduct} />
         </section>
 
         {/* FAQ Section */}
-        <section className="mt-12">
+        <section className="mt-12 bg-white p-6 rounded-lg">
           <h2 className="text-xl font-bold text-grayscale-90 mb-6">
             Câu hỏi thường gặp
           </h2>
@@ -202,23 +202,22 @@ export default function ProductDetailPage({
 
         {/* Related Products Section */}
         <section className="mt-12">
-          <h2 className="text-xl font-bold text-grayscale-90 mb-6">
+          <h2 className="text-xl font-bold text-grayscale-90">
             Sản phẩm liên quan
           </h2>
           <RelatedProducts products={relatedProductList} />
         </section>
 
         {/* Reviews Section */}
-        <section className="mt-12">
-          <h2 className="text-xl font-bold text-grayscale-90 mb-6">
+        <section className="mt-12 bg-white p-6 rounded-lg">
+          <h2 className="text-xl font-bold text-grayscale-90 mb-6 border-b-2 pb-5">
             Đánh giá sản phẩm
           </h2>
           <ProductReviews productId={adaptedProduct.id || ''} />
         </section>
 
         {/* Q&A Section */}
-        <section className="mt-12">
-          <h2 className="text-xl font-bold text-grayscale-90 mb-6">Hỏi đáp</h2>
+        <section className="mt-12 bg-white p-6 rounded-lg">
           <ProductQA />
         </section>
       </div>
