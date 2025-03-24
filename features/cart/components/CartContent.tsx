@@ -1,10 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { ChevronLeft } from 'lucide-react';
 
-import { useCart } from '../contexts/CartContext';
+import { useCart } from '../hooks/useCart';
 
 import { CartItems } from './CartItems';
 import { CartSummary } from './CartSummary';

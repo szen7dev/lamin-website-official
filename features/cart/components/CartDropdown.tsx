@@ -1,6 +1,6 @@
 'use client';
 
-import type { CartItem as CartItemType } from '@/features/cart/types';
+import type { CartItem as CartItemType } from '@/features/cart/types/cartTypes';
 
 import Image from 'next/image';
 import Link from 'next/link';

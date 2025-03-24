@@ -14,7 +14,7 @@ export const getBestSellingCombo = async (
   const queryParams = {
     optionSeller: params.optionSeller ?? DEFAULT_OPTION_SELLER,
     select:
-      'name sign unit sellingUnitprice listedUnitprice unitNote slug thumbnail category',
+      'name sign unit sellingUnitprice listedUnitprice unitNote slug thumbnail category quantity',
     populates: JSON.stringify(
       params.populates ?? {
         path: 'thumbnail category',

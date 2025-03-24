@@ -49,7 +49,7 @@ export default function ProductCard({
       name: product.name,
       price: priceAsNumber || 0,
       originalPrice: originalPriceAsNumber,
-      quantity: 1,
+      quantity: product.quantity || 1,
       unit: product.unit || 'Hộp',
       image: product.thumbnail?.path
         ? apiClient.getFileUrl(product.thumbnail.path)

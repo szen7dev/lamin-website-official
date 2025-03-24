@@ -3,9 +3,12 @@ export interface CartItem {
   name: string;
   price: number;
   originalPrice?: number; // Make this optional to avoid the toLocaleString error
+  inStockQuantity?: number;
   quantity: number;
   unit: string;
   image?: string;
+  discount?: number;
+  slug?: string;
 }
 
 export interface Cart {
