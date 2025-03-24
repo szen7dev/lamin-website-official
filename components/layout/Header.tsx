@@ -166,7 +166,7 @@ export function Header() {
                     <CartIcon height={15} width={17} />
                     <span className="font-medium">Giỏ Hàng</span>
                     {totalItems > 0 && (
-                      <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-error-5 text-xs font-bold text-white">
+                      <span className="absolute left-8 top-1 flex h-4 w-4 items-center justify-center rounded-full bg-error-30 text-xs font-bold text-white">
                         {totalItems}
                       </span>
                     )}

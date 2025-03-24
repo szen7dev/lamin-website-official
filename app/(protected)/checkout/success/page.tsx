@@ -1,7 +1,5 @@
 'use client';
-import { DownloadIcon } from '@/public/icons';
 import Image from 'next/image';
-import Link from 'next/link';
 
 export default function CheckoutConfirmationPage() {
   return (
@@ -9,9 +7,9 @@ export default function CheckoutConfirmationPage() {
       <div className="">
         <Image
           alt="QR Code"
+          height={150}
           src="/images/success-checkout-img.svg"
           width={150}
-          height={150}
         />
       </div>
       <div className="bg-white p-6 w-[500px] rounded-xl">
@@ -37,9 +35,9 @@ export default function CheckoutConfirmationPage() {
                 <div className="flex gap-2 items-center">
                   <Image
                     alt="QR Code"
+                    height={20}
                     src="/icons/qr-code-icon.svg"
                     width={20}
-                    height={20}
                   />
                   <p className="text-grayscale-90 font-medium text-base">
                     Thanh toán bằng chuyển khoản (QR Code)
@@ -48,9 +46,9 @@ export default function CheckoutConfirmationPage() {
                 <div className="flex gap-2 items-center">
                   <Image
                     alt="Success"
+                    height={20}
                     src="/icons/success-icon.svg"
                     width={20}
-                    height={20}
                   />
                   <p className="text-[#51B848] font-medium text-base">
                     Đã thanh toán

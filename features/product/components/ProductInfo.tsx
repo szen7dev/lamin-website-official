@@ -79,11 +79,18 @@ export default function ProductInfo({
     if (!product || !selectedVariant) return;
 
     addItem({
-      id: `${product._id}-${selectedVariant.id}`,
+      id: `${product._id}`,
+      slug: product.slug,
+      category: {
+        _id: product.category?._id || '',
+        name: product.category?.name || '',
+        slug: product.category?.slug || '',
+      },
       name: product.name,
       price: selectedVariant.price,
       originalPrice: selectedVariant.originalPrice,
-      quantity,
+      quantity: 1,
+      inStockQuantity: product.quantity,
       unit: selectedVariant.name,
       image: apiClient.getFileUrl(product.images?.[0].path) || '',
     });
