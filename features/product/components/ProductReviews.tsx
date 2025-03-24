@@ -38,16 +38,16 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
   return (
     <div className="space-y-8">
       {/* Rating Summary - 2 Columns */}
-      <div className="grid grid-cols-2 gap-8">
+      <div className="grid grid-cols-5 gap-8">
         {/* Left Column */}
-        <div className="flex flex-col items-start space-y-4 max-w-[200px]">
+        <div className="flex flex-col items-start space-y-4 max-w-[200px] col-span-1">
           <span className="text-lg">Tuyệt vời</span>
           <div className="flex items-center gap-2">
             <span className="text-4xl font-bold">5.0</span>
-            <Star className="h-6 w-6 fill-warning-5 text-warning-5" />
+            <Star className="h-6 w-6 fill-[#FFB200] text-[#FFB200]" />
           </div>
           <Button
-            className="w-full bg-primary-5 text-white hover:bg-primary-20"
+            className="w-full bg-primary-50 text-white rounded-full hover:bg-primary-50/80"
             // onClick={() => setShowReviewForm(true)}
           >
             Gửi đánh giá
@@ -55,7 +55,7 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
         </div>
 
         {/* Right Column */}
-        <div className="space-y-2">
+        <div className="space-y-2 col-span-2">
           {[5, 4, 3, 2, 1].map(rating => {
             const count = ratingCounts[5 - rating];
             const percentage =
@@ -69,9 +69,9 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
                       <Star
                         key={idx}
                         className={cn(
-                          'h-4 w-4',
+                          'h-3 w-3',
                           idx < rating
-                            ? 'fill-warning-5 text-warning-5'
+                            ? 'fill-[#FFB200] text-[#FFB200]'
                             : 'fill-gray-200 text-gray-200',
                         )}
                       />
@@ -80,7 +80,7 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
                 </div>
                 <div className="flex-1 h-2 bg-gray-100 rounded-full">
                   <div
-                    className="h-full bg-warning-5 rounded-full"
+                    className="h-full bg-[#FFB200] rounded-full"
                     style={{ width: `${percentage}%` }}
                   />
                 </div>
@@ -103,7 +103,7 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
               className={cn(
                 'px-4 py-1.5 rounded-full text-sm transition-colors',
                 selectedFilter === stars
-                  ? 'bg-primary-5 text-white'
+                  ? 'bg-white border-[1px] border-primary-50 text-primary-50'
                   : 'bg-white text-gray-600 border border-gray-200 hover:border-primary-5',
               )}
               onClick={() => setSelectedFilter(stars)}>

@@ -6,22 +6,15 @@ import type {
 } from '@/features/product/types/productTypes';
 
 import { useEffect, useState } from 'react';
-import {
-  Loader2,
-  Minus,
-  Pill,
-  Plus,
-  RotateCcw,
-  Share2,
-  Star,
-  Truck,
-} from 'lucide-react';
+import { Loader2, Minus, Plus, Star } from 'lucide-react';
+import Image from 'next/image';
 
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/features/cart/hooks/useCart';
 import { cn } from '@/utils/helpers';
 import apiClient from '@/services/api/apiClient';
 import { useToast } from '@/hooks/use-toast';
+import { ClockIcon, FacebookBranchIcon } from '@/components/icons';
 
 interface ProductInfoProps {
   product: Product;
@@ -155,47 +148,69 @@ export default function ProductInfo({
       {/* Brand & Title */}
       <div>
         <div className="text-sm text-[#0D6EFD]">
-          Thương hiệu:{' '}
-          <span className="font-medium">{product.company?.name}</span>
+          <span className="text-grayscale-90 font-medium text-sm mr-1">
+            Thương hiệu:
+          </span>
+          <span className="text-primary-50 text-sm font-medium">
+            {product.company?.name}
+          </span>
         </div>
         <h1 className="mt-2 text-2xl font-bold text-[#111827]">
           {product.name}
         </h1>
-        <p className="mt-2 text-sm text-[#6B7280]">{product.description}</p>
+        {/* <p className="mt-2 text-sm text-[#6B7280]">{product.description}</p> */}
 
-        <div className="mt-4 flex flex-wrap items-center gap-4">
-          <span className="text-sm text-[#6B7280]">{product._id}</span>
+        <div className="mt-2 flex flex-wrap items-center gap-4">
+          <span className="text-sm text-grayscale-90">{product._id}</span>
           <div className="flex items-center gap-2">
             <div className="flex items-center gap-1">
-              <Star className="h-4 w-4 fill-[#FFA800] text-[#FFA800]" />
-              <span className="font-medium text-[#111827]">
+              <Star className="h-3 w-3 fill-[#FFA800] text-[#FFA800]" />
+              <span className="text-[#111827]  font-normal text-xs">
                 {product.rating}
               </span>
             </div>
-            <span className="text-[#FFA800]">
+            <span className="text-primary-50 font-normal text-xs">
               ({product.numberOfRating} đánh giá)
             </span>
-            <span className="text-[#0D6EFD]">
+            <span className="text-primary-50 font-normal text-sm">
               • {product.amountComment} bình luận
             </span>
           </div>
           <Button
-            className="h-8 rounded-full bg-[#1877F2] px-3 text-white hover:bg-[#1877F2]/90"
+            className="h-8 rounded-sm bg-[#1877F2] px-2 text-white hover:bg-[#1877F2]/80 hover:border-[1px] hover:text-white"
             size="sm"
             variant="ghost">
-            <Share2 className="mr-2 h-4 w-4" />
-            Chia sẻ
+            <span className="flex items-center gap-2">
+              <FacebookBranchIcon
+                className="w-4 h-4"
+                fill="#ffffff"
+                height={16}
+                width={16}
+              />
+              Chia sẻ
+            </span>
           </Button>
         </div>
       </div>
 
+      <div className="flex items-center gap-1 mt-0">
+        <Image
+          alt="point-icon"
+          height={20}
+          src="/icons/point-icon.svg"
+          width={20}
+        />
+        <span className="text-sm font-normal text-grayscale-90">
+          Tặng 20 điểm thưởng khi mua hàng
+        </span>
+      </div>
       {/* Price */}
-      <div className="flex items-baseline gap-3">
+      <div className="flex items-baseline gap-3 mt-0">
         <div className="flex items-baseline gap-2">
-          <span className="text-[28px] font-bold text-[#0D6EFD]">
+          <span className="text-[28px] font-semibold text-primary-50">
             {selectedVariant?.price.toLocaleString()}đ
           </span>
-          <span className="text-sm text-[#6B7280]">
+          <span className="text-sm font-semibold text-primary-50">
             / {selectedVariant?.name}
           </span>
         </div>
@@ -227,7 +242,6 @@ export default function ProductInfo({
           </div>
         </div>
       )}
-
       {/* Product Details */}
       <div className="grid grid-cols-5 gap-x-8 gap-y-3 text-sm">
         {product.category && (
@@ -272,6 +286,32 @@ export default function ProductInfo({
             <div className="col-span-3 text-[#111827]">{product.storage}</div>
           </>
         )}
+        {product.description && (
+          <>
+            <div className="col-span-2 text-[#6B7280]">Mô tả ngắn</div>
+            <div className="col-span-3 text-grayscale-90 line-clamp-3">
+              {product.description}
+            </div>
+          </>
+        )}
+      </div>
+
+      <div className=" rounded-lg overflow-hidden border border-grayscale-20">
+        <div className="flex gap-2 text-[#F37021] bg-orange-100 font-medium text-base p-2">
+          <Image alt="sale-icon" height={16} src="/icons/Sale.svg" width={16} />
+          Khuyến mãi được áp dụng
+        </div>
+        <div className="flex items-center p-2">
+          <div className="bg-primary-5 rounded-lg p-2">
+            <Image
+              alt="price-tag"
+              height={20}
+              src="/icons/priceTag.svg"
+              width={20}
+            />
+          </div>
+          <span className="ml-2">Giảm ngay 10% áp dụng đến 31/03</span>
+        </div>
       </div>
 
       {/* Quantity Selector */}
@@ -319,38 +359,57 @@ export default function ProductInfo({
           )}
         </Button>
         <Button
-          className="flex-1 rounded-[100px] border-0 bg-[#F8F9FA] py-3 text-base font-medium text-[#0D6EFD] hover:bg-[#F8F9FA]/80"
+          className="flex-1 rounded-[100px] border-0 bg-primary-5 py-3 text-base font-medium text-[#0D6EFD] hover:bg-primary-5/80"
           variant="outline">
           Tìm nhà thuốc
         </Button>
       </div>
 
       {/* Policy Cards */}
-      <div className="grid grid-cols-3 gap-6">
+      <div className="grid grid-cols-3 gap-3">
         <div className="flex items-start gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#0D6EFD]/10">
-            <RotateCcw className="h-5 w-5 text-[#0D6EFD]" />
+          <div className="flex h-10 w-10 p-2 items-center justify-center rounded-full bg-[#0D6EFD]/10">
+            <ClockIcon className="h-6 w-6 text-[#0D6EFD]" />
           </div>
           <div>
-            <p className="font-medium text-[#111827]">Đổi trả trong 30 ngày</p>
-            <p className="text-sm text-[#6B7280]">Kể từ ngày mua hàng</p>
+            <p className="font-medium text-sm text-grayscale-90">
+              Đổi trả trong 30 ngày
+            </p>
+            <p className="text-xs font-normal text-grayscale-40">
+              Kể từ ngày mua hàng
+            </p>
           </div>
         </div>
         <div className="flex items-start gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#0D6EFD]/10">
-            <Truck className="h-5 w-5 text-[#0D6EFD]" />
+          <div className="flex h-10 w-14 p-2 items-center justify-center rounded-full bg-[#0D6EFD]/10">
+            {/* <Truck className="h-5 w-5 text-[#0D6EFD]" /> */}
+            <Image
+              alt="point-icon"
+              height={20}
+              src="/icons/TransportIcon.svg"
+              width={20}
+            />
           </div>
           <div>
-            <p className="font-medium text-[#111827]">Miễn phí vận chuyển</p>
+            <p className="font-medium text-sm text-grayscale-90">
+              Miễn phí vận chuyển
+            </p>
             <p className="text-sm text-[#6B7280]">Theo chính sách giao hàng</p>
           </div>
         </div>
         <div className="flex items-start gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#0D6EFD]/10">
-            <Pill className="h-5 w-5 text-[#0D6EFD]" />
+          <div className="flex h-10 w-10 p-2 items-center justify-center rounded-full bg-[#0D6EFD]/10">
+            <Image
+              alt="point-icon"
+              height={20}
+              src="/icons/PillsIcon.svg"
+              width={20}
+            />
           </div>
           <div>
-            <p className="font-medium text-[#111827]">Miễn phí 100%</p>
+            <p className="font-medium text-sm text-grayscale-90">
+              Miễn phí 100%
+            </p>
             <p className="text-sm text-[#6B7280]">Đổi thuốc</p>
           </div>
         </div>
