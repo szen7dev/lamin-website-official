@@ -127,7 +127,7 @@ export default function HeightMeasurementResult({
         predictedHeight,
         growthRate: 50, // Giá trị mặc định
         analysisDate: userData.createAt || new Date().toISOString(),
-        coach: 'Chuyên gia Elela',
+        coach: 'Chuyên gia Lamin',
         recommendations: [
           'Ngủ trước 10h tối',
           'Chơi các môn thể thao kéo dãn như Bơi, Xà, Nhảy Dây',

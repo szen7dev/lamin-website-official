@@ -261,11 +261,11 @@ const mockArticles: Article[] = [
   {
     id: 'article-vaccination',
     title:
-      'Chính thức: Tiêm chủng Elela thông tin về kết quả kiểm tra của trẻ em và đánh giá an toàn tiêm chủng cho toàn dân',
-    slug: 'tiem-chung-elela-thong-tin-ket-qua-kiem-tra',
+      'Chính thức: Tiêm chủng Lamin thông tin về kết quả kiểm tra của trẻ em và đánh giá an toàn tiêm chủng cho toàn dân',
+    slug: 'tiem-chung-lamin-thong-tin-ket-qua-kiem-tra',
     excerpt:
-      'Elela công bố kết quả kiểm tra và đánh giá an toàn trong chương trình tiêm chủng toàn dân, đặc biệt là đối với trẻ em.',
-    content: `<p>Elela vừa công bố kết quả kiểm tra và đánh giá an toàn trong chương trình tiêm chủng toàn dân...</p>`,
+      'Lamin công bố kết quả kiểm tra và đánh giá an toàn trong chương trình tiêm chủng toàn dân, đặc biệt là đối với trẻ em.',
+    content: `<p>Lamin vừa công bố kết quả kiểm tra và đánh giá an toàn trong chương trình tiêm chủng toàn dân...</p>`,
     thumbnailUrl: '/placeholder.svg?height=400&width=600', // Replace with actual image
     categories: [
       {
@@ -298,11 +298,11 @@ const mockArticles: Article[] = [
   {
     id: 'article-vaccination-2',
     title:
-      'Chính thức: Tiêm chủng Elela thông tin về kết quả kiểm tra của trẻ em và đánh giá an toàn tiêm chủng cho toàn dân',
-    slug: 'tiem-chung-elela-thong-tin-ket-qua-kiem-tra-2',
+      'Chính thức: Tiêm chủng Lamin thông tin về kết quả kiểm tra của trẻ em và đánh giá an toàn tiêm chủng cho toàn dân',
+    slug: 'tiem-chung-Lamin-thong-tin-ket-qua-kiem-tra-2',
     excerpt:
-      'Elela công bố kết quả kiểm tra và đánh giá an toàn trong chương trình tiêm chủng toàn dân, đặc biệt là đối với trẻ em.',
-    content: `<p>Elela vừa công bố kết quả kiểm tra và đánh giá an toàn trong chương trình tiêm chủng toàn dân...</p>`,
+      'Lamin công bố kết quả kiểm tra và đánh giá an toàn trong chương trình tiêm chủng toàn dân, đặc biệt là đối với trẻ em.',
+    content: `<p>Lamin vừa công bố kết quả kiểm tra và đánh giá an toàn trong chương trình tiêm chủng toàn dân...</p>`,
     thumbnailUrl: '/placeholder.svg?height=400&width=600', // Replace with actual image
     categories: [
       {
@@ -334,11 +334,11 @@ const mockArticles: Article[] = [
   {
     id: 'article-vaccination-3',
     title:
-      'Chính thức: Tiêm chủng Elela thông tin về kết quả kiểm tra của trẻ em và đánh giá an toàn tiêm chủng cho toàn dân',
-    slug: 'tiem-chung-elela-thong-tin-ket-qua-kiem-tra-3',
+      'Chính thức: Tiêm chủng Lamin thông tin về kết quả kiểm tra của trẻ em và đánh giá an toàn tiêm chủng cho toàn dân',
+    slug: 'tiem-chung-Lamin-thong-tin-ket-qua-kiem-tra-3',
     excerpt:
-      'Elela công bố kết quả kiểm tra và đánh giá an toàn trong chương trình tiêm chủng toàn dân, đặc biệt là đối với trẻ em.',
-    content: `<p>Elela vừa công bố kết quả kiểm tra và đánh giá an toàn trong chương trình tiêm chủng toàn dân...</p>`,
+      'Lamin công bố kết quả kiểm tra và đánh giá an toàn trong chương trình tiêm chủng toàn dân, đặc biệt là đối với trẻ em.',
+    content: `<p>Lamin vừa công bố kết quả kiểm tra và đánh giá an toàn trong chương trình tiêm chủng toàn dân...</p>`,
     thumbnailUrl: '/placeholder.svg?height=400&width=600', // Replace with actual image
     categories: [
       {

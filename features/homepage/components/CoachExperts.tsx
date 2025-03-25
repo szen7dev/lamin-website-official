@@ -23,7 +23,7 @@ export default function CoachExperts() {
           Coach tư vấn chăm sóc sức khỏe
         </h2>
         <p className="mb-4 text-base font-medium text-white/90">
-          Danh sách các Coach tư vấn chăm sóc sức khỏe của Elela
+          Danh sách các Coach tư vấn chăm sóc sức khỏe của Lamin
         </p>
         <Link
           className="decoration-transparent inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-primary hover:bg-white/90 font-normal text-sm transition-colors"

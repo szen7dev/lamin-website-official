@@ -279,7 +279,7 @@ export function CartSummary({
           <a className="underline" href="/privacy-policy">
             Chính sách xử lý dữ liệu cá nhân
           </a>{' '}
-          của Nhà thuốc Elela
+          của Lamin
         </p>
       </div>
 

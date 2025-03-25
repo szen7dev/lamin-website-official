@@ -77,7 +77,7 @@ export function TermsModal({
             />
             <label className="text-sm" htmlFor="terms">
               Tôi đồng ý với điều khoản dịch vụ, chính sách thu thập và xử lý dữ
-              liệu cá nhân của Elela
+              liệu cá nhân của Lamin
             </label>
           </div>
         </div>
