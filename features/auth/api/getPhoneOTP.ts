@@ -19,7 +19,7 @@ export const getPhoneOTP = async (
       '/api/auth/users/get-phone-otp',
       {
         phone: params.phone,
-        optionSeller: params.optionSeller,
+        optionSeller: params.optionSeller || 1,
       },
       false, // Don't require auth for this endpoint
     );

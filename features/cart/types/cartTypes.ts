@@ -7,8 +7,9 @@ export interface CartItem {
     name: string;
     slug: string;
   };
-  originalPrice?: number; // Make this optional to avoid the toLocaleString error
+  originalPrice: number; // Make this optional to avoid the toLocaleString error
   inStockQuantity?: number;
+  salesoff?: number;
   quantity: number;
   unit: string;
   image?: string;

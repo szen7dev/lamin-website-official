@@ -1,16 +1,12 @@
 'use client';
 
 import type { CartItem } from '../types/cartTypes';
+import type { Voucher } from '../types/voucherTypes';
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ChevronRight, Coins, HelpCircle } from 'lucide-react';
 import Image from 'next/image';
-
-import {
-  calculateVoucherDiscount,
-  validateVoucher,
-} from '../mocks/voucherMockData';
 
 import { PromotionModal } from './PromotionModal';
 
@@ -23,22 +19,28 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { formatPrice } from '@/utils/format';
+import { useAuth } from '@/hooks';
 
 interface CartSummaryProps {
   items: CartItem[];
   selectedItems: string[];
   onCheckout?: () => void;
+  onVoucherSelect?: (voucher: Voucher | null) => void;
+  onPointsDiscountChange?: (pointsDiscount: number) => void;
 }
 
 export function CartSummary({
   items,
   selectedItems,
   onCheckout,
+  onVoucherSelect,
+  onPointsDiscountChange,
 }: CartSummaryProps) {
   const router = useRouter();
+  const { user } = useAuth();
   const [usePoints, setUsePoints] = useState(false);
   const [isPromoModalOpen, setIsPromoModalOpen] = useState(false);
-  const [appliedPromoCode, setAppliedPromoCode] = useState('');
+  const [appliedVoucher, setAppliedVoucher] = useState<Voucher | null>(null);
   const [summary, setSummary] = useState({
     subtotal: 0,
     directDiscount: 0,
@@ -72,15 +74,34 @@ export function CartSummary({
     const rewardPoints = Math.floor(subtotal * 0.01);
 
     // Giảm giá từ điểm tích lũy
-    const pointsDiscount = usePoints ? 25000 : 0;
+    const pointsDiscount =
+      usePoints && user?.contacts && user?.contacts[0].remainLoyaltyPoints
+        ? user?.contacts[0].remainLoyaltyPoints
+        : 0;
+
+    // Pass the points discount to the parent component
+    if (onPointsDiscountChange) {
+      onPointsDiscountChange(pointsDiscount);
+    }
 
     // Tính voucher discount nếu có
-    const voucherDiscount = appliedPromoCode
-      ? calculateVoucherDiscount(
-          validateVoucher(appliedPromoCode, subtotal)!,
-          subtotal,
-        )
-      : 0;
+    let voucherDiscount = 0;
+
+    if (appliedVoucher) {
+      // If we have a real API voucher
+      if (appliedVoucher.salesoffAmount > 0) {
+        // Fixed amount discount
+        voucherDiscount = appliedVoucher.salesoffAmount;
+      } else if (appliedVoucher.salesoffRate > 0) {
+        // Percentage discount
+        voucherDiscount = (subtotal * appliedVoucher.salesoffRate) / 100;
+      }
+
+      // Check if the minimum order amount is met
+      if (subtotal < appliedVoucher.minOrderAmount) {
+        voucherDiscount = 0;
+      }
+    }
 
     // Tổng tiết kiệm
     const savedAmount = directDiscount + pointsDiscount + voucherDiscount;
@@ -97,16 +118,17 @@ export function CartSummary({
       rewardPoints,
       savedAmount,
     });
-  }, [items, selectedItems, usePoints, appliedPromoCode]);
+  }, [items, selectedItems, usePoints, appliedVoucher]);
 
-  const handleApplyPromoCode = (code: string) => {
-    const voucher = validateVoucher(code, summary.subtotal);
+  const handleApplyPromotion = (voucher: Voucher | null) => {
+    console.log('Applied voucher:', voucher);
+    setAppliedVoucher(voucher);
 
-    if (voucher) {
-      setAppliedPromoCode(code);
-    } else {
-      setAppliedPromoCode('');
+    // Pass the voucher data to the parent component
+    if (onVoucherSelect) {
+      onVoucherSelect(voucher);
     }
+
     setIsPromoModalOpen(false);
   };
 
@@ -115,6 +137,26 @@ export function CartSummary({
       onCheckout();
     } else {
       router.push('/checkout');
+    }
+  };
+
+  const handleUsePointsChange = (checked: boolean) => {
+    setUsePoints(checked);
+
+    // If turning off points usage, reset the points discount
+    if (!checked) {
+      const newPointsDiscount = 0;
+
+      if (onPointsDiscountChange) {
+        onPointsDiscountChange(newPointsDiscount);
+      }
+    } else if (user?.contacts && user?.contacts[0].remainLoyaltyPoints) {
+      // If turning on points usage, update the points discount
+      const newPointsDiscount = user.contacts[0].remainLoyaltyPoints;
+
+      if (onPointsDiscountChange) {
+        onPointsDiscountChange(newPointsDiscount);
+      }
     }
   };
 
@@ -129,20 +171,25 @@ export function CartSummary({
         <ChevronRight className="w-4 h-4" />
       </button>
 
-      <div className="flex items-center justify-between py-2">
-        <div className="flex items-center gap-2">
-          {/* <Coins className="w-4 h-4 text-yellow-500" /> */}
-          <Image
-            alt="Point Coin"
-            className=""
-            height={16}
-            src="/images/PointCoinImg.png"
-            width={16}
-          />
-          <span className="font-normal text-sm">Đổi 25.000 điểm (25.000đ)</span>
+      {user?.contacts && (
+        <div className="flex items-center justify-between py-2">
+          <div className="flex items-center gap-2">
+            {/* <Coins className="w-4 h-4 text-yellow-500" /> */}
+            <Image
+              alt="Point Coin"
+              className=""
+              height={16}
+              src="/images/PointCoinImg.png"
+              width={16}
+            />
+            <span className="font-normal text-sm">
+              Đổi {user?.contacts[0].remainLoyaltyPoints || 0} điểm (
+              {user?.contacts[0].remainLoyaltyPoints || 0}đ)
+            </span>
+          </div>
+          <Switch checked={usePoints} onCheckedChange={handleUsePointsChange} />
         </div>
-        <Switch checked={usePoints} onCheckedChange={setUsePoints} />
-      </div>
+      )}
 
       <div className="space-y-2 text-sm text-[#4A4F63]">
         <div className="flex justify-between">
@@ -238,7 +285,7 @@ export function CartSummary({
 
       <PromotionModal
         isOpen={isPromoModalOpen}
-        onApplyPromotion={handleApplyPromoCode}
+        onApplyPromotion={handleApplyPromotion}
         onClose={() => setIsPromoModalOpen(false)}
       />
     </div>

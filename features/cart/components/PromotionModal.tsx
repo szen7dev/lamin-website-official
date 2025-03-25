@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { Clock } from 'lucide-react';
 
 import { useGetVoucher } from '../hooks/useGetVoucher';
@@ -17,12 +17,12 @@ import {
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { VoucherIcon } from '@/components/icons';
-import { AuthContext } from '@/contexts/AuthContext';
+import { useAuth } from '@/hooks';
 
 interface PromotionModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onApplyPromotion: (code: string) => void;
+  onApplyPromotion: (voucher: Voucher | null) => void;
 }
 
 const formatTimeLeft = (expiryDate: Date): string => {
@@ -61,20 +61,30 @@ export function PromotionModal({
   onApplyPromotion,
 }: PromotionModalProps) {
   const [manualCode, setManualCode] = useState('');
-  const [selectedCode, setSelectedCode] = useState('');
-  const auth = useContext(AuthContext);
+  const [selectedVoucher, setSelectedVoucher] = useState<Voucher | null>(null);
+  const { user } = useAuth();
 
-  // Only fetch vouchers if user is logged in
-  const customerId = auth?.user?.id || '';
-  const { data: vouchers = [], isLoading } = useGetVoucher({
-    customerID: customerId,
+  const { data: vouchers = [], isLoading: isLoadingVouchers } = useGetVoucher({
+    customerID: user?.id,
   });
 
   const handleApply = () => {
-    const codeToApply = selectedCode || manualCode.trim();
-
-    if (codeToApply) {
-      onApplyPromotion(codeToApply);
+    if (selectedVoucher) {
+      onApplyPromotion(selectedVoucher);
+      onClose();
+    } else if (manualCode.trim()) {
+      onApplyPromotion({
+        _id: manualCode.trim(),
+        name: manualCode.trim(),
+        sign: manualCode.trim(),
+        expired: new Date(),
+        salesoffAmount: 0,
+        salesoffRate: 0,
+        minOrderAmount: 0,
+      });
+      onClose();
+    } else {
+      onApplyPromotion(null);
       onClose();
     }
   };
@@ -86,7 +96,7 @@ export function PromotionModal({
           <DialogTitle>Mã khuyến mãi</DialogTitle>
         </DialogHeader>
 
-        {!auth?.isAuthenticated ? (
+        {!user ? (
           <div className="py-4 text-center">
             Vui lòng đăng nhập để sử dụng mã khuyến mãi
           </div>
@@ -107,7 +117,7 @@ export function PromotionModal({
               </Button>
             </div>
 
-            {isLoading ? (
+            {isLoadingVouchers ? (
               <div className="py-4 text-center">Đang tải mã khuyến mãi...</div>
             ) : vouchers.length > 0 ? (
               <div className="mt-4">
@@ -137,14 +147,14 @@ export function PromotionModal({
                             </div>
                           </div>
                           <Checkbox
-                            checked={selectedCode === voucher.sign}
+                            checked={selectedVoucher?._id === voucher._id}
                             className="data-[state=checked]:bg-blue-600 rounded-full border-gray-300 h-5 w-5 data-[state=checked]:text-white"
-                            id={voucher.sign}
+                            id={voucher._id}
                             onCheckedChange={() => {
-                              setSelectedCode(
-                                selectedCode === voucher.sign
-                                  ? ''
-                                  : voucher.sign,
+                              setSelectedVoucher(
+                                selectedVoucher?._id === voucher._id
+                                  ? null
+                                  : voucher,
                               );
                             }}
                           />

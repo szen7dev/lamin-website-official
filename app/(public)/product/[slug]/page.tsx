@@ -1,6 +1,6 @@
 'use client';
 
-import { use, useEffect, useState } from 'react';
+import { use, useMemo } from 'react';
 import { Loader2 } from 'lucide-react';
 
 import { Breadcrumb } from '@/components/ui/breadcrumb';
@@ -12,83 +12,77 @@ import ProductReviews from '@/features/product/components/ProductReviews';
 import ProductFAQ from '@/features/product/components/ProductFAQ';
 import ProductQA from '@/features/product/components/ProductQA';
 import { mockProduct } from '@/features/product/mocks/productMockData';
-import { useGetGoodsInfo, useGetQuestionList } from '@/features/product/hooks';
-import { Product, ProductImage } from '@/features/product/types/productTypes';
+import { useGetQuestionList } from '@/features/product/hooks';
+import { ProductImage } from '@/features/product/types/productTypes';
 import { useGetGoodsList } from '@/features/search/hooks/goods/useGetGoodsList';
+import { useAuth } from '@/hooks';
+import { useGetVoucher } from '@/features/cart/hooks/useGetVoucher';
+import { useGetGoodsInfoBySlug } from '@/features/product/hooks/useGetGoodsInfoBySlug';
 
 export default function ProductDetailPage({
   params,
-  searchParams,
 }: {
   params: { slug: string } | Promise<{ slug: string }>;
-  searchParams:
-    | { goodsId?: string; categoryId?: string }
-    | Promise<{ goodsId?: string; categoryId?: string }>;
 }) {
+  // Ensure we call all hooks at the top level in the same order
+  const { user } = useAuth();
+
   // Unwrap params using React.use() to handle the Promise
   const unwrappedParams = params instanceof Promise ? use(params) : params;
   const { slug } = unwrappedParams;
 
-  // Unwrap searchParams
-  const unwrappedSearchParams =
-    searchParams instanceof Promise ? use(searchParams) : searchParams;
+  console.log('ProductDetailPage slug:', slug);
 
-  // We'll use this state to store the goodsId once we look it up or get it from the API
-  const [goodsId, setGoodsId] = useState<string>(
-    unwrappedSearchParams.goodsId || '',
-  );
-  const [categoryId, setCategoryId] = useState<string>(
-    unwrappedSearchParams.categoryId || '',
-  );
-  const [isLoadingId, setIsLoadingId] = useState(
-    !unwrappedSearchParams.goodsId,
-  );
+  // Always call all data fetching hooks
+  const { productInfo, isLoading, error } = useGetGoodsInfoBySlug(slug);
 
-  // If goodsId is not provided in the query params, fetch it from the slug
-  useEffect(() => {
-    // If goodsId is already available from searchParams, don't fetch
-    if (unwrappedSearchParams.goodsId) {
-      return;
-    }
-
-    // Simulate API call to get goodsId from slug
-    const fetchGoodsIdBySlug = async () => {
-      try {
-        // In a real implementation, this would be an API call
-        // await apiClient.get(`/api/lookup/slug/${slug}`)
-
-        // For now, we'll just simulate a delay and return our example ID
-        await new Promise(resolve => setTimeout(resolve, 200));
-        setGoodsId('67b2a307af90b400131ad107');
-      } catch (error) {
-        console.error('Error fetching goodsId by slug:', error);
-      } finally {
-        setIsLoadingId(false);
-      }
-    };
-
-    fetchGoodsIdBySlug();
-  }, [slug, unwrappedSearchParams.goodsId]);
-
-  const { productInfo, isLoading, error } = useGetGoodsInfo(goodsId);
-
-  // Fetch good list by category ID
+  // Fetch good list by category ID - use optional chaining to handle undefined
   const { goodsList: relatedProductList, isLoading: isLoadingGoodsList } =
     useGetGoodsList({
-      categoryID: categoryId,
+      categoryID: productInfo?.category?._id,
       limit: 5,
       page: 1,
     });
 
   // Fetch questions for the product
   const { questionList, isLoading: isLoadingQuestions } = useGetQuestionList({
-    goodsId: goodsId,
+    slug: slug,
     limit: 10,
     page: 1,
   });
 
+  // Always call the voucher hook
+  const { data: vouchers = [], isLoading: isLoadingVouchers } = useGetVoucher({
+    customerID: user?.id,
+  });
+
+  // Use useMemo for derived data instead of conditional variables
+  const adaptedProduct = useMemo(() => {
+    if (!productInfo) return null;
+
+    return {
+      ...productInfo,
+      id: productInfo._id,
+      _id: productInfo._id,
+      name: productInfo.name,
+      description: productInfo.description || mockProduct.description,
+      slug: productInfo.slug || '',
+      ingredients: productInfo.ingredients || '',
+      storage: productInfo.storage || '',
+      usage: productInfo.usage || '',
+      images:
+        productInfo.images?.map((image: ProductImage) => ({
+          _id: image._id,
+          path: image.path,
+          size: image.size || 0,
+          alt: `${productInfo.name} - Image`,
+        })) || [],
+    };
+  }, [productInfo]);
+
+  // Now render based on component state
   // Loading state
-  if (isLoadingId || (isLoading && goodsId)) {
+  if (isLoading) {
     return (
       <div className="flex h-96 items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-[#0D6EFD]" />
@@ -113,32 +107,12 @@ export default function ProductDetailPage({
     );
   }
 
-  const product = productInfo;
-
-  if (!product) {
+  // If no product or adapted product, return null
+  if (!productInfo || !adaptedProduct) {
     return null;
   }
 
-  // We need to maintain compatibility with the existing components
-  // that expect the standard Product type, so we'll adapt our data
-  const adaptedProduct: Product = {
-    ...product,
-    id: product._id,
-    _id: product._id,
-    name: product.name,
-    description: product.description || mockProduct.description,
-    slug: product.slug || '',
-    ingredients: product.ingredients || '',
-    storage: product.storage || '',
-    usage: product.usage || '',
-    images: product.images.map((image: ProductImage) => ({
-      _id: image._id,
-      path: image.path,
-      size: image.size || 0,
-      alt: `${product.name} - Image`,
-    })),
-  };
-
+  // Only return the fully rendered component when we have all data
   return (
     <div className="min-h-screen bg-background pb-8 sm:pb-12 pt-4 sm:pt-6">
       <div className="container mx-auto px-4">
@@ -150,12 +124,12 @@ export default function ProductDetailPage({
               { label: 'Sản Phẩm', href: '/products' },
               {
                 label:
-                  typeof product.category.name === 'string'
-                    ? product.category.name
+                  typeof productInfo.category?.name === 'string'
+                    ? productInfo.category.name
                     : 'Danh Mục',
-                href: `/products/category/${typeof product.category.name === 'string' ? product.category.name : 'all'}`,
+                href: `/products/category/${typeof productInfo.category?.name === 'string' ? productInfo.category.name : 'all'}`,
               },
-              { label: product.name },
+              { label: productInfo.name },
             ]}
           />
         </nav>
@@ -178,7 +152,8 @@ export default function ProductDetailPage({
             <ProductInfo
               error={error}
               isLoading={isLoading}
-              product={product}
+              product={productInfo}
+              vouchers={vouchers}
             />
           </div>
         </div>

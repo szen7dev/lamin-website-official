@@ -1,6 +1,7 @@
 import { Voucher, VoucherParams } from '../types/voucherTypes';
 
 import { apiClient } from '@/services/api/apiClient';
+
 /**
  * Fetch vouchers for a customer
  * @param customerId - ID of the customer
@@ -16,13 +17,14 @@ export const getVouchers = async (
 
     const queryParams = {
       customerID: params.customerID,
-      select: 'name sign expired salesoffAmount salesoffRate minOrderAmount',
     };
 
     const vouchers = await apiClient.get<Voucher[]>(
       '/api/store/vouchers',
       queryParams,
     );
+
+    console.log('Voucher res', vouchers);
 
     if (!vouchers) {
       throw new Error('Failed to fetch vouchers');

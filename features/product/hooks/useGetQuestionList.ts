@@ -12,7 +12,14 @@ import { QuestionListParams } from '@/features/product/types/questionTypes';
  */
 export const useGetQuestionList = (params: QuestionListParams) => {
   const { data, isLoading, error, refetch, isError } = useQuery({
-    queryKey: ['PRODUCT_QUESTIONS', params.goodsId, params.page, params.limit, params.cursor],
+    queryKey: [
+      'PRODUCT_QUESTIONS',
+      params.goodsId,
+      params.page,
+      params.limit,
+      params.cursor,
+      params.slug,
+    ],
     queryFn: () => getQuestionList(params),
     staleTime: 1000 * 60 * 5, // 5 minutes
     enabled: !!params.goodsId, // Only fetch if goodsId is provided
@@ -32,4 +39,4 @@ export const useGetQuestionList = (params: QuestionListParams) => {
     refetch,
     hasData: !!data?.data?.listRecords?.length,
   };
-}; 
+};
