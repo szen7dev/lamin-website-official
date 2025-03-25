@@ -1,4 +1,4 @@
-import { Coach, GetCoachParams } from '../../types/coachTypes';
+import { Coach, GetCoachParams } from '../../homepage/types/coachTypes';
 
 import { apiClient, DEFAULT_OPTION_SELLER } from '@/services/api/apiClient';
 

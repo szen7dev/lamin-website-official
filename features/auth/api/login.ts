@@ -86,9 +86,10 @@ export const login = async (params: LoginParams): Promise<LoginResponse> => {
     // Return a standardized error response
     return {
       success: false,
-      message: error instanceof Error 
-        ? error.message 
-        : 'Đăng nhập không thành công. Vui lòng kiểm tra thông tin đăng nhập và thử lại.',
+      message:
+        error instanceof Error
+          ? error.message
+          : 'Đăng nhập không thành công. Vui lòng kiểm tra thông tin đăng nhập và thử lại.',
     };
   }
 };

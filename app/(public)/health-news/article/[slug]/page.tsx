@@ -20,7 +20,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   let seoData = {
     title: 'Bài Viết - Góc Sức Khỏe',
-    description: 'Bài viết về sức khỏe và dinh dưỡng từ Elena Pharmacy',
+    description: 'Bài viết về sức khỏe và dinh dưỡng từ Lamin Pharmacy',
   };
 
   try {
@@ -120,7 +120,7 @@ export default async function ArticleDetailPage({
                   />
                 </div>
                 <figcaption className="mt-1 sm:mt-2 text-center text-xs sm:text-sm text-grayscale-60">
-                  Elena mở rộng chi nhánh hoạt động
+                  Lamin mở rộng chi nhánh hoạt động
                 </figcaption>
               </figure>
 

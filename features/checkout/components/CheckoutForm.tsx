@@ -53,7 +53,7 @@ export type CheckoutFormValues = z.infer<typeof formSchema>;
 
 // Extended type that includes paymentMethodIndex
 export type CheckoutFormSubmission = CheckoutFormValues & {
-  paymentMethodIndex?: number;  // Make this optional since we're using paymentMethod directly
+  paymentMethodIndex?: number; // Make this optional since we're using paymentMethod directly
 };
 
 interface CheckoutFormProps {

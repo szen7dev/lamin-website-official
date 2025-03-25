@@ -1,5 +1,5 @@
 export const siteConfig = {
-  name: 'Elena Pharmacy',
+  name: 'Lamin Pharmacy',
   description: 'Your trusted pharmacy partner',
   url: 'https://elela.vn',
   ogImage: 'https://elela.vn/og-image.jpg',

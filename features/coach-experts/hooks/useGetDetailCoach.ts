@@ -4,7 +4,7 @@ import {
   Coach,
   GetDetailCoachParams,
 } from '@/features/homepage/types/coachTypes';
-import { getDetailCoach } from '@/features/homepage/api/coach/getDetailCoach';
+import { getDetailCoach } from '@/features/coach-experts/api/getDetailCoach';
 
 /**
  * Hook for fetching detailed coach information

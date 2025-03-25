@@ -159,7 +159,7 @@ export default function CheckoutConfirmationPage() {
               Chủ tài khoản:
             </div>
             <div className="text-grayscale-90 font-medium text-base mb-4">
-              Công ty Cổ Phần Dược Phẩm Elena
+              Công ty Cổ Phần Dược Phẩm Lamin
             </div>
 
             <div className="text-grayscale-50 text-base font-medium mb-1">

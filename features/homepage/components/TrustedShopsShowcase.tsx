@@ -6,32 +6,32 @@ const trustedShops = [
   {
     id: 1,
     image: '/placeholder.svg?height=80&width=160',
-    name: 'Nhà thuốc Elena 1',
+    name: 'Nhà thuốc Lamin 1',
   },
   {
     id: 2,
     image: '/placeholder.svg?height=80&width=160',
-    name: 'Nhà thuốc Elena 2',
+    name: 'Nhà thuốc Lamin 2',
   },
   {
     id: 3,
     image: '/placeholder.svg?height=80&width=160',
-    name: 'Nhà thuốc Elena 3',
+    name: 'Nhà thuốc Lamin 3',
   },
   {
     id: 4,
     image: '/placeholder.svg?height=80&width=160',
-    name: 'Nhà thuốc Elena 4',
+    name: 'Nhà thuốc Lamin 4',
   },
   {
     id: 5,
     image: '/placeholder.svg?height=80&width=160',
-    name: 'Nhà thuốc Elena 5',
+    name: 'Nhà thuốc Lamin 5',
   },
   {
     id: 6,
     image: '/placeholder.svg?height=80&width=160',
-    name: 'Nhà thuốc Elena 6',
+    name: 'Nhà thuốc Lamin 6',
   },
 ];
 

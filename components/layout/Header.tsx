@@ -178,7 +178,7 @@ export function Header() {
               {/* Mobile Menu Button and Logo - Only visible on small screens */}
               <div className="flex w-full justify-between items-center sm:hidden">
                 <Link
-                  aria-label="Elena Pharmacy Home"
+                  aria-label="Lamin Pharmacy Home"
                   className="flex items-end gap-2"
                   href="/">
                   <Image
@@ -211,7 +211,7 @@ export function Header() {
               <div className="flex items-center sm:flex justify-items-start gap-4">
                 {/* Logo */}
                 <Link
-                  aria-label="Elena Pharmacy Home"
+                  aria-label="Lamin Pharmacy Home"
                   className="flex items-end gap-2"
                   href="/">
                   <Image

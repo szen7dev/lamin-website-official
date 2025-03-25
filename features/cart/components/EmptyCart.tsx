@@ -33,7 +33,7 @@ export function EmptyCart() {
         Bạn chưa có sản phẩm nào trong giỏ
       </h2>
       <p className="mb-6 text-center text-gray-600">
-        Cùng khám phá hàng ngàn sản phẩm tại Nhà thuốc Elela Long Châu nhé!
+        Cùng khám phá hàng ngàn sản phẩm tại Nhà thuốc LAMIN nhé!
       </p>
 
       {/* Explore button */}

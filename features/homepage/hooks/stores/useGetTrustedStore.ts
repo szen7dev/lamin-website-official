@@ -1,6 +1,6 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 
 import { getTrustedStore } from '../../api/stores/getTrustedStore';
 import { GetTrustedStoreParams, TrustedStore } from '../../types/storeTypes';
@@ -11,7 +11,7 @@ import { GetTrustedStoreParams, TrustedStore } from '../../types/storeTypes';
  * @returns Query result with trusted store data and a helper for getting a single store
  */
 export const useGetTrustedStore = (params: GetTrustedStoreParams = {}) => {
-  const { data, isLoading, error } = useQuery({
+  const { data, isLoading, error } = useSuspenseQuery({
     queryKey: ['trustedStore', params],
     queryFn: () => getTrustedStore(params),
   });

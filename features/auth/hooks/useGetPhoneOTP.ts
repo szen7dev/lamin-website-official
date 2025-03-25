@@ -32,12 +32,14 @@ export const useGetPhoneOTP = (params?: UseGetPhoneOTPParams) => {
       // Call success callback if provided with the OTP string
       if (onSuccess) onSuccess(otp);
     },
-    onError: (error) => {
+    onError: error => {
       // Show error toast
       toast({
         title: 'Lỗi',
         description:
-          error instanceof Error ? error.message : 'Không thể gửi mã OTP, hãy kiểm tra lại số điện thoại của bạn',
+          error instanceof Error
+            ? error.message
+            : 'Không thể gửi mã OTP, hãy kiểm tra lại số điện thoại của bạn',
         variant: 'destructive',
       });
 

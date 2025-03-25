@@ -5,7 +5,7 @@ import NutritionCheckForm from '@/features/nutrition-check/components/NutritionC
 import { generateMetadata as generateSeoMetadata } from '@/utils/seo';
 
 export const metadata: Metadata = generateSeoMetadata({
-  title: 'Kiểm Tra Dinh Dưỡng - Elena Pharmacy',
+  title: 'Kiểm Tra Thói Quen',
   description: 'Kiểm tra thói quen ăn uống và nhận tư vấn dinh dưỡng',
 });
 

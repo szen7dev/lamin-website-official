@@ -137,7 +137,7 @@ export default function ProductCard({
       <Link
         className="block mb-3 hover:no-underline decoration-transparent"
         href={{
-          pathname: `/product/${product.slug}`,
+          pathname: `/san-pham/${product.slug}`,
         }}>
         <div className="relative mb-1 aspect-square">
           <Image
@@ -216,7 +216,7 @@ export default function ProductCard({
         <Link
           className="decoration-transparent mt-auto w-full rounded-full bg-primary hover:bg-primary-60 text-white py-2 px-4 text-center text-sm sm:text-base font-medium transition-colors no-underline"
           href={{
-            pathname: `/product/${product.slug}`,
+            pathname: `/san-pham/${product.slug}`,
           }}>
           Chọn Mua
         </Link>

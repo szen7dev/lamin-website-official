@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Mic, Search, X } from 'lucide-react';
 import Link from 'next/link';
-import { router } from 'next/client';
 
 import SearchSuggestions from './SearchSuggestions';
 

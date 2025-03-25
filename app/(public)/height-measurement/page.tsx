@@ -5,7 +5,7 @@ import HeightMeasurementForm from '@/features/height-measurement/components/Heig
 import { generateMetadata as generateSeoMetadata } from '@/utils/seo';
 
 export const metadata: Metadata = generateSeoMetadata({
-  title: 'Đo Cao - Elena Pharmacy',
+  title: 'Đo Cao - Lamin Pharmacy',
   description: 'Công cụ đo và dự đoán chiều cao cho trẻ em',
 });
 

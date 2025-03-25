@@ -1,5 +1,7 @@
 import { notFound } from 'next/navigation';
+import { Metadata } from 'next';
 
+import { generateMetadata as generateSeoMetadata } from '@/utils/seo';
 import HeightMeasurementResult from '@/features/height-measurement/components/HeightMeasurementResult';
 import { DynamicBreadcrumb } from '@/components/dynamic-breadcrumb';
 
@@ -8,6 +10,11 @@ interface PageProps {
     id: string;
   };
 }
+
+export const metadata: Metadata = generateSeoMetadata({
+  title: 'Kết quả đo cao - Lamin Pharmacy',
+  description: 'Xem kết quả đo cao và nhận tư vấn về chiều cao',
+});
 
 export default async function HeightMeasurementResultsPage({
   params,

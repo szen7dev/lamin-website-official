@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 
-import { useGetCoach } from '../hooks/coach/useGetCoach';
+import { useGetCoach } from '../../coach-experts/hooks/useGetCoach';
 
 import { apiClient } from '@/services/api/apiClient';
 

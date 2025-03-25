@@ -22,7 +22,7 @@ export class NutritionCheckRealService implements NutritionCheckService {
         height: Number(data.height),
         weight: Number(data.weight),
         name: data.name,
-        note: `Kiểm tra dinh dưỡng từ website Elena Pharmacy`,
+        note: `Kiểm tra dinh dưỡng từ website Lamin Pharmacy`,
       };
 
       console.log('🌐 REAL API: Converted API data:', apiData);

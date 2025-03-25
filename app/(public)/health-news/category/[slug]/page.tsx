@@ -15,7 +15,7 @@ export async function generateMetadata({
   let seoData = {
     title: 'Danh Mục Bài Viết - Góc Sức Khỏe',
     description:
-      'Các bài viết theo danh mục về sức khỏe và dinh dưỡng từ Elena Pharmacy',
+      'Các bài viết theo danh mục về sức khỏe và dinh dưỡng từ Lamin Pharmacy',
   };
 
   try {
@@ -27,7 +27,7 @@ export async function generateMetadata({
         title: category.name,
         description:
           category.description ||
-          `Những bài viết về ${category.name} từ Elena Pharmacy`,
+          `Những bài viết về ${category.name} từ Lamin Pharmacy`,
       };
     }
   } catch (error) {

@@ -57,9 +57,9 @@ const HealthNews = dynamic(
 );
 
 export const metadata: Metadata = generateSeoMetadata({
-  title: 'Elena Pharmacy - Nhà thuốc trực tuyến của bạn',
+  title: 'Lamin Pharmacy - Nhà thuốc trực tuyến của bạn',
   description:
-    'Mua thuốc trực tuyến, nhận tư vấn sức khỏe và nhiều dịch vụ khác tại Elena Pharmacy',
+    'Mua thuốc trực tuyến, nhận tư vấn sức khỏe và nhiều dịch vụ khác tại Lamin Pharmacy',
   keywords: [
     'nhà thuốc',
     'thuốc',

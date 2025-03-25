@@ -9,7 +9,7 @@ import type {
 const mockTrustedShops: TrustedShop[] = [
   {
     id: '1',
-    name: 'Nhà thuốc Elena 1',
+    name: 'Nhà thuốc Lamin 1',
     slug: 'nha-thuoc-elena-1',
     description: 'Nhà thuốc uy tín hàng đầu tại Hà Nội',
     address: '30 Vĩnh Phúc, Ba Đình, Hà Nội',
@@ -27,7 +27,7 @@ const mockTrustedShops: TrustedShop[] = [
   },
   {
     id: '2',
-    name: 'Nhà thuốc Elena 2',
+    name: 'Nhà thuốc Lamin 2',
     slug: 'nha-thuoc-elena-2',
     description: 'Nhà thuốc uy tín hàng đầu tại Hồ Chí Minh',
     address: '123 Nguyễn Huệ, Quận 1, TP. Hồ Chí Minh',

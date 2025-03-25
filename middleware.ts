@@ -44,6 +44,22 @@ export async function middleware(request: NextRequest) {
     return NextResponse.rewrite(new URL(newPath, request.url));
   }
 
+  // Check for dynamic product path
+  if (pathname.startsWith('/product/') && pathname !== '/product') {
+    const slug = pathname.replace('/product/', '');
+    const newPath = `/san-pham/${slug}`;
+
+    return NextResponse.redirect(new URL(newPath, request.url));
+  }
+
+  // Check for dynamic san-pham path
+  if (pathname.startsWith('/san-pham/') && pathname !== '/san-pham') {
+    const slug = pathname.replace('/san-pham/', '');
+    const newPath = `/product/${slug}`;
+
+    return NextResponse.rewrite(new URL(newPath, request.url));
+  }
+
   // Check for dynamic he-thong-cua-hang path
   if (
     pathname.startsWith('/he-thong-cua-hang/') &&
