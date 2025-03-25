@@ -10,7 +10,7 @@ export function EmptyCart() {
       {/* Back button */}
       <div className="my-8 self-start">
         <Link
-          className="inline-flex items-center text-blue-600 hover:text-blue-700 hover:no-underline"
+          className="inline-flex items-center text-blue-600 hover:text-blue-700 hover:no-underline decoration-transparent"
           href="/">
           <ChevronLeft className="h-5 w-5" />
           <span>Tiếp tục mua sắm</span>
@@ -33,14 +33,16 @@ export function EmptyCart() {
         Bạn chưa có sản phẩm nào trong giỏ
       </h2>
       <p className="mb-6 text-center text-gray-600">
-        Cùng khám phá hàng ngàn sản phẩm tại Nhà thuốc Elela Long Châu nhé!
+        Cùng khám phá hàng ngàn sản phẩm tại Nhà thuốc LAMIN nhé!
       </p>
 
       {/* Explore button */}
       <Button
         asChild
         className="rounded-full bg-blue-600 px-8 hover:bg-blue-700">
-        <Link className="text-white hover:no-underline" href="/">
+        <Link
+          className="decoration-transparent text-white hover:no-underline"
+          href="/">
           Khám phá ngay
         </Link>
       </Button>

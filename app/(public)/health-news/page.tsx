@@ -1,12 +1,12 @@
 import type { Metadata } from 'next';
 
-import { Breadcrumb } from '@/components/ui/breadcrumb';
 import FeaturedArticles from '@/features/article/components/FeaturedArticles';
 import CategoryList from '@/features/article/components/CategoryList';
 import PopularArticles from '@/features/article/components/PopularArticles';
 import ArticleList from '@/features/article/components/ArticleList';
 import { articleService } from '@/features/article/services/articleServiceFactory';
 import { generateMetadata as generateSeoMetadata } from '@/utils/seo';
+import { DynamicBreadcrumb } from '@/components/dynamic-breadcrumb';
 
 export function generateMetadata(): Metadata {
   return generateSeoMetadata({
@@ -36,14 +36,7 @@ export default async function HealthNewsPage() {
     <div className="min-h-screen bg-background pb-8 sm:pb-12 pt-4 sm:pt-6">
       <div className="container mx-auto px-4">
         {/* Breadcrumb */}
-        <nav aria-label="Breadcrumb">
-          <Breadcrumb
-            items={[
-              { label: 'Trang Chủ', href: '/' },
-              { label: 'Góc Sức Khỏe' },
-            ]}
-          />
-        </nav>
+        <DynamicBreadcrumb />
 
         {/* Title Section */}
         <header className="mb-6 sm:mb-8">

@@ -2,10 +2,10 @@
 
 import Image from 'next/image';
 import { ChevronRight } from 'lucide-react';
+import Link from 'next/link';
 
-import { useGetCoach } from '../hooks/coach/useGetCoach';
+import { useGetCoach } from '../../coach-experts/hooks/useGetCoach';
 
-import { Button } from '@/components/ui/button';
 import { apiClient } from '@/services/api/apiClient';
 
 export default function CoachExperts() {
@@ -25,12 +25,12 @@ export default function CoachExperts() {
         <p className="mb-4 text-base font-medium text-white/90">
           Danh sách các Coach tư vấn chăm sóc sức khỏe của Elela
         </p>
-        <Button
-          className="flex items-center gap-2 rounded-full bg-white text-primary hover:bg-white/90"
-          variant="secondary">
+        <Link
+          className="decoration-transparent inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-primary hover:bg-white/90 font-normal text-sm transition-colors"
+          href="/doi-ngu-chuyen-mon">
           Tìm hiểu thêm
           <ChevronRight aria-hidden="true" className="h-4 w-4" />
-        </Button>
+        </Link>
       </header>
 
       <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -60,11 +60,17 @@ export default function CoachExperts() {
                     src={imageUrl}
                     width={80}
                   />
-                  <div>
+                  <div className="min-w-0 flex-1">
                     <span className="text-sm text-grayscale-40">
-                      Bác sĩ chuyên khoa
+                      {coach.field &&
+                      typeof coach.field === 'object' &&
+                      coach.field.name
+                        ? coach.field.name
+                        : typeof coach.field === 'string'
+                          ? coach.field
+                          : 'Bác sĩ chuyên khoa'}
                     </span>
-                    <h3 className="text-lg font-semibold text-grayscale-90">
+                    <h3 className="text-lg font-semibold text-grayscale-90 truncate">
                       {coach.name}
                     </h3>
                     <p className="text-sm text-primary">{experience}</p>

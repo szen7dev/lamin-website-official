@@ -145,7 +145,7 @@ export default function OrderInfo() {
             <strong>08:00 - 09:00 ngày {deliveryTime}</strong>
           </p>
           <p className="text-sm text-gray-600">
-            Nhà thuốc Elena LC HNI 115 Nguyễn Hoàng Tôn đã tiếp nhận đơn hàng.
+            Nhà thuốc Lamin LC HNI 115 Nguyễn Hoàng Tôn đã tiếp nhận đơn hàng.
           </p>
         </div>
         <div className="grid grid-cols-3 gap-4 my-4">
@@ -168,7 +168,7 @@ export default function OrderInfo() {
           <div className="bg-white p-4 rounded-lg shadow-md">
             <p className="text-gray-700 font-semibold">Điểm bán xử lý đơn</p>
             <p className="text-sm text-gray-600">
-              Nhà thuốc Elena LC HNI 115 Nguyễn Hoàng Tôn
+              Nhà thuốc Lamin LC HNI 115 Nguyễn Hoàng Tôn
             </p>
           </div>
         </div>

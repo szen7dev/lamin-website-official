@@ -11,11 +11,13 @@ export interface MediaItem {
   company?: string;
   type?: number;
   status?: number;
-  thumbnail?: string | {
-    _id: string;
-    name?: string;
-    path: string;
-  };
+  thumbnail?:
+    | string
+    | {
+        _id: string;
+        name?: string;
+        path: string;
+      };
   childs?: MediaItem[];
 }
 

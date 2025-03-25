@@ -1,3 +1,5 @@
+import { Thumbnail } from '@/types';
+
 export interface ComboProduct {
   _id: string;
   category: {
@@ -13,10 +15,7 @@ export interface ComboProduct {
   expired?: string;
   unitNote?: string;
   slug: string;
-  thumbnail: {
-    _id: string;
-    path: string;
-  };
+  thumbnail: Thumbnail;
 }
 
 export interface Combo {

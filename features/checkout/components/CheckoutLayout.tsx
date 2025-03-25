@@ -14,18 +14,13 @@ import {
   CheckoutFormSubmission,
 } from './CheckoutForm';
 
+import { DynamicBreadcrumb } from '@/components/dynamic-breadcrumb';
 import { useOrder } from '@/contexts/OrderContext';
-import { Breadcrumb } from '@/components/ui/breadcrumb';
 import { CartItems } from '@/features/cart/components/CartItems';
 import { CartSummary } from '@/features/cart/components/CartSummary';
 import { useCart } from '@/features/cart/hooks/useCart';
 import { useAuth } from '@/hooks';
 import { useToast } from '@/components/ui/use-toast';
-
-const breadcrumbItems = [
-  { label: 'Giỏ hàng', href: '/cart' },
-  { label: 'Thanh toán', href: '/checkout' },
-];
 
 export function CheckoutLayout() {
   const router = useRouter();
@@ -260,7 +255,7 @@ export function CheckoutLayout() {
 
   return (
     <div className="container mx-auto py-8">
-      <Breadcrumb items={breadcrumbItems} />
+      <DynamicBreadcrumb />
 
       <div className="mt-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 space-y-8">

@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 
-import { Breadcrumb } from '@/components/ui/breadcrumb';
+import { DynamicBreadcrumb } from '@/components/dynamic-breadcrumb';
 import NutritionCheckResult from '@/features/nutrition-check/components/NutritionCheckResult';
 
 export default async function NutritionCheckResultsPage({
@@ -21,13 +21,7 @@ export default async function NutritionCheckResultsPage({
     <div className="min-h-screen bg-[#F8F9FE] pb-12 pt-6">
       <div className="container mx-auto px-4">
         {/* Breadcrumb */}
-        <Breadcrumb
-          items={[
-            { label: 'Trang Chủ', href: '/' },
-            { label: 'Kiểm Tra Dinh Dưỡng', href: '/nutrition-check' },
-            { label: 'Kết quả phân tích' },
-          ]}
-        />
+        <DynamicBreadcrumb />
 
         {/* Main Content */}
         <div className="mx-auto max-w-xl">

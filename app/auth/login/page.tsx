@@ -174,19 +174,19 @@ export default function LoginPage() {
     switch (currentStep) {
       case LoginStep.PHONE_INPUT:
         return (
-          <div className="w-full max-w-md space-y-3 p-8 bg-white rounded-lg">
+          <div className="w-full max-w-md space-y-3 p-8 bg-gray-50 rounded-lg">
             <div className="text-center">
               <div className="flex items-center justify-center">
                 <Image
-                  alt="FPT Retail"
-                  className="h-12 w-auto"
-                  height={48}
-                  src="https://images.glints.com/unsafe/glints-dashboard.oss-ap-southeast-1.aliyuncs.com/company-logo/fd3ef04e572c6436a8580539e7555fd0.jpg"
-                  width={48}
+                  alt="Logo"
+                  className="w-auto"
+                  height={80}
+                  src="/images/Lamin_Logo_Colored.png"
+                  width={80}
                 />
                 <div className="text-left font-extrabold text-[#034EA2]">
                   <div className="text-sm">NHÀ THUỐC</div>
-                  <div className="text-xl leading-tight">LONG CHÂU</div>
+                  <div className="text-xl leading-tight">LAMIN</div>
                 </div>
               </div>
 
@@ -233,8 +233,9 @@ export default function LoginPage() {
 
               <div className="flex items-center justify-end gap-2">
                 <Button
-                  className="w-[120px] rounded-full bg-primary-5 text-primary"
-                  variant="default">
+                  className="w-[120px] rounded-full bg-primary-5 text-primary hover:text-white"
+                  variant="default"
+                  onClick={() => (window.location.href = '/')}>
                   Thoát
                 </Button>
                 <Button

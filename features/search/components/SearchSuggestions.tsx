@@ -42,7 +42,7 @@ export default function SearchSuggestions({
           results.map(result => (
             <Link
               key={result.id}
-              className="flex items-center gap-4 px-4 py-3 transition-colors border-t-2 hover:bg-grayscale-5 hover:no-underline"
+              className="decoration-transparent flex items-center gap-4 px-4 py-3 transition-colors border-t-2 hover:bg-grayscale-5 hover:no-underline"
               href={{
                 pathname: `/product/${result.slug}`,
               }}
@@ -81,7 +81,7 @@ export default function SearchSuggestions({
       {/* View All Link */}
       {results.length > 0 && (
         <Link
-          className="flex items-center justify-center gap-1 border-t border-grayscale-20 p-3 text-sm text-primary-40 hover:bg-grayscale-5"
+          className="decoration-transparent flex items-center justify-center gap-1 border-t border-grayscale-20 p-3 text-sm text-primary-40 hover:bg-grayscale-5"
           href={`/search?q=${encodeURIComponent(queryForSearch)}`}
           onClick={onClose}>
           Xem tất cả

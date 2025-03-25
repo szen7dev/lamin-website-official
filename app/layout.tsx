@@ -13,7 +13,7 @@ import { Providers } from '@/components/providers';
 import { fontSans } from '@/config/fonts';
 
 export const metadata = generateSeoMetadata({
-  title: 'Elena Pharmacy',
+  title: 'Lamin Pharmacy',
   description: 'Your trusted pharmacy partner',
 });
 

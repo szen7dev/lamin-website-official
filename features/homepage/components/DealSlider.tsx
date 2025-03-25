@@ -177,7 +177,7 @@ export default function DealSlider() {
         </div>
         <Link
           aria-label="Xem thêm sản phẩm khuyến mãi"
-          className="hidden md:flex items-center justify-center gap-1 rounded-full bg-white px-4 py-2 text-sm font-medium text-primary hover:bg-white/90"
+          className="hidden md:flex items-center justify-center gap-1 rounded-full bg-white px-4 py-2 text-sm font-medium text-primary hover:bg-white/90 decoration-transparent"
           href="/deals">
           Xem thêm
           <ChevronRight aria-hidden="true" className="h-4 w-4" />
@@ -395,7 +395,7 @@ export default function DealSlider() {
           <div className="pt-2 flex justify-center">
             <Link
               aria-label="Xem tất cả sản phẩm khuyến mãi"
-              className="flex items-center justify-center gap-1 text-white"
+              className="flex items-center justify-center gap-1 text-white decoration-transparent"
               href="/deals">
               Xem tất cả
               <ChevronRight aria-hidden="true" className="h-4 w-4" />

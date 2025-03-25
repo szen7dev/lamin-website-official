@@ -1,11 +1,11 @@
 import type { Metadata } from 'next';
 
-import { Breadcrumb } from '@/components/ui/breadcrumb';
+import { DynamicBreadcrumb } from '@/components/dynamic-breadcrumb';
 import NutritionCheckForm from '@/features/nutrition-check/components/NutritionCheckForm';
 import { generateMetadata as generateSeoMetadata } from '@/utils/seo';
 
 export const metadata: Metadata = generateSeoMetadata({
-  title: 'Kiểm Tra Dinh Dưỡng - Elena Pharmacy',
+  title: 'Kiểm Tra Thói Quen',
   description: 'Kiểm tra thói quen ăn uống và nhận tư vấn dinh dưỡng',
 });
 
@@ -14,12 +14,7 @@ export default function NutritionCheckPage() {
     <div className="min-h-screen bg-[#F8F9FE] pb-12 pt-6">
       <div className="container mx-auto px-4">
         {/* Breadcrumb */}
-        <Breadcrumb
-          items={[
-            { label: 'Trang Chủ', href: '/' },
-            { label: 'Kiểm Tra Dinh Dưỡng' },
-          ]}
-        />
+        <DynamicBreadcrumb />
 
         {/* Main Content */}
         <div className="mx-auto max-w-xl">

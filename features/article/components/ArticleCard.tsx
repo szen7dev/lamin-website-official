@@ -30,7 +30,9 @@ export default function ArticleCard({
   if (variant === 'featured') {
     return (
       <article className="group relative">
-        <Link className="block" href={`/health-news/article/${slug}`}>
+        <Link
+          className="decoration-transparent block"
+          href={`/health-news/article/${slug}`}>
           <figure className="relative aspect-[16/9] overflow-hidden rounded-lg">
             <Image
               fill
@@ -80,7 +82,9 @@ export default function ArticleCard({
   if (variant === 'compact') {
     return (
       <article className="group">
-        <Link className="flex gap-4" href={`/health-news/article/${slug}`}>
+        <Link
+          className="decoration-transparent flex gap-4"
+          href={`/health-news/article/${slug}`}>
           <figure className="relative h-20 w-32 flex-shrink-0 overflow-hidden rounded-lg">
             <Image
               fill
@@ -107,7 +111,9 @@ export default function ArticleCard({
   // Default variant
   return (
     <article className="group">
-      <Link className="block" href={`/health-news/article/${slug}`}>
+      <Link
+        className="decoration-transparent block"
+        href={`/health-news/article/${slug}`}>
         <figure className="relative aspect-[4/3] overflow-hidden rounded-lg">
           <Image
             fill

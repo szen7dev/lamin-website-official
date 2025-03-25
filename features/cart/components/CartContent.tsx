@@ -9,6 +9,7 @@ import { useCart } from '../hooks/useCart';
 
 import { CartItems } from './CartItems';
 import { CartSummary } from './CartSummary';
+
 import { useAuth } from '@/hooks';
 import { useToast } from '@/components/ui/use-toast';
 
@@ -46,29 +47,31 @@ export function CartContent() {
   const handleCheckout = () => {
     if (!isAuthenticated || !user) {
       toast({
-        title: "Đăng nhập cần thiết",
-        description: "Vui lòng đăng nhập để tiếp tục thanh toán",
-        variant: "destructive",
+        title: 'Đăng nhập cần thiết',
+        description: 'Vui lòng đăng nhập để tiếp tục thanh toán',
+        variant: 'destructive',
       });
+
       return;
     }
-    
+
     if (selectedItems.length === 0) {
       toast({
-        title: "Chưa chọn sản phẩm",
-        description: "Vui lòng chọn ít nhất một sản phẩm để thanh toán",
-        variant: "destructive",
+        title: 'Chưa chọn sản phẩm',
+        description: 'Vui lòng chọn ít nhất một sản phẩm để thanh toán',
+        variant: 'destructive',
       });
+
       return;
     }
-    
+
     router.push('/checkout');
   };
 
   return (
     <div className="container mx-auto px-4 py-6">
       <Link
-        className="inline-flex items-center text-blue-600 mb-6 hover:underline"
+        className="inline-flex items-center text-blue-600 mb-6 hover:underline decoration-transparent"
         href="/">
         <ChevronLeft className="w-4 h-4 mr-1" />
         Tiếp tục mua sắm

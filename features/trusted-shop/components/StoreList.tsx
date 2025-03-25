@@ -1,0 +1,135 @@
+'use client';
+
+import Image from 'next/image';
+import Link from 'next/link';
+import { useState } from 'react';
+import { Search, Star } from 'lucide-react';
+
+import { apiClient } from '@/services/api/apiClient';
+import { Input } from '@/components/ui/input';
+import { useGetTrustedStore } from '@/features/homepage';
+
+export default function StoreList() {
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const { trustedStore, isLoading } = useGetTrustedStore({
+    populates: {
+      path: 'thumbnail area3 area2 area1',
+      select: 'path name',
+    },
+    select: 'name sign location address rating numberOfRating',
+  });
+
+  // Filter stores based on search term
+  const filteredStores = Array.isArray(trustedStore)
+    ? trustedStore.filter(store =>
+        store.name.toLowerCase().includes(searchTerm.toLowerCase()),
+      )
+    : [];
+
+  return (
+    <>
+      {/* Search Section */}
+      <section className="container mx-auto mb-12">
+        <div className="mx-auto max-w-3xl">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-grayscale-40" />
+            <Input
+              className="pl-10 py-6 text-base rounded-2xl bg-white"
+              placeholder="Tìm kiếm các cửa hàng trên toàn quốc..."
+              type="text"
+              value={searchTerm}
+              onChange={e => setSearchTerm(e.target.value)}
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* Stores Grid Section */}
+      <section className="container mx-auto mb-12">
+        {isLoading ? (
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+            {[1, 2, 3, 4, 5, 6, 7, 8].map(item => (
+              <div
+                key={item}
+                className="animate-pulse rounded-xl bg-white shadow-sm">
+                <div className="h-48 rounded-t-xl bg-gray-200" />
+                <div className="p-4 space-y-3">
+                  <div className="h-5 w-3/4 rounded bg-gray-200" />
+                  <div className="flex items-center gap-1">
+                    <div className="h-4 w-4 rounded-full bg-gray-200" />
+                    <div className="h-4 w-24 rounded bg-gray-200" />
+                  </div>
+                  <div className="h-4 w-full rounded bg-gray-200" />
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : filteredStores.length > 0 ? (
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+            {filteredStores.map(store => {
+              // Get image URL
+              const imageUrl = store.thumbnail?.path
+                ? apiClient.getFileUrl(store.thumbnail.path)
+                : '/placeholder.svg';
+
+              return (
+                <Link
+                  key={store._id}
+                  className="block rounded-xl overflow-hidden bg-white shadow-sm hover:shadow-md transition-shadow decoration-transparent"
+                  href={`/he-thong-cua-hang/${store._id}`}>
+                  <div className="relative h-48 w-full">
+                    <Image
+                      fill
+                      alt={store.name}
+                      className="object-cover"
+                      src={imageUrl}
+                    />
+                  </div>
+                  <div className="p-4">
+                    <div className="flex items-center gap-1 mt-1">
+                      <span>
+                        <Star className="h-4 w-4 fill-[#FFB200] text-[#FFB200]" />
+                      </span>
+                      <span className="text-xs font-normal text-grayscale-90">
+                        {store.rating?.toFixed(1) || '0.0'}{' '}
+                        <span className="text-primary">
+                          ({store.numberOfRating || 0} đánh giá)
+                        </span>
+                      </span>
+                    </div>
+                    <h3 className="text-sm font-medium text-black truncate">
+                      {store.name}
+                    </h3>
+                    <p className="text-xs font-normal text-[#657384] mt-2 line-clamp-1 h-4">
+                      {[
+                        store.address,
+                        store?.area1?.name,
+                        store?.area2?.name,
+                        store?.area3?.name,
+                      ]
+                        .filter(Boolean)
+                        .join(', ') || 'Chưa có địa chỉ'}
+                    </p>
+                    <div className="mt-4 w-full">
+                      <div className="text-center py-2 px-4 bg-primary text-white rounded-md">
+                        Xem chi tiết
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        ) : (
+          <div className="rounded-xl bg-white p-8 text-center">
+            <p className="text-[#4A4F63]">
+              Không tìm thấy cửa hàng phù hợp với từ khóa &ldquo;{searchTerm}
+              &rdquo;
+            </p>
+          </div>
+        )}
+      </section>
+    </>
+  );
+}

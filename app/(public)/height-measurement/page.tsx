@@ -1,11 +1,11 @@
 import type { Metadata } from 'next';
 
-import { Breadcrumb } from '@/components/ui/breadcrumb';
+import { DynamicBreadcrumb } from '@/components/dynamic-breadcrumb';
 import HeightMeasurementForm from '@/features/height-measurement/components/HeightMeasurementForm';
 import { generateMetadata as generateSeoMetadata } from '@/utils/seo';
 
 export const metadata: Metadata = generateSeoMetadata({
-  title: 'Đo Cao - Elena Pharmacy',
+  title: 'Đo Cao - Lamin Pharmacy',
   description: 'Công cụ đo và dự đoán chiều cao cho trẻ em',
 });
 
@@ -15,9 +15,7 @@ export default function HeightMeasurementPage() {
       <div className="container mx-auto px-4">
         <div className="max-w-3xl mx-auto">
           {/* Breadcrumb */}
-          <Breadcrumb
-            items={[{ label: 'Trang Chủ', href: '/' }, { label: 'Đo Cao' }]}
-          />
+          <DynamicBreadcrumb />
 
           {/* Title Section */}
           <div className="mb-4 sm:mb-6">

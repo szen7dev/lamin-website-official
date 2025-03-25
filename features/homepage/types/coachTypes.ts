@@ -1,3 +1,15 @@
+import { Populate } from '@/types';
+
+export interface Field {
+  _id: string;
+  name: string;
+}
+
+export interface Position {
+  _id: string;
+  name: string;
+}
+
 export interface Coach {
   _id: string;
   isDefault: number;
@@ -74,7 +86,9 @@ export interface Coach {
   __v: number;
   linkUser: string;
   userUpdate: string;
-  field: string;
+  field: Field;
+  note: string;
+  position: Position;
 }
 
 export interface GetCoachParams {
@@ -83,4 +97,10 @@ export interface GetCoachParams {
   status?: number;
   page?: number;
   sort?: string;
+}
+
+export interface GetDetailCoachParams {
+  contactID: string;
+  populates?: Populate;
+  select?: string;
 }

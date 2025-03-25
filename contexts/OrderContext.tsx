@@ -1,6 +1,7 @@
 'use client';
 
 import type React from 'react';
+
 import { createContext, useContext, useState } from 'react';
 
 /**
@@ -44,7 +45,7 @@ export function OrderProvider({ children }: { children: React.ReactNode }) {
   // Set order information
   const setOrderInfo = (info: OrderInfo) => {
     setOrderInfoState(info);
-    
+
     // Optionally store in localStorage for persistence across page refreshes
     try {
       localStorage.setItem('orderInfo', JSON.stringify(info));
@@ -80,10 +81,10 @@ export function OrderProvider({ children }: { children: React.ReactNode }) {
  */
 export function useOrder() {
   const context = useContext(OrderContext);
-  
+
   if (context === undefined) {
     throw new Error('useOrder must be used within an OrderProvider');
   }
-  
+
   return context;
-} 
+}
