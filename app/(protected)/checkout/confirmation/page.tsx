@@ -106,7 +106,7 @@ export default function CheckoutConfirmationPage() {
             <strong>Ví điện tử</strong>
           </p>
           <Link
-            className="flex justify-center items-center space-x-2 font-medium text-sm text-primary-50"
+            className="decoration-transparent flex justify-center items-center space-x-2 font-medium text-sm text-primary-50"
             href="#">
             <Image
               alt="QR Code"

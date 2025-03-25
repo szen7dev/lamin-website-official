@@ -1,3 +1,5 @@
+import { Thumbnail } from '@/types';
+
 /**
  * Represents a single best seller product
  */
@@ -6,10 +8,7 @@ export interface BestSellerItem {
   name: string;
   sellingUnitprice: number;
   unit: string;
-  thumbnail: {
-    _id: string;
-    path: string;
-  };
+  thumbnail: Thumbnail;
   slug: string;
   category: {
     _id: string;

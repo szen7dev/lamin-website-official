@@ -28,7 +28,7 @@ export function Footer() {
             </div>
 
             <Link
-              className="text-grayscale-40 hover:text-primary -ml-1"
+              className="text-grayscale-40 hover:text-primary -ml-1 decoration-transparent"
               href="#">
               {contactInfo?.name}
             </Link>
@@ -60,7 +60,7 @@ export function Footer() {
               ].map((item, index) => (
                 <li key={index} className="flex items-center">
                   <Link
-                    className="text-grayscale-40 hover:text-primary -ml-1"
+                    className="text-grayscale-40 hover:text-primary -ml-1 decoration-transparent"
                     href="#">
                     {item}
                   </Link>
@@ -93,7 +93,7 @@ export function Footer() {
               ].map((item, index) => (
                 <li key={index} className="flex items-center">
                   <Link
-                    className="text-grayscale-40 hover:text-primary -ml-1"
+                    className="text-grayscale-40 hover:text-primary -ml-1 decoration-transparent"
                     href="#">
                     {item}
                   </Link>
@@ -153,7 +153,14 @@ export function Footer() {
               </div>
 
               <div className="flex space-x-4">
-                {['/images/JCB.png', '/images/mastercard.png', '/images/visa.png', '/images/VNpay.png', '/images/zalopay.png', '/images/Momo.png'].map(method => (
+                {[
+                  '/images/JCB.png',
+                  '/images/mastercard.png',
+                  '/images/visa.png',
+                  '/images/VNpay.png',
+                  '/images/zalopay.png',
+                  '/images/Momo.png',
+                ].map(method => (
                   <div
                     key={method}
                     className="border border-grayscale-10 px-1 py-2 rounded-sm">
@@ -162,8 +169,8 @@ export function Footer() {
                       className="object-contain"
                       height={32}
                       src={method}
-                      width={48}
                       style={{ width: 'auto' }}
+                      width={48}
                     />
                   </div>
                 ))}
@@ -188,7 +195,7 @@ export function Footer() {
               <div className="flex space-x-4">
                 <Link
                   aria-label="Facebook"
-                  className="hover:opacity-80"
+                  className="hover:opacity-80 decoration-transparent"
                   href={contactInfo?.facebook || '#'}
                   rel="noopener noreferrer"
                   target="_blank">
@@ -196,7 +203,7 @@ export function Footer() {
                 </Link>
                 <Link
                   aria-label="Zalo"
-                  className="hover:opacity-80"
+                  className="hover:opacity-80 decoration-transparent"
                   href={contactInfo?.zalo || '#'}
                   rel="noopener noreferrer"
                   target="_blank">
@@ -240,8 +247,8 @@ export function Footer() {
                       className="object-contain"
                       height={32}
                       src={method}
-                      width={48}
                       style={{ width: 'auto' }}
+                      width={48}
                     />
                   </div>
                 ))}
@@ -266,8 +273,8 @@ export function Footer() {
                 className="rounded-lg"
                 height={120}
                 src="/images/qrCode.png"
-                width={120}
                 style={{ width: 'auto' }}
+                width={120}
               />
             </div>
           </section>
@@ -280,7 +287,9 @@ export function Footer() {
             {contactInfo?.registration}
           </p>
           <address className="mt-2 not-italic">
-            • Địa chỉ: {contactInfo?.address} • Số điện thoại: {' '}{contactInfo?.phone} • Email: {' '}{contactInfo?.email} • Người quản lý nội dung: {' '}{contactInfo?.content}
+            • Địa chỉ: {contactInfo?.address} • Số điện thoại:{' '}
+            {contactInfo?.phone} • Email: {contactInfo?.email} • Người quản lý
+            nội dung: {contactInfo?.content}
           </address>
         </div>
       </div>

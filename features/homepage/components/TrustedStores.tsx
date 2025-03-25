@@ -98,7 +98,7 @@ export default function TrustedStores() {
             Mua thuốc tại các nhà thuốc uy tín trên toàn quốc
           </p>
         </div>
-        <Link href="/stores">
+        <Link className="decoration-transparent" href="/stores">
           <Button
             className="bg-white text-primary-50 hover:bg-white/90 hover:text-primary-60"
             size="sm">
@@ -161,13 +161,13 @@ export default function TrustedStores() {
                 Tổng hợp các cửa hàng được người dùng tin dùng và đánh giá cao
               </p>
             </div>
-            <Button
+            <Link
               aria-label="Xem tất cả cửa hàng"
-              className="hidden sm:flex rounded-full bg-white items-center gap-1 text-primary text-sm font-normal decoration-transparent hover:bg-white/90"
-              variant="link">
+              className="hidden sm:flex rounded-full bg-white items-center gap-1 px-4 py-2 text-primary text-sm font-normal decoration-transparent hover:bg-white/90"
+              href="/he-thong-cua-hang">
               Xem tất cả
               <ChevronRight aria-hidden="true" className="h-4 w-4" />
-            </Button>
+            </Link>
           </div>
 
           <div className="relative">
@@ -189,7 +189,7 @@ export default function TrustedStores() {
               slidesPerView={1}
               spaceBetween={8}
               onSwiper={handleSwiper}>
-              {trustedStore && trustedStore.length > 0 ? (
+              {Array.isArray(trustedStore) && trustedStore.length > 0 ? (
                 trustedStore.map(store => (
                   <SwiperSlide key={store._id}>
                     <article className="flex items-center gap-3 sm:gap-4 rounded-xl bg-white p-3 sm:p-4">
@@ -226,21 +226,22 @@ export default function TrustedStores() {
                 </SwiperSlide>
               )}
               {/* Custom Navigation Buttons - Refined positioning and styling */}
-              {trustedStore && trustedStore.length > slidesPerView && (
-                <>
-                  <button
-                    className="absolute top-1/2 left-1 -translate-y-1/2 bg-black/50 text-white p-1 rounded-full z-10 hover:bg-grayscale-50/60"
-                    onClick={() => swiperRef.current?.slidePrev()}>
-                    <ChevronLeft className="w-5 h-5 text-white stroke-[1.5]" />
-                  </button>
+              {Array.isArray(trustedStore) &&
+                trustedStore.length > slidesPerView && (
+                  <>
+                    <button
+                      className="absolute top-1/2 left-1 -translate-y-1/2 bg-black/50 text-white p-1 rounded-full z-10 hover:bg-grayscale-50/60"
+                      onClick={() => swiperRef.current?.slidePrev()}>
+                      <ChevronLeft className="w-5 h-5 text-white stroke-[1.5]" />
+                    </button>
 
-                  <button
-                    className="absolute top-1/2 right-1 -translate-y-1/2 bg-black/50 text-white p-1 rounded-full z-10 hover:bg-grayscale-50/60"
-                    onClick={() => swiperRef.current?.slideNext()}>
-                    <ChevronRight className="w-5 h-5 text-white stroke-[1.5]" />
-                  </button>
-                </>
-              )}
+                    <button
+                      className="absolute top-1/2 right-1 -translate-y-1/2 bg-black/50 text-white p-1 rounded-full z-10 hover:bg-grayscale-50/60"
+                      onClick={() => swiperRef.current?.slideNext()}>
+                      <ChevronRight className="w-5 h-5 text-white stroke-[1.5]" />
+                    </button>
+                  </>
+                )}
             </Swiper>
           </div>
         </section>

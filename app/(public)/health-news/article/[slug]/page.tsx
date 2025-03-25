@@ -170,7 +170,7 @@ export default async function ArticleDetailPage({
                   {article.tags.map(tag => (
                     <Link
                       key={tag}
-                      className="rounded-full bg-grayscale-10 px-2 sm:px-3 py-1 text-xs sm:text-sm text-grayscale-70 hover:bg-grayscale-20"
+                      className="decoration-transparent rounded-full bg-grayscale-10 px-2 sm:px-3 py-1 text-xs sm:text-sm text-grayscale-70 hover:bg-grayscale-20"
                       href={`/health-news?tag=${tag}`}>
                       {tag}
                     </Link>

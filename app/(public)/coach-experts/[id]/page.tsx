@@ -43,7 +43,7 @@ export default function CoachDetailPage() {
         </div>
         <div className="mb-6">
           <Link
-            className="inline-flex items-center text-primary hover:underline"
+            className="decoration-transparent inline-flex items-center text-primary hover:underline"
             href="/coach-experts">
             <ArrowLeft className="mr-2 h-4 w-4" />
             Quay lại danh sách chuyên gia

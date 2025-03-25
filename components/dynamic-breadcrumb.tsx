@@ -48,8 +48,8 @@ export function DynamicBreadcrumb() {
       <BreadcrumbList>
         <BreadcrumbItem>
           <BreadcrumbLink asChild>
-            <Link aria-label="Home" href="/">
-              Trang chủ
+            <Link aria-label="Home" className="decoration-transparent" href="/">
+              Trang chu
             </Link>
           </BreadcrumbLink>
         </BreadcrumbItem>
@@ -62,7 +62,9 @@ export function DynamicBreadcrumb() {
             ) : (
               <>
                 <BreadcrumbLink asChild>
-                  <Link href={item.href}>{item.label}</Link>
+                  <Link className="decoration-transparent" href={item.href}>
+                    {item.label}
+                  </Link>
                 </BreadcrumbLink>
                 <BreadcrumbSeparator>/</BreadcrumbSeparator>
               </>

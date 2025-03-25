@@ -9,6 +9,7 @@ const redirects = new Map([
   ['/coach-experts', '/doi-ngu-chuyen-mon'],
   ['/health-news', '/goc-suc-khoe'],
   ['/contact', '/lien-he'],
+  ['/store-locations', '/he-thong-cua-hang'],
 ]);
 
 // URL rewrites mapping (visible URL -> content URL)
@@ -18,9 +19,10 @@ const rewrites = new Map([
   ['/doi-ngu-chuyen-mon', '/coach-experts'],
   ['/goc-suc-khoe', '/health-news'],
   ['/lien-he', '/contact'],
+  ['/he-thong-cua-hang', '/store-locations'],
 ]);
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Check for dynamic coach experts path
@@ -38,6 +40,17 @@ export function middleware(request: NextRequest) {
   ) {
     const id = pathname.replace('/doi-ngu-chuyen-mon/', '');
     const newPath = `/coach-experts/${id}`;
+
+    return NextResponse.rewrite(new URL(newPath, request.url));
+  }
+
+  // Check for dynamic he-thong-cua-hang path
+  if (
+    pathname.startsWith('/he-thong-cua-hang/') &&
+    pathname !== '/he-thong-cua-hang'
+  ) {
+    const id = pathname.replace('/he-thong-cua-hang/', '');
+    const newPath = `/store-locations/${id}`;
 
     return NextResponse.rewrite(new URL(newPath, request.url));
   }

@@ -115,13 +115,19 @@ export function Header() {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-56">
         <DropdownMenuItem asChild>
-          <Link href="/profile">Tài khoản của tôi</Link>
+          <Link className="decoration-transparent" href="/profile">
+            Tài khoản của tôi
+          </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <Link href="/orders">Đơn hàng của tôi</Link>
+          <Link className="decoration-transparent" href="/orders">
+            Đơn hàng của tôi
+          </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <Link href="/favorites">Danh sách yêu thích</Link>
+          <Link className="decoration-transparent" href="/favorites">
+            Danh sách yêu thích
+          </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem className="text-red-500" onClick={handleLogout}>
@@ -202,7 +208,7 @@ export function Header() {
                 </button>
               </div>
 
-              <div className="hidden flex items-center sm:flex justify-items-start gap-4">
+              <div className="flex items-center sm:flex justify-items-start gap-4">
                 {/* Logo */}
                 <Link
                   aria-label="Elena Pharmacy Home"
@@ -297,7 +303,7 @@ export function Header() {
               {keywords.map(keyword => (
                 <Link
                   key={keyword._id}
-                  className="text-sm text-white decoration-white underline decoration-1 underline-offset-4 hover:text-white/90"
+                  className="text-sm text-white decoration-white underline underline-offset-4 hover:text-white/90"
                   href={`/search?q=${encodeURIComponent(keyword.keyword)}`}
                   onClick={() => {
                     updateKeyword(keyword.keyword);

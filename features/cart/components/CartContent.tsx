@@ -40,7 +40,7 @@ export function CartContent() {
   return (
     <div className="container mx-auto px-4 py-6">
       <Link
-        className="inline-flex items-center text-blue-600 mb-6 hover:underline"
+        className="inline-flex items-center text-blue-600 mb-6 hover:underline decoration-transparent"
         href="/">
         <ChevronLeft className="w-4 h-4 mr-1" />
         Tiếp tục mua sắm

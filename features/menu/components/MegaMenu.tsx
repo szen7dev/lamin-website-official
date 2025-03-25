@@ -400,7 +400,7 @@ export default function MegaMenu() {
                   </button>
                 ) : (
                   <Link
-                    className="flex items-center py-2 text-[15px] font-medium text-grayscale-90"
+                    className="flex items-center py-2 text-[15px] font-medium text-grayscale-90 decoration-transparent"
                     href={`/${item.slug}`}>
                     <div className="flex h-6 w-6 items-center justify-center rounded-full bg-green-500 text-white mr-2">
                       <span className="text-sm">G</span>
@@ -489,7 +489,7 @@ export default function MegaMenu() {
                       }) => (
                         <Link
                           key={product.id}
-                          className="flex flex-col items-center gap-2 rounded-lg bg-white p-3 shadow-sm transition-shadow hover:shadow-md text-center"
+                          className="flex flex-col items-center gap-2 rounded-lg bg-white p-3 shadow-sm transition-shadow hover:shadow-md text-center decoration-transparent"
                           href={`/products/${product.id}`}
                           onClick={() => setMobileMenuOpen(false)}>
                           <Image
@@ -506,7 +506,7 @@ export default function MegaMenu() {
                       ),
                     )}
                     <Link
-                      className="flex flex-col items-center justify-center gap-1 rounded-lg bg-white p-3 shadow-sm text-xs text-grayscale-50"
+                      className="flex flex-col items-center justify-center gap-1 rounded-lg bg-white p-3 shadow-sm text-xs text-grayscale-50 decoration-transparent"
                       href="#"
                       onClick={() => setMobileMenuOpen(false)}>
                       <span>Xem thêm</span>
@@ -534,7 +534,7 @@ export default function MegaMenu() {
                         </h3>
                       </div>
                       <Link
-                        className="flex items-center gap-1 text-xs text-primary-40 hover:underline"
+                        className="flex items-center gap-1 text-xs text-primary-40 hover:underline decoration-transparent"
                         href="/best-selling"
                         onClick={() => setMobileMenuOpen(false)}>
                         Xem tất cả
@@ -546,7 +546,7 @@ export default function MegaMenu() {
                       {bestSellingProducts.slice(0, 4).map(product => (
                         <Link
                           key={product._id}
-                          className="group space-y-1"
+                          className="group space-y-1 decoration-transparent"
                           href={`/products/${product._id}`}
                           onClick={() => setMobileMenuOpen(false)}>
                           <div className="relative aspect-square overflow-hidden rounded-lg">

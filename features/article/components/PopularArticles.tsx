@@ -24,7 +24,7 @@ export default function PopularArticles({ articles }: PopularArticlesProps) {
       {articles.map((article, index) => (
         <li key={article.id}>
           <Link
-            className="group flex gap-3"
+            className="group flex gap-3 decoration-transparent"
             href={`/health-news/article/${article.slug}`}>
             <div className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-primary-5/10 text-sm font-bold text-primary-40">
               {index + 1}

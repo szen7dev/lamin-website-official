@@ -38,7 +38,7 @@ export default function RelatedArticles({ articles }: RelatedArticlesProps) {
             key={article.id}
             className="overflow-hidden rounded-lg border border-grayscale-20 bg-white hover:shadow-md">
             <Link
-              className="flex gap-4"
+              className="flex gap-4 decoration-transparent"
               href={`/health-news/article/${article.slug}`}>
               {/* Article Image */}
               <div className="relative h-[120px] w-[200px] flex-shrink-0">

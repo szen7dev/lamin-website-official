@@ -2,21 +2,15 @@
 
 import Image from 'next/image';
 import { ChevronRight } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 import { useGetCoach } from '../hooks/coach/useGetCoach';
 
-import { Button } from '@/components/ui/button';
 import { apiClient } from '@/services/api/apiClient';
 
 export default function CoachExperts() {
   const { coaches, isLoading } = useGetCoach();
   const currentYear = new Date().getFullYear();
-  const router = useRouter();
-
-  const navigateCoachList = () => {
-    router.push('/coach-experts');
-  };
 
   return (
     <section
@@ -31,13 +25,12 @@ export default function CoachExperts() {
         <p className="mb-4 text-base font-medium text-white/90">
           Danh sách các Coach tư vấn chăm sóc sức khỏe của Elela
         </p>
-        <Button
-          className="flex items-center gap-2 rounded-full bg-white text-primary hover:bg-white/90"
-          variant="secondary"
-          onClick={navigateCoachList}>
+        <Link
+          className="decoration-transparent inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-primary hover:bg-white/90 font-normal text-sm transition-colors"
+          href="/doi-ngu-chuyen-mon">
           Tìm hiểu thêm
           <ChevronRight aria-hidden="true" className="h-4 w-4" />
-        </Button>
+        </Link>
       </header>
 
       <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">

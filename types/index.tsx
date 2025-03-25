@@ -10,3 +10,8 @@ export interface Populate {
   path: string;
   select: string;
 }
+
+export interface Thumbnail {
+  _id: string;
+  path: string;
+}

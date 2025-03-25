@@ -186,7 +186,7 @@ export default function CoachExpertsPage() {
                           <Link
                             key={coach._id}
                             className="block rounded-xl p-6 transition-shadow hover:shadow-md hover:bg-[#F8F9FE] decoration-transparent"
-                            href={`/coach-experts/${coach._id}`}>
+                            href={`/doi-ngu-chuyen-mon/${coach._id}`}>
                             <div className="flex items-center gap-4">
                               <Image
                                 alt={coach.name}

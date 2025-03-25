@@ -43,7 +43,7 @@ export function CartDropdown() {
         <p className="text-sm text-grayscale-40">{items.length} sản phẩm</p>
         <Button
           asChild
-          className="rounded-full bg-primary hover:bg-primary/90 text-white px-6">
+          className="rounded-full bg-primary hover:bg-primary/90 text-white px-6 decoration-transparent">
           <Link href="/cart">Xem giỏ hàng</Link>
         </Button>
       </div>
@@ -72,7 +72,7 @@ function CartItem({
 
       <div className="flex-1 min-w-0">
         <Link
-          className="text-sm text-grayscale-90 line-clamp-2 hover:text-primary"
+          className="text-sm text-grayscale-90 line-clamp-2 hover:text-primary decoration-transparent"
           href={{
             pathname: `/product/${item.slug}`,
             query: { goodsId: item.id },
