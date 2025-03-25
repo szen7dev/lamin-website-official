@@ -43,7 +43,9 @@ export default function SearchSuggestions({
             <Link
               key={result.id}
               className="decoration-transparent flex items-center gap-4 px-4 py-3 transition-colors border-t-2 hover:bg-grayscale-5 hover:no-underline"
-              href={`/products/${result.id}`}
+              href={{
+                pathname: `/product/${result.slug}`,
+              }}
               onClick={onClose}>
               <Image
                 alt={result.name}

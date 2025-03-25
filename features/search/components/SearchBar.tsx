@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Mic, Search, X } from 'lucide-react';
 import Link from 'next/link';
+import { router } from 'next/client';
 
 import SearchSuggestions from './SearchSuggestions';
 
@@ -156,6 +157,7 @@ export default function SearchBar() {
             price: item.sellingUnitprice,
             image: imageUrl || '/placeholder.svg',
             unit: item.unit || 'Hộp',
+            slug: item.slug,
           };
         })}
         searchQuery={debouncedQuery || query}

@@ -25,6 +25,7 @@ export interface ProductPromotion {
 
 export interface Product {
   // Core identification fields
+  sign: string;
   id?: string;
   _id?: string; // API field
   slug: string;
@@ -51,10 +52,10 @@ export interface Product {
   currentVariant?: ProductVariant;
 
   // API pricing fields
-  sellingUnitprice?: number;
-  listedUnitprice?: number;
-  unitprice?: number;
-  unitPrice?: number;
+  sellingUnitprice: number;
+  listedUnitprice: number;
+  unitprice: number;
+  unitPrice: number;
   unitPrice2?: number;
   unitPrice3?: number;
   unitPrice4?: number;

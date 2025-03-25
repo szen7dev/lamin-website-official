@@ -15,7 +15,8 @@ export const getQuestionList = async (
   try {
     const queryParams = {
       select: 'name note goods',
-      goodsID: params.goodsId,
+      ...(params.slug ? { slug: params.slug } : {}),
+      ...(params.goodsId ? { goodsId: params.goodsId } : {}),
       ...(params.limit ? { limit: params.limit } : {}),
       ...(params.page ? { page: params.page } : {}),
       ...(params.cursor ? { cursor: params.cursor } : {}),

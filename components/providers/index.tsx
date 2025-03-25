@@ -9,6 +9,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import { Toaster } from '@/components/ui/toaster';
 import { AuthProvider } from '@/contexts/AuthContext';
+import { OrderProvider } from '@/contexts/OrderContext';
 
 export interface ProvidersProps {
   children: React.ReactNode;
@@ -44,14 +45,16 @@ export function Providers({ children, themeProps }: ProvidersProps) {
         defaultTheme="system"
         {...themeProps}>
         <AuthProvider>
-          {mounted ? (
-            <>
-              {children}
-              <Toaster />
-            </>
-          ) : (
-            <div style={{ visibility: 'hidden' }}>{children}</div>
-          )}
+          <OrderProvider>
+            {mounted ? (
+              <>
+                {children}
+                <Toaster />
+              </>
+            ) : (
+              <div style={{ visibility: 'hidden' }}>{children}</div>
+            )}
+          </OrderProvider>
         </AuthProvider>
       </NextThemesProvider>
     </QueryClientProvider>

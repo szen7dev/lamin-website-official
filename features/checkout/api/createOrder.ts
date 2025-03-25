@@ -19,12 +19,17 @@ export interface CreateOrderData {
   name: string;
   note: string;
   total: string;
-  discount: string;
+  offer: string;
   salesoff: string;
   credit: string;
   shippingFee: string;
   recipientAddress: string;
   areaID: string;
+  buyerName: string;
+  buyerPhone: string;
+  buyerEmail: string;
+  recipientName: string;
+  recipientPhone: string;
   products: OrderProduct[];
 }
 
@@ -35,9 +40,12 @@ export interface CreateOrderData {
  */
 export const createOrder = async (data: CreateOrderData) => {
   try {
-    const response = await apiClient.post('/api/item/orders/insert-full', data);
+    const response = await apiClient.post(
+      '/api/store/orders/insert-full',
+      data,
+    );
 
-    return response.data;
+    return response;
   } catch (error) {
     console.error('Error creating order:', error);
     throw error;

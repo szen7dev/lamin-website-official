@@ -46,6 +46,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           const userEmail = localStorage.getItem('user_email') || '';
           const userImage = localStorage.getItem('user_image') || '';
           const userFullname = localStorage.getItem('user_fullname') || '';
+          const userLoyaltyPoints =
+            localStorage.getItem('user_loyalty_points') || '';
 
           // Try to reconstruct user object from localStorage
           setUser({
@@ -55,6 +57,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             email: userEmail,
             image: userImage,
             fullname: userFullname,
+            contacts: [{ remainLoyaltyPoints: parseInt(userLoyaltyPoints) }],
           });
         }
       } catch (error) {
@@ -79,6 +82,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     localStorage.removeItem('user_email');
     localStorage.removeItem('user_image');
     localStorage.removeItem('user_fullname');
+    localStorage.removeItem('user_loyalty_points');
     // Add any other user properties that were stored
   };
 
@@ -92,6 +96,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (userData.image) localStorage.setItem('user_image', userData.image);
     if (userData.fullname)
       localStorage.setItem('user_fullname', userData.fullname);
+    if (userData.contacts && userData.contacts[0].remainLoyaltyPoints) {
+      localStorage.setItem(
+        'user_loyalty_points',
+        userData.contacts[0].remainLoyaltyPoints.toString(),
+      );
+    }
     // Store additional user properties as needed
   }, []);
 
@@ -110,9 +120,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         apiClient.setToken(response.token);
 
         // Store user data
-        if (response.user) {
-          setUser(response.user);
-          storeUserData(response.user);
+        if (response.user && response.user.contacts) {
+          // Make sure to map _id to id and create a new object
+          const userData = {
+            ...response.user,
+            id: response.user.contacts[0]._id || '',
+          };
+
+          // Store in state and localStorage
+          setUser(userData);
+          storeUserData(userData);
         }
       }
 
@@ -138,9 +155,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         apiClient.setToken(response.token);
 
         // Store user data
-        if (response.user) {
-          setUser(response.user);
-          storeUserData(response.user);
+        if (response.user && response.user.contacts) {
+          // Make sure to map _id to id and create a new object
+          const userData = {
+            ...response.user,
+            id: response.user.contacts[0]._id || '',
+          };
+
+          // Store in state and localStorage
+          setUser(userData);
+          storeUserData(userData);
         }
       }
 

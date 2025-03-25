@@ -32,7 +32,8 @@ export interface QuestionListResponse {
  * Parameters for fetching question list
  */
 export interface QuestionListParams {
-  goodsId: string;
+  goodsId?: string;
+  slug?: string;
   limit?: number;
   page?: number;
   cursor?: string;

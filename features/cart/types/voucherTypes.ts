@@ -1,4 +1,5 @@
 export interface Voucher {
+  _id: string;
   name: string;
   sign: string;
   expired: Date;

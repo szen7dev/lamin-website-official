@@ -1,7 +1,66 @@
 'use client';
 import Image from 'next/image';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
-export default function CheckoutConfirmationPage() {
+import { getPaymentMethodText } from '@/features/checkout/utils/paymentMethods';
+import { useOrder } from '@/contexts/OrderContext';
+
+export default function CheckoutSuccessPage() {
+  const router = useRouter();
+  const { orderInfo } = useOrder();
+  
+  const [paymentMethodText, setPaymentMethodText] = useState('');
+  
+  useEffect(() => {
+    // If no order info in context, redirect back to cart
+    if (!orderInfo) {
+      router.push('/cart');
+      return;
+    }
+    
+    // Set the payment method text using the utility
+    setPaymentMethodText(getPaymentMethodText(orderInfo.paymentMethod));
+  }, [orderInfo, router]);
+
+  // If no order info, show loading or redirect
+  if (!orderInfo) {
+    return <div className="flex justify-center items-center h-screen">Loading...</div>;
+  }
+
+  // Format the order date
+  const orderDate = orderInfo.dateInvoice
+    ? new Date(orderInfo.dateInvoice).toLocaleDateString('vi-VN', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+      })
+    : new Date().toLocaleDateString('vi-VN', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+      });
+
+  // Get next day for delivery estimate
+  const deliveryDate = new Date(orderInfo.dateInvoice || new Date());
+
+  deliveryDate.setDate(deliveryDate.getDate() + 1);
+  const formattedDeliveryDate = deliveryDate.toLocaleDateString('vi-VN', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  });
+
+  // Handle view order details click
+  const handleViewOrderDetails = () => {
+    router.push('/orders/details');
+  };
+
+  // Handle go home click
+  const handleGoHome = () => {
+    router.push('/');
+  };
+
   return (
     <div className="flex flex-col items-center mx-auto pb-10">
       <div className="">
@@ -27,7 +86,7 @@ export default function CheckoutConfirmationPage() {
               <div className="text-grayscale-50 text-base font-medium">
                 <span>Thời gian nhận hàng dự kiến:</span>
                 <p className="text-grayscale-90 font-medium text-base  mb-4 ">
-                  Từ 08:00 - 09:00 ngày 08/03/2025
+                  Từ 08:00 - 18:00, {formattedDeliveryDate}
                 </p>
               </div>
               <div className="text-grayscale-50 text-base font-medium mb-4">
@@ -57,11 +116,15 @@ export default function CheckoutConfirmationPage() {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <button className="transform transition ease-in-out duration-200 hover:bg-primary-40 bg-primary-50 text-white py-2 rounded-3xl mt-4">
+            <div className="flex flex-col md:flex-row gap-4 justify-center">
+              <button
+                className="bg-blue-600 text-white py-2 px-4 rounded-2xl hover:bg-blue-700 transition"
+                onClick={handleViewOrderDetails}>
                 Chi tiết đơn hàng
               </button>
-              <button className="transform transition ease-in-out duration-200 hover:bg-primary-30 hover:text-white bg-primary-5 text-primary-50 py-2 rounded-3xl mt-4">
+              <button
+                className="bg-gray-200 text-gray-800 py-2 px-4 rounded-2xl hover:bg-gray-300 transition"
+                onClick={handleGoHome}>
                 Quay lại trang chủ
               </button>
             </div>

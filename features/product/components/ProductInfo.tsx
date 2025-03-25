@@ -9,22 +9,24 @@ import { useEffect, useState } from 'react';
 import { Loader2, Minus, Plus, Star } from 'lucide-react';
 import Image from 'next/image';
 
-import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/features/cart/hooks/useCart';
 import { cn } from '@/utils/helpers';
 import apiClient from '@/services/api/apiClient';
 import { useToast } from '@/hooks/use-toast';
 import { ClockIcon, FacebookBranchIcon } from '@/components/icons';
+import { Voucher } from '@/features/cart/types/voucherTypes';
 
 interface ProductInfoProps {
   product: Product;
+  vouchers: Voucher[];
   isLoading: boolean;
   error: any;
 }
 
 export default function ProductInfo({
   product,
+  vouchers,
   isLoading,
   error,
 }: ProductInfoProps) {
@@ -33,8 +35,6 @@ export default function ProductInfo({
     null,
   );
   const { addItem, isLoading: isAddingToCart } = useCart();
-  const { user } = useAuth();
-
   // Create variants from the goods info
   const createVariantsFromGoodsInfo = () => {
     if (!product) return [];
@@ -91,13 +91,19 @@ export default function ProductInfo({
 
     try {
       addItem({
-        id: `${product._id}-${selectedVariant.id}`,
+        id: `${product._id}`,
         name: product.name,
         price: selectedVariant.price,
-        originalPrice: selectedVariant.originalPrice,
+        originalPrice: selectedVariant.originalPrice || 0,
+        salesoff: product.listedUnitprice - product.sellingUnitprice || 0,
         quantity,
         unit: selectedVariant.name,
         image: apiClient.getFileUrl(product.images?.[0].path) || '',
+        category: {
+          _id: product.category?._id || '',
+          name: product.category?.name || '',
+          slug: product.category?.slug || '',
+        },
       });
 
       toast({
@@ -163,7 +169,7 @@ export default function ProductInfo({
         {/* <p className="mt-2 text-sm text-[#6B7280]">{product.description}</p> */}
 
         <div className="mt-2 flex flex-wrap items-center gap-4">
-          <span className="text-sm text-grayscale-90">{product._id}</span>
+          <span className="text-sm text-grayscale-90">{product.sign}</span>
           <div className="flex items-center gap-2">
             <div className="flex items-center gap-1">
               <Star className="h-3 w-3 fill-[#FFA800] text-[#FFA800]" />
@@ -203,7 +209,7 @@ export default function ProductInfo({
           width={20}
         />
         <span className="text-sm font-normal text-grayscale-90">
-          Tặng 20 điểm thưởng khi mua hàng
+          Tặng {product.sellingUnitprice / 100} điểm thưởng khi mua hàng
         </span>
       </div>
       {/* Price */}
@@ -298,23 +304,48 @@ export default function ProductInfo({
         )}
       </div>
 
-      <div className=" rounded-lg overflow-hidden border border-grayscale-20">
-        <div className="flex gap-2 text-[#F37021] bg-orange-100 font-medium text-base p-2">
-          <Image alt="sale-icon" height={16} src="/icons/Sale.svg" width={16} />
-          Khuyến mãi được áp dụng
-        </div>
-        <div className="flex items-center p-2">
-          <div className="bg-primary-5 rounded-lg p-2">
+      {product.listedUnitprice - product.sellingUnitprice > 0 && (
+        <div className=" rounded-lg overflow-hidden border border-grayscale-20">
+          <div className="flex gap-2 text-[#F37021] bg-orange-100 font-medium text-base p-2">
             <Image
-              alt="price-tag"
-              height={20}
-              src="/icons/priceTag.svg"
-              width={20}
+              alt="sale-icon"
+              height={16}
+              src="/icons/Sale.svg"
+              width={16}
             />
+            Khuyến mãi được áp dụng
           </div>
-          <span className="ml-2">Giảm ngay 10% áp dụng đến 31/03</span>
+          <div className="flex items-center p-2">
+            <div className="bg-primary-5 rounded-lg p-2">
+              <Image
+                alt="price-tag"
+                height={20}
+                src="/icons/priceTag.svg"
+                width={20}
+              />
+            </div>
+            <span className="ml-2">
+              Giảm ngay{' '}
+              {Math.floor(
+                ((product.listedUnitprice - product.sellingUnitprice) /
+                  product.listedUnitprice) *
+                  100,
+              )}
+              {'% '}
+              {product.expired
+                ? `áp dụng đến ${new Date(product.expired).toLocaleDateString(
+                    'vi-VN',
+                    {
+                      day: '2-digit',
+                      month: '2-digit',
+                      year: 'numeric',
+                    },
+                  )}`
+                : ''}
+            </span>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Quantity Selector */}
       <div className="flex items-center gap-4">

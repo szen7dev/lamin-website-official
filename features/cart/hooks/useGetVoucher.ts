@@ -12,7 +12,7 @@ import { VoucherParams } from '../types/voucherTypes';
  */
 export function useGetVoucher(params: VoucherParams) {
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ['vouchers', params],
+    queryKey: ['GET_VOUCHERS', params],
     queryFn: () => getVouchers(params),
     enabled: !!params.customerID,
     retry: 1,
