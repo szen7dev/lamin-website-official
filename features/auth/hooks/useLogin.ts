@@ -20,12 +20,13 @@ export const useLogin = (params?: UseLoginParams) => {
 
   return useMutation({
     mutationFn: (data: LoginParams) => login(data),
-    onSuccess: (response) => {
+    onSuccess: response => {
       if (!response.success) {
         // Show error toast
         toast({
           title: 'Lỗi',
-          description: response.message || 'Đăng nhập không thành công. Vui lòng thử lại.',
+          description:
+            response.message || 'Đăng nhập không thành công. Vui lòng thử lại.',
           variant: 'destructive',
         });
 
@@ -43,12 +44,14 @@ export const useLogin = (params?: UseLoginParams) => {
         if (onSuccess) onSuccess(response);
       }
     },
-    onError: (error) => {
+    onError: error => {
       // Show error toast
       toast({
         title: 'Lỗi',
         description:
-          error instanceof Error ? error.message : 'Đăng nhập không thành công. Vui lòng thử lại.',
+          error instanceof Error
+            ? error.message
+            : 'Đăng nhập không thành công. Vui lòng thử lại.',
         variant: 'destructive',
       });
 
@@ -56,4 +59,4 @@ export const useLogin = (params?: UseLoginParams) => {
       if (onError) onError();
     },
   });
-}; 
+};

@@ -1,11 +1,11 @@
 import type { Metadata } from 'next';
 
-import { Breadcrumb } from '@/components/ui/breadcrumb';
 import ArticleList from '@/features/article/components/ArticleList';
 import CategoryList from '@/features/article/components/CategoryList';
 import PopularArticles from '@/features/article/components/PopularArticles';
 import { articleService } from '@/features/article/services/articleServiceFactory';
 import { generateMetadata as generateSeoMetadata } from '@/utils/seo';
+import { DynamicBreadcrumb } from '@/components/dynamic-breadcrumb';
 
 export async function generateMetadata({
   params,
@@ -15,7 +15,7 @@ export async function generateMetadata({
   let seoData = {
     title: 'Danh Mục Bài Viết - Góc Sức Khỏe',
     description:
-      'Các bài viết theo danh mục về sức khỏe và dinh dưỡng từ Elena Pharmacy',
+      'Các bài viết theo danh mục về sức khỏe và dinh dưỡng từ Lamin Pharmacy',
   };
 
   try {
@@ -27,7 +27,7 @@ export async function generateMetadata({
         title: category.name,
         description:
           category.description ||
-          `Những bài viết về ${category.name} từ Elena Pharmacy`,
+          `Những bài viết về ${category.name} từ Lamin Pharmacy`,
       };
     }
   } catch (error) {
@@ -58,15 +58,7 @@ export default async function CategoryPage({
     <div className="min-h-screen bg-background pb-12 pt-6">
       <div className="container mx-auto px-4">
         {/* Breadcrumb */}
-        <nav aria-label="Breadcrumb">
-          <Breadcrumb
-            items={[
-              { label: 'Trang Chủ', href: '/' },
-              { label: 'Góc Sức Khỏe', href: '/health-news' },
-              { label: currentCategory?.name || 'Danh Mục' },
-            ]}
-          />
-        </nav>
+        <DynamicBreadcrumb />
 
         {/* Title Section */}
         <header className="mb-8">

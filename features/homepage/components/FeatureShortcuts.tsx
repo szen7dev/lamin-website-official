@@ -48,7 +48,7 @@ export default function FeatureShortcuts() {
           {features.map(feature => (
             <div key={feature._id} className="flex-shrink-0">
               <Link
-                className={`group flex h-full rounded-xl bg-white shadow-light-08 transition-all hover:shadow-light-16 ${
+                className={`decoration-transparent group flex h-full rounded-xl bg-white shadow-light-08 transition-all hover:shadow-light-16 ${
                   isDesktop
                     ? 'flex-row items-center gap-3 p-4'
                     : 'flex-col items-center gap-2 p-3'

@@ -9,23 +9,28 @@ import { useOrder } from '@/contexts/OrderContext';
 export default function CheckoutSuccessPage() {
   const router = useRouter();
   const { orderInfo } = useOrder();
-  
+
   const [paymentMethodText, setPaymentMethodText] = useState('');
-  
+
   useEffect(() => {
     // If no order info in context, redirect back to cart
     if (!orderInfo) {
       router.push('/cart');
+
       return;
     }
-    
+
     // Set the payment method text using the utility
     setPaymentMethodText(getPaymentMethodText(orderInfo.paymentMethod));
   }, [orderInfo, router]);
 
   // If no order info, show loading or redirect
   if (!orderInfo) {
-    return <div className="flex justify-center items-center h-screen">Loading...</div>;
+    return (
+      <div className="flex justify-center items-center h-screen">
+        Loading...
+      </div>
+    );
   }
 
   // Format the order date
@@ -77,7 +82,7 @@ export default function CheckoutSuccessPage() {
             Đặt hàng thành công
           </h2>
           <p className="text-grayscale-50 text-base font-normal">
-            Nhà thuốc Elena 123G Thụy Khuê đã tiếp nhận đơn hàng
+            Nhà thuốc Lamin 123G Thụy Khuê đã tiếp nhận đơn hàng
           </p>
         </div>
         <div className="rounded-lg">

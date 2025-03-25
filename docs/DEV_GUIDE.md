@@ -1,12 +1,12 @@
-# Tài Liệu Dự Án Elena Pharmacy Dành Cho Lập Trình Viên
+# Tài Liệu Dự Án Lamin Pharmacy Dành Cho Lập Trình Viên
 
-## Chào Mừng Đến Với Dự Án Frontend Elena Pharmacy! 👋
+## Chào Mừng Đến Với Dự Án Frontend Lamin Pharmacy! 👋
 
-Tài liệu này được biên soạn để giúp các lập trình viên mới nhanh chóng nắm bắt cấu trúc dự án, các quy ước coding và best practices. Bằng cách tuân theo hướng dẫn này, bạn sẽ nhanh chóng bắt kịp tiến độ và đóng góp hiệu quả cho dự án frontend Elena Pharmacy.
+Tài liệu này được biên soạn để giúp các lập trình viên mới nhanh chóng nắm bắt cấu trúc dự án, các quy ước coding và best practices. Bằng cách tuân theo hướng dẫn này, bạn sẽ nhanh chóng bắt kịp tiến độ và đóng góp hiệu quả cho dự án frontend Lamin Pharmacy.
 
 ## 🚀 Tổng Quan Dự Án
 
-Elena Pharmacy là một nền tảng thương mại điện tử chuyên bán thuốc trực tuyến. Dự án frontend này được xây dựng bằng **Next.js 14+ với App Router**, sử dụng **React**, **TypeScript**, và **Tailwind CSS**. Chúng tôi áp dụng **kiến trúc feature-based** để đảm bảo khả năng mở rộng, dễ bảo trì và codebase sạch đẹp, có tổ chức.
+Lamin Pharmacy là một nền tảng thương mại điện tử chuyên bán thuốc trực tuyến. Dự án frontend này được xây dựng bằng **Next.js 14+ với App Router**, sử dụng **React**, **TypeScript**, và **Tailwind CSS**. Chúng tôi áp dụng **kiến trúc feature-based** để đảm bảo khả năng mở rộng, dễ bảo trì và codebase sạch đẹp, có tổ chức.
 
 **Công Nghệ Chính:**
 
@@ -105,7 +105,7 @@ Elena Pharmacy là một nền tảng thương mại điện tử chuyên bán t
 
 1.  **Cài Đặt Dependencies:** Đảm bảo đã cài Node.js và yarn. Chạy `yarn` ở thư mục gốc dự án.
 2.  **Chạy Development Server:** Chạy `yarn dev` ở thư mục gốc để start development server.
-3.  **Truy Cập Ứng Dụng:** Mở trình duyệt và truy cập `http://localhost:3000` để xem frontend Elena Pharmacy ở chế độ development.
+3.  **Truy Cập Ứng Dụng:** Mở trình duyệt và truy cập `http://localhost:3000` để xem frontend Lamin Pharmacy ở chế độ development.
 4.  **Khám Phá Codebase:** Bắt đầu khám phá codebase bằng cách xem file `app/page.tsx` (Trang Chủ) và thư mục `features/homepage/` để hiểu cách tổ chức features và pages.
 
 ## 🤝 Hướng Dẫn Đóng Góp Code
@@ -132,12 +132,14 @@ UI Components → Feature Hooks → Feature Services → Root Services → API C
 \`\`\`
 
 **Vai trò của Root Services:**
+
 - Gọi trực tiếp đến các endpoints API thông qua apiClient
 - Xử lý các vấn đề chung như authentication, error handling
 - Trả về dữ liệu nguyên bản từ API (raw data)
 - Tổ chức theo domain của backend API (auth, crm, item, media, store)
 
 **Vai trò của Feature Services:**
+
 - Sử dụng Root Services thay vì gọi trực tiếp API
 - Chuyển đổi dữ liệu từ API format sang domain models phù hợp với UI
 - Tổng hợp dữ liệu từ nhiều Root Services nếu cần
@@ -156,11 +158,13 @@ const myService = myServiceFactory.getService();
 \`\`\`
 
 **Cách hoạt động của API Factory:**
+
 - `createApiServiceFactory` nhận vào mock service và real service, trả về một factory
 - Factory có method `getService()` trả về service phù hợp dựa trên cấu hình
 - Các hooks và components sử dụng `getService()` để lấy service, không cần biết đó là mock hay real
 
 Để chuyển đổi giữa mock và real API, cấu hình biến môi trường `NEXT_PUBLIC_API_MODE`:
+
 - `mock`: Sử dụng mock services (phát triển, testing)
 - `real`: Sử dụng real services (production)
 
@@ -171,176 +175,190 @@ Mappers chuyển đổi dữ liệu giữa API format và domain models:
 \`\`\`typescript
 // Ví dụ mapper
 export function mapApiModelToDomainModel(apiModel: ApiModel): DomainModel {
-  return {
-    id: apiModel._id,
-    name: apiModel.name,
-    // Các trường khác...
-  };
+return {
+id: apiModel.\_id,
+name: apiModel.name,
+// Các trường khác...
+};
 }
 \`\`\`
 
 **Vai trò của Mappers:**
+
 - Chuyển đổi dữ liệu từ API format sang domain models phù hợp với UI
 - Đảm bảo UI components nhận được dữ liệu đúng format bất kể nguồn dữ liệu
 - Xử lý các edge cases và differences giữa mock và real data
 
 Khi tạo mới một feature, hãy:
+
 1. Định nghĩa domain models trong `types/`
 2. Tạo mappers trong `mappers/`
 3. Sử dụng mappers trong cả mock và real services
 
 ### Hướng dẫn tạo mới một Service
 
-1. **Tạo Root Service (nếu cần):**
-   - Tạo file trong thư mục `/services/` phù hợp
-   - Implement các methods gọi trực tiếp đến API
-   \`\`\`typescript
-   // services/item/newItemService.ts
-   import apiClient from "../api/apiClient";
-   
-   export interface NewItem {
-     _id: string;
-     name: string;
-     // Các trường khác...
-   }
-   
-   class NewItemService {
-     async getItems(): Promise<NewItem[]> {
-       return apiClient.get("/api/items");
-     }
-     // Các methods khác...
-   }
-   
-   export const newItemService = new NewItemService();
-   \`\`\`
+1.  **Tạo Root Service (nếu cần):**
 
-2. **Tạo Feature Service Interface:**
-   - Định nghĩa interface trong `/features/your-feature/types/yourFeatureTypes.ts`
-   \`\`\`typescript
-   // features/your-feature/types/yourFeatureTypes.ts
-   export interface YourFeatureItem {
-     id: string;
-     name: string;
-     // Các trường khác...
-   }
-   
-   export interface YourFeatureService {
-     getItems(): Promise<YourFeatureItem[]>;
-     // Các methods khác...
-   }
-   \`\`\`
+    - Tạo file trong thư mục `/services/` phù hợp
+    - Implement các methods gọi trực tiếp đến API
+      \`\`\`typescript
+      // services/item/newItemService.ts
+      import apiClient from "../api/apiClient";
 
-3. **Implement Real Service:**
-   - Implement interface sử dụng root services
-   \`\`\`typescript
-   // features/your-feature/services/yourFeatureService.ts
-   import { newItemService } from "@/services/item/newItemService";
-   import { mapNewItemToYourFeatureItem } from "../mappers/yourFeatureMappers";
-   import type { YourFeatureItem, YourFeatureService } from "../types/yourFeatureTypes";
-   
-   class YourFeatureServiceImpl implements YourFeatureService {
-     async getItems(): Promise<YourFeatureItem[]> {
-       const items = await newItemService.getItems();
-       return items.map(mapNewItemToYourFeatureItem);
-     }
-     // Các methods khác...
-   }
-   
-   export const yourFeatureService = new YourFeatureServiceImpl();
-   \`\`\`
+    export interface NewItem {
+    \_id: string;
+    name: string;
+    // Các trường khác...
+    }
 
-4. **Implement Mock Service:**
-   - Tạo mock data trong `/features/your-feature/mocks/`
-   - Implement interface sử dụng mock data
-   \`\`\`typescript
-   // features/your-feature/mocks/yourFeatureMockService.ts
-   import { mockItems } from "./yourFeatureMockData";
-   import type { YourFeatureItem, YourFeatureService } from "../types/yourFeatureTypes";
-   
-   class YourFeatureMockService implements YourFeatureService {
-     async getItems(): Promise<YourFeatureItem[]> {
-       // Simulate network delay
-       await new Promise(resolve => setTimeout(resolve, 300));
-       return mockItems;
-     }
-     // Các methods khác...
-   }
-   
-   export const yourFeatureMockService = new YourFeatureMockService();
-   \`\`\`
+    class NewItemService {
+    async getItems(): Promise<NewItem[]> {
+    return apiClient.get("/api/items");
+    }
+    // Các methods khác...
+    }
 
-5. **Tạo Factory:**
-   - Sử dụng `createApiServiceFactory` để tạo factory
-   - Export method `getYourFeatureService()`
-   \`\`\`typescript
-   // features/your-feature/services/yourFeatureServiceFactory.ts
-   import { createApiServiceFactory } from "@/services/api/apiFactory";
-   import { yourFeatureMockService } from "../mocks/yourFeatureMockService";
-   import { yourFeatureService } from "./yourFeatureService";
-   import type { YourFeatureService } from "../types/yourFeatureTypes";
-   
-   export const yourFeatureServiceFactory = createApiServiceFactory<YourFeatureService>(
-     yourFeatureMockService,
-     yourFeatureService
-   );
-   
-   export const getYourFeatureService = () => yourFeatureServiceFactory.getService();
-   \`\`\`
+    export const newItemService = new NewItemService();
+    \`\`\`
 
-6. **Sử dụng trong Hooks:**
-   - Import `getYourFeatureService` và sử dụng trong hooks
-   \`\`\`typescript
-   // features/your-feature/hooks/useYourFeature.ts
-   import { useState, useEffect } from "react";
-   import { getYourFeatureService } from "../services/yourFeatureServiceFactory";
-   import type { YourFeatureItem } from "../types/yourFeatureTypes";
-   
-   export function useYourFeature() {
-     const [items, setItems] = useState<YourFeatureItem[]>([]);
-     const [loading, setLoading] = useState(true);
-     const [error, setError] = useState<Error | null>(null);
-     
-     useEffect(() => {
-       const fetchItems = async () => {
-         try {
-           const service = getYourFeatureService();
-           const data = await service.getItems();
-           setItems(data);
-         } catch (err) {
-           setError(err as Error);
-         } finally {
-           setLoading(false);
-         }
-       };
-       
-       fetchItems();
-     }, []);
-     
-     return { items, loading, error };
-   }
-   \`\`\`
+2.  **Tạo Feature Service Interface:**
+
+    - Định nghĩa interface trong `/features/your-feature/types/yourFeatureTypes.ts`
+      \`\`\`typescript
+      // features/your-feature/types/yourFeatureTypes.ts
+      export interface YourFeatureItem {
+      id: string;
+      name: string;
+      // Các trường khác...
+      }
+
+    export interface YourFeatureService {
+    getItems(): Promise<YourFeatureItem[]>;
+    // Các methods khác...
+    }
+    \`\`\`
+
+3.  **Implement Real Service:**
+
+    - Implement interface sử dụng root services
+      \`\`\`typescript
+      // features/your-feature/services/yourFeatureService.ts
+      import { newItemService } from "@/services/item/newItemService";
+      import { mapNewItemToYourFeatureItem } from "../mappers/yourFeatureMappers";
+      import type { YourFeatureItem, YourFeatureService } from "../types/yourFeatureTypes";
+
+    class YourFeatureServiceImpl implements YourFeatureService {
+    async getItems(): Promise<YourFeatureItem[]> {
+    const items = await newItemService.getItems();
+    return items.map(mapNewItemToYourFeatureItem);
+    }
+    // Các methods khác...
+    }
+
+    export const yourFeatureService = new YourFeatureServiceImpl();
+    \`\`\`
+
+4.  **Implement Mock Service:**
+
+    - Tạo mock data trong `/features/your-feature/mocks/`
+    - Implement interface sử dụng mock data
+      \`\`\`typescript
+      // features/your-feature/mocks/yourFeatureMockService.ts
+      import { mockItems } from "./yourFeatureMockData";
+      import type { YourFeatureItem, YourFeatureService } from "../types/yourFeatureTypes";
+
+    class YourFeatureMockService implements YourFeatureService {
+    async getItems(): Promise<YourFeatureItem[]> {
+    // Simulate network delay
+    await new Promise(resolve => setTimeout(resolve, 300));
+    return mockItems;
+    }
+    // Các methods khác...
+    }
+
+    export const yourFeatureMockService = new YourFeatureMockService();
+    \`\`\`
+
+5.  **Tạo Factory:**
+
+    - Sử dụng `createApiServiceFactory` để tạo factory
+    - Export method `getYourFeatureService()`
+      \`\`\`typescript
+      // features/your-feature/services/yourFeatureServiceFactory.ts
+      import { createApiServiceFactory } from "@/services/api/apiFactory";
+      import { yourFeatureMockService } from "../mocks/yourFeatureMockService";
+      import { yourFeatureService } from "./yourFeatureService";
+      import type { YourFeatureService } from "../types/yourFeatureTypes";
+
+    export const yourFeatureServiceFactory = createApiServiceFactory<YourFeatureService>(
+    yourFeatureMockService,
+    yourFeatureService
+    );
+
+    export const getYourFeatureService = () => yourFeatureServiceFactory.getService();
+    \`\`\`
+
+6.  **Sử dụng trong Hooks:**
+
+    - Import `getYourFeatureService` và sử dụng trong hooks
+      \`\`\`typescript
+      // features/your-feature/hooks/useYourFeature.ts
+      import { useState, useEffect } from "react";
+      import { getYourFeatureService } from "../services/yourFeatureServiceFactory";
+      import type { YourFeatureItem } from "../types/yourFeatureTypes";
+
+    export function useYourFeature() {
+    const [items, setItems] = useState<YourFeatureItem[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<Error | null>(null);
+
+    useEffect(() => {
+    const fetchItems = async () => {
+    try {
+    const service = getYourFeatureService();
+    const data = await service.getItems();
+    setItems(data);
+    } catch (err) {
+    setError(err as Error);
+    } finally {
+    setLoading(false);
+    }
+    };
+
+        fetchItems();
+
+    }, []);
+
+    return { items, loading, error };
+    }
+    \`\`\`
 
 ### Chuyển đổi từ Mock sang Real API
 
 Để chuyển đổi từ mock sang real API, hãy thực hiện các bước sau:
 
 1. **Kiểm tra API endpoints:**
+
    - Xác nhận các endpoints trong apiClient.ts khớp với API thực tế
    - Cập nhật URL, headers, và authentication nếu cần
 
 2. **Cập nhật mappers:**
+
    - Đảm bảo mappers chuyển đổi đúng từ API response sang domain models
    - Xử lý các edge cases và differences giữa mock và real data
 
 3. **Cập nhật environment variables:**
+
    - Đặt `NEXT_PUBLIC_API_MODE=real` trong file `.env.local`
    - Cấu hình các biến môi trường khác như API_URL
 
 4. **Kiểm tra xác thực:**
+
    - Đảm bảo authService.ts hoạt động đúng với API thực tế
    - Kiểm tra flow đăng nhập/đăng xuất
 
 5. **Triển khai error handling:**
+
    - Cập nhật interceptors trong apiClient.ts để xử lý lỗi API
    - Thêm UI components để hiển thị lỗi
 
@@ -351,23 +369,28 @@ Khi tạo mới một feature, hãy:
 ### Best Practices khi làm việc với API
 
 1. **Error Handling:**
+
    - Luôn bọc API calls trong try-catch blocks
    - Sử dụng interceptors để xử lý lỗi chung
    - Hiển thị thông báo lỗi thân thiện với người dùng
 
 2. **Loading States:**
+
    - Luôn theo dõi trạng thái loading của API calls
    - Hiển thị skeleton loaders hoặc spinners khi đang loading
 
 3. **Caching:**
+
    - Sử dụng React Query hoặc SWR để caching và revalidation
    - Tránh gọi API nhiều lần cho cùng một dữ liệu
 
 4. **Pagination:**
+
    - Implement pagination cho các danh sách lớn
    - Sử dụng infinite scrolling hoặc pagination controls
 
 5. **Retry Logic:**
+
    - Implement retry logic cho các API calls quan trọng
    - Sử dụng exponential backoff để tránh overload server
 
@@ -382,4 +405,3 @@ Khi tạo mới một feature, hãy:
 - **Reusable Components & Hooks:** Xây dựng reusable components và hooks để giảm trùng lặp code và nhất quán UI.
 - **Context API Quản Lý Global State:** Dùng Context API để quản lý global state của ứng dụng.
 - **Tầng API Service Cho Backend Integration:** Sử dụng thư mục `services/` để tạo tầng API service giao tiếp với backend, code API clean và dễ maintain.
-

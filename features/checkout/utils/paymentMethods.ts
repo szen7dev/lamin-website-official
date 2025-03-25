@@ -51,6 +51,7 @@ export const PAYMENT_METHODS = [
  */
 export const getPaymentMethodText = (id: string): string => {
   const method = PAYMENT_METHODS.find(m => m.value === id);
+
   return method?.label || 'Thanh toán tiền mặt khi nhận hàng';
 };
 
@@ -61,5 +62,6 @@ export const getPaymentMethodText = (id: string): string => {
  */
 export const getPaymentMethodIcon = (id: string): string => {
   const method = PAYMENT_METHODS.find(m => m.value === id);
+
   return method?.icon || '/images/payment/cash.png';
-}; 
+};

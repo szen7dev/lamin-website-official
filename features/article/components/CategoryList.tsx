@@ -23,7 +23,7 @@ export default function CategoryList({
           key={category.id}
           aria-current={activeSlug === category.slug ? 'page' : undefined}
           className={cn(
-            'flex flex-col items-center rounded-lg p-4 transition-colors',
+            'flex flex-col items-center rounded-lg p-4 transition-colors decoration-transparent',
             activeSlug === category.slug
               ? 'bg-primary-5 text-white'
               : 'bg-white hover:bg-primary-5/5',

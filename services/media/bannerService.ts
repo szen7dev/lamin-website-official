@@ -2,10 +2,7 @@ import type { CommonQueryParams } from '../types/common';
 
 import apiClient, { DEFAULT_OPTION_SELLER } from '../api/apiClient';
 
-interface Thumbnail {
-  _id: string;
-  path: string;
-}
+import { Thumbnail } from '@/types';
 
 export interface Banner {
   _id: string;

@@ -39,7 +39,7 @@ export default function MegaMenuColumn({
           {categoryProducts.map(product => (
             <Link
               key={product.id}
-              className="flex items-center gap-3 rounded-lg bg-white p-3 shadow-02 transition-shadow hover:shadow-md"
+              className="flex items-center gap-3 rounded-lg bg-white p-3 shadow-02 transition-shadow hover:shadow-md decoration-transparent"
               href={`/products/${product.id}`}
               style={{ textDecoration: 'none' }}>
               <Image
@@ -74,7 +74,7 @@ export default function MegaMenuColumn({
               </h3>
             </div>
             <Link
-              className="flex items-center gap-1 text-sm text-primary-40 ml-3 hover:underline"
+              className="flex items-center gap-1 text-sm text-primary-40 ml-3 hover:underline decoration-transparent"
               href="#"
               style={{ textDecoration: 'none' }}>
               Xem thêm
@@ -86,7 +86,7 @@ export default function MegaMenuColumn({
             {bestSellingProducts.map(product => (
               <Link
                 key={product._id}
-                className="group space-y-1"
+                className="group space-y-1 decoration-transparent"
                 href={{
                   pathname: `/product/${product.category.slug}`,
                   query: {

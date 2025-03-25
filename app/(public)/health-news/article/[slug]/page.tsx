@@ -4,7 +4,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Facebook, Check, Quote } from 'lucide-react';
 
-import { Breadcrumb } from '@/components/ui/breadcrumb';
 import { articleService } from '@/features/article/services/articleServiceFactory';
 import { formatDate } from '@/utils/format';
 import { Button } from '@/components/ui/button';
@@ -12,6 +11,7 @@ import RelatedArticles from '@/features/article/components/RelatedArticles';
 import { generateMetadata as generateSeoMetadata } from '@/utils/seo';
 import TextSizeAdjuster from '@/features/article/components/TextSizeAdjuster';
 import ArticleContent from '@/features/article/components/ArticleContent';
+import { DynamicBreadcrumb } from '@/components/dynamic-breadcrumb';
 
 export async function generateMetadata({
   params,
@@ -20,7 +20,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   let seoData = {
     title: 'Bài Viết - Góc Sức Khỏe',
-    description: 'Bài viết về sức khỏe và dinh dưỡng từ Elena Pharmacy',
+    description: 'Bài viết về sức khỏe và dinh dưỡng từ Lamin Pharmacy',
   };
 
   try {
@@ -57,18 +57,7 @@ export default async function ArticleDetailPage({
     <div className="min-h-screen bg-background pb-8 sm:pb-12 pt-4 sm:pt-6">
       <div className="container mx-auto px-4">
         {/* Breadcrumb - Navigation path */}
-        <nav aria-label="Breadcrumb">
-          <Breadcrumb
-            items={[
-              { label: 'Trang Chủ', href: '/' },
-              { label: 'Góc Sức Khỏe', href: '/health-news' },
-              {
-                label: article.categories[0]?.name || 'Truyền Thông',
-                href: `/health-news/category/${article.categories[0]?.slug || 'truyen-thong'}`,
-              },
-            ]}
-          />
-        </nav>
+        <DynamicBreadcrumb />
 
         <main className="mx-auto max-w-3xl">
           <article itemScope itemType="http://schema.org/Article">
@@ -131,7 +120,7 @@ export default async function ArticleDetailPage({
                   />
                 </div>
                 <figcaption className="mt-1 sm:mt-2 text-center text-xs sm:text-sm text-grayscale-60">
-                  Elena mở rộng chi nhánh hoạt động
+                  Lamin mở rộng chi nhánh hoạt động
                 </figcaption>
               </figure>
 
@@ -181,7 +170,7 @@ export default async function ArticleDetailPage({
                   {article.tags.map(tag => (
                     <Link
                       key={tag}
-                      className="rounded-full bg-grayscale-10 px-2 sm:px-3 py-1 text-xs sm:text-sm text-grayscale-70 hover:bg-grayscale-20"
+                      className="decoration-transparent rounded-full bg-grayscale-10 px-2 sm:px-3 py-1 text-xs sm:text-sm text-grayscale-70 hover:bg-grayscale-20"
                       href={`/health-news?tag=${tag}`}>
                       {tag}
                     </Link>

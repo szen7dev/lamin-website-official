@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Mic, Search, X } from 'lucide-react';
 import Link from 'next/link';
-import { router } from 'next/client';
 
 import SearchSuggestions from './SearchSuggestions';
 
@@ -56,22 +55,6 @@ export default function SearchBar() {
 
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
-
-  // Handle search submission
-  const handleSearch = () => {
-    if (query.trim()) {
-      updateKeyword(query.trim());
-      router.push(`/search?q=${encodeURIComponent(query.trim())}`);
-      setIsFocused(false);
-    }
-  };
-
-  // Handle key press (Enter to search)
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      handleSearch();
-    }
-  };
 
   return (
     <div ref={searchRef} className="relative w-full">
@@ -127,7 +110,7 @@ export default function SearchBar() {
             {keywords.slice(0, 8).map(keyword => (
               <Link
                 key={keyword.keyword}
-                className="rounded-full bg-grayscale-5 px-4 py-2 text-sm text-grayscale-90 hover:bg-grayscale-10"
+                className="decoration-transparent rounded-full bg-grayscale-5 px-4 py-2 text-sm text-grayscale-90 hover:bg-grayscale-10"
                 href={`/search?q=${encodeURIComponent(keyword.keyword)}`}
                 onClick={() => {
                   updateKeyword(keyword.keyword);

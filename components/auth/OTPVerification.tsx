@@ -151,16 +151,16 @@ export function OTPVerification({
         <div className="flex justify-center mb-10">
           <div className="flex flex-col items-center">
             <Image
-              alt="FPT Retail"
+              alt="Lamin logo"
               className="h-14 w-auto mb-2"
-              height={60}
-              src="https://images.glints.com/unsafe/glints-dashboard.oss-ap-southeast-1.aliyuncs.com/company-logo/fd3ef04e572c6436a8580539e7555fd0.jpg"
-              width={60}
+              height={80}
+              src="/images/Lamin_Logo_Colored.png"
+              width={80}
             />
             <div className="text-center">
               <div className="text-sm font-medium text-primary">NHÀ THUỐC</div>
               <div className="text-xl font-bold text-primary leading-tight">
-                LONG CHÂU
+                LAMIN
               </div>
             </div>
           </div>

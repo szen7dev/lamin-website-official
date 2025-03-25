@@ -79,7 +79,7 @@ export default function HealthNews() {
           />
         </div>
         <Link
-          className="flex items-center gap-1 text-primary-40 font-normal text-sm hover:underline"
+          className="flex items-center gap-1 text-primary-40 font-normal text-sm hover:underline decoration-transparent"
           href="/health-news">
           Xem thêm
           <ChevronRight className="h-4 w-4" />
@@ -91,7 +91,9 @@ export default function HealthNews() {
         {/* Main Article */}
         {mainArticle ? (
           <article className="md:col-span-2 decoration-transparent">
-            <Link className="group block" href={getArticleUrl(mainArticle)}>
+            <Link
+              className="decoration-transparent group block"
+              href={getArticleUrl(mainArticle)}>
               <figure className="relative mb-4 aspect-[16/9] overflow-hidden rounded-lg">
                 <Image
                   fill
@@ -125,7 +127,9 @@ export default function HealthNews() {
               <article
                 key={article._id}
                 className="group decoration-transparent">
-                <Link className="flex gap-3" href={getArticleUrl(article)}>
+                <Link
+                  className="decoration-transparent flex gap-3"
+                  href={getArticleUrl(article)}>
                   <figure className="relative h-20 w-32 flex-shrink-0 overflow-hidden rounded-lg">
                     <Image
                       fill

@@ -40,7 +40,7 @@ export default function ProductCardSimple({ product }: ProductCardSimpleProps) {
 
       {/* Product Image */}
       <Link
-        className="block mb-3 hover:no-underline"
+        className="decoration-transparent block mb-3 hover:no-underline"
         href={{
           pathname: `/product/${product.slug}`,
           query: { goodsId: product.id },
@@ -103,7 +103,7 @@ export default function ProductCardSimple({ product }: ProductCardSimpleProps) {
 
       {/* Buy Button */}
       <Link
-        className="mt-auto w-full rounded-full bg-primary hover:bg-primary-60 text-white py-2 px-4 text-center text-sm sm:text-base font-medium transition-colors no-underline"
+        className="decoration-transparent mt-auto w-full rounded-full bg-primary hover:bg-primary-60 text-white py-2 px-4 text-center text-sm sm:text-base font-medium transition-colors no-underline"
         href={{
           pathname: `/product/${product.slug}`,
           query: { goodsId: product.id },

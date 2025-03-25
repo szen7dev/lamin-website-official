@@ -171,7 +171,7 @@ export default function ProductQuestions({ productId }: ProductQuestionsProps) {
                 <div className="mt-4 ml-8 rounded-lg bg-grayscale-5 p-4">
                   <p className="text-sm text-grayscale-90">{question.answer}</p>
                   <p className="mt-2 text-xs text-grayscale-50">
-                    Trả lời bởi: Dược sĩ Elena •{' '}
+                    Trả lời bởi: Dược sĩ Lamin •{' '}
                     {new Date(question.createdAt).toLocaleDateString('vi-VN')}
                   </p>
                 </div>

@@ -14,7 +14,7 @@ const mockCategories: ArticleCategory[] = [
     id: 'cat-1',
     name: 'Truyền Thông',
     slug: 'truyen-thong',
-    description: 'Tin tức và thông báo chính thức từ Elena Pharmacy',
+    description: 'Tin tức và thông báo chính thức từ Lamin Pharmacy',
     thumbnailUrl: '/placeholder.svg?height=100&width=200',
   },
   {
@@ -106,10 +106,10 @@ const mockArticles: Article[] = [
   {
     id: 'article-1',
     title:
-      'Elena hợp tác chiến lược OMRON Healthcare cung cấp chuỗi thiết bị y tế thế hệ mới hàng đầu Việt Nam',
+      'Lamin hợp tác chiến lược OMRON Healthcare cung cấp chuỗi thiết bị y tế thế hệ mới hàng đầu Việt Nam',
     slug: 'elena-hop-tac-chien-luoc-omron-healthcare',
     excerpt:
-      'Ngày 13/6 vừa qua, Elena ký kết hợp tác với OMRON Healthcare cùng mang sản phẩm theo dõi huyết áp thế hệ mới đến với người tiêu dùng gần như đồng thời với các quốc gia tiên tiến trên thế giới. Đây là một sự kiện gây chú ý với ngành dược',
+      'Ngày 13/6 vừa qua, Lamin ký kết hợp tác với OMRON Healthcare cùng mang sản phẩm theo dõi huyết áp thế hệ mới đến với người tiêu dùng gần như đồng thời với các quốc gia tiên tiến trên thế giới. Đây là một sự kiện gây chú ý với ngành dược',
     content: `<p>Sự hợp tác chiến lược giữa VNH và thương hiệu về thiết bị y tế toàn cầu OMRON Healthcare nhằm hướng đến nâng tầm chất lượng chăm sóc y tế tại Việt Nam bằng sự kết hợp giữa phát triển chuỗi các thiết bị y tế thế hệ mới giúp theo dõi đánh giá sức khỏe đồng phòng bệnh và việc nâng cao nhận thức cộng đồng về bảo vệ sức khỏe toàn diện.</p>
     <p>Sự hợp tác chiến lược giữa VNH và thương hiệu về thiết bị y tế toàn cầu OMRON Healthcare nhằm hướng đến nâng tầm chất lượng chăm sóc y tế tại Việt Nam bằng sự kết hợp giữa phát triển chuỗi các thiết bị y tế thế hệ mới giúp theo dõi đánh giá sức khỏe đồng phòng bệnh và việc nâng cao nhận thức cộng đồng về bảo vệ sức khỏe toàn diện.</p>
     <p>Sự hợp tác chiến lược giữa VNH và thương hiệu về thiết bị y tế toàn cầu OMRON Healthcare nhằm hướng đến nâng tầm chất lượng chăm sóc y tế tại Việt Nam bằng sự kết hợp giữa phát triển chuỗi các thiết bị y tế thế hệ mới giúp theo dõi đánh giá sức khỏe đồng phòng bệnh và việc nâng cao nhận thức cộng đồng về bảo vệ sức khỏe toàn diện.</p>`,
@@ -119,7 +119,7 @@ const mockArticles: Article[] = [
       'hợp tác chiến lược',
       'OMRON',
       'thiết bị y tế',
-      'Elena',
+      'Lamin',
       'tiêm vắc xin',
     ],
     author: {
@@ -140,19 +140,19 @@ const mockArticles: Article[] = [
     size: 'medium',
     socialShares: 156,
     verified: true,
-    source: 'Elena Pharmacy',
+    source: 'Lamin Pharmacy',
   },
   {
     id: 'article-2',
-    title: 'Elena Pharmacy ra mắt dịch vụ tư vấn sức khỏe trực tuyến 24/7',
+    title: 'Lamin Pharmacy ra mắt dịch vụ tư vấn sức khỏe trực tuyến 24/7',
     slug: 'elena-pharmacy-ra-mat-dich-vu-tu-van-suc-khoe-truc-tuyen-24-7',
     excerpt:
-      'Elena Pharmacy chính thức triển khai dịch vụ tư vấn sức khỏe trực tuyến 24/7, mang đến sự tiện lợi và hỗ trợ kịp thời cho khách hàng mọi lúc, mọi nơi.',
-    content: `<p>Với đội ngũ dược sĩ và chuyên gia y tế giàu kinh nghiệm, Elena Pharmacy cam kết cung cấp dịch vụ tư vấn chất lượng cao, đáp ứng mọi nhu cầu về sức khỏe của khách hàng.</p>
-    <p>Khách hàng có thể dễ dàng kết nối với chuyên gia thông qua ứng dụng di động hoặc website của Elena Pharmacy, hoàn toàn miễn phí.</p>`,
+      'Lamin Pharmacy chính thức triển khai dịch vụ tư vấn sức khỏe trực tuyến 24/7, mang đến sự tiện lợi và hỗ trợ kịp thời cho khách hàng mọi lúc, mọi nơi.',
+    content: `<p>Với đội ngũ dược sĩ và chuyên gia y tế giàu kinh nghiệm, Lamin Pharmacy cam kết cung cấp dịch vụ tư vấn chất lượng cao, đáp ứng mọi nhu cầu về sức khỏe của khách hàng.</p>
+    <p>Khách hàng có thể dễ dàng kết nối với chuyên gia thông qua ứng dụng di động hoặc website của Lamin Pharmacy, hoàn toàn miễn phí.</p>`,
     thumbnailUrl: '/placeholder.svg?height=400&width=600',
     categories: [mockCategories[0]],
-    tags: ['tư vấn sức khỏe', 'dịch vụ trực tuyến', 'Elena Pharmacy'],
+    tags: ['tư vấn sức khỏe', 'dịch vụ trực tuyến', 'Lamin Pharmacy'],
     author: mockAuthors[1],
     publishedAt: '2025-03-05T14:00:00Z',
     updatedAt: '2025-03-06T09:45:00Z',
@@ -162,7 +162,7 @@ const mockArticles: Article[] = [
     size: 'small',
     socialShares: 92,
     verified: true,
-    source: 'Elena Pharmacy',
+    source: 'Lamin Pharmacy',
   },
   {
     id: 'article-3',
@@ -184,19 +184,19 @@ const mockArticles: Article[] = [
     size: 'medium',
     socialShares: 115,
     verified: true,
-    source: 'Elena Pharmacy',
+    source: 'Lamin Pharmacy',
   },
   {
     id: 'article-4',
-    title: 'Elena Pharmacy khai trương chi nhánh mới tại TP.HCM',
+    title: 'Lamin Pharmacy khai trương chi nhánh mới tại TP.HCM',
     slug: 'elena-pharmacy-khai-truong-chi-nhanh-moi-tai-tp-hcm',
     excerpt:
-      'Elena Pharmacy tiếp tục mở rộng mạng lưới với việc khai trương chi nhánh mới tại TP.HCM, mang đến dịch vụ chăm sóc sức khỏe chất lượng cao cho người dân thành phố.',
-    content: `<p>Chi nhánh mới của Elena Pharmacy được trang bị đầy đủ các loại thuốc, thực phẩm chức năng và thiết bị y tế, cùng với đội ngũ dược sĩ tận tâm và chuyên nghiệp.</p>
-    <p>Nhân dịp khai trương, Elena Pharmacy có nhiều chương trình khuyến mãi hấp dẫn dành cho khách hàng.</p>`,
+      'Lamin Pharmacy tiếp tục mở rộng mạng lưới với việc khai trương chi nhánh mới tại TP.HCM, mang đến dịch vụ chăm sóc sức khỏe chất lượng cao cho người dân thành phố.',
+    content: `<p>Chi nhánh mới của Lamin Pharmacy được trang bị đầy đủ các loại thuốc, thực phẩm chức năng và thiết bị y tế, cùng với đội ngũ dược sĩ tận tâm và chuyên nghiệp.</p>
+    <p>Nhân dịp khai trương, Lamin Pharmacy có nhiều chương trình khuyến mãi hấp dẫn dành cho khách hàng.</p>`,
     thumbnailUrl: '/placeholder.svg?height=400&width=600',
     categories: [mockCategories[0]],
-    tags: ['khai trương', 'chi nhánh mới', 'Elena Pharmacy', 'TP.HCM'],
+    tags: ['khai trương', 'chi nhánh mới', 'Lamin Pharmacy', 'TP.HCM'],
     author: mockAuthors[0],
     publishedAt: '2025-02-25T09:00:00Z',
     updatedAt: '2025-02-26T11:15:00Z',
@@ -206,19 +206,19 @@ const mockArticles: Article[] = [
     size: 'small',
     socialShares: 68,
     verified: true,
-    source: 'Elena Pharmacy',
+    source: 'Lamin Pharmacy',
   },
   {
     id: 'article-5',
-    title: "Elena Pharmacy đồng hành cùng chương trình 'Sức khỏe cho mọi nhà'",
+    title: "Lamin Pharmacy đồng hành cùng chương trình 'Sức khỏe cho mọi nhà'",
     slug: 'elena-pharmacy-dong-hanh-cung-chuong-trinh-suc-khoe-cho-moi-nha',
     excerpt:
-      "Elena Pharmacy tham gia chương trình 'Sức khỏe cho mọi nhà' nhằm nâng cao nhận thức về sức khỏe cộng đồng và cung cấp các dịch vụ y tế miễn phí cho người dân có hoàn cảnh khó khăn.",
-    content: `<p>Elena Pharmacy cam kết đóng góp vào sự phát triển của cộng đồng thông qua các hoạt động xã hội và chương trình chăm sóc sức khỏe ý nghĩa.</p>
+      "Lamin Pharmacy tham gia chương trình 'Sức khỏe cho mọi nhà' nhằm nâng cao nhận thức về sức khỏe cộng đồng và cung cấp các dịch vụ y tế miễn phí cho người dân có hoàn cảnh khó khăn.",
+    content: `<p>Lamin Pharmacy cam kết đóng góp vào sự phát triển của cộng đồng thông qua các hoạt động xã hội và chương trình chăm sóc sức khỏe ý nghĩa.</p>
     <p>Chương trình 'Sức khỏe cho mọi nhà' sẽ được triển khai tại nhiều tỉnh thành trên cả nước, mang đến cơ hội tiếp cận dịch vụ y tế chất lượng cao cho mọi người.</p>`,
     thumbnailUrl: '/placeholder.svg?height=400&width=600',
     categories: [mockCategories[0]],
-    tags: ['chương trình', 'sức khỏe cộng đồng', 'Elena Pharmacy', 'từ thiện'],
+    tags: ['chương trình', 'sức khỏe cộng đồng', 'Lamin Pharmacy', 'từ thiện'],
     author: mockAuthors[1],
     publishedAt: '2025-02-20T15:45:00Z',
     updatedAt: '2025-02-21T10:00:00Z',
@@ -228,23 +228,23 @@ const mockArticles: Article[] = [
     size: 'medium',
     socialShares: 81,
     verified: true,
-    source: 'Elena Pharmacy',
+    source: 'Lamin Pharmacy',
   },
   {
     id: 'article-6',
     title:
-      "Elena Pharmacy nhận giải thưởng 'Thương hiệu chăm sóc sức khỏe uy tín năm 2024'",
+      "Lamin Pharmacy nhận giải thưởng 'Thương hiệu chăm sóc sức khỏe uy tín năm 2024'",
     slug: 'elena-pharmacy-nhan-giai-thuong-thuong-hieu-cham-soc-suc-khoe-uy-tin-nam-2024',
     excerpt:
-      "Elena Pharmacy vinh dự nhận giải thưởng 'Thương hiệu chăm sóc sức khỏe uy tín năm 2024', khẳng định vị thế và chất lượng dịch vụ hàng đầu trong ngành dược phẩm.",
-    content: `<p>Giải thưởng là sự ghi nhận cho những nỗ lực không ngừng của Elena Pharmacy trong việc mang đến các sản phẩm và dịch vụ chăm sóc sức khỏe tốt nhất cho khách hàng.</p>
-    <p>Elena Pharmacy cam kết tiếp tục đổi mới và phát triển để đáp ứng mọi nhu cầu về sức khỏe của cộng đồng.</p>`,
+      "Lamin Pharmacy vinh dự nhận giải thưởng 'Thương hiệu chăm sóc sức khỏe uy tín năm 2024', khẳng định vị thế và chất lượng dịch vụ hàng đầu trong ngành dược phẩm.",
+    content: `<p>Giải thưởng là sự ghi nhận cho những nỗ lực không ngừng của Lamin Pharmacy trong việc mang đến các sản phẩm và dịch vụ chăm sóc sức khỏe tốt nhất cho khách hàng.</p>
+    <p>Lamin Pharmacy cam kết tiếp tục đổi mới và phát triển để đáp ứng mọi nhu cầu về sức khỏe của cộng đồng.</p>`,
     thumbnailUrl: '/placeholder.svg?height=400&width=600',
     categories: [mockCategories[0]],
     tags: [
       'giải thưởng',
       'thương hiệu uy tín',
-      'Elena Pharmacy',
+      'Lamin Pharmacy',
       'chăm sóc sức khỏe',
     ],
     author: mockAuthors[0],
@@ -256,7 +256,7 @@ const mockArticles: Article[] = [
     size: 'small',
     socialShares: 102,
     verified: true,
-    source: 'Elena Pharmacy',
+    source: 'Lamin Pharmacy',
   },
   {
     id: 'article-vaccination',
@@ -292,7 +292,7 @@ const mockArticles: Article[] = [
     size: 'medium',
     socialShares: 156,
     verified: true,
-    source: 'Elena Pharmacy',
+    source: 'Lamin Pharmacy',
   },
   // Add more similar articles for the related section
   {
@@ -329,7 +329,7 @@ const mockArticles: Article[] = [
     size: 'medium',
     socialShares: 156,
     verified: true,
-    source: 'Elena Pharmacy',
+    source: 'Lamin Pharmacy',
   },
   {
     id: 'article-vaccination-3',
@@ -365,7 +365,7 @@ const mockArticles: Article[] = [
     size: 'medium',
     socialShares: 156,
     verified: true,
-    source: 'Elena Pharmacy',
+    source: 'Lamin Pharmacy',
   },
 ];
 
