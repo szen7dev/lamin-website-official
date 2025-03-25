@@ -5,6 +5,7 @@ export interface SearchResult {
   price: number;
   image: string;
   unit: string;
+  slug: string;
 }
 
 export interface SearchQuery {

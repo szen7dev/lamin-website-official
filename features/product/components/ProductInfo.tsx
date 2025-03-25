@@ -331,7 +331,7 @@ export default function ProductInfo({
                   product.listedUnitprice) *
                   100,
               )}
-              {'%'}
+              {'% '}
               {product.expired
                 ? `áp dụng đến ${new Date(product.expired).toLocaleDateString(
                     'vi-VN',
