@@ -2,12 +2,13 @@
 
 import type { CartItem as CartItemType } from '@/features/cart/types/cartTypes';
 
-import Image from 'next/image';
+import { default as NextImage } from 'next/image';
 import Link from 'next/link';
 import { Trash2 } from 'lucide-react';
 
 import { formatCurrency } from '@/utils/format';
 import { Button } from '@/components/ui/button';
+import { Skeleton } from '@/components/ui/skeleton';
 import { useCart } from '@/features/cart/hooks/useCart';
 
 export function CartDropdown() {
@@ -60,14 +61,18 @@ function CartItem({
 }) {
   return (
     <div className="p-4 flex gap-3 hover:bg-grayscale-5">
-      <div className="relative w-16 h-16 flex-shrink-0">
-        <Image
-          fill
-          alt={item.name}
-          className="object-cover rounded-md"
-          sizes="64px"
-          src={item.image || '/placeholder.svg?height=64&width=64'}
-        />
+      <div className="relative h-16 w-16 flex-shrink-0">
+        {item.image ? (
+          <NextImage
+            fill
+            alt={item.name}
+            className="object-cover rounded"
+            sizes="64px"
+            src={item.image}
+          />
+        ) : (
+          <Skeleton className="h-full w-full rounded" />
+        )}
       </div>
 
       <div className="flex-1 min-w-0">

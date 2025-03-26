@@ -1,16 +1,13 @@
 'use client';
 
-import type { Article } from '../types/articleTypes';
-
 import Link from 'next/link';
 
 import { formatDate } from '@/utils/format';
+import { useGetNews } from '@/features/homepage';
 
-interface PopularArticlesProps {
-  articles: Article[];
-}
+export default function PopularArticles() {
+  const { news: articles } = useGetNews();
 
-export default function PopularArticles({ articles }: PopularArticlesProps) {
   if (!articles || articles.length === 0) {
     return (
       <div className="py-4 text-center">
@@ -22,7 +19,7 @@ export default function PopularArticles({ articles }: PopularArticlesProps) {
   return (
     <ul className="space-y-4">
       {articles.map((article, index) => (
-        <li key={article.id}>
+        <li key={article._id}>
           <Link
             className="group flex gap-3 decoration-transparent"
             href={`/health-news/article/${article.slug}`}>
@@ -34,11 +31,11 @@ export default function PopularArticles({ articles }: PopularArticlesProps) {
                 {article.title}
               </h3>
               <div className="mt-1 flex items-center gap-2 text-xs text-grayscale-50">
-                <time dateTime={article.publishedAt}>
-                  {formatDate(article.publishedAt)}
+                <time dateTime={article.createAt}>
+                  {formatDate(article.createAt)}
                 </time>
                 <span>•</span>
-                <span>{article.viewCount} lượt xem</span>
+                <span>{article.amountView} lượt xem</span>
               </div>
             </div>
           </Link>

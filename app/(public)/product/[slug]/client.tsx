@@ -24,8 +24,6 @@ export function ProductDetailClient({
   const unwrappedParams = params instanceof Promise ? use(params) : params;
   const { slug } = unwrappedParams;
 
-  console.log('ProductDetailPage slug:', slug);
-
   // Always call all data fetching hooks
   const {
     productInfo,

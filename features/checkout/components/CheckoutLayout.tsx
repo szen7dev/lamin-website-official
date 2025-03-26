@@ -25,7 +25,7 @@ import { useToast } from '@/components/ui/use-toast';
 export function CheckoutLayout() {
   const router = useRouter();
   const { items, removeItem, updateQuantity, updateUnit } = useCart();
-  const { createOrder, isCreating, isError, error } = useCreateOrder();
+  const { createOrder } = useCreateOrder();
   const { user } = useAuth();
   const { toast } = useToast();
   const { setOrderInfo } = useOrder();
@@ -171,8 +171,6 @@ export function CheckoutLayout() {
           onSuccess: response => {
             // Add proper error handling for the response
             const data = response || {};
-
-            console.log('Order API response:', response);
 
             setIsSubmitting(false);
             toast({

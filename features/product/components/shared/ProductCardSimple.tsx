@@ -1,8 +1,10 @@
 'use client';
 
+import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
+
+import { Skeleton } from '@/components/ui/skeleton';
 
 interface ProductUnit {
   label: string;
@@ -45,14 +47,18 @@ export default function ProductCardSimple({ product }: ProductCardSimpleProps) {
           pathname: `/product/${product.slug}`,
           query: { goodsId: product.id },
         }}>
-        <div className="relative mb-1 aspect-square">
-          <Image
-            fill
-            alt={product.name}
-            className="object-contain"
-            sizes="(min-width: 768px) 33vw, (min-width: 1024px) 25vw, 50vw"
-            src={product.image || '/placeholder.svg'}
-          />
+        <div className="relative mb-1 aspect-square w-full overflow-hidden rounded-lg">
+          {product.image ? (
+            <Image
+              fill
+              alt={product.name}
+              className="object-cover transition-transform duration-300 group-hover:scale-105"
+              sizes="(max-width: 768px) 50vw, 33vw"
+              src={product.image}
+            />
+          ) : (
+            <Skeleton className="h-full w-full" />
+          )}
         </div>
 
         {/* Product Name */}

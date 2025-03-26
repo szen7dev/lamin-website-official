@@ -24,8 +24,6 @@ export const getVouchers = async (
       queryParams,
     );
 
-    console.log('Voucher res', vouchers);
-
     if (!vouchers) {
       throw new Error('Failed to fetch vouchers');
     }

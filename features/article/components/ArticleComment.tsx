@@ -26,7 +26,6 @@ export default function ArticleComment({ articleId }: ArticleCommentProps) {
 
     // Simulate API call
     setTimeout(() => {
-      console.log('Comment submitted:', { articleId, name, email, comment });
       setComment('');
       setName('');
       setEmail('');
