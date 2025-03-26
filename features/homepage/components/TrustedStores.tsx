@@ -155,7 +155,7 @@ export default function TrustedStores() {
               <h2
                 className="text-xl sm:text-2xl md:text-3xl font-semibold text-white"
                 id="trusted-stores-heading">
-                Các cửa hàng uy tín của Elela
+                Các cửa hàng uy tín của Lamin
               </h2>
               <p className="text-sm sm:text-base text-grayscale-5">
                 Tổng hợp các cửa hàng được người dùng tin dùng và đánh giá cao

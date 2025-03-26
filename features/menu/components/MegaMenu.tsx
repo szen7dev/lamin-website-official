@@ -185,6 +185,7 @@ export default function MegaMenu() {
     originalPrice: Math.round(product.sellingUnitprice * 1.2), // Estimate original price as 20% higher if not provided
     unit: product.unit || 'hộp',
     category: product.category,
+    slug: product.slug,
   }));
 
   // Handle level 2 hover with debounce

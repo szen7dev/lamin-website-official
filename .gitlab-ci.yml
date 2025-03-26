@@ -8,7 +8,7 @@ build-docker-staging:
     - _DOCKER_CACHE_IMAGE_TAG=`echo $CI_COMMIT_REF_NAME | sed -E 's/[^a-z0-9._-]+/__/g'`
     - _DOCKER_RELEASE_IMAGE_TAG="$_DOCKER_CACHE_IMAGE_TAG-`printf %010d $CI_PIPELINE_ID`-$CI_COMMIT_SHORT_SHA"
     - |
-      cat <<EOF > .env
+      cat <<EOF > .env.production
       NEXT_PUBLIC_API_MODE=mock
       NEXT_PUBLIC_API_URL=https://api.trixgo.com
       NEXT_PUBLIC_API_TIMEOUT=30000
@@ -28,7 +28,7 @@ build-docker-prod:
     - _DOCKER_CACHE_IMAGE_TAG=`echo $CI_COMMIT_REF_NAME | sed -E 's/[^a-z0-9._-]+/__/g'`
     - _DOCKER_RELEASE_IMAGE_TAG="$_DOCKER_CACHE_IMAGE_TAG-`printf %010d $CI_PIPELINE_ID`-$CI_COMMIT_SHORT_SHA"
     - |
-      cat <<EOF > .env
+      cat <<EOF > .env.production
       NEXT_PUBLIC_API_MODE=mock
       NEXT_PUBLIC_API_URL=https://api.trixgo.com
       NEXT_PUBLIC_API_TIMEOUT=30000

@@ -299,7 +299,7 @@ export function Header() {
 
             {/* Popular Keywords - Hidden on smallest screens */}
             <div className="hidden sm:flex flex-wrap gap-x-4 gap-y-1 pb-1">
-              <span className="text-sm text-white/80">Từ khóa phổ biến:</span>
+              <span className="text-sm text-white/80">Tìm kiếm phổ biến:</span>
               {keywords.map(keyword => (
                 <Link
                   key={keyword._id}

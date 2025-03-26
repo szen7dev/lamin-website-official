@@ -88,7 +88,7 @@ export default function MegaMenuColumn({
                 key={product._id}
                 className="group space-y-1 decoration-transparent"
                 href={{
-                  pathname: `/product/${product.category.slug}`,
+                  pathname: `/product/${product.slug}`,
                   query: {
                     goodsId: product._id,
                     categoryId: product.category?._id,
