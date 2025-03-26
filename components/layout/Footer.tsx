@@ -140,7 +140,7 @@ export function Footer() {
             </div>
 
             {/* Certifications */}
-            <div>
+            {/* <div>
               <div className="flex">
                 <span className="text-primary">
                   <Dot
@@ -175,7 +175,7 @@ export function Footer() {
                   </div>
                 ))}
               </div>
-            </div>
+            </div> */}
 
             {/* Social Media */}
             <div>
@@ -216,7 +216,7 @@ export function Footer() {
           {/* Payment & App Download Column */}
           <section className="space-y-6">
             {/* Payment Methods */}
-            <div>
+            {/* <div>
               <div className="flex">
                 <span className="text-primary">
                   <Dot
@@ -253,7 +253,7 @@ export function Footer() {
                   </div>
                 ))}
               </div>
-            </div>
+            </div> */}
 
             {/* App Download */}
             <div>
