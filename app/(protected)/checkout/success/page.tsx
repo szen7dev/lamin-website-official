@@ -3,12 +3,17 @@ import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-import { getPaymentMethodText } from '@/features/checkout/utils/paymentMethods';
+import {
+  getPaymentMethodIcon,
+  getPaymentMethodText,
+} from '@/features/checkout/utils/paymentMethods';
 import { useOrder } from '@/contexts/OrderContext';
 
 export default function CheckoutSuccessPage() {
   const router = useRouter();
   const { orderInfo } = useOrder();
+
+  console.log('orderInfo', orderInfo);
 
   const [paymentMethodText, setPaymentMethodText] = useState('');
 
@@ -98,13 +103,13 @@ export default function CheckoutSuccessPage() {
                 <span>Phương thức thanh toán:</span>
                 <div className="flex gap-2 items-center">
                   <Image
-                    alt="QR Code"
+                    alt={`${getPaymentMethodText(orderInfo.paymentMethod)}`}
                     height={20}
-                    src="/icons/qr-code-icon.svg"
+                    src={`${getPaymentMethodIcon(orderInfo.paymentMethod)}`}
                     width={20}
                   />
                   <p className="text-grayscale-90 font-medium text-base">
-                    Thanh toán bằng chuyển khoản (QR Code)
+                    {`${getPaymentMethodText(orderInfo.paymentMethod)}`}
                   </p>
                 </div>
                 <div className="flex gap-2 items-center">

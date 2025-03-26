@@ -11,11 +11,11 @@ export interface OrderProduct {
 
 export interface CreateOrderData {
   optionSeller: number;
-  customerID: string;
+  customerID?: string;
   outin: number;
   type: number;
   paymentMethod: string;
-  voucherID: string;
+  voucherID?: string;
   name: string;
   note: string;
   total: string;

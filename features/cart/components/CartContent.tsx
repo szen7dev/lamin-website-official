@@ -45,15 +45,15 @@ export function CartContent() {
   };
 
   const handleCheckout = () => {
-    if (!isAuthenticated || !user) {
-      toast({
-        title: 'Đăng nhập cần thiết',
-        description: 'Vui lòng đăng nhập để tiếp tục thanh toán',
-        variant: 'destructive',
-      });
-
-      return;
-    }
+    // if (!isAuthenticated || !user) {
+    //   toast({
+    //     title: 'Đăng nhập cần thiết',
+    //     description: 'Vui lòng đăng nhập để tiếp tục thanh toán',
+    //     variant: 'destructive',
+    //   });
+    //
+    //   return;
+    // }
 
     if (selectedItems.length === 0) {
       toast({

@@ -3,7 +3,7 @@
 import type { CreateOrderData } from '../api/createOrder';
 import type { Voucher } from '@/features/cart/types/voucherTypes';
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { useCreateOrder } from '../hooks/useCreateOrder';
@@ -21,6 +21,7 @@ import { CartSummary } from '@/features/cart/components/CartSummary';
 import { useCart } from '@/features/cart/hooks/useCart';
 import { useAuth } from '@/hooks';
 import { useToast } from '@/components/ui/use-toast';
+import { useGetContactByPhone } from '@/features/contact/hooks/useGetContactByPhone';
 
 export function CheckoutLayout() {
   const router = useRouter();
@@ -45,7 +46,17 @@ export function CheckoutLayout() {
   const [formValues, setFormValues] = useState<CheckoutFormSubmission | null>(
     null,
   );
+  const [phoneNumberToLookup, setPhoneNumberToLookup] = useState<string>('');
   const formRef = useRef<CheckoutFormRef>(null);
+
+  // Contact lookup hook - initialized with empty string, only enabled when we need it
+  const {
+    data: contactData,
+    isLoading: isContactLoading,
+    refetch: refetchContact,
+  } = useGetContactByPhone({
+    phone: phoneNumberToLookup,
+  });
 
   const handleSelectAll = (checked: boolean) => {
     setSelectedItems(checked ? cartItems.map(item => item.id) : []);
@@ -78,13 +89,40 @@ export function CheckoutLayout() {
     // Store the form values for future use
     setFormValues(values);
 
-    // Instead of calling handleSubmit which depends on the state update,
-    // directly process the submission with the provided values
+    // If user is not logged in and we have a phone number, try to find the contact first
+    if (!user?.id && values.customerPhone) {
+      setPhoneNumberToLookup(values.customerPhone);
+
+      // We'll use the useEffect to continue processing after the contactData is available
+      return;
+    }
+
+    // Otherwise, proceed with submission directly
     processSubmission(values);
   };
 
-  // New function that processes submission with provided form values
-  const processSubmission = async (formValues: CheckoutFormSubmission) => {
+  // Effect to handle contact lookup and continue with order submission
+  useEffect(() => {
+    // Only proceed if we're looking up a phone number and we have a form submission pending
+    if (phoneNumberToLookup && formValues && !isContactLoading) {
+      if (contactData) {
+        // Contact found, proceed with the submission
+        processSubmission(formValues, contactData.contactID);
+      } else {
+        // No contact found, proceed without a contactID
+        processSubmission(formValues);
+      }
+
+      // Reset the lookup phone number
+      setPhoneNumberToLookup('');
+    }
+  }, [phoneNumberToLookup, contactData, isContactLoading, formValues]);
+
+  // Modified to accept an optional contactID parameter
+  const processSubmission = async (
+    formValues: CheckoutFormSubmission,
+    contactID?: string,
+  ) => {
     setIsSubmitting(true);
     try {
       // Filter products: Only include products which are selected in the cart
@@ -129,20 +167,13 @@ export function CheckoutLayout() {
 
       const submitData: CreateOrderData = {
         optionSeller: 1,
-        customerID: user?.id || '',
         outin: 1,
         type: 5,
         paymentMethod: formValues.paymentMethod,
-        voucherID: voucherId,
         name: `Đơn hàng ${formValues.customerName || 'Khách hàng'}`,
         note: formValues.note || '',
         total: totalPrice.toString(),
-        salesoff: items
-          .reduce(
-            (sum, item) => sum + (item.originalPrice - item.price || 0),
-            0,
-          )
-          .toString(),
+        salesoff: directDiscount.toString(),
         offer: voucherDiscount.toString(),
         credit: pointsDiscount.toString(), // Use the pointsDiscount here
         shippingFee: shippingFee.toString(),
@@ -164,6 +195,17 @@ export function CheckoutLayout() {
           note: '',
         })),
       };
+
+      // Prioritize user ID if logged in, otherwise use found contact ID
+      if (user?.id) {
+        submitData.customerID = user.id;
+      } else if (contactID) {
+        submitData.customerID = contactID;
+      }
+
+      if (voucherId) {
+        submitData.voucherID = voucherId;
+      }
 
       // Use the mutation function from useCreateOrder
       await new Promise<void>((resolve, reject) => {
@@ -191,7 +233,7 @@ export function CheckoutLayout() {
               paymentMethod: data?.paymentMethod || submitData.paymentMethod,
               total: data?.total?.toString() || submitData.total,
               subtotal: subtotal.toString(),
-              directDiscount: submitData.salesoff,
+              directDiscount: directDiscount.toString(),
               voucherDiscount: submitData.offer || data.offer,
               pointsDiscount: pointsDiscount.toString(),
               shippingFee:
@@ -201,6 +243,7 @@ export function CheckoutLayout() {
                 parseFloat(submitData.offer || '0') +
                 pointsDiscount
               ).toString(),
+              dateOrder: data?.date || new Date().toISOString(),
               dateInvoice: data?.createdAt || new Date().toISOString(),
               buyerPhone: data?.buyerPhone || submitData.buyerPhone,
               recipientAddress:
