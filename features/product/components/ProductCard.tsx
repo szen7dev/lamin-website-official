@@ -3,10 +3,11 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { useCart } from '@/features/cart/hooks/useCart';
+import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
 import { ComboProduct } from '@/features/homepage/types/comboTypes';
 import { apiClient } from '@/services/api/apiClient';
+import { useCart } from '@/features/cart/hooks/useCart';
 
 export interface ProductUnit {
   label: string;
@@ -28,7 +29,7 @@ export default function ProductCard({
   error,
   isLoading,
 }: ProductCardProps) {
-  const { addItem } = useCart();
+  const { addToCart } = useCart();
 
   const handleAddToCart = () => {
     // if (!product) return;
@@ -44,7 +45,7 @@ export default function ProductCard({
     //     : product.sellingUnitprice
     //   : undefined;
     //
-    // addItem({
+    // addToCart({
     //   id: `${product._id}`,
     //   name: product.name,
     //   price: priceAsNumber || 0,
@@ -118,6 +119,10 @@ export default function ProductCard({
     );
   }
 
+  const imageUrl = product.thumbnail?.path
+    ? apiClient.getFileUrl(product.thumbnail.path)
+    : undefined;
+
   return (
     <div
       className={cn(
@@ -139,18 +144,18 @@ export default function ProductCard({
         href={{
           pathname: `/san-pham/${product.slug}`,
         }}>
-        <div className="relative mb-1 aspect-square">
-          <Image
-            fill
-            alt={product.name}
-            className="object-contain"
-            sizes={`(min-width: 1024px) 50vw, 100vw`}
-            src={
-              product.thumbnail?.path
-                ? apiClient.getFileUrl(product.thumbnail.path)
-                : '/placeholder.svg?height=200&width=200'
-            }
-          />
+        <div className="relative aspect-square w-full overflow-hidden rounded-lg">
+          {imageUrl ? (
+            <Image
+              fill
+              alt={product.name}
+              className="object-contain transition-transform duration-300 group-hover:scale-105"
+              sizes={`(min-width: 1024px) 50vw, 100vw`}
+              src={imageUrl}
+            />
+          ) : (
+            <Skeleton className="h-full w-full" />
+          )}
         </div>
 
         {/* Product Name */}

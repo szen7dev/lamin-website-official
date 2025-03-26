@@ -78,9 +78,6 @@ export const getBestSellers = async (
       ...params, // Allow overriding with custom params
     };
 
-    // Log request (dev-only, can be conditionally compiled for production)
-    console.log('Fetching best sellers with params:', queryParams);
-
     // Make API request
     const response = await apiClient.get<BestSellerResponse>(
       '/api/crm/combo/best-seller',

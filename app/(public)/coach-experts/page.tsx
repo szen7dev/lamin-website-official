@@ -33,6 +33,7 @@ export default function CoachExpertsPage() {
             alt="Coach Experts Banner"
             className="object-cover"
             quality={100}
+            sizes="100vw"
             src="/images/coach_pages.png"
           />
         </div>

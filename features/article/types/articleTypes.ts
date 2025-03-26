@@ -1,24 +1,30 @@
+import { Thumbnail } from '@/types';
+
 // Types for article feature
 export interface Article {
-  id: string;
-  title: string;
-  slug: string;
-  excerpt: string;
-  content: string;
-  thumbnailUrl: string;
-  categories: ArticleCategory[];
+  _id: string;
+  type: number;
   tags: string[];
-  author: Author;
-  publishedAt: string;
-  updatedAt?: string;
-  readingTime: number;
-  viewCount: number;
-  featured: boolean;
-  size?: 'small' | 'medium' | 'large'; // For text size adjustment
-  socialShares: number;
-  verified?: boolean;
-  source?: string;
-  relatedArticles?: string[]; // IDs of related articles
+  status: number;
+  amountReaction: number;
+  amountComment: number;
+  amountView: number;
+  state: number;
+  company: string;
+  author: Author | string;
+  title: string;
+  content: string;
+  slug: string;
+  category: string;
+  thumbnail: Thumbnail;
+  summary: string;
+  description: string;
+  modifyAt: Date;
+  createAt: Date;
+  __v: number;
+  userUpdate: string;
+  caption?: string;
+  updateAt?: Date;
 }
 
 export interface ArticleCategory {
@@ -74,32 +80,25 @@ export interface ArticleListParams {
   authorId?: string;
   tag?: string;
   verified?: boolean;
-}
-
-export interface ArticleListResponse {
-  articles: Article[];
-  total: number;
-  page: number;
-  limit: number;
-  totalPages: number;
+  optionSeller?: number;
 }
 
 // Service Interface
 export interface ArticleService {
-  getArticles(params?: ArticleListParams): Promise<ArticleListResponse>;
-  getArticleBySlug(slug: string): Promise<Article>;
-  getArticleCategories(): Promise<ArticleCategory[]>;
+  getArticles(params?: ArticleListParams): Promise<Article[]>;
+  getArticleBySlugID(slug: string): Promise<Article>;
   getRelatedArticles(articleSlug: string, limit?: number): Promise<Article[]>;
-  getFeaturedArticles(limit?: number): Promise<Article[]>;
-  getPopularArticles(limit?: number): Promise<Article[]>;
-  getArticleComments(articleId: string): Promise<ArticleComment[]>;
-  addArticleComment(
-    articleId: string,
-    comment: Omit<ArticleComment, 'id' | 'createdAt'>,
-  ): Promise<ArticleComment>;
-  likeArticle(articleId: string): Promise<void>;
-  shareArticle(
-    articleId: string,
-    platform: 'facebook' | 'twitter' | 'linkedin',
-  ): Promise<void>;
+  // getArticleCategories(): Promise<ArticleCategory[]>;
+  // getFeaturedArticles(limit?: number): Promise<Article[]>;
+  // getPopularArticles(limit?: number): Promise<Article[]>;
+  // getArticleComments(articleId: string): Promise<ArticleComment[]>;
+  // addArticleComment(
+  //   articleId: string,
+  //   comment: Omit<ArticleComment, 'id' | 'createdAt'>,
+  // ): Promise<ArticleComment>;
+  // likeArticle(articleId: string): Promise<void>;
+  // shareArticle(
+  //   articleId: string,
+  //   platform: 'facebook' | 'twitter' | 'linkedin',
+  // ): Promise<void>;
 }

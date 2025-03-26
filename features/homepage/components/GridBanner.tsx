@@ -10,10 +10,12 @@ import { Swiper as SwiperClass } from 'swiper';
 import { useGetMediasHomepage } from '../hooks/banner/useGetMediasHomepage';
 
 import { apiClient } from '@/services/api/apiClient';
+import { Skeleton } from '@/components/ui/skeleton';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
+
 export default function GridBanner() {
   const { banners: leftSlides } = useGetMediasHomepage({
     type: 2,
@@ -39,22 +41,26 @@ export default function GridBanner() {
             loop={(leftSlides?.length || 0) > 1}
             modules={[Navigation, Pagination, Autoplay]}
             pagination={{
-              clickable: true,
               bulletActiveClass: 'bg-primary opacity-100',
               bulletClass:
                 'inline-block w-2 h-2 rounded-full bg-grayscale-30 opacity-70 mx-1 cursor-pointer transition-all',
+              clickable: true,
             }}
             onSwiper={swiper => (swiperRef.current = swiper)}>
-            {leftSlides?.map(slide => (
+            {leftSlides?.map((slide, index) => (
               <SwiperSlide key={slide._id} className="relative h-full">
-                <Image
-                  fill
-                  priority
-                  alt={slide.name}
-                  className="object-cover"
-                  sizes="(max-width: 768px) 100vw, 60vw"
-                  src={apiClient.getFileUrl(slide.thumbnail.path)}
-                />
+                {slide.thumbnail?.path ? (
+                  <Image
+                    fill
+                    alt={slide.name}
+                    className="object-cover"
+                    priority={index === 0}
+                    sizes="(max-width: 768px) 100vw, 60vw"
+                    src={apiClient.getFileUrl(slide.thumbnail.path)}
+                  />
+                ) : (
+                  <Skeleton className="h-full w-full" />
+                )}
               </SwiperSlide>
             ))}
             {/* Custom Navigation Buttons - Refined positioning and styling */}
@@ -80,32 +86,33 @@ export default function GridBanner() {
         <div className="hidden md:flex md:col-span-2 flex-col gap-4">
           {/* Top image - Fixed height container */}
           <div className="relative w-full h-[140px] rounded-lg overflow-hidden shadow-08">
-            <Image
-              fill
-              alt="Top right image"
-              className="object-cover"
-              sizes="(max-width: 768px) 100vw, 40vw"
-              src={
-                rightSlides?.[0]?.thumbnail?.path
-                  ? apiClient.getFileUrl(rightSlides?.[0].thumbnail.path)
-                  : '/placeholder.svg'
-              }
-            />
+            {rightSlides?.[0]?.thumbnail?.path ? (
+              <Image
+                fill
+                priority
+                alt="Top right image"
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, 40vw"
+                src={apiClient.getFileUrl(rightSlides[0].thumbnail.path)}
+              />
+            ) : (
+              <Skeleton className="h-full w-full" />
+            )}
           </div>
 
           {/* Bottom image - Fixed height container */}
           <div className="relative w-full h-[140px] rounded-lg overflow-hidden shadow-08">
-            <Image
-              fill
-              alt="Bottom right image"
-              className="object-cover"
-              sizes="(max-width: 768px) 100vw, 40vw"
-              src={
-                rightSlides?.[1]?.thumbnail?.path
-                  ? apiClient.getFileUrl(rightSlides?.[1].thumbnail.path)
-                  : '/placeholder.svg'
-              }
-            />
+            {rightSlides?.[1]?.thumbnail?.path ? (
+              <Image
+                fill
+                alt="Bottom right image"
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, 40vw"
+                src={apiClient.getFileUrl(rightSlides[1].thumbnail.path)}
+              />
+            ) : (
+              <Skeleton className="h-full w-full" />
+            )}
           </div>
         </div>
       </div>

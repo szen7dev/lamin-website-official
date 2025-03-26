@@ -7,7 +7,7 @@ export const API_MODE: ApiMode =
 
 // Helper to check if we're using mock API
 export const isMockApi = () => {
-  const mode = API_MODE === 'real';
+  const mode = API_MODE === 'mock';
 
   console.log(`🔧 API Mode: ${mode ? 'MOCK' : 'REAL'}`);
 

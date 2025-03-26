@@ -1,27 +1,25 @@
 'use client';
 
-import type { Article } from '../types/articleTypes';
-
 import { useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 import ArticleCard from './ArticleCard';
 
 import { Button } from '@/components/ui/button';
+import { useGetNews } from '@/features/homepage';
 
 interface ArticleListProps {
-  articles: Article[];
   totalPages?: number;
   currentPage?: number;
   onPageChange?: (page: number) => void;
 }
 
 export default function ArticleList({
-  articles,
   totalPages = 1,
   currentPage = 1,
   onPageChange,
 }: ArticleListProps) {
+  const { news: articles } = useGetNews();
   const [page, setPage] = useState(currentPage);
 
   const handlePageChange = (newPage: number) => {
@@ -45,7 +43,7 @@ export default function ArticleList({
     <div>
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {articles.map(article => (
-          <ArticleCard key={article.id} article={article} />
+          <ArticleCard key={article._id} article={article} />
         ))}
       </div>
 

@@ -1,19 +1,15 @@
 'use client';
 
-import type { Article } from '../types/articleTypes';
-
 import { useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 import ArticleCard from './ArticleCard';
 
 import { Button } from '@/components/ui/button';
+import { useGetNews } from '@/features';
 
-interface FeaturedArticlesProps {
-  articles: Article[];
-}
-
-export default function FeaturedArticles({ articles }: FeaturedArticlesProps) {
+export default function FeaturedArticles() {
+  const { news: articles } = useGetNews();
   const [currentIndex, setCurrentIndex] = useState(0);
 
   if (!articles || articles.length === 0) {
@@ -67,7 +63,11 @@ export default function FeaturedArticles({ articles }: FeaturedArticlesProps) {
         </div>
         <div className="space-y-6">
           {sideArticles.map(article => (
-            <ArticleCard key={article.id} article={article} variant="compact" />
+            <ArticleCard
+              key={article._id}
+              article={article}
+              variant="compact"
+            />
           ))}
         </div>
       </div>

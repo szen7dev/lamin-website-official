@@ -11,7 +11,6 @@ export class NutritionCheckRealService implements NutritionCheckService {
     data: NutritionCheckFormData,
   ): Promise<NutritionCheckResult> {
     try {
-      console.log('🌐 REAL API: Submitting nutrition check data:', data);
 
       // Chuyển đổi dữ liệu form sang định dạng API theo tài liệu
       const apiData = {
@@ -25,12 +24,8 @@ export class NutritionCheckRealService implements NutritionCheckService {
         note: `Kiểm tra dinh dưỡng từ website Lamin Pharmacy`,
       };
 
-      console.log('🌐 REAL API: Converted API data:', apiData);
-
       // Gọi API survey_result theo tài liệu
       const response = await apiClient.post('/api/crm/survey_result', apiData);
-
-      console.log('🌐 REAL API: Raw API response:', response);
 
       // Xử lý và chuyển đổi response
       const result = this.mapApiResponseToResult(response);

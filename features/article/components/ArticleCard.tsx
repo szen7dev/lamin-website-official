@@ -1,31 +1,105 @@
 'use client';
 
-import type { Article } from '../types/articleTypes';
-
 import Image from 'next/image';
 import Link from 'next/link';
 
 import { formatDate } from '@/utils/format';
+import { Skeleton } from '@/components/ui/skeleton';
+import { News } from '@/features/homepage/types/newsTypes';
 
 interface ArticleCardProps {
-  article: Article;
+  article: News;
   variant?: 'default' | 'featured' | 'compact';
+  isLoading?: boolean;
 }
 
 export default function ArticleCard({
   article,
   variant = 'default',
+  isLoading = false,
 }: ArticleCardProps) {
-  const {
-    title,
-    slug,
-    excerpt,
-    thumbnailUrl,
-    author,
-    publishedAt,
-    readingTime,
-    categories,
-  } = article;
+  // If loading or no article data is provided, show skeleton
+  if (isLoading || !article) {
+    if (variant === 'featured') {
+      return (
+        <article className="group relative">
+          <div className="relative aspect-[16/9] w-full">
+            <Skeleton className="w-full h-full rounded-t-lg" />
+          </div>
+          <div className="mt-4">
+            <div className="mb-2 flex items-center gap-3">
+              <Skeleton className="h-6 w-20 rounded" />
+              <Skeleton className="h-5 w-24 rounded" />
+              <Skeleton className="h-5 w-24 rounded" />
+            </div>
+            <Skeleton className="h-7 w-full rounded mb-2" />
+            <Skeleton className="h-7 w-3/4 rounded" />
+            <div className="mt-2">
+              <Skeleton className="h-5 w-full rounded mb-1" />
+              <Skeleton className="h-5 w-full rounded mb-1" />
+              <Skeleton className="h-5 w-3/4 rounded" />
+            </div>
+            <div className="mt-3 flex items-center gap-2">
+              <Skeleton className="h-6 w-6 rounded-full" />
+              <Skeleton className="h-5 w-32 rounded" />
+            </div>
+          </div>
+        </article>
+      );
+    }
+
+    if (variant === 'compact') {
+      return (
+        <article className="group">
+          <div className="decoration-transparent flex gap-4">
+            <div className="relative h-20 w-32 flex-shrink-0">
+              <Skeleton className="w-full h-full rounded-lg" />
+            </div>
+            <div>
+              <Skeleton className="h-5 w-full rounded mb-1" />
+              <Skeleton className="h-5 w-3/4 rounded mb-2" />
+              <div className="mt-1 flex items-center gap-2">
+                <Skeleton className="h-4 w-20 rounded" />
+                <Skeleton className="h-4 w-4 rounded-full" />
+                <Skeleton className="h-4 w-20 rounded" />
+              </div>
+            </div>
+          </div>
+        </article>
+      );
+    }
+
+    // Default variant skeleton
+    return (
+      <article className="group">
+        <div className="relative aspect-[4/3] w-full">
+          <Skeleton className="w-full h-full rounded-lg" />
+        </div>
+        <div className="mt-3">
+          <div className="mb-2 flex items-center gap-2">
+            <Skeleton className="h-6 w-20 rounded" />
+            <Skeleton className="h-4 w-24 rounded" />
+          </div>
+          <Skeleton className="h-6 w-full rounded mb-1" />
+          <Skeleton className="h-6 w-3/4 rounded mb-2" />
+          <div className="mt-2">
+            <Skeleton className="h-4 w-full rounded mb-1" />
+            <Skeleton className="h-4 w-3/4 rounded" />
+          </div>
+        </div>
+      </article>
+    );
+  }
+
+  const { title, slug, summary, thumbnail, createAt, description } = article;
+
+  // Format date safely
+  const formatDateSafely = (date: Date | string | undefined) => {
+    if (!date) return '';
+    const dateString = date instanceof Date ? date.toISOString() : String(date);
+
+    return formatDate(dateString);
+  };
 
   if (variant === 'featured') {
     return (
@@ -33,46 +107,34 @@ export default function ArticleCard({
         <Link
           className="decoration-transparent block"
           href={`/health-news/article/${slug}`}>
-          <figure className="relative aspect-[16/9] overflow-hidden rounded-lg">
-            <Image
-              fill
-              alt={title}
-              className="object-cover transition-transform duration-300 group-hover:scale-105"
-              src={thumbnailUrl || '/placeholder.svg'}
-            />
-          </figure>
+          <div className="relative aspect-[16/9] w-full">
+            {thumbnail ? (
+              <Image
+                fill
+                alt={title}
+                className="object-cover transition-transform duration-300 group-hover:scale-105 rounded-t-lg"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                src={thumbnail.path}
+              />
+            ) : (
+              <div className="w-full h-full rounded-t-lg">
+                <Skeleton className="w-full h-full rounded-t-lg" />
+              </div>
+            )}
+          </div>
           <div className="mt-4">
             <div className="mb-2 flex items-center gap-3">
-              <span className="rounded bg-primary-5/10 px-2 py-1 text-xs font-medium text-primary-40">
-                {categories[0]?.name}
-              </span>
-              <time
-                className="text-sm text-grayscale-50"
-                dateTime={publishedAt}>
-                {formatDate(publishedAt)}
+              <time className="text-sm text-grayscale-50" dateTime={createAt}>
+                {formatDateSafely(createAt)}
               </time>
-              <span className="text-sm text-grayscale-50">
-                {readingTime} phút đọc
-              </span>
+              <span className="text-sm text-grayscale-50">5 phút đọc</span>
             </div>
             <h3 className="line-clamp-2 text-xl font-semibold text-grayscale-90 group-hover:text-primary-40">
               {title}
             </h3>
-            <p className="mt-2 line-clamp-3 text-grayscale-60">{excerpt}</p>
-            <footer className="mt-3 flex items-center gap-2">
-              {author.avatarUrl && (
-                <Image
-                  alt={author.name}
-                  className="rounded-full"
-                  height={24}
-                  src={author.avatarUrl || '/placeholder.svg'}
-                  width={24}
-                />
-              )}
-              <span className="text-sm font-medium text-grayscale-70">
-                {author.name}
-              </span>
-            </footer>
+            <p className="mt-2 line-clamp-3 text-grayscale-60">
+              {summary || description}
+            </p>
           </div>
         </Link>
       </article>
@@ -85,22 +147,28 @@ export default function ArticleCard({
         <Link
           className="decoration-transparent flex gap-4"
           href={`/health-news/article/${slug}`}>
-          <figure className="relative h-20 w-32 flex-shrink-0 overflow-hidden rounded-lg">
-            <Image
-              fill
-              alt={title}
-              className="object-cover transition-transform duration-300 group-hover:scale-105"
-              src={thumbnailUrl || '/placeholder.svg'}
-            />
-          </figure>
+          <div className="relative h-20 w-32 flex-shrink-0">
+            {thumbnail ? (
+              <Image
+                fill
+                alt={title}
+                className="object-cover transition-transform duration-300 group-hover:scale-105 rounded-lg"
+                src={thumbnail.path}
+              />
+            ) : (
+              <div className="w-full h-full rounded-lg">
+                <Skeleton className="w-full h-full rounded-lg" />
+              </div>
+            )}
+          </div>
           <div>
             <h3 className="line-clamp-2 text-sm font-medium text-grayscale-90 group-hover:text-primary-40">
               {title}
             </h3>
             <div className="mt-1 flex items-center gap-2 text-xs text-grayscale-50">
-              <time dateTime={publishedAt}>{formatDate(publishedAt)}</time>
+              <time dateTime={createAt}>{formatDateSafely(createAt)}</time>
               <span>•</span>
-              <span>{readingTime} phút đọc</span>
+              <span>5 phút đọc</span>
             </div>
           </div>
         </Link>
@@ -114,28 +182,31 @@ export default function ArticleCard({
       <Link
         className="decoration-transparent block"
         href={`/health-news/article/${slug}`}>
-        <figure className="relative aspect-[4/3] overflow-hidden rounded-lg">
-          <Image
-            fill
-            alt={title}
-            className="object-cover transition-transform duration-300 group-hover:scale-105"
-            src={thumbnailUrl || '/placeholder.svg'}
-          />
-        </figure>
+        <div className="relative aspect-[4/3] w-full">
+          {thumbnail ? (
+            <Image
+              fill
+              alt={title}
+              className="object-cover transition-transform duration-300 group-hover:scale-105 rounded-lg"
+              src={thumbnail.path}
+            />
+          ) : (
+            <div className="w-full h-full rounded-lg">
+              <Skeleton className="w-full h-full rounded-lg" />
+            </div>
+          )}
+        </div>
         <div className="mt-3">
           <div className="mb-2 flex items-center gap-2">
-            <span className="rounded bg-primary-5/10 px-2 py-1 text-xs font-medium text-primary-40">
-              {categories[0]?.name}
-            </span>
-            <time className="text-xs text-grayscale-50" dateTime={publishedAt}>
-              {formatDate(publishedAt)}
+            <time className="text-xs text-grayscale-50" dateTime={createAt}>
+              {formatDateSafely(createAt)}
             </time>
           </div>
           <h3 className="line-clamp-2 font-medium text-grayscale-90 group-hover:text-primary-40">
             {title}
           </h3>
           <p className="mt-2 line-clamp-2 text-sm text-grayscale-60">
-            {excerpt}
+            {summary || description}
           </p>
         </div>
       </Link>

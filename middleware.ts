@@ -7,9 +7,10 @@ const redirects = new Map([
   ['/height-measurement', '/do-cao'],
   ['/nutrition-check', '/kiem-tra-thoi-quen'],
   ['/coach-experts', '/doi-ngu-chuyen-mon'],
-  ['/health-news', '/goc-suc-khoe'],
+  ['/health-news', '/chuyen-trang-suc-khoe'],
   ['/contact', '/lien-he'],
   ['/store-locations', '/he-thong-cua-hang'],
+  ['/health-news/article', '/chuyen-trang-suc-khoe/bai-viet'],
 ]);
 
 // URL rewrites mapping (visible URL -> content URL)
@@ -17,9 +18,10 @@ const rewrites = new Map([
   ['/do-cao', '/height-measurement'],
   ['/kiem-tra-thoi-quen', '/nutrition-check'],
   ['/doi-ngu-chuyen-mon', '/coach-experts'],
-  ['/goc-suc-khoe', '/health-news'],
+  ['/chuyen-trang-suc-khoe', '/health-news'],
   ['/lien-he', '/contact'],
   ['/he-thong-cua-hang', '/store-locations'],
+  ['/chuyen-trang-suc-khoe/bai-viet', '/health-news/article'],
 ]);
 
 export async function middleware(request: NextRequest) {
@@ -40,6 +42,28 @@ export async function middleware(request: NextRequest) {
   ) {
     const id = pathname.replace('/doi-ngu-chuyen-mon/', '');
     const newPath = `/coach-experts/${id}`;
+
+    return NextResponse.rewrite(new URL(newPath, request.url));
+  }
+
+  // Check for dynamic article path
+  if (
+    pathname.startsWith('/health-news/article/') &&
+    pathname !== '/health-news/article'
+  ) {
+    const slug = pathname.replace('/health-news/article/', '');
+    const newPath = `/chuyen-trang-suc-khoe/bai-viet/${slug}`;
+
+    return NextResponse.redirect(new URL(newPath, request.url));
+  }
+
+  // Check for dynamic Vietnamese article path
+  if (
+    pathname.startsWith('/chuyen-trang-suc-khoe/bai-viet/') &&
+    pathname !== '/chuyen-trang-suc-khoe/bai-viet'
+  ) {
+    const slug = pathname.replace('/chuyen-trang-suc-khoe/bai-viet/', '');
+    const newPath = `/health-news/article/${slug}`;
 
     return NextResponse.rewrite(new URL(newPath, request.url));
   }

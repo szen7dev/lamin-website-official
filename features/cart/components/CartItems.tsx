@@ -17,6 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { Skeleton } from '@/components/ui/skeleton';
 import { formatPrice } from '@/utils/format';
 import { useCart } from '@/features/cart/hooks/useCart';
 
@@ -116,12 +117,19 @@ export function CartItems({
                 />
 
                 <div className="w-20 h-20 relative flex-shrink-0">
-                  <Image
-                    fill
-                    alt={item.name}
-                    className="object-cover rounded"
-                    src={item.image || '/placeholder.svg?height=80&width=80'}
-                  />
+                  {item.image ? (
+                    <Image
+                      fill
+                      alt={item.name}
+                      className="object-cover rounded"
+                      sizes="80px"
+                      src={item.image}
+                    />
+                  ) : (
+                    <div className="w-full h-full rounded bg-gray-100 flex items-center justify-center">
+                      <Skeleton className="w-full h-full rounded" />
+                    </div>
+                  )}
                 </div>
 
                 <div className="min-w-0 align-middle">

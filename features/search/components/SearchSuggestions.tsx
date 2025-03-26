@@ -2,9 +2,11 @@
 
 import type { SearchResult } from '@/features/search/types/searchTypes';
 
-import Image from 'next/image';
 import Link from 'next/link';
+import Image from 'next/image';
 import { ChevronRight, Search } from 'lucide-react';
+
+import { Skeleton } from '@/components/ui/skeleton';
 
 interface SearchSuggestionsProps {
   query: string;
@@ -47,13 +49,19 @@ export default function SearchSuggestions({
                 pathname: `/product/${result.slug}`,
               }}
               onClick={onClose}>
-              <Image
-                alt={result.name}
-                className="w-24 h-14 rounded-lg object-cover"
-                height={100}
-                src={result.image || '/placeholder.svg'}
-                width={57}
-              />
+              <div className="relative h-14 w-24 flex-shrink-0">
+                {result.image ? (
+                  <Image
+                    alt={result.name}
+                    className="object-cover rounded-lg"
+                    height={100}
+                    src={result.image}
+                    width={57}
+                  />
+                ) : (
+                  <Skeleton className="h-full w-full rounded-lg" />
+                )}
+              </div>
               <div className="flex flex-1 flex-col">
                 <p className="line-clamp-2 text-sm font-medium text-grayscale-50">
                   {result.name}

@@ -23,11 +23,9 @@ export function ContactForm() {
 
       return errors;
     },
-    onSubmit: async values => {
+    onSubmit: async () => {
       setIsSubmitting(true);
       try {
-        // Submit form logic
-        console.log('Form submitted:', values);
       } catch (error) {
         console.error('Error submitting form:', error);
       } finally {
