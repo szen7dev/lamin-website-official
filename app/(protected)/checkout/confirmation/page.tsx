@@ -152,7 +152,7 @@ export default function CheckoutConfirmationPage() {
               Số tài khoản:
             </div>
             <div className="text-grayscale-90 font-medium text-base mb-4">
-              0001 6433 1980 322
+              00000000
             </div>
 
             <div className="text-grayscale-50 text-base font-medium mb-1">
