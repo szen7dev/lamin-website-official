@@ -369,8 +369,10 @@ export default function MegaMenu() {
 
   // Mobile menu
   return (
-    <div ref={menuRef} className="border-t border-grayscale-20 bg-white">
-      <div className="container mx-auto px-4">
+    <div
+      ref={menuRef}
+      className="border-t border-grayscale-20 bg-white relative ">
+      <div className="mx-auto">
         <ul className="py-2 divide-y divide-grayscale-20">
           {/* Render level 1 items */}
           {formattedMenu.level1Items.map(item => {
