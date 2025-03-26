@@ -1,11 +1,12 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import Image from 'next/image';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import Image from 'next/image';
 import dynamic from 'next/dynamic';
 
 import { Button } from '@/components/ui/button';
+import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/utils/helpers';
 import apiClient from '@/services/api/apiClient';
 
@@ -71,14 +72,20 @@ export default function ProductGallery({ images }: ProductGalleryProps) {
         {/* Main Image */}
         <div className="relative aspect-square w-full">
           <div className="absolute inset-0 rounded-lg overflow-hidden bg-white">
-            <Image
-              fill
-              priority
-              alt={processedImages[currentImage].alt}
-              className="object-contain"
-              sizes={`(min-width: 1024px) 50vw, 100vw`}
-              src={processedImages[currentImage].url || '/placeholder.svg'}
-            />
+            {processedImages[currentImage].url ? (
+              <Image
+                fill
+                alt={processedImages[currentImage].alt}
+                className="object-contain"
+                priority={currentImage === 0}
+                sizes={`(min-width: 1024px) 50vw, 100vw`}
+                src={processedImages[currentImage].url}
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center">
+                <Skeleton className="w-full h-full" />
+              </div>
+            )}
           </div>
 
           {/* Navigation Buttons - Only show if there's more than one image */}
@@ -111,43 +118,58 @@ export default function ProductGallery({ images }: ProductGalleryProps) {
             {processedImages.slice(0, MAX_THUMBNAILS).map((image, index) => (
               <button
                 key={image.id}
+                aria-label={`View product image ${index + 1}`}
                 className={cn(
-                  'relative aspect-square rounded-lg overflow-hidden',
-                  index === currentImage
+                  'relative aspect-square w-16 cursor-pointer rounded-md overflow-hidden',
+                  currentImage === index
                     ? 'ring-2 ring-primary-5'
                     : 'ring-1 ring-grayscale-20',
                 )}
                 onClick={() => setCurrentImage(index)}>
-                <Image
-                  fill
-                  alt={image.alt}
-                  className="object-contain"
-                  sizes={`(min-width: 1024px) 50vw, 100vw`}
-                  src={image.url || '/placeholder.svg'}
-                />
+                {image.url ? (
+                  <Image
+                    fill
+                    alt={image.alt}
+                    className="object-cover"
+                    sizes="64px"
+                    src={image.url}
+                  />
+                ) : (
+                  <Skeleton className="w-full h-full" />
+                )}
               </button>
             ))}
 
             {/* "View More" thumbnail - Only show if there are more images than MAX_THUMBNAILS */}
             {remainingImagesCount > 0 && (
               <button
-                className="relative aspect-square rounded-lg overflow-hidden bg-grayscale-90"
+                aria-label="View more product images"
+                className="relative aspect-square w-16 cursor-pointer rounded-md overflow-hidden ring-1 ring-grayscale-20"
                 onClick={() => setModalOpen(true)}>
-                <div className="absolute inset-0 flex flex-col items-center justify-center text-white">
-                  <span className="text-sm font-medium">Xem thêm</span>
-                  <span className="text-sm font-medium">
-                    {remainingImagesCount} ảnh
-                  </span>
-                </div>
-                {processedImages[MAX_THUMBNAILS] && (
-                  <Image
-                    fill
-                    alt={`Xem thêm ${remainingImagesCount} ảnh`}
-                    className="object-cover opacity-50"
-                    src={
-                      processedImages[MAX_THUMBNAILS].url || '/placeholder.svg'
-                    }
-                  />
+                {processedImages[MAX_THUMBNAILS].url ? (
+                  <div className="relative h-full w-full">
+                    <Image
+                      fill
+                      alt="More product images"
+                      className="object-cover"
+                      sizes="64px"
+                      src={processedImages[MAX_THUMBNAILS].url}
+                    />
+                    <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+                      <span className="text-white text-xs font-medium">
+                        +{remainingImagesCount}
+                      </span>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="relative h-full w-full">
+                    <Skeleton className="w-full h-full" />
+                    <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+                      <span className="text-white text-xs font-medium">
+                        +{remainingImagesCount}
+                      </span>
+                    </div>
+                  </div>
                 )}
               </button>
             )}

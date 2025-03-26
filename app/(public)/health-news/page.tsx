@@ -1,12 +1,14 @@
 import type { Metadata } from 'next';
 
+import { Suspense } from 'react';
+
 import FeaturedArticles from '@/features/article/components/FeaturedArticles';
 import CategoryList from '@/features/article/components/CategoryList';
 import PopularArticles from '@/features/article/components/PopularArticles';
 import ArticleList from '@/features/article/components/ArticleList';
-import { articleService } from '@/features/article/services/articleServiceFactory';
 import { generateMetadata as generateSeoMetadata } from '@/utils/seo';
 import { DynamicBreadcrumb } from '@/components/dynamic-breadcrumb';
+import Loading from '@/app/loading';
 
 export function generateMetadata(): Metadata {
   return generateSeoMetadata({
@@ -23,15 +25,6 @@ export function generateMetadata(): Metadata {
 }
 
 export default async function HealthNewsPage() {
-  // Fetch data on the server
-  const categories = await articleService.getArticleCategories();
-  const featuredArticles = await articleService.getFeaturedArticles(5);
-  const popularArticles = await articleService.getPopularArticles(5);
-  const latestArticles = await articleService.getArticles({
-    page: 1,
-    limit: 12,
-  });
-
   return (
     <div className="min-h-screen bg-background pb-8 sm:pb-12 pt-4 sm:pt-6">
       <div className="container mx-auto px-4">
@@ -54,7 +47,9 @@ export default async function HealthNewsPage() {
           <h2 className="sr-only" id="featured-articles">
             Bài Viết Nổi Bật
           </h2>
-          <FeaturedArticles articles={featuredArticles} />
+          <Suspense fallback={<Loading />}>
+            <FeaturedArticles />
+          </Suspense>
         </section>
 
         <div className="grid grid-cols-1 gap-6 sm:gap-8 md:grid-cols-12">
@@ -69,7 +64,7 @@ export default async function HealthNewsPage() {
                 id="categories-heading">
                 Danh Mục
               </h2>
-              <CategoryList categories={categories} />
+              <CategoryList />
             </section>
 
             {/* Latest Articles */}
@@ -81,7 +76,9 @@ export default async function HealthNewsPage() {
                   Bài Viết Mới Nhất
                 </h2>
               </div>
-              <ArticleList articles={latestArticles.articles} />
+              <Suspense fallback={<Loading />}>
+                <ArticleList />
+              </Suspense>
             </section>
           </main>
 
@@ -96,7 +93,9 @@ export default async function HealthNewsPage() {
                 id="popular-articles">
                 Bài Viết Phổ Biến
               </h2>
-              <PopularArticles articles={popularArticles} />
+              <Suspense fallback={<Loading />}>
+                <PopularArticles />
+              </Suspense>
             </section>
 
             {/* Newsletter Signup */}

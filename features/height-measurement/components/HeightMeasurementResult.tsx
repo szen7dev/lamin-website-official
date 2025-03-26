@@ -82,8 +82,6 @@ export default function HeightMeasurementResult({
     if (!apiResponse) return;
 
     try {
-      console.log('🌐 Xử lý dữ liệu từ API:', apiResponse);
-
       // Thông tin cá nhân từ API
       const userData = apiResponse.data || {};
       const growTrackData = apiResponse.growTrack || {};

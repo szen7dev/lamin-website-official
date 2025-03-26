@@ -124,6 +124,7 @@ export function CoachDetail({ coach, isLoading, error }: CoachDetailProps) {
                   fill
                   alt={coach.name}
                   className="object-cover"
+                  sizes="192px"
                   src={imageUrl}
                 />
               </div>

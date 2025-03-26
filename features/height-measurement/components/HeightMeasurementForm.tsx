@@ -3,25 +3,14 @@ import type { HeightMeasurementFormData } from '../types/heightMeasurementTypes'
 
 import { useForm } from 'react-hook-form';
 import { AlertCircle } from 'lucide-react';
-import { useEffect } from 'react';
 
 import { useHeightMeasurementMutation } from '../hooks/usePostHeightMeasurement';
 
 import { Button } from '@/components/ui/button';
 
 export default function HeightMeasurementForm() {
-  const { createHeightMeasurement, isPending, error, isSuccess, data } =
+  const { createHeightMeasurement, isPending, error } =
     useHeightMeasurementMutation();
-
-  useEffect(() => {
-    console.log('🖥️ Form Component: Current state:', {
-      isPending,
-      error,
-      isSuccess,
-      data,
-    });
-  }, [isPending, error, isSuccess, data]);
-
   const {
     register,
     handleSubmit,
@@ -41,11 +30,8 @@ export default function HeightMeasurementForm() {
   });
 
   const onSubmit = (formData: HeightMeasurementFormData) => {
-    console.log('🖥️ Form Component: Form submitted with data:', formData);
-
     // Đảm bảo số điện thoại đúng định dạng
     if (!/^[0-9]{10,11}$/.test(formData.phone)) {
-      console.log('🖥️ Form Component: Invalid phone number format');
       setError('phone', {
         type: 'manual',
         message: 'Số điện thoại không hợp lệ',
@@ -72,7 +58,6 @@ export default function HeightMeasurementForm() {
         formData.note = 'Đo chiều cao từ website';
       }
 
-      console.log('🖥️ Form Component: Processed data:', formData);
       createHeightMeasurement(formData);
     } catch (err) {
       console.error('🖥️ Form Component: Error processing form data:', err);
@@ -84,7 +69,6 @@ export default function HeightMeasurementForm() {
   };
 
   const handleReset = () => {
-    console.log('🖥️ Form Component: Form reset');
     reset();
   };
 

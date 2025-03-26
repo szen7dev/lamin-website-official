@@ -99,6 +99,7 @@ export default function HealthNews() {
                   fill
                   alt={mainArticle.title}
                   className="object-cover transition-transform duration-300 group-hover:scale-105"
+                  sizes="(max-width: 768px) 100vw, 66vw"
                   src={getImageUrl(mainArticle.thumbnail)}
                 />
               </figure>
@@ -135,6 +136,7 @@ export default function HealthNews() {
                       fill
                       alt={article.title}
                       className="object-cover transition-transform duration-300 group-hover:scale-105"
+                      sizes="128px"
                       src={getImageUrl(article.thumbnail)}
                     />
                   </figure>

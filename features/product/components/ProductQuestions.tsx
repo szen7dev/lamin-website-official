@@ -31,7 +31,6 @@ export default function ProductQuestions({ productId }: ProductQuestionsProps) {
 
     // Simulate API call
     setTimeout(() => {
-      console.log('Question submitted:', { productId, question, name, email });
       setQuestion('');
       setName('');
       setEmail('');

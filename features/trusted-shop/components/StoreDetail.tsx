@@ -86,6 +86,7 @@ export function StoreDetail({ store, isLoading }: StoreDetailProps) {
                     fill
                     alt={store.name || 'Store image'}
                     className="object-cover"
+                    sizes="(max-width: 768px) 100vw, 50vw"
                     src={imageUrl}
                   />
                 </div>

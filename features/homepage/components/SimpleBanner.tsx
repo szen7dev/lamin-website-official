@@ -7,6 +7,7 @@ import { useGetMediasHomepage } from '../hooks/banner/useGetMediasHomepage';
 
 import { apiClient } from '@/services/api/apiClient';
 import { Skeleton } from '@/components/ui/skeleton';
+
 export default function SimpleBanner() {
   const { banners, isLoading } = useGetMediasHomepage({
     type: 1,
@@ -44,7 +45,6 @@ export default function SimpleBanner() {
       {/* Mobile Banner */}
       <div className="md:hidden w-full">
         <Image
-          priority
           alt={banner?.name || 'Hero Banner'}
           className="w-full object-cover"
           height={300}

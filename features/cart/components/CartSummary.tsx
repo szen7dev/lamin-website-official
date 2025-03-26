@@ -121,7 +121,6 @@ export function CartSummary({
   }, [items, selectedItems, usePoints, appliedVoucher]);
 
   const handleApplyPromotion = (voucher: Voucher | null) => {
-    console.log('Applied voucher:', voucher);
     setAppliedVoucher(voucher);
 
     // Pass the voucher data to the parent component

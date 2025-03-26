@@ -276,7 +276,6 @@ export default function DealSlider() {
 
                           if (expirationDate.getTime() <= now.getTime()) {
                             // Show toast message for expired promotion
-                            console.log('Product is expired');
                             toast({
                               title: 'Thông báo',
                               description:
@@ -368,7 +367,6 @@ export default function DealSlider() {
 
                             if (expirationDate.getTime() <= now.getTime()) {
                               // Show toast message for expired promotion
-                              console.log('Product is expired');
                               toast({
                                 title: 'Thông báo',
                                 description:

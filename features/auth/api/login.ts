@@ -63,8 +63,6 @@ export const login = async (params: LoginParams): Promise<LoginResponse> => {
       false, // Don't require auth for this endpoint
     );
 
-    console.log('Login response:', response);
-
     // If API returns standardized response
     if (response && typeof response === 'object') {
       return {
