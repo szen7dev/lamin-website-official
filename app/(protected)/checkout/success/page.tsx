@@ -13,8 +13,6 @@ export default function CheckoutSuccessPage() {
   const router = useRouter();
   const { orderInfo } = useOrder();
 
-  console.log('orderInfo', orderInfo);
-
   const [paymentMethodText, setPaymentMethodText] = useState('');
 
   useEffect(() => {
