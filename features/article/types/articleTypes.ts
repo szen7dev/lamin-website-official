@@ -1,4 +1,12 @@
-import { Thumbnail } from '@/types';
+import { Populate, Thumbnail } from '@/types';
+
+export interface UserUpdate {
+  _id: string;
+  image: string;
+  fullname: string;
+  position: string;
+  note: string;
+}
 
 // Types for article feature
 export interface Article {
@@ -15,14 +23,17 @@ export interface Article {
   title: string;
   content: string;
   slug: string;
-  category: string;
+  category: {
+    _id: string;
+    name: string;
+  };
   thumbnail: Thumbnail;
   summary: string;
   description: string;
   modifyAt: Date;
   createAt: Date;
   __v: number;
-  userUpdate: string;
+  userUpdate: UserUpdate;
   caption?: string;
   updateAt?: Date;
 }
@@ -75,12 +86,14 @@ export interface ArticleListParams {
   search?: string;
   page?: number;
   limit?: number;
+  select?: string;
   featured?: boolean;
   sort?: 'latest' | 'popular' | 'oldest';
   authorId?: string;
   tag?: string;
   verified?: boolean;
   optionSeller?: number;
+  populates?: Populate;
 }
 
 // Service Interface

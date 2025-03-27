@@ -269,6 +269,7 @@ export function Footer() {
               </div>
 
               <Image
+                priority
                 alt="QR Code"
                 className="rounded-lg"
                 height={120}

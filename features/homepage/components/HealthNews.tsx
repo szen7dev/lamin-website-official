@@ -26,8 +26,8 @@ export default function HealthNews() {
   // Helper function to create article URL
   const getArticleUrl = (article: any) => {
     return article?.slug
-      ? `/health-news/article/${article.slug}`
-      : '/health-news';
+      ? `/chuyen-trang-suc-khoe/bai-viet/${article.slug}`
+      : '/chuyen-trang-suc-khoe';
   };
 
   if (isLoading) {
@@ -80,7 +80,7 @@ export default function HealthNews() {
         </div>
         <Link
           className="flex items-center gap-1 text-primary-40 font-normal text-sm hover:underline decoration-transparent"
-          href="/health-news">
+          href="/chuyen-trang-suc-khoe">
           Xem thêm
           <ChevronRight className="h-4 w-4" />
         </Link>

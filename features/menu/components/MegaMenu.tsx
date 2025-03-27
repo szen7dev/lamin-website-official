@@ -285,7 +285,7 @@ export default function MegaMenu() {
   // Desktop menu
   if (!isMobile) {
     return (
-      <nav className="border-b border-grayscale-20 bg-white">
+      <nav className="bg-white">
         <div className="container mx-auto px-4">
           <ul className="flex space-x-8 py-4">
             {/* Render level 1 items (top navigation) */}

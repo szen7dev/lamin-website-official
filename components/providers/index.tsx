@@ -8,6 +8,7 @@ import { ThemeProvider as NextThemesProvider } from 'next-themes';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import { Toaster } from '@/components/ui/toaster';
+import { NavigationProgress } from '@/components/ui/navigation-progress';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { OrderProvider } from '@/contexts/OrderContext';
 
@@ -48,12 +49,11 @@ export function Providers({ children, themeProps }: ProvidersProps) {
           <OrderProvider>
             {mounted ? (
               <>
+                <NavigationProgress />
                 {children}
                 <Toaster />
               </>
-            ) : (
-              <div style={{ visibility: 'hidden' }}>{children}</div>
-            )}
+            ) : null}
           </OrderProvider>
         </AuthProvider>
       </NextThemesProvider>

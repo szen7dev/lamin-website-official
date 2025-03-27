@@ -11,6 +11,8 @@ const redirects = new Map([
   ['/contact', '/lien-he'],
   ['/store-locations', '/he-thong-cua-hang'],
   ['/health-news/article', '/chuyen-trang-suc-khoe/bai-viet'],
+  ['/checkout', '/thanh-toan'],
+  ['/cart', '/gio-hang'],
 ]);
 
 // URL rewrites mapping (visible URL -> content URL)
@@ -22,6 +24,8 @@ const rewrites = new Map([
   ['/lien-he', '/contact'],
   ['/he-thong-cua-hang', '/store-locations'],
   ['/chuyen-trang-suc-khoe/bai-viet', '/health-news/article'],
+  ['/thanh-toan', '/checkout'],
+  ['/gio-hang', '/cart'],
 ]);
 
 export async function middleware(request: NextRequest) {
