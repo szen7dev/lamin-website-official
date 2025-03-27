@@ -1,5 +1,6 @@
 import { Star } from 'lucide-react';
-import Image from 'next/image';
+
+import { Skeleton } from '@/components/ui/skeleton';
 
 export interface Comment {
   id: string;
@@ -73,13 +74,7 @@ export function CommentList({
                 <div key={reply.id} className="mt-4 pl-12 relative">
                   {/* Staff Avatar */}
                   <div className="absolute -left-0 w-8 h-8 rounded-full overflow-hidden border-2 border-white">
-                    <Image
-                      alt={`Ảnh đại diện của ${reply.author.name}`}
-                      className="h-full w-full object-cover"
-                      height={32}
-                      src="/public/placeholder-user.jpg"
-                      width={32}
-                    />
+                    <Skeleton className="h-[32px] w-[32px]" />
                   </div>
 
                   <div>

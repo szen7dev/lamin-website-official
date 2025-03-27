@@ -5,18 +5,15 @@ import { ProductDetailClient } from './client';
 import { generateMetadata as generateSeoMetadata } from '@/utils/seo';
 import { getGoodsInfoBySlug } from '@/features/product/api/getGoodsInfoBySlug';
 
-interface ProductDetailPageProps {
-  params: {
-    slug: string;
-  };
-}
-
 export async function generateMetadata({
   params,
-}: ProductDetailPageProps): Promise<Metadata> {
+}: {
+  params: { slug: string };
+}): Promise<Metadata> {
   try {
     // Fetch the product data server-side for metadata
-    const { slug } = params;
+    const resolvedParams = await Promise.resolve(params);
+    const { slug } = resolvedParams;
 
     const productInfo = await getGoodsInfoBySlug(slug);
 
@@ -38,7 +35,12 @@ export async function generateMetadata({
 
 export default async function ProductDetailPage({
   params,
-}: ProductDetailPageProps) {
+}: {
+  params: { slug: string };
+}) {
+  const resolvedParams = await Promise.resolve(params);
+  const { slug } = resolvedParams;
+
   // This is a server component that renders the client component
-  return <ProductDetailClient params={{ slug: params.slug }} />;
+  return <ProductDetailClient params={{ slug }} />;
 }
