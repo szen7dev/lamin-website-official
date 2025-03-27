@@ -3,13 +3,55 @@
 import type { CartItem } from '../types/cartTypes';
 import type React from 'react';
 
-import {
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-  useCallback,
-} from 'react';
+import { createContext, useContext, useState, useCallback } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+
+// Keys for React Query
+const CART_QUERY_KEY = 'cart';
+
+// Helper functions for localStorage
+const getCartFromStorage = (): { items: CartItem[]; expiry: number } | null => {
+  try {
+    const savedCartData = localStorage.getItem('cart');
+
+    console.log('Loading cart from storage:', savedCartData);
+
+    if (!savedCartData) return null;
+
+    const cartData = JSON.parse(savedCartData);
+
+    // Check if the cart data is still valid (not expired)
+    if (cartData.expiry && new Date().getTime() < cartData.expiry) {
+      console.log('Valid cart data found:', cartData);
+
+      return cartData;
+    }
+
+    // Clear expired cart data
+    console.log('Cart data expired, clearing');
+    localStorage.removeItem('cart');
+
+    return null;
+  } catch (error) {
+    console.error('Failed to load cart from localStorage:', error);
+
+    return null;
+  }
+};
+
+const saveCartToStorage = (items: CartItem[]): void => {
+  try {
+    const cartData = {
+      items,
+      expiry: new Date().getTime() + 24 * 60 * 60 * 1000, // 1 day from now
+    };
+
+    console.log('Saving cart to storage:', cartData);
+    localStorage.setItem('cart', JSON.stringify(cartData));
+  } catch (error) {
+    console.error('Failed to save cart to localStorage:', error);
+  }
+};
 
 type CartContextType = {
   items: CartItem[];
@@ -26,30 +68,46 @@ type CartContextType = {
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
-  const [items, setItems] = useState<CartItem[]>([]);
+  const queryClient = useQueryClient();
   const [isLoading, setIsLoading] = useState(false);
 
-  // Load cart from localStorage
-  useEffect(() => {
-    try {
-      const savedCart = localStorage.getItem('cart');
+  // Use React Query to fetch and cache cart data
+  const { data: cartData } = useQuery({
+    queryKey: [CART_QUERY_KEY],
+    queryFn: () => {
+      const storedData = getCartFromStorage();
 
-      if (savedCart) {
-        setItems(JSON.parse(savedCart));
-      }
-    } catch (error) {
-      console.error('Failed to load cart from localStorage:', error);
-    }
-  }, []);
+      console.log('Query function executed, got data:', storedData);
 
-  // Save cart to localStorage
-  useEffect(() => {
-    try {
-      localStorage.setItem('cart', JSON.stringify(items));
-    } catch (error) {
-      console.error('Failed to save cart to localStorage:', error);
-    }
-  }, [items]);
+      return (
+        storedData || {
+          items: [],
+          expiry: new Date().getTime() + 24 * 60 * 60 * 1000,
+        }
+      );
+    },
+    staleTime: 24 * 60 * 60 * 1000, // 1 day
+    gcTime: 7 * 24 * 60 * 60 * 1000, // 1 week
+    refetchOnWindowFocus: false,
+    refetchOnMount: true,
+  });
+
+  const items = cartData?.items || [];
+
+  // Mutations for cart operations
+  const updateCartMutation = useMutation({
+    mutationFn: async (newItems: CartItem[]) => {
+      saveCartToStorage(newItems);
+
+      return {
+        items: newItems,
+        expiry: new Date().getTime() + 24 * 60 * 60 * 1000,
+      };
+    },
+    onSuccess: result => {
+      queryClient.setQueryData([CART_QUERY_KEY], result);
+    },
+  });
 
   const totalItems = items.reduce((total, item) => total + item.quantity, 0);
   const totalPrice = items.reduce(
@@ -57,79 +115,91 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     0,
   );
 
-  const addItem = useCallback((item: CartItem) => {
-    setIsLoading(true);
-    try {
-      const validItem = {
-        ...item,
-        quantity: Math.max(1, Math.floor(item.quantity) || 1),
-      };
+  const addItem = useCallback(
+    (item: CartItem) => {
+      setIsLoading(true);
+      try {
+        const validItem = {
+          ...item,
+          quantity: Math.max(1, Math.floor(item.quantity) || 1),
+        };
 
-      setItems(prev => {
-        const existingItemIndex = prev.findIndex(i => i.id === validItem.id);
+        const existingItemIndex = items.findIndex(i => i.id === validItem.id);
+        let newItems: CartItem[];
 
         if (existingItemIndex >= 0) {
-          const updatedItems = [...prev];
-
-          updatedItems[existingItemIndex] = {
-            ...updatedItems[existingItemIndex],
-            quantity:
-              updatedItems[existingItemIndex].quantity + validItem.quantity,
+          newItems = [...items];
+          newItems[existingItemIndex] = {
+            ...newItems[existingItemIndex],
+            quantity: newItems[existingItemIndex].quantity + validItem.quantity,
           };
-
-          return updatedItems;
+        } else {
+          newItems = [...items, validItem];
         }
 
-        return [...prev, validItem];
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
+        updateCartMutation.mutate(newItems);
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [items, updateCartMutation],
+  );
 
-  const removeItem = useCallback((id: string) => {
-    setIsLoading(true);
-    try {
-      setItems(prev => prev.filter(item => item.id !== id));
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
+  const removeItem = useCallback(
+    (id: string) => {
+      setIsLoading(true);
+      try {
+        const newItems = items.filter(item => item.id !== id);
 
-  const updateQuantity = useCallback((id: string, quantity: number) => {
-    setIsLoading(true);
-    try {
-      const validQuantity = Math.max(1, Math.floor(quantity) || 1);
+        updateCartMutation.mutate(newItems);
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [items, updateCartMutation],
+  );
 
-      setItems(prev =>
-        prev.map(item =>
+  const updateQuantity = useCallback(
+    (id: string, quantity: number) => {
+      setIsLoading(true);
+      try {
+        const validQuantity = Math.max(1, Math.floor(quantity) || 1);
+        const newItems = items.map(item =>
           item.id === id ? { ...item, quantity: validQuantity } : item,
-        ),
-      );
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
+        );
 
-  const updateUnit = useCallback((id: string, unit: string) => {
-    setIsLoading(true);
-    try {
-      setItems(prev =>
-        prev.map(item => (item.id === id ? { ...item, unit } : item)),
-      );
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
+        updateCartMutation.mutate(newItems);
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [items, updateCartMutation],
+  );
+
+  const updateUnit = useCallback(
+    (id: string, unit: string) => {
+      setIsLoading(true);
+      try {
+        const newItems = items.map(item =>
+          item.id === id ? { ...item, unit } : item,
+        );
+
+        updateCartMutation.mutate(newItems);
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [items, updateCartMutation],
+  );
 
   const clearCart = useCallback(() => {
     setIsLoading(true);
     try {
-      setItems([]);
+      updateCartMutation.mutate([]);
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [updateCartMutation]);
 
   return (
     <CartContext.Provider
