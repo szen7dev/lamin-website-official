@@ -14,7 +14,13 @@ import { useCart } from '@/features/cart/hooks/useCart';
 import { cn } from '@/utils/helpers';
 import apiClient from '@/services/api/apiClient';
 import { useToast } from '@/hooks/use-toast';
-import { ClockIcon, FacebookBranchIcon } from '@/components/icons';
+import {
+  ClockIcon,
+  FacebookBranchIcon,
+  PillIcon,
+  SaleIcon,
+  TransportIcon,
+} from '@/components/icons';
 import { Voucher } from '@/features/cart/types/voucherTypes';
 
 interface ProductInfoProps {
@@ -307,12 +313,7 @@ export default function ProductInfo({
       {product.listedUnitprice - product.sellingUnitprice > 0 && (
         <div className=" rounded-lg overflow-hidden border border-grayscale-20">
           <div className="flex gap-2 text-[#F37021] bg-orange-100 font-medium text-base p-2">
-            <Image
-              alt="sale-icon"
-              height={16}
-              src="/icons/Sale.svg"
-              width={16}
-            />
+            <SaleIcon />
             Khuyến mãi được áp dụng
           </div>
           <div className="flex items-center p-2">
@@ -415,13 +416,7 @@ export default function ProductInfo({
         </div>
         <div className="flex items-start gap-3">
           <div className="flex h-10 w-14 p-2 items-center justify-center rounded-full bg-[#0D6EFD]/10">
-            {/* <Truck className="h-5 w-5 text-[#0D6EFD]" /> */}
-            <Image
-              alt="point-icon"
-              height={20}
-              src="/icons/TransportIcon.svg"
-              width={20}
-            />
+            <TransportIcon />
           </div>
           <div>
             <p className="font-medium text-sm text-grayscale-90">
@@ -432,12 +427,7 @@ export default function ProductInfo({
         </div>
         <div className="flex items-start gap-3">
           <div className="flex h-10 w-10 p-2 items-center justify-center rounded-full bg-[#0D6EFD]/10">
-            <Image
-              alt="point-icon"
-              height={20}
-              src="/icons/PillsIcon.svg"
-              width={20}
-            />
+            <PillIcon />
           </div>
           <div>
             <p className="font-medium text-sm text-grayscale-90">
