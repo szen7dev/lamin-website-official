@@ -167,7 +167,7 @@ export default function DealSlider() {
       <header className="mb-4 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <h2
-            className="flex items-center gap-1 text-xl font-bold text-white"
+            className="flex items-center gap-1 text-xl sm:text-[28px] font-bold text-white mr-2"
             id="deals-heading">
             Săn
             <span className="text-warning-50">⚡</span>

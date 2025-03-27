@@ -15,10 +15,10 @@ export default function CoachExperts() {
   return (
     <section
       aria-labelledby="coaches-heading"
-      className="rounded-2xl bg-gradient-3 p-8">
+      className="rounded-2xl bg-gradient-3 px-4 py-5">
       <header className="mb-8">
         <h2
-          className="mb-2 text-3xl font-semibold text-white"
+          className="mb-2 text-[22px] font-semibold text-white sm:text-[28px]"
           id="coaches-heading">
           Coach tư vấn chăm sóc sức khỏe
         </h2>
@@ -28,7 +28,7 @@ export default function CoachExperts() {
         <Link
           className="decoration-transparent inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-primary hover:bg-white/90 font-normal text-sm transition-colors"
           href="/doi-ngu-chuyen-mon">
-          Tìm hiểu thêm
+          Xem tất cả
           <ChevronRight aria-hidden="true" className="h-4 w-4" />
         </Link>
       </header>
