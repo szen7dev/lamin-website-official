@@ -1,19 +1,10 @@
-import { Article } from '../types/articleTypes';
+import { Article, ArticleListParams } from '../types/articleTypes';
 
 import { apiClient, DEFAULT_OPTION_SELLER } from '@/services/api/apiClient';
 
 /**
  * Parameters for fetching article list
  */
-export interface ArticleListParams {
-  optionSeller?: number;
-  limit?: number;
-  page?: number;
-  select?: string;
-  sort?: string;
-  [key: string]: any;
-}
-
 /**
  * Get list of articles
  * @param params Query parameters for fetching articles
@@ -24,10 +15,12 @@ export const getArticleList = async (
 ): Promise<Article[]> => {
   try {
     const queryParams = {
-      select: 'name slug thumbnail description createdAt updatedAt',
+      select:
+        params.select || 'name slug thumbnail description createdAt updatedAt',
       optionSeller: params.optionSeller || DEFAULT_OPTION_SELLER,
-      populates: JSON.stringify({ path: 'thumbnail', select: 'path' }),
-      ...params,
+      populates: params.populates
+        ? JSON.stringify(params.populates)
+        : JSON.stringify({ path: 'thumbnail', select: 'path' }),
     };
 
     // The apiClient.get method handles response normalization internally

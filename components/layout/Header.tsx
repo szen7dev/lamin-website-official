@@ -1,4 +1,4 @@
-'use client';//
+'use client'; //
 
 import Link from 'next/link';
 import Image from 'next/image';
@@ -322,6 +322,7 @@ export function Header() {
             </div>
             <div className="bg-white p-2 rounded-b-xl w-full flex-1 flex items-center justify-center">
               <Image
+                priority
                 alt="QR Code"
                 className="object-contain"
                 height={100}

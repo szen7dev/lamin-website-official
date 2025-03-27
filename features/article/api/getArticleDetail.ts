@@ -1,5 +1,6 @@
 import { Article } from '../types/articleTypes';
 
+import { Populate } from '@/types';
 import { apiClient, DEFAULT_OPTION_SELLER } from '@/services/api/apiClient';
 
 /**
@@ -9,6 +10,7 @@ export interface ArticleDetailParams {
   slug: string;
   optionSeller?: number;
   select?: string;
+  populates?: Populate;
 }
 
 /**
@@ -29,7 +31,9 @@ export const getArticleDetail = async (
     const queryParams = {
       slug: params.slug,
       optionSeller: params.optionSeller ?? DEFAULT_OPTION_SELLER,
-      populates: JSON.stringify({ path: 'thumbnail', select: 'path' }),
+      populates: params.populates
+        ? JSON.stringify(params.populates)
+        : JSON.stringify({ path: 'thumbnail', select: 'path' }),
     };
 
     const response = await apiClient.get<Article[] | Article>(

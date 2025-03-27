@@ -58,13 +58,13 @@ export default function TextSizeAdjuster({
 
   return (
     <div className={`flex items-center gap-2 ${className}`}>
-      <span className="text-sm text-[#6C757D]">Kích thước chữ</span>
-      <div className="flex">
+      <span className="text-sm text-grayscale-50">Kích thước chữ</span>
+      <div className="flex p-1 bg-[#f5f5f5] w-max h-max rounded-full">
         <Button
-          className={`rounded-l-md rounded-r-none border-r-0 ${
+          className={`rounded-full border-0 ${
             activeSize === 'default'
-              ? 'bg-[#0D6EFD] text-white hover:bg-[#0D6EFD]/90'
-              : 'bg-white text-[#0D6EFD] hover:bg-gray-50'
+              ? 'bg-primary text-white hover:bg-primary/90'
+              : 'bg-[#f5f5f5] text-black hover:bg-gray-50'
           }`}
           size="sm"
           variant={activeSize === 'default' ? 'default' : 'outline'}
@@ -72,10 +72,10 @@ export default function TextSizeAdjuster({
           Mặc định
         </Button>
         <Button
-          className={`rounded-l-none rounded-r-md ${
+          className={`rounded-full border-0 ${
             activeSize === 'large'
-              ? 'bg-[#0D6EFD] text-white hover:bg-[#0D6EFD]/90'
-              : 'bg-white text-[#0D6EFD] hover:bg-gray-50'
+              ? 'bg-primary text-white hover:bg-primary/90'
+              : 'bg-[#f5f5f5] text-black hover:bg-gray-50'
           }`}
           size="sm"
           variant={activeSize === 'large' ? 'default' : 'outline'}

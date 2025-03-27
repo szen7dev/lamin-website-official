@@ -1,37 +1,49 @@
 'use client';
 
-import type { Article } from '../types/articleTypes';
-
 import Image from 'next/image';
 import Link from 'next/link';
-import { FileText } from 'lucide-react';
+
+import { useGetArticleList } from '../hooks';
 
 import { Skeleton } from '@/components/ui/skeleton';
 import { apiClient } from '@/services';
+import { NewspaperIcon } from '@/components/icons';
 
-interface RelatedArticlesProps {
-  articles?: Article[];
-  isLoading?: boolean;
-}
+export default function RelatedArticles() {
+  const {
+    articles: articleList,
+    isLoading: isLoadingList,
+    error: errorList,
+  } = useGetArticleList({
+    populates: {
+      path: 'author category thumbnail userUpdate position tags name',
+      select: '_id name fullname image path size note position',
+    },
+    select: 'category title',
+  });
 
-export default function RelatedArticles({
-  articles = [],
-  isLoading = false,
-}: RelatedArticlesProps) {
+  if (isLoadingList) {
+    return <Skeleton className="h-5 w-full rounded" />;
+  }
+
+  if (errorList) {
+    return <div className="text-red-500">Error fetching articles</div>;
+  }
+
   // Section Header - always shown
   const header = (
-    <div className="flex items-center gap-2">
-      <div className="flex h-6 w-6 items-center justify-center rounded bg-primary-5">
-        <FileText className="h-4 w-4 text-white" />
+    <div className="mb-4 flex items-center gap-2">
+      <div className="flex h-6 w-6 items-center justify-center rounded">
+        <NewspaperIcon />
       </div>
-      <h2 className="text-lg font-bold text-grayscale-90">
+      <h2 className="text-lg font-semibold text-grayscale-90">
         Các bài viết liên quan
       </h2>
     </div>
   );
 
   // If loading, show skeleton
-  if (isLoading) {
+  if (isLoadingList) {
     return (
       <div className="space-y-6">
         {header}
@@ -43,7 +55,7 @@ export default function RelatedArticles({
               className="overflow-hidden rounded-lg border border-grayscale-20 bg-white">
               <div className="flex gap-4">
                 {/* Skeleton Image */}
-                <div className="relative h-16 w-16 flex-shrink-0">
+                <div className="relative h-20 w-20 flex-shrink-0">
                   <Skeleton className="w-full h-full rounded-lg" />
                 </div>
                 {/* Skeleton Content */}
@@ -61,7 +73,7 @@ export default function RelatedArticles({
   }
 
   // If no articles and not loading
-  if (articles.length === 0) {
+  if (articleList.length === 0) {
     return (
       <div className="space-y-6">
         {header}
@@ -74,37 +86,38 @@ export default function RelatedArticles({
 
   // If articles are available
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {header}
       {/* Article Cards */}
       <div className="space-y-4">
-        {articles.map(article => (
+        {articleList.slice(1, 4).map(article => (
           <article
             key={article._id}
-            className="overflow-hidden rounded-lg border border-grayscale-20 bg-white hover:shadow-md">
+            className="overflow-hidden hover:bg-gray-50 rounded-sm py-2">
             <Link
-              className="flex gap-4 decoration-transparent"
-              href={`/health-news/article/${article.slug}`}>
+              className="flex justify- gap-6 items-center decoration-transparent"
+              href={`/chuyen-trang-suc-khoe/bai-viet/${article.slug}`}>
               {/* Article Image */}
-              <div className="relative h-16 w-16 flex-shrink-0">
+              <div className="relative h-20 w-32 flex-shrink-0 rounded-sm overflow-hidden">
                 {article.thumbnail ? (
                   <Image
-                    fill
                     alt={article.title || 'Thumbnail'}
-                    className="object-cover rounded-lg"
-                    sizes="64px"
+                    className="object-cover h-20 w-32 rounded-sm"
+                    height={80}
                     src={apiClient.getFileUrl(article.thumbnail.path)}
+                    width={128}
                   />
                 ) : (
-                  <div className="w-full h-full rounded-lg">
-                    <Skeleton className="w-full h-full rounded-lg" />
+                  <div className="w-full h-full">
+                    <Skeleton className="w-full h-full rounded-sm" />
                   </div>
                 )}
               </div>
+
               {/* Article Content */}
-              <div className="flex flex-col justify-center py-3 pr-4 flex-grow">
-                <span className="mb-2 inline-block rounded-md bg-primary-5/10 px-3 py-1 text-sm text-primary-40">
-                  Truyền Thông
+              <div className="flex flex-col flex-grow justify-between">
+                <span className="mb-2 w-max rounded-full bg-grayscale-10 px-2 sm:px-3 py-1 text-xs sm:text-sm text-grayscale-40">
+                  {article.category.name}
                 </span>
                 <h3 className="line-clamp-2 text-base font-medium text-grayscale-90 group-hover:text-primary-40">
                   {article.title}

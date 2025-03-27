@@ -2,7 +2,8 @@
 
 import { useSuspenseQuery } from '@tanstack/react-query';
 
-import { getArticleList, type ArticleListParams } from '../api/getArticleList';
+import { getArticleList } from '../api/getArticleList';
+import { ArticleListParams } from '../types/articleTypes';
 
 /**
  * Custom hook to fetch article list data

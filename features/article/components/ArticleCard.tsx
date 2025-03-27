@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { formatDate } from '@/utils/format';
 import { Skeleton } from '@/components/ui/skeleton';
 import { News } from '@/features/homepage/types/newsTypes';
+import { apiClient } from '@/services';
 
 interface ArticleCardProps {
   article: News;
@@ -106,7 +107,7 @@ export default function ArticleCard({
       <article className="group relative">
         <Link
           className="decoration-transparent block"
-          href={`/health-news/article/${slug}`}>
+          href={`/chuyen-trang-suc-khoe/bai-viet/${slug}`}>
           <div className="relative aspect-[16/9] w-full">
             {thumbnail ? (
               <Image
@@ -114,7 +115,7 @@ export default function ArticleCard({
                 alt={title}
                 className="object-cover transition-transform duration-300 group-hover:scale-105 rounded-t-lg"
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                src={thumbnail.path}
+                src={apiClient.getFileUrl(thumbnail.path)}
               />
             ) : (
               <div className="w-full h-full rounded-t-lg">
@@ -146,14 +147,14 @@ export default function ArticleCard({
       <article className="group">
         <Link
           className="decoration-transparent flex gap-4"
-          href={`/health-news/article/${slug}`}>
+          href={`/chuyen-trang-suc-khoe/bai-viet/${slug}`}>
           <div className="relative h-20 w-32 flex-shrink-0">
             {thumbnail ? (
               <Image
                 fill
                 alt={title}
                 className="object-cover transition-transform duration-300 group-hover:scale-105 rounded-lg"
-                src={thumbnail.path}
+                src={apiClient.getFileUrl(thumbnail.path)}
               />
             ) : (
               <div className="w-full h-full rounded-lg">
@@ -181,14 +182,14 @@ export default function ArticleCard({
     <article className="group">
       <Link
         className="decoration-transparent block"
-        href={`/health-news/article/${slug}`}>
+        href={`/chuyen-trang-suc-khoe/bai-viet/${slug}`}>
         <div className="relative aspect-[4/3] w-full">
           {thumbnail ? (
             <Image
               fill
               alt={title}
               className="object-cover transition-transform duration-300 group-hover:scale-105 rounded-lg"
-              src={thumbnail.path}
+              src={apiClient.getFileUrl(thumbnail.path)}
             />
           ) : (
             <div className="w-full h-full rounded-lg">

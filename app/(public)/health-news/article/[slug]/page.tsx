@@ -14,7 +14,8 @@ export async function generateMetadata({
   params: { slug: string };
 }): Promise<Metadata> {
   // Ensure params is ready
-  const { slug } = params;
+  const resolvedParams = await Promise.resolve(params);
+  const { slug } = resolvedParams;
 
   let seoData = {
     title: 'Bài Viết - Góc Sức Khỏe',
@@ -128,19 +129,18 @@ function ArticleDetailSkeleton() {
 // Main page component
 export default async function ArticleDetailPage() {
   return (
-    <div className="min-h-screen bg-background pb-8 sm:pb-12 pt-4 sm:pt-6">
-      <div className="container mx-auto px-4">
+    <main className="py-8">
+      <div className="container mx-auto">
         {/* Breadcrumb - Navigation path */}
         <DynamicBreadcrumb />
-
-        <main className="mx-auto max-w-3xl">
-          <article>
-            <Suspense fallback={<ArticleDetailSkeleton />}>
-              <ArticleDetailContent />
-            </Suspense>
-          </article>
-        </main>
       </div>
-    </div>
+      <div className="container mx-auto mb-12">
+        <article>
+          <Suspense fallback={<ArticleDetailSkeleton />}>
+            <ArticleDetailContent />
+          </Suspense>
+        </article>
+      </div>
+    </main>
   );
 }

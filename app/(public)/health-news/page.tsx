@@ -101,9 +101,9 @@ export default async function HealthNewsPage() {
             {/* Newsletter Signup */}
             <section
               aria-labelledby="newsletter-signup"
-              className="rounded-lg bg-primary-5 p-4 sm:p-6 text-white">
+              className="rounded-lg bg-primary p-4 sm:p-6 text-white">
               <h2
-                className="mb-1 sm:mb-2 text-lg sm:text-xl font-bold"
+                className="mb-1 sm:mb-2 text-lg sm:text-xl font-bold text-white"
                 id="newsletter-signup">
                 Đăng Ký Nhận Tin
               </h2>
@@ -121,7 +121,7 @@ export default async function HealthNewsPage() {
                   type="email"
                 />
                 <button
-                  className="w-full rounded-lg bg-white px-3 sm:px-4 py-2 text-sm sm:text-base font-medium text-primary-5 hover:bg-white/90"
+                  className="w-full rounded-lg bg-white px-3 sm:px-4 py-2 text-sm sm:text-base font-medium text-primary hover:bg-white/90"
                   type="submit">
                   Đăng Ký
                 </button>
