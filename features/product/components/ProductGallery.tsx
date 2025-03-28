@@ -113,7 +113,7 @@ export default function ProductGallery({ images }: ProductGalleryProps) {
 
         {/* Thumbnails - Only show if there's more than one image */}
         {processedImages.length > 1 && (
-          <div className="grid grid-cols-4 gap-4">
+          <div className="flex gap-4">
             {/* Display up to MAX_THUMBNAILS thumbnails */}
             {processedImages.slice(0, MAX_THUMBNAILS).map((image, index) => (
               <button

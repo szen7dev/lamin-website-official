@@ -91,9 +91,6 @@ export default function ProductDetail({
 
         {/* Reviews Section */}
         <section className="mt-12 bg-white p-6 rounded-lg">
-          <h2 className="text-xl font-bold text-grayscale-90 mb-6 border-b-2 pb-5">
-            Đánh giá sản phẩm
-          </h2>
           <ProductReviews productId={adaptedProduct.id || ''} />
         </section>
 
