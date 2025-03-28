@@ -3,7 +3,12 @@ import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-import { CircleIcon, QuestionMarkIcon } from '@/components/icons';
+import {
+  CircleIcon,
+  PointCoinIcon,
+  QuestionMarkIcon,
+  SuccessIcon,
+} from '@/components/icons';
 import { formatCurrency } from '@/utils/format';
 import {
   getPaymentMethodIcon,
@@ -217,12 +222,7 @@ export default function OrderInfo() {
           <div className="flex justify-between text-base font-normal text-grayscale-50 mb-5">
             <span>Điểm thưởng </span>
             <div className="flex justify-between items-center gap-1">
-              <Image
-                alt="QR Code"
-                height={20}
-                src="/icons/point-icon.svg"
-                width={20}
-              />
+              <PointCoinIcon height={20} width={20} />
               <span className="text-base font-medium text-[#F79009]">
                 {orderInfo.loyaltyPoints
                   ? `${orderInfo.loyaltyPoints} điểm`
@@ -255,7 +255,7 @@ export default function OrderInfo() {
             <Image
               alt="Payment Method"
               height={22}
-              src={paymentMethodIcon || '/icons/qr-code-icon.svg'}
+              src={paymentMethodIcon}
               width={22}
             />
             <p className="text-grayscale-90 font-medium text-sm">
@@ -263,12 +263,7 @@ export default function OrderInfo() {
             </p>
           </div>
           <div className="flex gap-2 items-center">
-            <Image
-              alt="Success"
-              height={16}
-              src="/icons/success-icon.svg"
-              width={16}
-            />
+            <SuccessIcon height={16} width={16} />
             <p className="text-[#51B848] font-medium text-sm">
               {orderInfo.paymentMethod === '1'
                 ? 'Thanh toán khi nhận hàng'

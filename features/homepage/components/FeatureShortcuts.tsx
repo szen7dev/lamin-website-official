@@ -38,7 +38,7 @@ export default function FeatureShortcuts() {
   };
 
   return (
-    <nav aria-label="Truy cập nhanh" className="py-4 md:py-6">
+    <nav aria-label="Truy cập nhanh" className="py-4 md:py-0 pb-4 mb-4">
       {isLoading ? (
         <div className="flex justify-center py-8">
           <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary-30 border-t-transparent" />
@@ -48,7 +48,7 @@ export default function FeatureShortcuts() {
           {features.map(feature => (
             <div key={feature._id} className="flex-shrink-0">
               <Link
-                className={`decoration-transparent group flex h-full rounded-xl bg-white shadow-light-08 transition-all hover:shadow-light-16 ${
+                className={`decoration-transparent group flex h-full rounded-xl bg-white shadow-md transition-all hover:shadow-light-08 ${
                   isDesktop
                     ? 'flex-row items-center gap-3 p-4'
                     : 'flex-col items-center gap-2 p-3'

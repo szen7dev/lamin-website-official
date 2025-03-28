@@ -18,6 +18,7 @@ import {
   ClockIcon,
   FacebookBranchIcon,
   PillIcon,
+  PointCoinIcon,
   SaleIcon,
   TransportIcon,
 } from '@/components/icons';
@@ -208,12 +209,7 @@ export default function ProductInfo({
       </div>
 
       <div className="flex items-center gap-1 mt-0">
-        <Image
-          alt="point-icon"
-          height={20}
-          src="/icons/point-icon.svg"
-          width={20}
-        />
+        <PointCoinIcon height={20} width={20} />
         <span className="text-sm font-normal text-grayscale-90">
           Tặng {product.sellingUnitprice / 100} điểm thưởng khi mua hàng
         </span>
@@ -321,7 +317,7 @@ export default function ProductInfo({
               <Image
                 alt="price-tag"
                 height={20}
-                src="/icons/priceTag.svg"
+                src="/images/PriceTag.png"
                 width={20}
               />
             </div>

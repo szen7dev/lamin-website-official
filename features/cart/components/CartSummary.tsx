@@ -163,7 +163,7 @@ export function CartSummary({
     <div className="bg-white rounded-lg shadow p-4 space-y-4">
       <button
         aria-label="Áp dụng ưu đãi"
-        className="flex w-full items-center justify-between bg-[#eaeffa] rounded-md text-blue-600 font-medium text-sm cursor-pointer bg-transparent border-none p-3"
+        className="flex w-full items-center justify-between bg-[#EAEFFA] rounded-md text-blue-600 font-medium text-sm cursor-pointer bg-transparent border-none p-3"
         type="button"
         onClick={() => setIsPromoModalOpen(true)}>
         <span>Áp dụng ưu đãi để được giảm giá</span>
@@ -238,20 +238,25 @@ export function CartSummary({
       </div>
 
       <div className="pt-2 border-t">
-        <div className="flex items-center gap-1 text-sm">
-          <Coins className="w-4 h-4 text-yellow-500" />
+        <div className="flex items-center gap-1 text-sm justify-between">
           <span>Điểm thưởng</span>
-          <span className="text-yellow-500">{summary.rewardPoints} điểm</span>
+          <div className="flex gap-1">
+            <Coins className="w-4 h-4 text-[#F79009]" />
+            <span className="text-[#F79009]">{summary.rewardPoints} điểm</span>
+          </div>
         </div>
-        <div className="text-sm text-orange-500">
-          Tiết kiệm được {formatPrice(summary.savedAmount)}
+        <div className="text-sm flex justify-between">
+          <span>Tiết kiệm được</span>
+          <span className="text-[#F79009]">
+            {formatPrice(summary.savedAmount)}
+          </span>
         </div>
       </div>
 
       <div className="pt-2 border-t">
         <div className="flex justify-between items-center mb-4">
-          <span>Thành tiền</span>
-          <div className="text-right">
+          <span className="text-lg font-semibold">Thành tiền</span>
+          <div className="flex gap-2 items-center">
             <span className="text-gray-500 line-through text-sm">
               {formatPrice(summary.subtotal)}
             </span>

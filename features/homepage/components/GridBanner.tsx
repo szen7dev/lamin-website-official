@@ -28,10 +28,10 @@ export default function GridBanner() {
   const swiperRef = useRef<SwiperClass | null>(null);
 
   return (
-    <div className="container mx-auto px-4 py-6">
+    <div className="container mx-auto sm:px-4 sm:py-6">
       <div className="grid grid-cols-1 md:grid-cols-5 gap-4 md:gap-5">
         {/* Left Side - Sliding Banner */}
-        <div className="relative rounded-lg overflow-hidden md:col-span-3 shadow-08 group h-full">
+        <div className="relative rounded-lg overflow-hidden md:col-span-3 shadow-08 group h-[180px] sm:h-full">
           <Swiper
             autoplay={{
               delay: 3000,

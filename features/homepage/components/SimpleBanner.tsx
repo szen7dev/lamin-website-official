@@ -46,8 +46,8 @@ export default function SimpleBanner() {
       <div className="md:hidden w-full">
         <Image
           alt={banner?.name || 'Hero Banner'}
-          className="w-full object-cover"
-          height={300}
+          className="w-full h-[172px] object-cover"
+          height={172}
           sizes="100vw"
           src={imageUrl}
           width={600}
