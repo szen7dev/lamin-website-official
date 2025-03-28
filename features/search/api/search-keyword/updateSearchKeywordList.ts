@@ -21,7 +21,7 @@ export const updateSearchKeyword = async (
       optionSeller,
     };
 
-    const response = await apiClient.post<SearchKeyword>(
+    const response = await apiClient.putNormalizedResponse<SearchKeyword>(
       '/api/crm/search_keyword',
       params,
     );

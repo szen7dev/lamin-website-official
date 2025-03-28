@@ -1,51 +1,76 @@
-// Types for order feature
-export interface OrderItem {
-  id: string;
-  productId: string;
+// Base interfaces for common fields
+interface BaseOrderFields {
+  optionSeller: number;
+  customerID?: string;
+  outin: number;
+  type: number;
+  paymentMethod: string;
+  voucherID?: string;
   name: string;
-  price: number;
+  note: string;
+  total: number;
+  offer: number;
+  salesoff: number;
+  credit: number;
+  shippingFee: number;
+  recipientAddress: string;
+  areaID: string;
+  buyerName: string;
+  buyerPhone: string;
+  buyerEmail: string;
+  recipientName: string;
+  recipientPhone: string;
+  products: OrderProduct[];
+}
+
+export interface OrderProduct {
+  productID: string;
   quantity: number;
-  image: string;
+  unitPrice: number;
+  listedUnitprice: number;
+  name: string;
+  note: string;
 }
 
-export interface Order {
+export interface Funda {
+  _id: string;
+  name: string;
+  sign: string;
+}
+
+export interface Customer {
+  _id: string;
+  name: string;
+}
+
+// Main order type with additional fields for full order
+export interface Order extends BaseOrderFields {
   id: string;
-  userId: string;
-  items: OrderItem[];
-  totalItems: number;
-  totalPrice: number;
-  status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
-  shippingAddress: {
-    fullName: string;
-    address: string;
-    city: string;
-    postalCode: string;
-    country: string;
-    phone: string;
-  };
-  paymentMethod: 'cod' | 'bank_transfer' | 'credit_card' | 'momo' | 'zalopay';
-  createdAt: string;
-  updatedAt: string;
+  sign: string;
+  createAt: string;
+  amount: number;
+  customer: Customer;
+  status: number;
+  loyaltyPoints: number;
+  totalShippingFee: number;
+  deliveryStartETA?: string;
+  deliveryEndETA?: string;
+  processingTime?: string;
+  deliveryStartTime?: string;
+  deliveredTime?: string;
+  funda: Funda;
 }
 
-export interface CreateOrderRequest {
-  items: {
-    productId: string;
-    quantity: number;
-  }[];
-  shippingAddress: {
-    fullName: string;
-    address: string;
-    city: string;
-    postalCode: string;
-    country: string;
-    phone: string;
-  };
-  paymentMethod: 'cod' | 'bank_transfer' | 'credit_card' | 'momo' | 'zalopay';
+// Type for creating a new order
+export interface CreateOrderData extends BaseOrderFields {}
+
+// Type for API response when creating an order
+export interface CreateOrderResponse extends BaseOrderFields {
+  _id: string;
 }
 
 export interface OrderService {
   getOrders(): Promise<Order[]>;
   getOrderById(orderId: string): Promise<Order>;
-  createOrder(orderData: CreateOrderRequest): Promise<Order>;
+  createOrder(orderData: CreateOrderData): Promise<CreateOrderResponse>;
 }

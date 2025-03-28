@@ -26,3 +26,29 @@ export const formatPrice = (price: number | undefined) => {
     currency: 'VND',
   }).format(price);
 };
+
+export const formattedDeliveryDate = (
+  deliveryStartETA: string,
+  deliveryEndETA: string,
+) => {
+  // Get next day for delivery estimate
+  const deliveryStartTime = new Date(deliveryStartETA || new Date());
+  const deliveryEndTime = new Date(deliveryEndETA || new Date());
+
+  // Format the delivery date (for deliveryStartETA just get time itme (like: 08:00) and for deliveryEndETA get time and date (like: 08:00 - 18:00, 01/01/2022))
+  let formattedDeliveryDate;
+
+  if (
+    deliveryStartTime.getDate() !== deliveryEndTime.getDate() ||
+    deliveryStartTime.getMonth() !== deliveryEndTime.getMonth() ||
+    deliveryStartTime.getFullYear() !== deliveryEndTime.getFullYear()
+  ) {
+    formattedDeliveryDate = `${deliveryStartTime.getHours()}:00, ${deliveryStartTime.getDate()}/${deliveryStartTime.getMonth()}/${deliveryStartTime.getFullYear()} - ${deliveryEndTime.getHours()}:00, ${deliveryEndTime.getDate()}/${deliveryEndTime.getMonth()}/${deliveryEndTime.getFullYear()}`;
+  } else {
+    formattedDeliveryDate = `${deliveryStartTime.getHours()}:00 - ${deliveryEndTime.getHours()}:00, ${deliveryEndTime.getDate()}/${deliveryEndTime.getMonth()}/${deliveryEndTime.getFullYear()}`;
+  }
+
+  console.log('formattedDeliveryDate', formattedDeliveryDate);
+
+  return formattedDeliveryDate;
+};

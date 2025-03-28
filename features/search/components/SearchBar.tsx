@@ -14,7 +14,15 @@ import { FileInfo } from '@/features/search/types/goodsTypes';
 import apiClient from '@/services/api/apiClient';
 import { Button } from '@/components/ui/button';
 
-export default function SearchBar() {
+interface SearchBarProps {
+  selectedKeyword: string;
+  onClearSearch: () => void;
+}
+
+export default function SearchBar({
+  selectedKeyword,
+  onClearSearch,
+}: SearchBarProps) {
   const [isFocused, setIsFocused] = useState(false);
   const [query, setQuery] = useState('');
   const [debouncedQuery, setDebouncedQuery] = useState('');
@@ -25,6 +33,12 @@ export default function SearchBar() {
 
   // Update keyword popularity when user searches
   const { updateKeyword } = useUpdateSearchKeyword();
+
+  useEffect(() => {
+    if (selectedKeyword) {
+      setQuery(selectedKeyword);
+    }
+  }, [selectedKeyword]);
 
   // Implement debouncing for search query
   useEffect(() => {
@@ -56,6 +70,12 @@ export default function SearchBar() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  const handleClearSearch = () => {
+    setQuery('');
+    setDebouncedQuery('');
+    onClearSearch();
+  };
+
   return (
     <div ref={searchRef} className="relative w-full">
       <div className="relative">
@@ -77,7 +97,7 @@ export default function SearchBar() {
               className="rounded-full p-1 hover:bg-grayscale-10"
               size="sm"
               variant="ghost"
-              onClick={() => setQuery('')}>
+              onClick={() => handleClearSearch()}>
               <X className="h-5 w-5 text-grayscale-50" />
               <span className="sr-only">Clear search</span>
             </Button>
@@ -125,7 +145,10 @@ export default function SearchBar() {
 
       {/* Search results suggestions */}
       <SearchSuggestions
-        isVisible={isFocused && query.length > 0}
+        isVisible={
+          (isFocused && query.length > 0) ||
+          (selectedKeyword.length > 0 && !isFocused)
+        }
         query={query}
         results={goodsList.map(item => {
           // Safely handle the image URL

@@ -3,11 +3,17 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
-import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
+import {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useState,
+} from 'react';
 import { MapPin, User } from 'lucide-react';
 
 import { useGetAreaList } from '../hooks/useGetAreaList';
-import { Area } from '../types/areaTypes';
+import { Area, AREA_LEVELS, AreaChild } from '../types/areaTypes';
 
 import { PaymentMethodSelector } from './PaymentMethodSelector';
 
@@ -28,6 +34,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { provinces } from '@/features/checkout/mocks/province';
 
 const formSchema = z.object({
   // Người đặt
@@ -75,25 +82,14 @@ export const CheckoutForm = forwardRef<CheckoutFormRef, CheckoutFormProps>(
 
     // Area selection state
     const [selectedProvince, setSelectedProvince] = useState<Area | null>(null);
-    const [selectedDistrict, setSelectedDistrict] = useState<Area | null>(null);
-    const [selectedWard, setSelectedWard] = useState<Area | null>(null);
+    const [selectedDistrict, setSelectedDistrict] = useState<AreaChild | null>(
+      null,
+    );
+    const [selectedWard, setSelectedWard] = useState<AreaChild | null>(null);
 
-    // Search state with debounce
-    const [searchKeyword, setSearchKeyword] = useState<string>('');
-    const [debouncedKeyword, setDebouncedKeyword] = useState<string>('');
-
-    // Use debounce like search bar
-    useEffect(() => {
-      const timer = setTimeout(() => {
-        setDebouncedKeyword(searchKeyword);
-      }, 300); // 300ms debounce delay
-
-      return () => clearTimeout(timer);
-    }, [searchKeyword]);
-
-    // Simple area search with debounced keyword
-    const { areas: searchResults, isLoading: isLoadingAreas } = useGetAreaList(
-      debouncedKeyword ? { keyword: debouncedKeyword } : {},
+    // Get districts and wards based on selected province
+    const { areas, isLoading: isLoadingAreas } = useGetAreaList(
+      selectedProvince ? { keyword: selectedProvince.name } : {},
     );
 
     const form = useForm<CheckoutFormValues>({
@@ -144,66 +140,27 @@ export const CheckoutForm = forwardRef<CheckoutFormRef, CheckoutFormProps>(
       }
     }, [selectedDistrict, form]);
 
-    // Filter results by level with proper type handling
-    // First get direct provinces from search
-    const directProvinces = searchResults.filter(area => area.level === 1);
-
-    // Get parent provinces (from level 2 areas)
-    const parentProvinces = searchResults
-      .filter(area => area.parent?.level === 1)
-      .map(area => area.parent)
-      .filter((parent): parent is Area => !!parent);
-
-    // Get grandparent provinces (from level 3 areas)
-    const grandparentProvinces = searchResults
-      .filter(area => area.parent?.parent?.level === 1)
-      .map(area => area.parent?.parent)
-      .filter((parent): parent is Area => !!parent);
-
-    // Combine all provinces and filter duplicates by _id
-    const provinces = [
-      ...directProvinces,
-      ...parentProvinces,
-      ...grandparentProvinces,
-    ].filter(
-      (province, index, self) =>
-        self.findIndex(p => p._id === province._id) === index,
-    );
+    // Get the province data from API response
+    const provinceData = useMemo(() => {
+      return areas.find(area => area.level === AREA_LEVELS.PROVINCE);
+    }, [areas]);
 
     // Get districts based on selected province
-    const districts = selectedProvince
-      ? [
-          // Direct districts
-          ...searchResults.filter(
-            area =>
-              area.level === 2 && area.parent?._id === selectedProvince._id,
-          ),
-          // Parent districts from level 3 areas
-          ...searchResults
-            .filter(
-              area =>
-                area.level === 3 &&
-                area.parent?.level === 2 &&
-                area.parent.parent?._id === selectedProvince._id,
-            )
-            .map(area => area.parent)
-            .filter((parent): parent is Area => !!parent),
-        ].filter(
-          (district, index, self) =>
-            self.findIndex(d => d._id === district._id) === index,
-        )
-      : [];
+    const districts = useMemo(() => {
+      if (!provinceData || !selectedProvince) return [];
+
+      return provinceData.childs || [];
+    }, [provinceData, selectedProvince]);
 
     // Get wards based on selected district
-    const wards = selectedDistrict
-      ? searchResults.filter(
-          area => area.level === 3 && area.parent?._id === selectedDistrict._id,
-        )
-      : [];
+    const wards = useMemo(() => {
+      if (!selectedDistrict) return [];
+
+      return selectedDistrict.childs || [];
+    }, [selectedDistrict]);
 
     // Custom submission handler to include paymentMethodIndex
     const handleFormSubmit = (values: CheckoutFormValues) => {
-      // Just pass the form values along with paymentMethodIndex
       onSubmit({
         ...values,
         paymentMethodIndex,
@@ -364,10 +321,25 @@ export const CheckoutForm = forwardRef<CheckoutFormRef, CheckoutFormProps>(
                         disabled={isSubmitting}
                         onValueChange={value => {
                           field.onChange(value);
-                          const province =
-                            provinces.find(p => p._id === value) || null;
+                          // Convert province mock data to Area type
+                          const selectedProv = provinces.find(
+                            p => p._id === value,
+                          );
 
-                          setSelectedProvince(province);
+                          if (selectedProv) {
+                            const areaProvince: Area = {
+                              _id: selectedProv._id,
+                              name: selectedProv.name,
+                              level: selectedProv.level,
+                              parent: null,
+                              childs: [],
+                              sign: selectedProv._id,
+                            };
+
+                            setSelectedProvince(areaProvince);
+                          } else {
+                            setSelectedProvince(null);
+                          }
                         }}>
                         <FormControl>
                           <SelectTrigger className="h-12 rounded-lg border-gray-300">
@@ -375,23 +347,11 @@ export const CheckoutForm = forwardRef<CheckoutFormRef, CheckoutFormProps>(
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          {isLoadingAreas ? (
-                            <SelectItem disabled value="loading">
-                              Đang tải...
+                          {provinces.map(province => (
+                            <SelectItem key={province._id} value={province._id}>
+                              {province.name}
                             </SelectItem>
-                          ) : provinces.length > 0 ? (
-                            provinces.map(province => (
-                              <SelectItem
-                                key={province._id}
-                                value={province._id}>
-                                {province.name}
-                              </SelectItem>
-                            ))
-                          ) : (
-                            <SelectItem disabled value="no-results">
-                              Không có kết quả
-                            </SelectItem>
-                          )}
+                          ))}
                         </SelectContent>
                       </Select>
                       <FormMessage />
@@ -507,15 +467,8 @@ export const CheckoutForm = forwardRef<CheckoutFormRef, CheckoutFormProps>(
                         <Input
                           className="h-12 rounded-lg border-gray-300"
                           disabled={isSubmitting}
-                          placeholder="Nhập địa chỉ cụ thể"
+                          placeholder="Nhập số nhà, tên đường..."
                           {...field}
-                          onChange={e => {
-                            field.onChange(e);
-                            // Simple update of search keyword - debounce is handled in useEffect
-                            const value = e.target.value;
-
-                            setSearchKeyword(value);
-                          }}
                         />
                       </FormControl>
                       <FormMessage />

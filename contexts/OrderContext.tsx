@@ -9,23 +9,14 @@ import { createContext, useContext, useState } from 'react';
  */
 export interface OrderInfo {
   orderId: string;
-  sign?: string;
-  customerName: string;
-  paymentMethod: string;
-  total: string;
-  subtotal: string;
-  directDiscount: string;
-  voucherDiscount: string;
-  pointsDiscount: string;
-  shippingFee: string;
-  savedAmount: string;
-  dateInvoice: string;
-  buyerPhone: string;
-  recipientAddress: string;
-  funda?: string;
-  loyaltyPoints?: string;
-  voucherCode: string;
-  items?: string;
+  total: number;
+  subtotal: number;
+  directDiscount: number;
+  voucherDiscount: number;
+  pointsDiscount: number;
+  shippingFee: number;
+  savedAmount: number;
+  loyaltyPoints: number;
 }
 
 type OrderContextType = {

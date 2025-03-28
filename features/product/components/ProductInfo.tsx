@@ -100,6 +100,7 @@ export default function ProductInfo({
       addItem({
         id: `${product._id}`,
         name: product.name,
+        slug: product.slug,
         price: selectedVariant.price,
         originalPrice: selectedVariant.originalPrice || 0,
         salesoff: product.listedUnitprice - product.sellingUnitprice || 0,

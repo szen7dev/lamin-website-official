@@ -50,6 +50,8 @@ export function Header() {
   const { totalItems } = useCart();
   const { user, isAuthenticated, logout } = useAuth();
 
+  const [selectedKeyword, setSelectedKeyword] = useState('');
+
   // Inside the Header component, add the hook call before the return statement
   const { data: contactInfo, isLoading: isContactInfoLoading } =
     useContactInfo();
@@ -78,6 +80,15 @@ export function Header() {
   // Handle logout
   const handleLogout = async () => {
     await logout();
+  };
+
+  const handleClickKeyword = (keyword: string) => {
+    setSelectedKeyword(keyword);
+    updateKeyword(keyword);
+  };
+
+  const handleClearSearch = () => {
+    setSelectedKeyword('');
   };
 
   // User profile component that shows when logged in
@@ -338,7 +349,10 @@ export function Header() {
             {/* Search Bar Section */}
             <div className="flex gap-4 sm:py-3 sm:mt-0">
               <div className="flex-1">
-                <SearchBar />
+                <SearchBar
+                  selectedKeyword={selectedKeyword}
+                  onClearSearch={handleClearSearch}
+                />
               </div>
             </div>
 
@@ -346,15 +360,12 @@ export function Header() {
             <div className="hidden sm:flex flex-wrap gap-x-4 gap-y-1 pb-1">
               <span className="text-sm text-white/80">Tìm kiếm phổ biến:</span>
               {keywords?.map(keyword => (
-                <Link
+                <button
                   key={keyword._id}
                   className="text-sm text-white decoration-white underline underline-offset-4 hover:text-white/90"
-                  href={`/search?q=${encodeURIComponent(keyword.keyword)}`}
-                  onClick={() => {
-                    updateKeyword(keyword.keyword);
-                  }}>
+                  onClick={() => handleClickKeyword(keyword.keyword)}>
                   {keyword.keyword}
-                </Link>
+                </button>
               ))}
             </div>
           </div>

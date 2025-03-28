@@ -13,9 +13,16 @@ export const getAreaList = async (
 ): Promise<Area[]> => {
   try {
     const populatesObject = {
-      path: 'parent',
-      select: 'name sign parent level',
-      populate: { path: 'parent', select: 'name sign parent level' },
+      path: 'parent childs',
+      select: 'name sign parent level childs',
+      populate: {
+        path: 'parent childs',
+        select: 'name sign parent level childs',
+        populate: {
+          path: 'parent childs',
+          select: 'name sign parent level childs',
+        },
+      },
     };
 
     const queryParams = {
