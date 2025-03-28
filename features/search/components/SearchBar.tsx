@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { Mic, Search, X } from 'lucide-react';
+import { ArrowLeft, Mic, Search, X } from 'lucide-react';
 import Link from 'next/link';
 
 import SearchSuggestions from './SearchSuggestions';
@@ -13,12 +13,14 @@ import { useGetGoodsList } from '@/features/search/hooks/goods/useGetGoodsList';
 import { FileInfo } from '@/features/search/types/goodsTypes';
 import apiClient from '@/services/api/apiClient';
 import { Button } from '@/components/ui/button';
+import { useMediaQuery } from '@/hooks/useMediaQuery';
 
 export default function SearchBar() {
   const [isFocused, setIsFocused] = useState(false);
   const [query, setQuery] = useState('');
   const [debouncedQuery, setDebouncedQuery] = useState('');
   const searchRef = useRef<HTMLDivElement>(null);
+  const isMobile = useMediaQuery('(max-width: 768px)');
 
   // Get top search keywords
   const { keywords } = useGetSearchKeywordList();
@@ -56,6 +58,115 @@ export default function SearchBar() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  // Handle back button click on mobile
+  const handleBackClick = () => {
+    setIsFocused(false);
+    setQuery('');
+  };
+
+  // Mobile view with full-screen search
+  if (isMobile && isFocused) {
+    return (
+      <div className="fixed inset-0 z-50 flex flex-col bg-white">
+        {/* Blue header bar */}
+        <div className="flex items-center gap-2 bg-gradient-3 p-3">
+          <Button
+            className="text-white"
+            size="sm"
+            variant="ghost"
+            onClick={handleBackClick}>
+            <ArrowLeft className="h-5 w-5" />
+          </Button>
+
+          <div className="relative flex-1">
+            <input
+              className="h-10 w-full rounded-full border-none bg-white pl-10 pr-10 text-base text-grayscale-90 placeholder:text-grayscale-40 focus:outline-none"
+              placeholder="Tìm kiếm sản phẩm..."
+              type="text"
+              value={query}
+              onChange={e => setQuery(e.target.value)}
+            />
+            <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-grayscale-50" />
+
+            {query && (
+              <Button
+                className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full p-1 hover:bg-grayscale-10"
+                size="sm"
+                variant="ghost"
+                onClick={() => setQuery('')}>
+                <X className="h-4 w-4 text-grayscale-50" />
+                <span className="sr-only">Clear search</span>
+              </Button>
+            )}
+          </div>
+        </div>
+
+        {/* Top search keywords */}
+        {!query && keywords.length > 0 && (
+          <div className="p-4">
+            <div className="mb-3 font-medium text-grayscale-90">
+              Tra cứu hàng đầu
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {keywords.slice(0, 8).map(keyword => (
+                <Link
+                  key={keyword.keyword}
+                  className="decoration-transparent rounded-full bg-grayscale-5 px-4 py-2 text-sm text-grayscale-90 hover:bg-grayscale-10"
+                  href={`/search?q=${encodeURIComponent(keyword.keyword)}`}
+                  onClick={() => {
+                    updateKeyword(keyword.keyword);
+                    setIsFocused(false);
+                  }}>
+                  {keyword.keyword}
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Search results suggestions */}
+        {query.length > 0 && (
+          <SearchSuggestions
+            isVisible={true}
+            query={query}
+            results={goodsList.map(item => {
+              // Safely handle the image URL
+              let imageUrl = '';
+
+              if (item.images && item.images.length > 0) {
+                if (typeof item.images[0] === 'string') {
+                  imageUrl = apiClient.getFileUrl(item.images[0]);
+                } else {
+                  const fileInfo = item.images[0] as FileInfo;
+
+                  if (fileInfo && fileInfo.path) {
+                    imageUrl = apiClient.getFileUrl(fileInfo.path);
+                  } else if (fileInfo && fileInfo.url) {
+                    imageUrl = apiClient.getFileUrl(fileInfo.url);
+                  }
+                }
+              } else if (item.thumbnail) {
+                imageUrl = apiClient.getFileUrl(item.thumbnail);
+              }
+
+              return {
+                id: item._id,
+                name: item.name,
+                price: item.sellingUnitprice,
+                image: imageUrl || '/placeholder.svg',
+                unit: item.unit || 'Hộp',
+                slug: item.slug,
+              };
+            })}
+            searchQuery={debouncedQuery || query}
+            onClose={() => setIsFocused(false)}
+          />
+        )}
+      </div>
+    );
+  }
+
+  // Desktop view (or mobile when not focused)
   return (
     <div ref={searchRef} className="relative w-full">
       <div className="relative">
@@ -64,7 +175,7 @@ export default function SearchBar() {
         )}
         <input
           className="h-12 w-full rounded-lg border-none bg-white pl-12 pr-20 text-base text-grayscale-90 shadow-sm placeholder:text-grayscale-40 focus:outline-none focus:ring-2 focus:ring-primary-20"
-          placeholder="Tìm tên thuốc, bệnh lý, thực phẩm chức năng..."
+          placeholder="Tìm kiếm sản phẩm..."
           type="text"
           value={query}
           onChange={e => setQuery(e.target.value)}

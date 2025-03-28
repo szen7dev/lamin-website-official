@@ -54,39 +54,68 @@ export default function ArticleDetailContent() {
   };
 
   return (
-    <div className="flex justify-center article-detail-content bg-white rounded-2xl">
-      <div className="max-w-screen-md my-6">
+    <div className="flex justify-center article-detail-content bg-white rounded-2xl px-4 py-6 sm:px-0 sm:py-0">
+      <div className="max-w-screen-md md:my-6">
         {/* Article Title */}
         <h1 className="mb-4 text-3xl font-medium text-grayscale-90 sm:text-3xl">
           {article?.title}
         </h1>
 
-        <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
-          {/* Date and Share */}
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2 text-[#6C757D]">
-              <CalendarIcon className="h-4 w-4" />
-              <time
-                className="text-sm font-medium"
-                dateTime={
-                  article?.createAt
-                    ? new Date(article.createAt).toISOString()
-                    : ''
-                }>
-                {formatDateSafely(article?.createAt)}
-              </time>
+        {/* Date, Share and Text Size Controls - Responsive layout */}
+        <div className="mb-6">
+          {/* Mobile View: Date and Text Size Adjuster on one row, Share button below */}
+          <div className="block md:hidden space-y-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2 text-[#6C757D]">
+                <CalendarIcon className="h-4 w-4" />
+                <time
+                  className="text-sm font-medium"
+                  dateTime={
+                    article?.createAt
+                      ? new Date(article.createAt).toISOString()
+                      : ''
+                  }>
+                  {formatDateSafely(article?.createAt)}
+                </time>
+              </div>
+              <TextSizeAdjuster className="scale-90 origin-right" />
             </div>
-            <Button
-              className="flex items-center gap-2 rounded-sm bg-[#1877F2] text-white hover:bg-[#1877F2]/90"
-              size={'sm'}
-              variant="default">
-              <FacebookPngIcon className="w-[20px] h-[20px]" />
-              <span className="text-xs font-medium">Chia sẻ</span>
-            </Button>
+            <div>
+              <Button
+                className="flex items-center gap-2 rounded-sm bg-[#1877F2] text-white hover:bg-[#1877F2]/90"
+                size={'sm'}
+                variant="default">
+                <FacebookPngIcon className="w-[20px] h-[20px]" />
+                <span className="text-xs font-medium">Chia sẻ</span>
+              </Button>
+            </div>
           </div>
 
-          {/* Text Size Controls */}
-          <TextSizeAdjuster />
+          {/* Desktop View: All elements on one row */}
+          <div className="hidden md:flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2 text-[#6C757D]">
+                <CalendarIcon className="h-4 w-4" />
+                <time
+                  className="text-sm font-medium"
+                  dateTime={
+                    article?.createAt
+                      ? new Date(article.createAt).toISOString()
+                      : ''
+                  }>
+                  {formatDateSafely(article?.createAt)}
+                </time>
+              </div>
+              <Button
+                className="flex items-center gap-2 rounded-sm bg-[#1877F2] text-white hover:bg-[#1877F2]/90"
+                size={'sm'}
+                variant="default">
+                <FacebookPngIcon className="w-[20px] h-[20px]" />
+                <span className="text-xs font-medium">Chia sẻ</span>
+              </Button>
+            </div>
+            <TextSizeAdjuster />
+          </div>
         </div>
 
         {/* Article Summary */}

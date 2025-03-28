@@ -265,7 +265,7 @@ export default function DealSlider() {
                     </div>
 
                     <button
-                      className="block w-full rounded-md bg-primary py-2 text-center text-sm font-medium text-white hover:bg-primary-60"
+                      className="block w-full rounded-full bg-primary py-2 text-center text-sm font-medium text-white hover:bg-primary-60"
                       onClick={e => {
                         e.preventDefault();
 
@@ -356,7 +356,7 @@ export default function DealSlider() {
                       </div>
 
                       <button
-                        className="block w-full rounded-md bg-primary py-1.5 text-center text-sm font-medium text-white hover:bg-primary-60"
+                        className="block w-full rounded-full bg-primary py-1.5 text-center text-sm font-medium text-white hover:bg-primary-60"
                         onClick={e => {
                           e.preventDefault();
 

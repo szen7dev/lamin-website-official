@@ -254,7 +254,7 @@ export default function TrustedStores() {
           <article
             key={benefit.id}
             className="flex flex-col sm:flex-row items-center text-left gap-3">
-            <div className="rounded-full bg-primary-5 p-2 sm:p-3">
+            <div className="rounded-full bg-[#d0dcf8] p-2 sm:p-3">
               <div className="flex items-center justify-center h-6 w-6 sm:h-7 sm:w-7 text-primary-40">
                 {benefit.icon}
               </div>

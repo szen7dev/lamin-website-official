@@ -396,7 +396,7 @@ export default function ProductInfo({
       </div>
 
       {/* Policy Cards */}
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-rows-3 sm:grid-cols-3 gap-3">
         <div className="flex items-start gap-3">
           <div className="flex h-10 w-10 p-2 items-center justify-center rounded-full bg-[#0D6EFD]/10">
             <ClockIcon className="h-6 w-6 text-[#0D6EFD]" />
@@ -411,7 +411,7 @@ export default function ProductInfo({
           </div>
         </div>
         <div className="flex items-start gap-3">
-          <div className="flex h-10 w-14 p-2 items-center justify-center rounded-full bg-[#0D6EFD]/10">
+          <div className="flex h-10 w-10 p-2 items-center justify-center rounded-full bg-[#0D6EFD]/10">
             <TransportIcon />
           </div>
           <div>

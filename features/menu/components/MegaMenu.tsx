@@ -1,9 +1,8 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { ChevronDown, ChevronRight, X } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 import Link from 'next/link';
-import Image from 'next/image';
 
 import MegaMenuItem from './MegaMenuItem';
 import MegaMenuItemLink from './MegaMenuItemLink';
@@ -14,6 +13,7 @@ import { useGetBestSellers } from '@/features/menu/hooks/useGetBestSellers';
 import { MediaItem } from '@/features/menu/types/mediaTypes';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import apiClient from '@/services/api/apiClient';
+import Image from 'next/image';
 
 // Format menu data based on levels
 interface FormattedMenuData {
@@ -144,7 +144,12 @@ export default function MegaMenu() {
   );
 
   const [activeLevel2Item, setActiveLevel2Item] = useState<string | null>(null);
-  const [expandedMobileItems, setExpandedMobileItems] = useState<string[]>([]);
+
+  // Track expanded items at each level for mobile view
+  const [expandedLevel1Items, setExpandedLevel1Items] = useState<string[]>([]);
+  const [expandedLevel2Items, setExpandedLevel2Items] = useState<string[]>([]);
+  const [expandedLevel3Items, setExpandedLevel3Items] = useState<string[]>([]);
+
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const isMobile = useMediaQuery('(max-width: 768px)');
   const menuRef = useRef<HTMLDivElement>(null);
@@ -203,27 +208,31 @@ export default function MegaMenu() {
     };
   }, []);
 
-  const toggleMobileItem = (id: string) => {
-    const isDropdownItem = formattedMenu.level1Items.find(
-      item =>
-        item._id === id &&
-        formattedMenu.level2ItemsByParent[item._id]?.length > 0,
+  // Toggle functions for each level in mobile view
+  const toggleLevel1Item = (id: string) => {
+    setExpandedLevel1Items(prev =>
+      prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id],
     );
+  };
 
-    if (isDropdownItem) {
-      setActiveLevel1Item(id);
-      setMobileMenuOpen(true);
-    } else {
-      setExpandedMobileItems(prev =>
-        prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id],
-      );
-    }
+  const toggleLevel2Item = (id: string) => {
+    setExpandedLevel2Items(prev =>
+      prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id],
+    );
+  };
+
+  const toggleLevel3Item = (id: string) => {
+    setExpandedLevel3Items(prev =>
+      prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id],
+    );
   };
 
   // Close expanded items when switching to desktop
   useEffect(() => {
     if (!isMobile) {
-      setExpandedMobileItems([]);
+      setExpandedLevel1Items([]);
+      setExpandedLevel2Items([]);
+      setExpandedLevel3Items([]);
       setMobileMenuOpen(false);
     }
   }, [isMobile]);
@@ -367,226 +376,140 @@ export default function MegaMenu() {
     );
   }
 
-  // Mobile menu
+  // Mobile menu with animated dropdowns
   return (
     <div
       ref={menuRef}
-      className="border-t border-grayscale-20 bg-white relative ">
+      className="border-t border-grayscale-20 bg-white relative">
       <div className="mx-auto">
         <ul className="py-2 divide-y divide-grayscale-20">
           {/* Render level 1 items */}
           {formattedMenu.level1Items.map(item => {
-            const hasDropdown =
+            const hasLevel2Items =
               formattedMenu.level2ItemsByParent[item._id]?.length > 0;
+            const isExpanded = expandedLevel1Items.includes(item._id);
 
             return (
               <li key={item._id} className="py-2">
-                {hasDropdown ? (
-                  <button
-                    className="flex items-center justify-between text-grayscale-90 cursor-pointer py-2 w-full text-left"
-                    onClick={() => toggleMobileItem(item._id)}>
-                    <div className="flex items-center">
-                      <div className="flex h-6 w-6 items-center justify-center rounded-full bg-green-500 text-white mr-2">
-                        <span className="text-sm">G</span>
-                      </div>
-                      <span className="text-[15px] font-medium">
-                        {item.name}
-                      </span>
-                    </div>
+                <button
+                  className="flex items-center justify-between text-grayscale-90 cursor-pointer py-2 w-full text-left"
+                  onClick={() => toggleLevel1Item(item._id)}>
+                  <div className="flex items-center">
+                    <span className="text-[15px] font-medium">{item.name}</span>
+                  </div>
+                  {hasLevel2Items && (
                     <ChevronDown
-                      className={`h-5 w-5 transition-transform ${
-                        expandedMobileItems.includes(item._id)
-                          ? 'rotate-180'
-                          : ''
+                      className={`h-5 w-5 transition-transform duration-300 ${
+                        isExpanded ? 'rotate-180' : ''
                       }`}
                     />
-                  </button>
-                ) : (
-                  <Link
-                    className="flex items-center py-2 text-[15px] font-medium text-grayscale-90 decoration-transparent"
-                    href={`/${item.slug}`}>
-                    <div className="flex h-6 w-6 items-center justify-center rounded-full bg-green-500 text-white mr-2">
-                      <span className="text-sm">G</span>
-                    </div>
-                    {item.name}
-                  </Link>
+                  )}
+                </button>
+
+                {/* Level 2 items - animated dropdown */}
+                {hasLevel2Items && (
+                  <div
+                    className={`overflow-hidden transition-all duration-300 ease-in-out ${
+                      isExpanded
+                        ? 'max-h-[1000px] opacity-100'
+                        : 'max-h-0 opacity-0'
+                    }`}>
+                    <ul className="pl-4 py-3 space-y-0 bg-[#e7edfb] rounded-2xl mt-2">
+                      {(formattedMenu.level2ItemsByParent[item._id] || []).map(
+                        (level2Item, index, array) => {
+                          const hasLevel3Items =
+                            formattedMenu.level3ItemsByParent[level2Item._id]
+                              ?.length > 0;
+                          const isLevel2Expanded = expandedLevel2Items.includes(
+                            level2Item._id,
+                          );
+                          const isLastItem = index === array.length - 1;
+
+                          return (
+                            <li
+                              key={level2Item._id}
+                              className="border-grayscale-20">
+                              <div className="flex items-center">
+                                {hasLevel3Items ? (
+                                  <button
+                                    className="flex items-center justify-between text-grayscale-80 w-full py-1.5"
+                                    onClick={() =>
+                                      toggleLevel2Item(level2Item._id)
+                                    }>
+                                    <div className="flex justify-start items-center">
+                                      <Image
+                                        alt={level2Item.name}
+                                        height={32}
+                                        src={
+                                          level2Item.thumbnail &&
+                                          typeof level2Item.thumbnail ===
+                                            'object' &&
+                                          level2Item.thumbnail.path
+                                            ? apiClient.getFileUrl(
+                                                level2Item.thumbnail.path,
+                                              )
+                                            : '/placeholder.svg'
+                                        }
+                                        width={32}
+                                      />
+                                      <span className="text-[14px]">
+                                        {level2Item.name}
+                                      </span>
+                                    </div>
+                                  </button>
+                                ) : (
+                                  <Link
+                                    className="text-[14px] text-grayscale-80 py-1.5 block w-full decoration-transparent"
+                                    href={`/${level2Item.slug}`}>
+                                    {level2Item.name}
+                                  </Link>
+                                )}
+                              </div>
+
+                              {/* Level 3 items - animated dropdown */}
+                              {hasLevel3Items && (
+                                <div
+                                  className={`overflow-hidden transition-all duration-300 ease-in-out ${
+                                    isLevel2Expanded
+                                      ? 'max-h-[500px] opacity-100'
+                                      : 'max-h-0 opacity-0'
+                                  }`}>
+                                  <ul className="pl-3 py-1 space-y-1">
+                                    {(
+                                      formattedMenu.level3ItemsByParent[
+                                        level2Item._id
+                                      ] || []
+                                    ).map(level3Item => (
+                                      <li
+                                        key={level3Item._id}
+                                        className="border-l border-grayscale-20 pl-2">
+                                        <Link
+                                          className="text-[13px] text-grayscale-70 py-1 block decoration-transparent"
+                                          href={`/${level3Item.slug}`}>
+                                          {level3Item.name}
+                                        </Link>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                </div>
+                              )}
+
+                              {/* Separator - not shown for last item */}
+                              {!isLastItem && (
+                                <div className="h-px bg-gray-200 my-1 mx-2" />
+                              )}
+                            </li>
+                          );
+                        },
+                      )}
+                    </ul>
+                  </div>
                 )}
               </li>
             );
           })}
         </ul>
       </div>
-
-      {/* Full-screen mobile mega menu */}
-      {mobileMenuOpen && (
-        <div className="fixed inset-0 bg-white z-50 overflow-hidden flex flex-col">
-          {/* Header */}
-          <div className="bg-primary-5 text-white p-4 flex items-center justify-between">
-            <h3 className="text-lg font-medium">
-              {formattedMenu.level1Items.find(
-                item => item._id === activeLevel1Item,
-              )?.name || 'Danh mục sản phẩm'}
-            </h3>
-            <button
-              aria-label="Đóng menu"
-              className="p-1 rounded-full hover:bg-white/10"
-              onClick={() => setMobileMenuOpen(false)}>
-              <X className="h-6 w-6" />
-            </button>
-          </div>
-
-          {/* Content */}
-          <div className="flex flex-1 overflow-hidden">
-            {/* Level 2 items (categories sidebar) */}
-            <div className="w-1/3 bg-grayscale-5 overflow-y-auto">
-              <ul className="divide-y divide-grayscale-20">
-                {(
-                  formattedMenu.level2ItemsByParent[activeLevel1Item || ''] ||
-                  []
-                ).map((category: MediaItem) => (
-                  <li key={category._id}>
-                    <button
-                      className={`w-full text-left px-4 py-3 flex items-center gap-2 ${
-                        category._id === activeLevel2Item
-                          ? 'bg-primary-5/10 text-primary-5 font-medium'
-                          : 'text-grayscale-70'
-                      }`}
-                      onClick={() => setActiveLevel2Item(category._id)}>
-                      {category.thumbnail && (
-                        <div className="flex h-5 w-5 items-center justify-center">
-                          <Image
-                            alt={category.name}
-                            className={`h-5 w-5 ${category._id === activeLevel2Item ? 'text-primary-40' : 'text-grayscale-50'}`}
-                            height={20}
-                            src={
-                              typeof category.thumbnail !== 'string' &&
-                              category.thumbnail?.path
-                                ? apiClient.getFileUrl(category.thumbnail.path)
-                                : '/placeholder.svg'
-                            }
-                            width={20}
-                          />
-                        </div>
-                      )}
-                      <span className="text-sm truncate">{category.name}</span>
-                      {category._id === activeLevel2Item && (
-                        <ChevronRight className="h-4 w-4 ml-auto text-primary-40" />
-                      )}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Content area */}
-            <div className="w-2/3 overflow-y-auto p-4">
-              <div className="space-y-4">
-                {/* Level 3 products grid */}
-                {categoryProducts.length > 0 && (
-                  <div className="grid grid-cols-2 gap-3">
-                    {categoryProducts.map(
-                      (product: {
-                        id: string;
-                        name: string;
-                        image: string;
-                      }) => (
-                        <Link
-                          key={product.id}
-                          className="flex flex-col items-center gap-2 rounded-lg bg-white p-3 shadow-sm transition-shadow hover:shadow-md text-center decoration-transparent"
-                          href={`/products/${product.id}`}
-                          onClick={() => setMobileMenuOpen(false)}>
-                          <Image
-                            alt={product.name}
-                            className="h-10 w-10 object-contain"
-                            height={40}
-                            src={product.image}
-                            width={40}
-                          />
-                          <span className="text-xs text-grayscale-90">
-                            {product.name}
-                          </span>
-                        </Link>
-                      ),
-                    )}
-                    <Link
-                      className="flex flex-col items-center justify-center gap-1 rounded-lg bg-white p-3 shadow-sm text-xs text-grayscale-50 decoration-transparent"
-                      href="#"
-                      onClick={() => setMobileMenuOpen(false)}>
-                      <span>Xem thêm</span>
-                      <ChevronRight className="h-4 w-4" />
-                    </Link>
-                  </div>
-                )}
-
-                {/* Best Selling Section */}
-                {bestSellingProducts.length > 0 && (
-                  <div>
-                    <div className="mb-3 flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <div className="flex h-5 w-5 items-center justify-center rounded-full bg-primary-5">
-                          <Image
-                            alt="Bán chạy nhất"
-                            className="text-white"
-                            height={16}
-                            src="top-products.svg"
-                            width={16}
-                          />
-                        </div>
-                        <h3 className="text-sm font-medium text-grayscale-90">
-                          Bán chạy nhất
-                        </h3>
-                      </div>
-                      <Link
-                        className="flex items-center gap-1 text-xs text-primary-40 hover:underline decoration-transparent"
-                        href="/best-selling"
-                        onClick={() => setMobileMenuOpen(false)}>
-                        Xem tất cả
-                        <ChevronRight className="h-3 w-3" />
-                      </Link>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-3">
-                      {bestSellingProducts.slice(0, 4).map(product => (
-                        <Link
-                          key={product._id}
-                          className="group space-y-1 decoration-transparent"
-                          href={`/products/${product._id}`}
-                          onClick={() => setMobileMenuOpen(false)}>
-                          <div className="relative aspect-square overflow-hidden rounded-lg">
-                            <Image
-                              fill
-                              alt={product.name}
-                              className="object-contain transition-transform group-hover:scale-105"
-                              sizes="(max-width: 768px) 100vw, 150px"
-                              src={product.image}
-                            />
-                          </div>
-                          <h4 className="line-clamp-2 text-xs text-grayscale-90 group-hover:text-primary-40">
-                            {product.name}
-                          </h4>
-                          <div>
-                            <div className="flex items-baseline gap-1">
-                              <span className="text-sm font-medium text-primary-5">
-                                {product.price.toLocaleString()}đ
-                              </span>
-                              <span className="text-xs text-grayscale-50">
-                                /{product.unit}
-                              </span>
-                            </div>
-                            <span className="text-xs text-grayscale-40 line-through">
-                              {product.originalPrice.toLocaleString()}đ
-                            </span>
-                          </div>
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

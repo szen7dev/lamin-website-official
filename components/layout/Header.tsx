@@ -177,7 +177,7 @@ export function Header() {
             <div className="flex flex-col space-y-4 sm:flex-row sm:space-y-0 h-max items-start sm:items-center justify-between">
               {/* Mobile Menu Button and Logo - Only visible on small screens */}
               {/* <div className="flex w-full justify-between items-center sm:hidden"> */}
-              <div className="grid grid-cols-3 flex items-center w-full sm:hidden">
+              <div className="grid grid-cols-3 items-center w-full sm:hidden">
                 <button
                   aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
                   className="col-span-1 text-white"
@@ -342,8 +342,8 @@ export function Header() {
               </div>
             </div>
 
-            {/* Popular Keywords - Hidden on smallest screens */}
-            <div className="hidden sm:flex flex-wrap gap-x-4 gap-y-1 pb-1">
+            <div
+              className={`flex flex-wrap gap-x-4 gap-y-1 pb-1 ${isMobile ? 'pt-3' : ''}`}>
               <span className="text-sm text-white/80">Tìm kiếm phổ biến:</span>
               {keywords?.map(keyword => (
                 <Link
@@ -407,121 +407,91 @@ export function Header() {
       </div>
 
       {/* Navigation Menu - Toggle on Mobile */}
-      {mobileMenuOpen && (
-        <nav
-          aria-label="Main Navigation"
-          className={`absolute w-[80vw] h-[100vh] flex flex-col justify-between top-0 bottom-0 z-50 border-t border-white/10 bg-white ${mobileMenuOpen || !isMobile ? 'block' : 'hidden'}`}>
-          <div className="">
-            <div className="bg-primary-50 flex justify-between container">
-              <Link
-                aria-label="Lamin Pharmacy Home"
-                className="col-span-1"
-                href="/">
-                <Image
-                  alt="Logo"
-                  className="h-20 w-auto"
-                  height={80}
-                  src="/images/KhaiTruongWinggo.svg"
-                  style={{ width: 'auto' }}
-                  width={80}
-                />
-                {/* <div className="text-white">
-                      <div className="text-xs font-medium">NHÀ THUỐC</div>
-                      <div className="text-base font-bold leading-none">
-                        LONG CHÂU
-                      </div>
-                    </div> */}
-              </Link>
-              <button
-                aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
-                className="col-span-1 text-white"
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
-                {mobileMenuOpen ? (
-                  <X className="h-7 w-7" />
-                ) : (
-                  <Menu className="h-7 w-7" />
-                )}
-              </button>
-            </div>
-            <div className="container bg-primary-40 py-3">
-              <p className="text-grayscale-5 text-base font-normal mb-3">
-                Đăng nhập để hưởng những đặc quyền dành riêng cho thành viên
-              </p>
-              {isAuthenticated ? (
-                <UserProfile />
-              ) : (
-                <Button
-                  className="rounded-full bg-white px-3 md:px-6 text-primary hover:bg-white/90 text-xs md:text-sm"
-                  variant="secondary"
-                  onClick={() => setLoginModalOpen(true)}>
-                  <span className="font-medium text-sm">Đăng Nhập</span>
-                </Button>
-              )}
-            </div>
-            <div className="container mx-auto px-4">
-              <MegaMenu />
-            </div>
-          </div>
-          <div className="container py-5 border-t">
-            <span className="text-grayscale-50">
-              Trải nghiệm tốt nhất với ứng dụng
-            </span>
-            <div className="flex mt-2 gap-2">
-              <div className="flex items-center gap-2 rounded-full text-sm font-medium border bg-primary-50 border-white/20 px-4 py-2 text-white justify-center">
-                <Download className="h-5 w-5" />
-                <span className="truncate">Tải ngay</span>
-              </div>
-              <div className="flex items-center gap-2 rounded-full text-sm font-medium bg-primary-5 px-4 py-2 text-white justify-center">
-                <Phone className="h-5 w-5 text-primary-50 " />
-                <div>
-                  <span className="mr-1 text-primary-50">Tư vấn:</span>
-                  <span className="text-primary-50">{getHotline()}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </nav>
-      )}
+      <button
+        aria-label="Close mobile menu"
+        className={`fixed inset-0 bg-black/50 z-40 transition-opacity duration-300 ${
+          mobileMenuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+        }`}
+        tabIndex={mobileMenuOpen ? 0 : -1}
+        onClick={() => setMobileMenuOpen(false)}
+      />
+
+      {/* Mobile Navigation - Now using transform and transitions instead of conditional rendering */}
       <nav
-        aria-label="Main Navigation"
-        className={`flex flex-col justify-between top-0 bottom-0 z-50 border-t border-white/10 bg-white ${mobileMenuOpen || !isMobile ? 'block' : 'hidden'}`}>
+        aria-label="Mobile Navigation"
+        className={`fixed w-[80vw] h-[100vh] flex flex-col justify-between top-0 left-0 bottom-0 z-50 border-t border-white/10 bg-white transform transition-transform duration-300 ease-in-out ${
+          mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
+        }`}>
+        <div className="">
+          <div className="bg-primary-50 flex justify-between container">
+            <Link
+              aria-label="Lamin Pharmacy Home"
+              className="col-span-1"
+              href="/">
+              <Image
+                alt="Logo"
+                className="h-20 w-auto"
+                height={80}
+                src="/images/KhaiTruongWinggo.svg"
+                style={{ width: 'auto' }}
+                width={80}
+              />
+            </Link>
+            <button
+              aria-label="Close menu"
+              className="col-span-1 text-white"
+              onClick={() => setMobileMenuOpen(false)}>
+              <X className="h-7 w-7" />
+            </button>
+          </div>
+          <div className="container bg-gradient-3 py-3">
+            <p className="text-grayscale-5 text-base font-normal mb-3">
+              Đăng nhập để hưởng những đặc quyền dành riêng cho thành viên
+            </p>
+            {isAuthenticated ? (
+              <UserProfile />
+            ) : (
+              <Button
+                className="rounded-full bg-white px-3 md:px-6 text-primary hover:bg-white/90 text-xs md:text-sm"
+                variant="secondary"
+                onClick={() => setLoginModalOpen(true)}>
+                <span className="font-medium text-sm">Đăng Nhập</span>
+              </Button>
+            )}
+          </div>
+          <div className="container mx-auto px-4">
+            <MegaMenu />
+          </div>
+        </div>
+        <div className="container py-5 border-t">
+          <span className="text-grayscale-50">
+            Trải nghiệm tốt nhất với ứng dụng
+          </span>
+          <div className="flex mt-2 gap-2">
+            <div className="flex items-center gap-2 rounded-full text-sm font-medium border bg-primary-50 border-white/20 px-4 py-2 text-white justify-center">
+              <Download className="h-5 w-5" />
+              <span className="truncate">Tải ngay</span>
+            </div>
+            <div className="flex items-center gap-2 rounded-full text-sm font-medium bg-primary-5 px-4 py-2 text-white justify-center">
+              <Phone className="h-5 w-5 text-primary-50 " />
+              <div>
+                <span className="mr-1 text-primary-50">Tư vấn:</span>
+                <span className="text-primary-50">{getHotline()}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      {/* Desktop Navigation */}
+      <nav
+        aria-label="Desktop Navigation"
+        className={`hidden md:block flex-col justify-between top-0 bottom-0 z-50 border-t border-white/10 bg-white`}>
         <div className="container mx-auto px-4">
           <MegaMenu />
         </div>
       </nav>
 
-      {/* Mobile Contact and Download - Show in Mobile Menu */}
-      {mobileMenuOpen && (
-        <div className="md:hidden border-t border-white/10 py-4">
-          <div className="container mx-auto px-4 flex flex-col gap-3">
-            {/* Also update the mobile version of the phone number in the mobile menu section */}
-            {/* Find the section with <Phone className="h-5 w-5" /> in the mobile menu and replace that div with: */}
-            <div className="flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-white w-full justify-center">
-              <Phone className="h-5 w-5" />
-              <div>
-                <span className="mr-1 text-sm">Tư vấn ngay:</span>
-                <span className="font-medium">{getHotline()}</span>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-2 rounded-full border border-white/20 px-4 py-2 text-white w-full justify-center">
-              <Download className="h-5 w-5" />
-              <span>Tải ứng dụng</span>
-            </div>
-
-            {/* Add logout button to mobile menu when logged in */}
-            {isAuthenticated && (
-              <Button
-                className="flex items-center gap-2 rounded-full border border-white/20 px-4 py-2 text-white w-full justify-center bg-transparent hover:bg-white/10"
-                variant="ghost"
-                onClick={handleLogout}>
-                <LogOut className="h-5 w-5" />
-                <span>Đăng xuất</span>
-              </Button>
-            )}
-          </div>
-        </div>
-      )}
       {/* Login Modal */}
       <LoginModal
         isOpen={loginModalOpen}

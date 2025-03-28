@@ -72,7 +72,7 @@ export default function ProductTabs({ product }: ProductTabsProps) {
     <div className="rounded-lg border border-grayscale-20">
       <div className="flex">
         {/* Left Column - Navigation */}
-        <div className="w-fit border-r border-grayscale-20">
+        <div className="w-fit border-r border-grayscale-20 hidden sm:block">
           <nav
             aria-label="Product sections"
             className="sticky top-4 flex flex-col">
@@ -95,8 +95,10 @@ export default function ProductTabs({ product }: ProductTabsProps) {
         {/* Right Column - Content */}
         <div className="flex-1 p-6">
           {/* Header with Text Size Controls */}
-          <div className="mb-6 flex items-center justify-between border-b-2 pb-4">
-            <h1 className="text-xl font-bold text-gray-900">{product.name}</h1>
+          <div className="mb-6 flex flex-col-reverse sm:flex-row items-start sm:items-center justify-between border-b-2 pb-4 gap-2">
+            <h1 className="text-xl font-bold text-gray-900 hidden sm:block">
+              {product.name}
+            </h1>
             <div className="flex items-center gap-2">
               <span className="font-normal text-sm text-grayscale-50">
                 Kích thước chữ
@@ -131,7 +133,7 @@ export default function ProductTabs({ product }: ProductTabsProps) {
             )}>
             {/* Description Section */}
             <section id="description">
-              <h2 className="mb-4 text-xl font-bold text-gray-900">
+              <h2 className="mb-4 text-base sm:text-xl font-semibold sm:font-bold text-gray-900">
                 {product.name} là gì?
               </h2>
               <p className="mb-4 text-gray-700">{product.description}</p>
@@ -140,7 +142,7 @@ export default function ProductTabs({ product }: ProductTabsProps) {
             {/* features Section */}
             {product.features && (
               <section className="mt-8" id="features">
-                <h2 className="mb-4 text-xl font-bold text-gray-900">
+                <h2 className="mb-4 text-base sm:text-xl font-semibold sm:font-bold text-gray-900">
                   Đặc điểm nổi bật của {product.name}
                 </h2>
                 <div className="mt-4 overflow-hidden border-gray-200">
@@ -152,7 +154,7 @@ export default function ProductTabs({ product }: ProductTabsProps) {
             {/* Ingredients Section */}
             {product.ingredients && (
               <section className="mt-8" id="ingredients">
-                <h2 className="mb-4 text-xl font-bold text-gray-900">
+                <h2 className="mb-4 text-base sm:text-xl font-semibold sm:font-bold text-gray-900">
                   Thành phần của {product.name}
                 </h2>
                 <div className="mt-4 overflow-hiddenborder-gray-200">
@@ -164,7 +166,7 @@ export default function ProductTabs({ product }: ProductTabsProps) {
             {/* Usage Section */}
             {product.usage && (
               <section className="mt-8" id="usage">
-                <h2 className="mb-4 text-xl font-bold text-gray-900">
+                <h2 className="mb-4 text-base sm:text-xl font-semibold sm:font-bold text-gray-900">
                   Cách dùng {product.name}
                 </h2>
                 <p className="mb-2 text-gray-700">{product.usage}</p>
@@ -174,7 +176,7 @@ export default function ProductTabs({ product }: ProductTabsProps) {
             {/* SideEffect Section */}
             {product.sideEffects ? (
               <section className="mt-8" id="sideEffects">
-                <h2 className="mb-4 text-xl font-bold text-gray-900">
+                <h2 className="mb-4 text-base sm:text-xl font-semibold sm:font-bold text-gray-900">
                   Tác dụng phụ
                 </h2>
                 <p className="mb-2 text-gray-700">{product.sideEffects}</p>
@@ -182,7 +184,7 @@ export default function ProductTabs({ product }: ProductTabsProps) {
             ) : (
               <>
                 <section className="mt-8" id="sideEffects">
-                  <h2 className="mb-4 text-xl font-bold text-gray-900">
+                  <h2 className="mb-4 text-base sm:text-xl font-semibold sm:font-bold text-gray-900">
                     Tác dụng phụ
                   </h2>
                   <p className="mb-2 text-gray-700">
@@ -194,7 +196,9 @@ export default function ProductTabs({ product }: ProductTabsProps) {
 
             {/* Warnings Section */}
             <section className="mt-8" id="warnings">
-              <h2 className="mb-4 text-xl font-bold text-gray-900">Lưu ý</h2>
+              <h2 className="mb-4 text-base sm:text-xl font-semibold sm:font-bold text-gray-900">
+                Lưu ý
+              </h2>
               <div className="mt-4 rounded-lg bg-orange-50 p-4">
                 <div className="flex items-start">
                   <AlertTriangle className="mr-3 h-5 w-5 text-orange-500" />
@@ -224,7 +228,7 @@ export default function ProductTabs({ product }: ProductTabsProps) {
             {/* Storage Section */}
             {product.storage && (
               <section className="mt-8" id="storage">
-                <h2 className="mb-4 text-xl font-bold text-gray-900">
+                <h2 className="mb-4 text-base sm:text-xl font-semibold sm:font-bold text-gray-900">
                   Bảo quản
                 </h2>
                 <p className="text-gray-700">{product.storage}</p>

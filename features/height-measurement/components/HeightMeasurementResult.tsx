@@ -102,7 +102,6 @@ export default function HeightMeasurementResult({
 
       const predictedHeight = growTrackData.whoHS;
 
-      console.log('heightData', heightData);
 
       // Tạo kết quả
       setProcessedData({
@@ -149,7 +148,6 @@ export default function HeightMeasurementResult({
     // Tính tuổi hiện tại
     const currentAge = calculateAge(processedData.birthDate).years;
 
-    console.log('currentAge', currentAge);
 
     // Tạo chart mới
     chartInstance.current = new Chart(ctx, {
