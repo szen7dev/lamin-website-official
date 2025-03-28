@@ -176,18 +176,29 @@ export function Header() {
             {/* Top Row with Logo, Actions and Auth */}
             <div className="flex flex-col space-y-4 sm:flex-row sm:space-y-0 h-max items-start sm:items-center justify-between">
               {/* Mobile Menu Button and Logo - Only visible on small screens */}
-              <div className="flex w-full justify-between items-center sm:hidden">
+              {/* <div className="flex w-full justify-between items-center sm:hidden"> */}
+              <div className="grid grid-cols-3 flex items-center w-full sm:hidden">
+                <button
+                  aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
+                  className="col-span-1 text-white"
+                  onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+                  {mobileMenuOpen ? (
+                    <X className="h-7 w-7" />
+                  ) : (
+                    <Menu className="h-7 w-7" />
+                  )}
+                </button>
                 <Link
                   aria-label="Lamin Pharmacy Home"
-                  className="flex items-end gap-2"
+                  className="col-span-1 mx-auto flex items-end gap-2"
                   href="/">
                   <Image
                     alt="Logo"
-                    className="h-8 w-auto"
-                    height={32}
+                    className="h-20 w-auto"
+                    height={80}
                     src="/images/KhaiTruongWinggo.svg"
                     style={{ width: 'auto' }}
-                    width={32}
+                    width={80}
                   />
                   {/* <div className="text-white">
                     <div className="text-xs font-medium">NHÀ THUỐC</div>
@@ -196,16 +207,50 @@ export function Header() {
                     </div>
                   </div> */}
                 </Link>
-                <button
-                  aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
-                  className="text-white"
-                  onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
-                  {mobileMenuOpen ? (
-                    <X className="h-6 w-6" />
-                  ) : (
-                    <Menu className="h-6 w-6" />
-                  )}
-                </button>
+                <div className="col-span-1 ml-auto flex gap-2">
+                  <div className=" relative p-1 bg-primary-50 w-10 h-10 flex items-center justify-center rounded-full">
+                    {/* <CartIcon
+                      className="text-grayscale-5"
+                      fill="#F9F9FB"
+                      height={23}
+                      width={23}
+                    />
+                    {totalItems > 0 && (
+                      <span className="absolute left-6 top-2 flex h-3 w-3 items-center justify-center rounded-full bg-[#F37021] font-bold text-white text-[8px]">
+                        {totalItems}
+                      </span>
+                    )} */}
+
+                    <div
+                      className={`relative ${totalItems > 0 ? 'group' : ''}`}>
+                      <Link
+                        className="hover:no-underline h-10 w-10 flex items-center justify-center gap-2 rounded-full bg-primary px-3 md:px-6 py-2 text-white hover:bg-primary/70 text-xs md:text-sm relative"
+                        href="/cart">
+                        <CartIcon
+                          className="text-grayscale-5"
+                          fill="#F9F9FB"
+                          height={23}
+                          width={23}
+                        />
+                        {totalItems > 0 && (
+                          <span className="absolute left-6 top-2 flex h-3 w-3 items-center justify-center rounded-full bg-[#F37021] font-bold text-white text-[8px]">
+                            {totalItems}
+                          </span>
+                        )}
+                      </Link>
+                    </div>
+                  </div>
+                  <div className="rounded-sm p-1 bg-white w-10 h-10">
+                    <Image
+                      priority
+                      alt="QR Code"
+                      className="object-contain"
+                      height={100}
+                      src="/images/qrCode.png"
+                      width={100}
+                    />
+                  </div>
+                </div>
               </div>
 
               <div className="flex items-center sm:flex justify-items-start gap-4">
@@ -216,7 +261,7 @@ export function Header() {
                   href="/">
                   <Image
                     alt="Logo"
-                    className="h-20 w-auto"
+                    className="h-20 w-auto hidden sm:block"
                     height={40}
                     src="/images/KhaiTruongWinggo.svg"
                     style={{ width: 'auto' }}
@@ -269,7 +314,7 @@ export function Header() {
 
                 <div className={`relative ${totalItems > 0 ? 'group' : ''}`}>
                   <Link
-                    className="hover:no-underline h-10 flex items-center gap-2 rounded-full bg-primary px-3 md:px-6 py-2 text-white hover:bg-primary/70 text-xs md:text-sm relative"
+                    className="hover:no-underline h-10 flex items-center gap-2 rounded-full bg-primary px-3 md:px-6 py-2 text-white hover:bg-primary/70 text-xs md:text-sm"
                     href="/cart">
                     <CartIcon height={15} width={17} />
                     <span className="font-medium">Giỏ Hàng</span>
@@ -291,7 +336,7 @@ export function Header() {
             </div>
 
             {/* Search Bar Section */}
-            <div className="flex gap-4 py-3 mt-2 sm:mt-0">
+            <div className="flex gap-4 sm:py-3 sm:mt-0">
               <div className="flex-1">
                 <SearchBar />
               </div>
@@ -335,7 +380,7 @@ export function Header() {
       </div>
 
       {/* Mobile Auth and Cart - Only visible on small screens */}
-      <div className="flex sm:hidden justify-between items-center px-4 py-2 bg-white/10">
+      <div className="hidden justify-between items-center px-4 py-2 bg-white/10">
         {/* Conditionally show mobile user profile or login button */}
         {isAuthenticated ? (
           <MobileUserProfile />
@@ -362,9 +407,84 @@ export function Header() {
       </div>
 
       {/* Navigation Menu - Toggle on Mobile */}
+      {mobileMenuOpen && (
+        <nav
+          aria-label="Main Navigation"
+          className={`absolute w-[80vw] h-[100vh] flex flex-col justify-between top-0 bottom-0 z-50 border-t border-white/10 bg-white ${mobileMenuOpen || !isMobile ? 'block' : 'hidden'}`}>
+          <div className="">
+            <div className="bg-primary-50 flex justify-between container">
+              <Link
+                aria-label="Lamin Pharmacy Home"
+                className="col-span-1"
+                href="/">
+                <Image
+                  alt="Logo"
+                  className="h-20 w-auto"
+                  height={80}
+                  src="/images/KhaiTruongWinggo.svg"
+                  style={{ width: 'auto' }}
+                  width={80}
+                />
+                {/* <div className="text-white">
+                      <div className="text-xs font-medium">NHÀ THUỐC</div>
+                      <div className="text-base font-bold leading-none">
+                        LONG CHÂU
+                      </div>
+                    </div> */}
+              </Link>
+              <button
+                aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
+                className="col-span-1 text-white"
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+                {mobileMenuOpen ? (
+                  <X className="h-7 w-7" />
+                ) : (
+                  <Menu className="h-7 w-7" />
+                )}
+              </button>
+            </div>
+            <div className="container bg-primary-40 py-3">
+              <p className="text-grayscale-5 text-base font-normal mb-3">
+                Đăng nhập để hưởng những đặc quyền dành riêng cho thành viên
+              </p>
+              {isAuthenticated ? (
+                <UserProfile />
+              ) : (
+                <Button
+                  className="rounded-full bg-white px-3 md:px-6 text-primary hover:bg-white/90 text-xs md:text-sm"
+                  variant="secondary"
+                  onClick={() => setLoginModalOpen(true)}>
+                  <span className="font-medium text-sm">Đăng Nhập</span>
+                </Button>
+              )}
+            </div>
+            <div className="container mx-auto px-4">
+              <MegaMenu />
+            </div>
+          </div>
+          <div className="container py-5 border-t">
+            <span className="text-grayscale-50">
+              Trải nghiệm tốt nhất với ứng dụng
+            </span>
+            <div className="flex mt-2 gap-2">
+              <div className="flex items-center gap-2 rounded-full text-sm font-medium border bg-primary-50 border-white/20 px-4 py-2 text-white justify-center">
+                <Download className="h-5 w-5" />
+                <span className="truncate">Tải ngay</span>
+              </div>
+              <div className="flex items-center gap-2 rounded-full text-sm font-medium bg-primary-5 px-4 py-2 text-white justify-center">
+                <Phone className="h-5 w-5 text-primary-50 " />
+                <div>
+                  <span className="mr-1 text-primary-50">Tư vấn:</span>
+                  <span className="text-primary-50">{getHotline()}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </nav>
+      )}
       <nav
         aria-label="Main Navigation"
-        className={`border-t border-white/10 bg-white ${mobileMenuOpen || !isMobile ? 'block' : 'hidden'}`}>
+        className={`flex flex-col justify-between top-0 bottom-0 z-50 border-t border-white/10 bg-white ${mobileMenuOpen || !isMobile ? 'block' : 'hidden'}`}>
         <div className="container mx-auto px-4">
           <MegaMenu />
         </div>

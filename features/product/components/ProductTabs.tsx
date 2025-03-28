@@ -8,6 +8,7 @@ import Image from 'next/image';
 
 import { cn } from '@/utils/helpers';
 import apiClient from '@/services/api/apiClient';
+import { SuccessIcon } from '@/components/icons';
 
 interface ProductTabsProps {
   product: Product;
@@ -263,13 +264,7 @@ export default function ProductTabs({ product }: ProductTabsProps) {
                 {product.userUpdate?.fullname || 'Dược sĩ Nguyễn Thanh Hải'}
               </h3>
               <div className="flex items-center gap-1 rounded-full  px-3 py-1">
-                <Image
-                  alt="đã kiểm duyệt"
-                  className="h-4 w-4 object-cover"
-                  height={20}
-                  src="/icons/success-icon.svg"
-                  width={20}
-                />
+                <SuccessIcon height={20} width={20} />
                 <span className="text-sm font-medium italic text-green-600">
                   Đã kiểm duyệt nội dung
                 </span>

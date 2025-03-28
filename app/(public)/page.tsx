@@ -110,7 +110,7 @@ export default function HomePage() {
       {/* Best Selling Products - Server Component for SEO */}
       <section
         aria-labelledby="bestselling-heading"
-        className="container mx-auto px-3 sm:px-4 py-6 sm:py-8">
+        className="container mx-auto px-3 sm:px-4 sm:py-0">
         <h2 className="sr-only" id="bestselling-heading">
           Sản phẩm bán chạy
         </h2>
@@ -120,7 +120,7 @@ export default function HomePage() {
       {/* Coach Experts - Server Component for SEO */}
       <section
         aria-labelledby="coaches-heading"
-        className="container mx-auto px-3 sm:px-4 py-6 sm:py-8">
+        className="container mx-auto px-3 sm:px-4 py-6 sm:py-5">
         <h2 className="sr-only" id="coaches-heading">
           Chuyên gia tư vấn
         </h2>
@@ -128,14 +128,15 @@ export default function HomePage() {
       </section>
 
       {/* Health News - Server Component for SEO */}
-      <section className="container mx-auto px-3 sm:px-4 py-6 sm:py-8">
+      <section className="container mx-auto px-3 sm:px-4 sm:py-5">
         <HealthNews />
       </section>
 
       {/* Trusted Stores - Client Component for carousel */}
       <section
         aria-labelledby="trusted-stores-heading"
-        className="container mx-auto px-3 sm:px-4 py-6 sm:py-8">
+        // className="container mx-auto px-3 sm:px-4 py-6 sm:py-8">
+        className="sm:container sm:mx-auto sm:px-4 py-6 sm:py-5">
         <h2 className="sr-only" id="trusted-stores-heading">
           Cửa hàng uy tín
         </h2>

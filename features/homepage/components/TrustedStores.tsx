@@ -140,7 +140,7 @@ export default function TrustedStores() {
   };
 
   return (
-    <div className="space-y-8 sm:space-y-12">
+    <div className="space-y-3 sm:space-y-6">
       {/* Trusted Stores Section */}
       {isLoading ? (
         renderLoadingSkeleton()
@@ -149,11 +149,11 @@ export default function TrustedStores() {
       ) : (
         <section
           aria-labelledby="trusted-stores-heading"
-          className="rounded-2xl bg-gradient-3 p-3 sm:p-4 md:p-6">
+          className="sm:rounded-2xl bg-gradient-3 p-3 sm:p-4 md:p-6">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4 sm:mb-6">
             <div className="flex flex-col justify-between gap-2 sm:gap-3">
               <h2
-                className="text-xl sm:text-2xl md:text-3xl font-semibold text-white"
+                className="text-xl sm:text-2xl md:text-[28px] font-semibold text-white"
                 id="trusted-stores-heading">
                 Các cửa hàng uy tín của Lamin
               </h2>
@@ -180,12 +180,13 @@ export default function TrustedStores() {
               className="trusted-stores-swiper"
               // modules={[Navigation]}
               modules={[Navigation, Pagination, Autoplay]}
-              pagination={{
-                clickable: true,
-                bulletActiveClass: 'bg-primary opacity-100',
-                bulletClass:
-                  'inline-block w-2 h-2 rounded-full bg-grayscale-30 opacity-70 mx-1 cursor-pointer transition-all',
-              }}
+              // pagination={{
+              //   clickable: true,
+              //   bulletActiveClass: 'bg-primary opacity-100',
+              //   bulletClass:
+              //     'inline-block w-2 h-2 rounded-full bg-grayscale-30 opacity-70 mx-1 cursor-pointer transition-all',
+              // }}
+              pagination={false}
               slidesPerView={1}
               spaceBetween={8}
               onSwiper={handleSwiper}>
@@ -248,11 +249,11 @@ export default function TrustedStores() {
       )}
 
       {/* Benefits Section */}
-      <section className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
+      <section className="grid grid-cols-2 p-4 sm:p-0 md:grid-cols-4 gap-3 sm:gap-4">
         {benefits.map(benefit => (
           <article
             key={benefit.id}
-            className="flex items-center text-left gap-3">
+            className="flex flex-col sm:flex-row items-center text-left gap-3">
             <div className="rounded-full bg-primary-5 p-2 sm:p-3">
               <div className="flex items-center justify-center h-6 w-6 sm:h-7 sm:w-7 text-primary-40">
                 {benefit.icon}

@@ -8,6 +8,7 @@ import {
   getPaymentMethodText,
 } from '@/features/checkout/utils/paymentMethods';
 import { useOrder } from '@/contexts/OrderContext';
+import { SuccessIcon } from '@/components/icons';
 
 export default function CheckoutSuccessPage() {
   const router = useRouter();
@@ -111,12 +112,7 @@ export default function CheckoutSuccessPage() {
                   </p>
                 </div>
                 <div className="flex gap-2 items-center">
-                  <Image
-                    alt="Success"
-                    height={20}
-                    src="/icons/success-icon.svg"
-                    width={20}
-                  />
+                  <SuccessIcon height={20} width={20} />
                   <p className="text-[#51B848] font-medium text-base">
                     Đã thanh toán
                   </p>
