@@ -25,7 +25,10 @@ export const getArticleList = async (
 
     // The apiClient.get method handles response normalization internally
     // It will automatically extract listRecords from any level of nesting
-    const articles = await apiClient.get<Article[]>('/api/medias', queryParams);
+    const articles = await apiClient.getNormalizedResponse<Article[]>(
+      '/api/medias',
+      queryParams,
+    );
 
     return articles || [];
   } catch (error) {

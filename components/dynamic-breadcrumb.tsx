@@ -12,6 +12,30 @@ import {
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
 
+// Map of URL segments to their Vietnamese display text with proper accents
+const vietnameseTextMap: Record<string, string> = {
+  // Main sections
+  'trang-chu': 'Trang chủ',
+  'do-cao': 'Đo cao',
+  'kiem-tra-thoi-quen': 'Kiểm tra thói quen',
+  'doi-ngu-chuyen-mon': 'Đội ngũ chuyên môn',
+  'chuyen-trang-suc-khoe': 'Chuyên trang sức khỏe',
+  'he-thong-cua-hang': 'Hệ thống cửa hàng',
+  'lien-he': 'Liên hệ',
+  'san-pham': 'Sản phẩm',
+  'tin-tuc': 'Tin tức',
+  'gioi-thieu': 'Giới thiệu',
+  'dang-nhap': 'Đăng nhập',
+  'dang-ky': 'Đăng ký',
+
+  // Sub-sections
+  'ket-qua': 'Kết quả',
+  'chi-tiet': 'Chi tiết',
+  'danh-sach': 'Danh sách',
+  'thong-tin': 'Thông tin',
+  'bai-viet': 'Bài viết',
+};
+
 export function DynamicBreadcrumb() {
   const pathname = usePathname();
 
@@ -28,10 +52,10 @@ export function DynamicBreadcrumb() {
     // Create the path for this breadcrumb item
     const href = `/${segments.slice(0, index + 1).join('/')}`;
 
-    // Format the segment for display (capitalize, replace hyphens with spaces)
-    const label = segment
-      .replace(/-/g, ' ')
-      .replace(/\b\w/g, char => char.toUpperCase());
+    // Get Vietnamese text from mapping or format the segment for display
+    const label =
+      vietnameseTextMap[segment] ||
+      segment.replace(/-/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
 
     // Check if this is the last segment (current page)
     const isLastItem = index === segments.length - 1;
@@ -48,8 +72,11 @@ export function DynamicBreadcrumb() {
       <BreadcrumbList>
         <BreadcrumbItem>
           <BreadcrumbLink asChild>
-            <Link aria-label="Home" className="decoration-transparent" href="/">
-              Trang chu
+            <Link
+              aria-label="Trang chủ"
+              className="decoration-transparent"
+              href="/">
+              Trang chủ
             </Link>
           </BreadcrumbLink>
         </BreadcrumbItem>

@@ -300,7 +300,7 @@ export function Header() {
             {/* Popular Keywords - Hidden on smallest screens */}
             <div className="hidden sm:flex flex-wrap gap-x-4 gap-y-1 pb-1">
               <span className="text-sm text-white/80">Tìm kiếm phổ biến:</span>
-              {keywords.map(keyword => (
+              {keywords?.map(keyword => (
                 <Link
                   key={keyword._id}
                   className="text-sm text-white decoration-white underline underline-offset-4 hover:text-white/90"

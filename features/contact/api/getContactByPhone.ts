@@ -18,7 +18,7 @@ export const getContactByPhone = async (
       phone: params.phone,
     };
 
-    const contact = await apiClient.get<Contact>(
+    const contact = await apiClient.getNormalizedResponse<Contact>(
       '/api/item/contacts/get-id-by-phone',
       queryParams,
     );

@@ -40,7 +40,7 @@ export interface CreateOrderData {
  */
 export const createOrder = async (data: CreateOrderData) => {
   try {
-    const response = await apiClient.post(
+    const response = await apiClient.postNormalizedResponse<CreateOrderData>(
       '/api/store/orders/insert-full',
       data,
     );

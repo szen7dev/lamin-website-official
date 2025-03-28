@@ -26,7 +26,10 @@ export const getDetailCoach = async (
 
   try {
     // Make API call to get coach details
-    const coach = await apiClient.get<Coach>('/api/item/contacts', queryParams);
+    const coach = await apiClient.getNormalizedResponse<Coach>(
+      '/api/item/contacts',
+      queryParams,
+    );
 
     return coach;
   } catch (error) {

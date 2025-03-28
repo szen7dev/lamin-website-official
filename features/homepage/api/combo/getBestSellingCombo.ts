@@ -25,7 +25,7 @@ export const getBestSellingCombo = async (
 
   try {
     // Fetch combo data from API
-    const combos = await apiClient.get<ComboProduct[]>(
+    const combos = await apiClient.getNormalizedResponse<ComboProduct[]>(
       '/api/crm/combo/best-seller',
       queryParams,
     );

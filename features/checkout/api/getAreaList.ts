@@ -25,7 +25,7 @@ export const getAreaList = async (
     };
 
     // Make the API request
-    const response = await apiClient.get<Area[]>(
+    const response = await apiClient.getNormalizedResponse<Area[]>(
       '/api/item/areas',
       queryParams,
     );

@@ -5,6 +5,7 @@ import { NextResponse } from 'next/server';
 // URL redirects mapping (from -> to)
 const redirects = new Map([
   ['/height-measurement', '/do-cao'],
+  ['/height-measurement/results', '/do-cao/ket-qua'],
   ['/nutrition-check', '/kiem-tra-thoi-quen'],
   ['/coach-experts', '/doi-ngu-chuyen-mon'],
   ['/health-news', '/chuyen-trang-suc-khoe'],
@@ -18,6 +19,7 @@ const redirects = new Map([
 // URL rewrites mapping (visible URL -> content URL)
 const rewrites = new Map([
   ['/do-cao', '/height-measurement'],
+  ['/do-cao/ket-qua', '/height-measurement/results'],
   ['/kiem-tra-thoi-quen', '/nutrition-check'],
   ['/doi-ngu-chuyen-mon', '/coach-experts'],
   ['/chuyen-trang-suc-khoe', '/health-news'],
@@ -48,6 +50,28 @@ export async function middleware(request: NextRequest) {
     const newPath = `/coach-experts/${id}`;
 
     return NextResponse.rewrite(new URL(newPath, request.url));
+  }
+
+  // Check for dynamic do-cao experts path
+  if (
+    pathname.startsWith('/do-cao/ket-qua/') &&
+    pathname !== '/do-cao/ket-qua'
+  ) {
+    const id = pathname.replace('/do-cao/ket-qua/', '');
+    const newPath = `/height-measurement/results/${id}`;
+
+    return NextResponse.rewrite(new URL(newPath, request.url));
+  }
+
+  // Check for dynamic height-measurement results path
+  if (
+    pathname.startsWith('/height-measurement/results/') &&
+    pathname !== '/height-measurement/results'
+  ) {
+    const id = pathname.replace('/height-measurement/results/', '');
+    const newPath = `/do-cao/ket-qua/${id}`;
+
+    return NextResponse.redirect(new URL(newPath, request.url));
   }
 
   // Check for dynamic article path

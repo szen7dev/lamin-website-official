@@ -17,7 +17,11 @@ export class ProductRealService implements ProductService {
         ...params,
       };
 
-      const response = await apiClient.get('/api/item/goods', apiParams);
+      const response =
+        await apiClient.getNormalizedResponse<ProductListResponse>(
+          '/api/item/goods',
+          apiParams,
+        );
 
       return response;
     } catch (error) {
@@ -29,7 +33,10 @@ export class ProductRealService implements ProductService {
   async getProductBySlug(slug: string): Promise<Product> {
     try {
       // Theo tài liệu API, truyền slug như một tham số
-      const response = await apiClient.get(`/api/item/goods`, { slug });
+      const response = await apiClient.getNormalizedResponse<Product>(
+        `/api/item/goods`,
+        { slug },
+      );
 
       return response;
     } catch (error) {

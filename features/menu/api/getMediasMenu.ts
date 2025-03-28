@@ -79,7 +79,7 @@ export const getMediasMenu = async (
     };
 
     // Make API request
-    const response = await apiClient.get<MediaMenuResponse>(
+    const response = await apiClient.getNormalizedResponse<MediaMenuResponse>(
       '/api/medias/menu',
       queryParams,
     );

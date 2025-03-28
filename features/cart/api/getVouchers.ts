@@ -19,7 +19,7 @@ export const getVouchers = async (
       customerID: params.customerID,
     };
 
-    const vouchers = await apiClient.get<Voucher[]>(
+    const vouchers = await apiClient.getNormalizedResponse<Voucher[]>(
       '/api/store/vouchers',
       queryParams,
     );

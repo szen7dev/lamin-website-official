@@ -14,7 +14,7 @@ export const getGoodsInfo = async (goodsId: string): Promise<Product> => {
       goodsID: goodsId,
     };
 
-    const response = await apiClient.get<Product>(
+    const response = await apiClient.getNormalizedResponse<Product>(
       `/api/item/goods`,
       queryParams,
     );

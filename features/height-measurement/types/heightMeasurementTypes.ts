@@ -8,6 +8,7 @@ export interface HeightMeasurementFormData {
   gender: number;
   note?: string;
   optionSeller?: number;
+  contactID?: string;
 }
 
 export interface HeightMeasurementResultData {
