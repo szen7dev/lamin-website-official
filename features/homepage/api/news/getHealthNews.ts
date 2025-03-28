@@ -21,7 +21,10 @@ export const getHealthNews = async (
   };
 
   // Fetch news data from API
-  const news = await apiClient.get<News[]>('/api/medias', queryParams);
+  const news = await apiClient.getNormalizedResponse<News[]>(
+    '/api/medias',
+    queryParams,
+  );
 
   // Return the response data or empty array if no data
   return news || [];

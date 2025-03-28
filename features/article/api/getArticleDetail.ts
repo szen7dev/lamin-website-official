@@ -36,7 +36,7 @@ export const getArticleDetail = async (
         : JSON.stringify({ path: 'thumbnail', select: 'path' }),
     };
 
-    const response = await apiClient.get<Article[] | Article>(
+    const response = await apiClient.getNormalizedResponse<Article[] | Article>(
       '/api/medias',
       queryParams,
     );

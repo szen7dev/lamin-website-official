@@ -29,7 +29,10 @@ export const getSaledCombo = async (
 
   try {
     // Fetch combo data from API
-    const combos = await apiClient.get<Combo[]>('/api/crm/combo', queryParams);
+    const combos = await apiClient.getNormalizedResponse<Combo[]>(
+      '/api/crm/combo',
+      queryParams,
+    );
 
     // The apiClient.get method now handles response normalization internally
     return combos || [];

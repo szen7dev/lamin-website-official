@@ -14,12 +14,12 @@ export const getHeightMeasurementInfo = async (
       trackID: trackId,
     };
 
-    const response = await apiClient.get<GrowTrackApiResponse>(
+    const { data, response } = await apiClient.get<GrowTrackApiResponse, any>(
       `/api/crm/grow_track`,
       queryParams,
     );
 
-    if (!response) {
+    if (!data) {
       throw new Error('Không thể lấy thông tin đo chiều cao');
     }
 

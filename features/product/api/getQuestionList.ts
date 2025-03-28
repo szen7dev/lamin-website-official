@@ -22,10 +22,11 @@ export const getQuestionList = async (
       ...(params.cursor ? { cursor: params.cursor } : {}),
     };
 
-    const response = await apiClient.get<QuestionListResponse>(
-      '/api/medias/question',
-      queryParams,
-    );
+    const response =
+      await apiClient.getNormalizedResponse<QuestionListResponse>(
+        '/api/medias/question',
+        queryParams,
+      );
 
     return response;
   } catch (error) {

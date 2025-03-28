@@ -10,6 +10,7 @@ export const postHeightMeasurement = async (
 ): Promise<HeightMeasurementResultData> => {
   try {
     const queryParams = {
+      contactID: params.contactID || '',
       optionSeller: params.optionSeller || DEFAULT_OPTION_SELLER,
       name: params.name,
       phone: params.phone,
@@ -23,9 +24,12 @@ export const postHeightMeasurement = async (
       weight: Number(params.weight),
     };
 
-    const response = await apiClient.post('/api/crm/grow_track', queryParams);
+    const response = await apiClient.postNormalizedResponse(
+      '/api/crm/grow_track',
+      queryParams,
+    );
 
-    return response.data;
+    return response;
   } catch (error) {
     console.error('API: Error submitting height measurement:', error);
     throw new Error(

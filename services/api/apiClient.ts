@@ -310,8 +310,8 @@ class ApiClient {
     return response as unknown as T;
   }
 
-  // Phương thức GET
-  public async get<T = any>(
+  // Get normalized data only (original behavior)
+  public async getNormalizedResponse<T = any>(
     url: string,
     params?: Record<string, any>,
     requireAuth = true,
@@ -338,8 +338,72 @@ class ApiClient {
     }
   }
 
+  // Phương thức GET - returns full response with normalized data
+  public async get<T = any, R = any>(
+    url: string,
+    params?: Record<string, any>,
+    requireAuth = true,
+  ): Promise<{ data: T; response: R }> {
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+    };
+
+    // Thêm token nếu cần
+    if (requireAuth) {
+      const token = this.getToken() || (requireAuth ? DEFAULT_TOKEN : '');
+
+      if (token) {
+        headers.Authorization = `Bearer ${token}`;
+      }
+    }
+
+    try {
+      const response = await this.instance.get(url, { params, headers });
+      const normalizedData = this.normalizeResponse<T>(response.data);
+
+      return {
+        data: normalizedData,
+        response: response.data as R,
+      };
+    } catch (error) {
+      return this.handleRequestError(error, url);
+    }
+  }
+
   // Phương thức POST
-  public async post<T = any>(
+  public async post<T = any, R = any>(
+    url: string,
+    data?: any,
+    requireAuth = true,
+  ): Promise<{ data: T; response: R }> {
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+    };
+
+    // Thêm token nếu cần
+    if (requireAuth) {
+      const token = this.getToken() || (requireAuth ? DEFAULT_TOKEN : '');
+
+      if (token) {
+        headers.Authorization = `Bearer ${token}`;
+      }
+    }
+
+    try {
+      const response = await this.instance.post(url, data, { headers });
+      const normalizedData = this.normalizeResponse<T>(response.data);
+
+      return {
+        data: normalizedData,
+        response: response.data as R,
+      };
+    } catch (error) {
+      return this.handleRequestError(error, url);
+    }
+  }
+
+  // Get normalized data only for POST (original behavior)
+  public async postNormalizedResponse<T = any>(
     url: string,
     data?: any,
     requireAuth = true,
@@ -367,7 +431,39 @@ class ApiClient {
   }
 
   // Phương thức PUT
-  public async put<T = any>(
+  public async put<T = any, R = any>(
+    url: string,
+    data?: any,
+    requireAuth = true,
+  ): Promise<{ data: T; response: R }> {
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+    };
+
+    // Thêm token nếu cần
+    if (requireAuth) {
+      const token = this.getToken() || (requireAuth ? DEFAULT_TOKEN : '');
+
+      if (token) {
+        headers.Authorization = `Bearer ${token}`;
+      }
+    }
+
+    try {
+      const response = await this.instance.put(url, data, { headers });
+      const normalizedData = this.normalizeResponse<T>(response.data);
+
+      return {
+        data: normalizedData,
+        response: response.data as R,
+      };
+    } catch (error) {
+      return this.handleRequestError(error, url);
+    }
+  }
+
+  // Get normalized data only for PUT (original behavior)
+  public async putNormalizedResponse<T = any>(
     url: string,
     data?: any,
     requireAuth = true,
@@ -395,7 +491,10 @@ class ApiClient {
   }
 
   // Thêm phương thức DELETE
-  public async delete<T = any>(url: string, requireAuth = true): Promise<T> {
+  public async delete<T = any, R = any>(
+    url: string,
+    requireAuth = true,
+  ): Promise<{ data: T; response: R }> {
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
     };
@@ -410,7 +509,38 @@ class ApiClient {
     }
 
     try {
-      const response = await this.instance.delete<T>(url, { headers });
+      const response = await this.instance.delete(url, { headers });
+      const normalizedData = this.normalizeResponse<T>(response.data);
+
+      return {
+        data: normalizedData,
+        response: response.data as R,
+      };
+    } catch (error) {
+      return this.handleRequestError(error, url);
+    }
+  }
+
+  // Get normalized data only for DELETE (original behavior)
+  public async deleteNormalizedResponse<T = any>(
+    url: string,
+    requireAuth = true,
+  ): Promise<T> {
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+    };
+
+    // Thêm token nếu cần
+    if (requireAuth) {
+      const token = this.getToken() || (requireAuth ? DEFAULT_TOKEN : '');
+
+      if (token) {
+        headers.Authorization = `Bearer ${token}`;
+      }
+    }
+
+    try {
+      const response = await this.instance.delete(url, { headers });
 
       return this.normalizeResponse<T>(response.data);
     } catch (error) {

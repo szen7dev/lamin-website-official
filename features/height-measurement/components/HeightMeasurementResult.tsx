@@ -1,12 +1,13 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { AlertCircle, Check } from 'lucide-react';
+import { AlertCircle } from 'lucide-react';
 import Chart from 'chart.js/auto';
 
 import { useGetHeightMeasurementInfo } from '../hooks/useGetHeightMeasurementInfo';
 
 import { useMediaQuery } from '@/hooks/useMediaQuery';
+import { CheckIcon } from '@/components/icons';
 
 const percentiles = [
   { name: 'P3', color: '#0D6EFD' },
@@ -95,25 +96,13 @@ export default function HeightMeasurementResult({
       ) {
         // Sử dụng dữ liệu ageHeightNow nếu có
         heightData = growTrackData.ageHeightNow;
-      } else if (growTrackData.hdfs && Array.isArray(growTrackData.hdfs)) {
-        // Sử dụng dữ liệu hdfs nếu có
-        heightData = growTrackData.hdfs.map((item: any) => ({
-          age: item.age,
-          height: item.height,
-        }));
       } else {
         heightData = fallbackData.heightData;
       }
 
-      const predictedHeight =
-        growTrackData.ageHeightP50 && growTrackData.ageHeightP50.length > 0
-          ? Math.round(
-              growTrackData.ageHeightP50[growTrackData.ageHeightP50.length - 1]
-                .height,
-            )
-          : userData.gender === 1
-            ? 170
-            : 160;
+      const predictedHeight = growTrackData.whoHS;
+
+      console.log('heightData', heightData);
 
       // Tạo kết quả
       setProcessedData({
@@ -123,7 +112,7 @@ export default function HeightMeasurementResult({
         birthDate: userData.birthday || new Date().toISOString(),
         height: userData.height || 0,
         predictedHeight,
-        growthRate: 50, // Giá trị mặc định
+        growthRate: 36, // Giá trị mặc định
         analysisDate: userData.createAt || new Date().toISOString(),
         coach: 'Chuyên gia Lamin',
         recommendations: [
@@ -139,6 +128,9 @@ export default function HeightMeasurementResult({
 
   // Tạo biểu đồ
   useEffect(() => {
+    if (!apiResponse) return;
+    const growTrackData = apiResponse.growTrack || {};
+
     if (!chartRef.current || !processedData || !processedData.heightData) {
       return;
     }
@@ -154,6 +146,11 @@ export default function HeightMeasurementResult({
       chartInstance.current.destroy();
     }
 
+    // Tính tuổi hiện tại
+    const currentAge = calculateAge(processedData.birthDate).years;
+
+    console.log('currentAge', currentAge);
+
     // Tạo chart mới
     chartInstance.current = new Chart(ctx, {
       type: 'line',
@@ -167,10 +164,10 @@ export default function HeightMeasurementResult({
               .fill(0)
               .map((_, idx) => {
                 // Lấy giá trị từ P3, P5, v.v. nếu có
-                if (apiResponse?.growTrack) {
+                if (growTrackData) {
                   const pData =
-                    apiResponse.growTrack[
-                      `ageHeight${p.name}` as keyof typeof apiResponse.growTrack
+                    growTrackData[
+                      `ageHeight${p.name}` as keyof typeof growTrackData
                     ];
 
                   return Array.isArray(pData) && idx < pData.length
@@ -181,8 +178,7 @@ export default function HeightMeasurementResult({
                 return null;
               }),
             borderColor: p.color,
-            borderWidth: 0.5,
-            borderDash: [5, 5],
+            borderWidth: 1,
             fill: false,
             tension: 0.4,
             pointRadius: 0,
@@ -248,7 +244,7 @@ export default function HeightMeasurementResult({
             border: {
               width: 1,
             },
-            min: 5, // Bắt đầu từ 5 tuổi
+            min: currentAge + 1, // Bắt đầu từ tuổi hiện tại thay vì 5
             max: 20, // Kết thúc ở 20 tuổi
           },
           y: {
@@ -352,7 +348,7 @@ export default function HeightMeasurementResult({
 
   if (error) {
     return (
-      <div className="rounded-lg bg-error-5/10 p-6 text-error-5 flex flex-col items-center gap-3">
+      <div className="rounded-lg bg-error-5/10 p-6 text-[#FF0000] flex flex-col items-center gap-3">
         <AlertCircle aria-hidden="true" className="h-10 w-10 shrink-0" />
         <h2 className="text-lg font-semibold">Lỗi khi tải dữ liệu</h2>
         <p className="text-center">
@@ -361,9 +357,9 @@ export default function HeightMeasurementResult({
             : 'Không thể tải kết quả đo chiều cao'}
         </p>
         <button
-          className="mt-2 px-4 py-2 bg-primary-5 text-white rounded-lg hover:bg-primary-20"
+          className="mt-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-20"
           type="button"
-          onClick={() => (window.location.href = '/height-measurement')}>
+          onClick={() => (window.location.href = '/do-cao')}>
           Thử lại
         </button>
       </div>
@@ -421,27 +417,33 @@ export default function HeightMeasurementResult({
       {/* Column 1: Age and Height Table */}
       <aside className="w-full md:w-[200px] shrink-0 order-2 md:order-1">
         <div className="rounded-lg border border-grayscale-20">
-          <header className="grid grid-cols-2 bg-primary-5 text-center text-xs sm:text-sm font-medium text-white">
+          <header className="grid grid-cols-2 bg-primary text-center text-xs sm:text-sm font-medium text-white">
             <div className="border-r border-white/10 px-2 sm:px-4 py-2">
               Tuổi
             </div>
             <div className="px-2 sm:px-4 py-2">Chiều cao (cm)</div>
           </header>
           <div className="max-h-[300px] md:max-h-[600px] overflow-y-auto">
-            {processedData.heightData.map((item, index) => (
-              <div
-                key={item.age}
-                className={`grid grid-cols-2 border-t border-grayscale-20 text-center text-xs sm:text-sm ${
-                  index === processedData.heightData.length - 1
-                    ? 'text-error-5'
-                    : ''
-                }`}>
-                <div className="border-r border-grayscale-20 px-2 sm:px-4 py-2">
-                  {item.age}
+            {processedData.heightData
+              .filter(item => {
+                // Tính tuổi hiện tại
+                const currentAge = calculateAge(processedData.birthDate).years;
+
+                // Chỉ hiển thị từ tuổi hiện tại trở đi
+                return item.age >= currentAge;
+              })
+              .map((item, index, filteredArray) => (
+                <div
+                  key={item.age}
+                  className={`grid grid-cols-2 border-t border-grayscale-20 text-center text-xs sm:text-sm ${
+                    index === filteredArray.length - 1 ? 'text-[#FF0000]' : ''
+                  }`}>
+                  <div className="border-r border-grayscale-20 px-2 sm:px-4 py-2">
+                    {item.age}
+                  </div>
+                  <div className="px-2 sm:px-4 py-2">{item.height}</div>
                 </div>
-                <div className="px-2 sm:px-4 py-2">{item.height}</div>
-              </div>
-            ))}
+              ))}
           </div>
         </div>
       </aside>
@@ -459,7 +461,7 @@ export default function HeightMeasurementResult({
             aria-valuemax={100}
             aria-valuemin={0}
             aria-valuenow={processedData.growthRate}
-            className="h-6 sm:h-8 flex-1 rounded-md bg-primary-5"
+            className="h-6 sm:h-8 flex-1 rounded-md bg-[#F37021]"
             role="progressbar"
           />
         </div>
@@ -507,7 +509,7 @@ export default function HeightMeasurementResult({
           </p>
           <p className="flex flex-wrap items-center gap-1">
             •{' '}
-            <span className="text-error-5">
+            <span className="text-[#FF0000]">
               Dự đoán chiều cao khi trưởng thành:{' '}
               {processedData.predictedHeight}cm
             </span>
@@ -535,10 +537,7 @@ export default function HeightMeasurementResult({
             {processedData.recommendations.map((recommendation, index) => (
               <li key={index} className="flex items-center gap-1 sm:gap-2">
                 <div className="flex h-4 w-4 sm:h-5 sm:w-5 items-center justify-center rounded-full bg-success-5">
-                  <Check
-                    aria-hidden="true"
-                    className="h-2 w-2 sm:h-3 sm:w-3 text-white"
-                  />
+                  <CheckIcon />
                 </div>
                 <span className="text-xs sm:text-sm text-grayscale-60">
                   {recommendation}

@@ -19,12 +19,12 @@ export const getGoodsInfoBySlug = async (slug: string): Promise<Product> => {
       optionSeller: DEFAULT_OPTION_SELLER || 1,
     };
 
-    const response = await apiClient.get<Product>(
+    const response = await apiClient.getNormalizedResponse<Product>(
       `/api/item/goods`,
       queryParams,
     );
 
-    return response as Product;
+    return response;
   } catch (error) {
     console.error('Error fetching goods info:', error);
     throw error;
