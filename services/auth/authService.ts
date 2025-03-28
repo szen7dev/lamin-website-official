@@ -3,7 +3,6 @@
 
 import { login as loginApi } from '@/features/auth/api/login';
 import { getPhoneOTP } from '@/features/auth/api/getPhoneOTP';
-import { sleep } from '@/utils/helpers';
 
 export interface AuthResponse {
   success: boolean;
@@ -15,7 +14,7 @@ class AuthService {
   async sendOTP(phoneNumber: string): Promise<AuthResponse> {
     try {
       // Use the real API endpoint
-      const otp = await getPhoneOTP({
+      await getPhoneOTP({
         phone: phoneNumber,
         optionSeller: false,
       });
@@ -71,26 +70,6 @@ class AuthService {
             : 'Verification failed. Please try again.',
       };
     }
-  }
-
-  async loginWithZalo(phoneNumber: string): Promise<AuthResponse> {
-    // Simulate API call
-    await sleep(1000);
-
-    return {
-      success: true,
-      message: 'Zalo verification initiated',
-    };
-  }
-
-  async loginWithSMS(phoneNumber: string): Promise<AuthResponse> {
-    // Simulate API call
-    await sleep(1000);
-
-    return {
-      success: true,
-      message: 'SMS verification initiated',
-    };
   }
 }
 

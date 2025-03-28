@@ -18,7 +18,9 @@ export const checkUserExists = async (
   params: CheckUserExistsParams,
 ): Promise<CheckUserExistsResponse> => {
   try {
-    const response = await apiClient.post<{ message: string }>(
+    const response = await apiClient.postNormalizedResponse<{
+      message: string;
+    }>(
       '/api/auth/users/check-user-exists',
       { phone: params.phone },
       false, // Don't require auth for this endpoint

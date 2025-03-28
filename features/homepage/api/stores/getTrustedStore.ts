@@ -14,16 +14,15 @@ export const getTrustedStore = async (
   const queryParams = {
     optionSeller: params.optionSeller ?? DEFAULT_OPTION_SELLER,
     select: params.select ?? 'name sign location address rating numberOfRating',
-    populates: JSON.stringify(params.populates),
+    populates: params.populates ? JSON.stringify(params.populates) : undefined,
     // Include fundaID if provided
     ...(params.fundaID && { fundaID: params.fundaID }),
   };
 
   // Fetch trusted store data from API
-  const trustedStore = await apiClient.get<TrustedStore[] | TrustedStore>(
-    '/api/item/fundas',
-    queryParams,
-  );
+  const trustedStore = await apiClient.getNormalizedResponse<
+    TrustedStore[] | TrustedStore
+  >('/api/item/fundas', queryParams);
 
   // Return the response data
   return trustedStore;

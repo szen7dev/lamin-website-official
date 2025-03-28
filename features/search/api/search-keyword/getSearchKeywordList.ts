@@ -18,7 +18,7 @@ export const getSearchKeywordList = async (
 
     // The apiClient.get method now handles response normalization internally
     // It will automatically extract listRecords from any level of nesting
-    const keywords = await apiClient.get<SearchKeyword[]>(
+    const keywords = await apiClient.getNormalizedResponse<SearchKeyword[]>(
       '/api/crm/search_keyword',
       params,
     );

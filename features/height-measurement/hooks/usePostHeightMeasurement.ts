@@ -10,7 +10,13 @@ import { useRouter } from 'next/navigation';
 
 import { postHeightMeasurement } from '../api/postHeightMeasurement';
 
-export function useHeightMeasurementMutation() {
+interface HeightMeasurementMutationOptions {
+  contactID?: string;
+}
+
+export function useHeightMeasurementMutation(
+  options?: HeightMeasurementMutationOptions,
+) {
   const router = useRouter();
 
   const mutation = useMutation({
@@ -18,7 +24,16 @@ export function useHeightMeasurementMutation() {
       formData: HeightMeasurementFormData,
     ): Promise<HeightMeasurementResultData> => {
       try {
-        const result = await postHeightMeasurement(formData);
+        // Add contactID to formData if it exists in options
+        const dataToSubmit: HeightMeasurementFormData = {
+          ...formData,
+        };
+
+        if (options?.contactID) {
+          dataToSubmit.contactID = options.contactID;
+        }
+
+        const result = await postHeightMeasurement(dataToSubmit);
 
         return result;
       } catch (error) {
@@ -29,7 +44,7 @@ export function useHeightMeasurementMutation() {
 
     onSuccess: (data: HeightMeasurementResultData) => {
       if (data && data._id) {
-        const resultUrl = `/height-measurement/results/${data._id}`;
+        const resultUrl = `/do-cao/ket-qua/${data._id}`;
 
         router.push(resultUrl);
       } else {

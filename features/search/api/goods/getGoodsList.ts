@@ -23,7 +23,10 @@ export const getGoodsList = async (
 
     // The apiClient.get method now handles response normalization internally
     // It will automatically extract listRecords from any level of nesting
-    const goods = await apiClient.get<Goods[]>('/api/item/goods', queryParams);
+    const goods = await apiClient.getNormalizedResponse<Goods[]>(
+      '/api/item/goods',
+      queryParams,
+    );
 
     return goods || [];
   } catch (error) {

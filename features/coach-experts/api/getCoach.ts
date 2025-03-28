@@ -21,7 +21,7 @@ export const getCoach = async (
   };
 
   // Fetch coaches data from API
-  const coaches = await apiClient.get<Coach[]>(
+  const coaches = await apiClient.getNormalizedResponse<Coach[]>(
     '/api/item/contacts',
     queryParams,
   );

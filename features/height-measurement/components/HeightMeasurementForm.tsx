@@ -7,10 +7,19 @@ import { AlertCircle } from 'lucide-react';
 import { useHeightMeasurementMutation } from '../hooks/usePostHeightMeasurement';
 
 import { Button } from '@/components/ui/button';
+import { useAuth } from '@/hooks';
 
 export default function HeightMeasurementForm() {
+  const { user, isAuthenticated } = useAuth();
+
+  // Only pass contactID if user is authenticated and has contacts
+  const mutationOptions =
+    isAuthenticated && user?.contacts?.[0]?._id
+      ? { contactID: user.contacts[0]._id }
+      : undefined;
+
   const { createHeightMeasurement, isPending, error } =
-    useHeightMeasurementMutation();
+    useHeightMeasurementMutation(mutationOptions);
   const {
     register,
     handleSubmit,
@@ -289,7 +298,7 @@ export default function HeightMeasurementForm() {
       {/* Form Actions */}
       <div className="flex flex-col sm:flex-row sm:justify-end gap-2 sm:gap-3 pt-2 sm:pt-4">
         <Button
-          className="rounded-lg bg-grayscale-5 px-4 sm:px-6 py-2 sm:py-2.5 text-sm font-medium text-grayscale-90 transition-colors hover:bg-grayscale-10 disabled:opacity-70 order-2 sm:order-1"
+          className="rounded-lg bg-grayscale-5 border-primary text-primary px-4 sm:px-6 py-2 sm:py-2.5 text-sm font-medium transition-colors hover:bg-grayscale-10 disabled:opacity-70 order-2 sm:order-1"
           disabled={isPending}
           type="button"
           variant="outline"
@@ -297,7 +306,7 @@ export default function HeightMeasurementForm() {
           Đặt lại
         </Button>
         <Button
-          className="rounded-lg bg-primary-5 px-4 sm:px-6 py-2 sm:py-2.5 text-sm font-medium text-white transition-colors hover:bg-primary-20 disabled:opacity-70 flex items-center justify-center gap-2 order-1 sm:order-2"
+          className="rounded-lg bg-primary px-4 sm:px-6 py-2 sm:py-2.5 text-sm font-medium text-white transition-colors hover:bg-primary-20 disabled:opacity-70 flex items-center justify-center gap-2 order-1 sm:order-2"
           disabled={isPending}
           type="submit">
           {isPending ? (

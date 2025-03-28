@@ -40,7 +40,10 @@ export async function getContactInfo(): Promise<Config> {
       type: 3,
     };
 
-    const config = await apiClient.get<Config>('/api/item/configs', params);
+    const config = await apiClient.getNormalizedResponse<Config>(
+      '/api/item/configs',
+      params,
+    );
 
     return config;
   } catch (error: any) {
@@ -55,32 +58,9 @@ export async function getContactInfo(): Promise<Config> {
   }
 }
 
-// Hàm để lấy cấu hình trang web theo loại
-export async function getConfigByType(type: number): Promise<Config> {
-  try {
-    const params: ConfigQueryParams = {
-      optionSeller: DEFAULT_OPTION_SELLER,
-      type,
-    };
-
-    const config = await apiClient.get<Config>('/api/item/configs', params);
-
-    return config;
-  } catch (error: any) {
-    console.error('Error fetching config by type:', error);
-    error.context = {
-      service: 'configService',
-      method: 'getConfigByType',
-      params: { optionSeller: DEFAULT_OPTION_SELLER, type },
-    };
-    throw error;
-  }
-}
-
 // Export các hàm riêng lẻ
 export const configService = {
   getContactInfo,
-  getConfigByType,
 };
 
 export default configService;

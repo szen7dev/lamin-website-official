@@ -97,9 +97,9 @@ export default function LoginPage() {
     try {
       // Check if user exists - this will trigger onUserExists or onUserNotExists
       checkUserExistsMutation.mutate(phoneNumber);
-    } catch (error) {
+    } catch (_error) {
       // Handle error silently but set error message for user
-      console.error('Error checking if user exists:', error);
+      console.error('Error checking if user exists:', _error);
       setError('Có lỗi xảy ra. Vui lòng thử lại sau.');
       setIsLoading(false);
     }
@@ -149,7 +149,8 @@ export default function LoginPage() {
         setError('Mã OTP không đúng. Vui lòng thử lại.');
         setIsLoading(false);
       }
-    } catch (error) {
+    } catch (_error) {
+      console.error('OTP verification error:', _error);
       setError('Có lỗi xảy ra. Vui lòng thử lại sau.');
       setIsLoading(false);
     }

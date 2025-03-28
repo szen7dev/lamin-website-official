@@ -54,7 +54,7 @@ export interface LoginResponse {
  */
 export const login = async (params: LoginParams): Promise<LoginResponse> => {
   try {
-    const response = await apiClient.post<LoginResponse>(
+    const response = await apiClient.postNormalizedResponse<LoginResponse>(
       '/api/auth/users/login',
       {
         email: params.email, // This can be either email or phone number

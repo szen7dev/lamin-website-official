@@ -15,7 +15,7 @@ export const getPhoneOTP = async (
   params: GetPhoneOTPParams,
 ): Promise<string> => {
   try {
-    const response = await apiClient.post<string>(
+    const response = await apiClient.postNormalizedResponse<string>(
       '/api/auth/users/get-phone-otp',
       {
         phone: params.phone,

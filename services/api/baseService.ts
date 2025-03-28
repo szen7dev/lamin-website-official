@@ -11,7 +11,7 @@ export abstract class BaseService {
     requireAuth = true,
   ): Promise<T> {
     try {
-      const response = await apiClient.get<ApiResponse<T>>(
+      const response = await apiClient.getNormalizedResponse<ApiResponse<T>>(
         `${this.basePath}${path}`,
         params,
         requireAuth,
@@ -64,7 +64,7 @@ export abstract class BaseService {
     requireAuth = true,
   ): Promise<T> {
     try {
-      const response = await apiClient.post<ApiResponse<T>>(
+      const response = await apiClient.postNormalizedResponse<ApiResponse<T>>(
         `${this.basePath}${path}`,
         data,
         requireAuth,
@@ -117,7 +117,7 @@ export abstract class BaseService {
     requireAuth = true,
   ): Promise<T> {
     try {
-      const response = await apiClient.put<ApiResponse<T>>(
+      const response = await apiClient.putNormalizedResponse<ApiResponse<T>>(
         `${this.basePath}${path}`,
         data,
         requireAuth,
@@ -166,7 +166,7 @@ export abstract class BaseService {
 
   protected async delete<T>(path: string, requireAuth = true): Promise<T> {
     try {
-      const response = await apiClient.delete<ApiResponse<T>>(
+      const response = await apiClient.deleteNormalizedResponse<ApiResponse<T>>(
         `${this.basePath}${path}`,
         requireAuth,
       );

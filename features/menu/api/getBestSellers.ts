@@ -79,7 +79,7 @@ export const getBestSellers = async (
     };
 
     // Make API request
-    const response = await apiClient.get<BestSellerResponse>(
+    const response = await apiClient.getNormalizedResponse<BestSellerResponse>(
       '/api/crm/combo/best-seller',
       queryParams,
     );
