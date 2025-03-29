@@ -57,9 +57,9 @@ const HealthNews = dynamic(
 );
 
 export const metadata: Metadata = generateSeoMetadata({
-  title: 'Lamin Pharmacy - Nhà thuốc trực tuyến của bạn',
+  title: 'Lamin-Giải pháp tăng cao toàn diện cho trẻ',
   description:
-    'Mua thuốc trực tuyến, nhận tư vấn sức khỏe và nhiều dịch vụ khác tại Lamin Pharmacy',
+    'Giải pháp tăng cao toàn diện cho trẻ',
   keywords: [
     'nhà thuốc',
     'thuốc',
