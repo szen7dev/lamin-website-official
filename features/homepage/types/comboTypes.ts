@@ -2,20 +2,20 @@ import { Thumbnail } from '@/types';
 
 export interface ComboProduct {
   _id: string;
-  category: {
+  category?: {
     _id: string;
     name: string;
     slug: string;
   };
-  quantity: number;
-  sellingUnitprice: number;
-  listedUnitprice: number;
-  name: string;
-  unit: string;
+  quantity?: number;
+  sellingUnitprice?: number | undefined;
+  listedUnitprice?: number | undefined;
+  name?: string;
+  unit?: string;
   expired?: string;
   unitNote?: string;
-  slug: string;
-  thumbnail: Thumbnail;
+  slug?: string;
+  thumbnail?: Thumbnail;
 }
 
 export interface Combo {

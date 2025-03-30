@@ -163,7 +163,7 @@ export function CartSummary({
     <div className="bg-white rounded-lg shadow p-4 space-y-4">
       <button
         aria-label="Áp dụng ưu đãi"
-        className="flex w-full items-center justify-between bg-[#EAEFFA] rounded-md text-blue-600 font-medium text-sm cursor-pointer bg-transparent border-none p-3"
+        className="flex w-full items-center justify-between bg-[#EAEFFA] rounded-md text-blue-600 font-medium text-sm cursor-pointer border-none p-3"
         type="button"
         onClick={() => setIsPromoModalOpen(true)}>
         <span>Áp dụng ưu đãi để được giảm giá</span>
@@ -240,8 +240,14 @@ export function CartSummary({
       <div className="pt-2 border-t">
         <div className="flex items-center gap-1 text-sm justify-between">
           <span>Điểm thưởng</span>
-          <div className="flex gap-1">
-            <Coins className="w-4 h-4 text-[#F79009]" />
+          <div className="flex gap-1 items-center">
+            <Image
+              alt="Point Coin"
+              className="w-4 h-4"
+              height={16}
+              src="/images/PointCoinImg.png"
+              width={16}
+            />
             <span className="text-[#F79009]">{summary.rewardPoints} điểm</span>
           </div>
         </div>
@@ -267,9 +273,12 @@ export function CartSummary({
         </div>
 
         <Button
-          className="w-full text-white"
+          className="w-full text-white rounded-full"
           disabled={selectedItems.length === 0}
           size="lg"
+          style={{
+            background: 'linear-gradient(277.59deg, #1250DC 0%, #306DE4 100%)',
+          }}
           onClick={handleCheckout}>
           Mua hàng
         </Button>

@@ -1,3 +1,5 @@
+import { Populate } from '@/types';
+
 export interface ProductImage {
   _id: string;
   path: string;
@@ -167,16 +169,31 @@ export interface ProductListResponse {
   totalPages: number;
 }
 
+export interface ProductReviewParams {
+  populates?: Populate;
+  goodsID: string;
+  optionSeller?: number;
+  limit?: number;
+  rating?: number;
+  type?: number;
+}
+
 export interface ProductReview {
-  id: string;
+  _id: string;
+  amountReply: number;
   rating: number;
-  content: string;
   author: {
-    name: string;
+    _id: string;
+    fullname: string;
+    image: string;
+    phone: string;
+    createAt: string;
+    rating: number;
   };
-  createdAt: string;
-  likes: number;
-  verified: boolean;
+  goods: string;
+  content: string;
+  createAt: string;
+  lastestReply?: ProductReview;
 }
 
 export interface ProductQuestion {
@@ -186,7 +203,7 @@ export interface ProductQuestion {
   author: {
     name: string;
   };
-  createdAt: string;
+  createAt: string;
   answered: boolean;
 }
 

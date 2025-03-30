@@ -7,7 +7,6 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
 import { ComboProduct } from '@/features/homepage/types/comboTypes';
 import { apiClient } from '@/services/api/apiClient';
-import { useCart } from '@/features/cart/hooks/useCart';
 
 export interface ProductUnit {
   label: string;
@@ -29,8 +28,6 @@ export default function ProductCard({
   error,
   isLoading,
 }: ProductCardProps) {
-  const { addToCart } = useCart();
-
   const handleAddToCart = () => {
     // if (!product) return;
     //
@@ -148,7 +145,7 @@ export default function ProductCard({
           {imageUrl ? (
             <Image
               fill
-              alt={product.name}
+              alt={product?.name || ''}
               className="object-contain transition-transform duration-300 group-hover:scale-105"
               sizes={`(min-width: 1024px) 50vw, 100vw`}
               src={imageUrl}
@@ -188,7 +185,7 @@ export default function ProductCard({
       <div className="mb-2">
         <div className="flex items-baseline gap-2">
           <span className="text-base sm:text-lg font-bold text-primary">
-            {formatPrice(product.sellingUnitprice)}
+            {formatPrice(product?.sellingUnitprice || 0)}
           </span>
           {product.unit && (
             <span className="text-xs sm:text-sm text-primary-50">

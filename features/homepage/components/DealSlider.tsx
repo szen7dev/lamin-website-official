@@ -163,7 +163,7 @@ export default function DealSlider() {
   return (
     <section
       aria-labelledby="deals-heading"
-      className="rounded-xl overflow-hidden bg-gradient-3 p-4">
+      className="rounded-xl overflow-hidden bg-gradient-primary p-4">
       <header className="mb-4 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <h2
@@ -265,7 +265,7 @@ export default function DealSlider() {
                     </div>
 
                     <button
-                      className="block w-full rounded-md bg-primary py-2 text-center text-sm font-medium text-white hover:bg-primary-60"
+                      className="block w-full rounded-full bg-primary py-2 text-center text-sm font-medium text-white hover:bg-primary-60"
                       onClick={e => {
                         e.preventDefault();
 
@@ -356,7 +356,7 @@ export default function DealSlider() {
                       </div>
 
                       <button
-                        className="block w-full rounded-md bg-primary py-1.5 text-center text-sm font-medium text-white hover:bg-primary-60"
+                        className="block w-full rounded-full bg-primary py-1.5 text-center text-sm font-medium text-white hover:bg-primary-60"
                         onClick={e => {
                           e.preventDefault();
 

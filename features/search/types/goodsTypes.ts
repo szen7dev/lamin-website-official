@@ -1,3 +1,5 @@
+import { Thumbnail } from '@/types';
+
 /**
  * Simple FileInfo interface to avoid dependency on external module
  */
@@ -32,7 +34,7 @@ export interface Goods {
   status: number;
   createdAt?: string;
   updatedAt?: string;
-  thumbnail?: string;
+  thumbnail?: Thumbnail;
 }
 
 export interface GoodsVariant {

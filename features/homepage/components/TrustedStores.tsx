@@ -47,12 +47,11 @@ const benefits = [
 
 export default function TrustedStores() {
   const { trustedStore, isLoading, error } = useGetTrustedStore();
-
   // Loading skeleton UI
   const renderLoadingSkeleton = () => (
     <section
       aria-labelledby="trusted-stores-heading"
-      className="rounded-2xl bg-gradient-3 p-3 sm:p-4 md:p-6">
+      className="rounded-2xl bg-gradient-primary p-3 sm:p-4 md:p-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4 sm:mb-6">
         <div className="flex flex-col justify-between gap-2 sm:gap-3">
           <div className="h-8 w-48 bg-white/20 rounded-md animate-pulse" />
@@ -86,7 +85,7 @@ export default function TrustedStores() {
   const renderError = () => (
     <section
       aria-labelledby="trusted-stores-heading"
-      className="rounded-2xl bg-gradient-3 p-3 sm:p-4 md:p-6">
+      className="rounded-2xl bg-gradient-primary p-3 sm:p-4 md:p-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4 sm:mb-6">
         <div className="flex flex-col justify-between gap-2 sm:gap-3">
           <h2
@@ -149,7 +148,7 @@ export default function TrustedStores() {
       ) : (
         <section
           aria-labelledby="trusted-stores-heading"
-          className="sm:rounded-2xl bg-gradient-3 p-3 sm:p-4 md:p-6">
+          className="sm:rounded-2xl bg-gradient-primary p-3 sm:p-4 md:p-6">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4 sm:mb-6">
             <div className="flex flex-col justify-between gap-2 sm:gap-3">
               <h2
@@ -254,7 +253,7 @@ export default function TrustedStores() {
           <article
             key={benefit.id}
             className="flex flex-col sm:flex-row items-center text-left gap-3">
-            <div className="rounded-full bg-primary-5 p-2 sm:p-3">
+            <div className="rounded-full bg-[#d0dcf8] p-2 sm:p-3">
               <div className="flex items-center justify-center h-6 w-6 sm:h-7 sm:w-7 text-primary-40">
                 {benefit.icon}
               </div>

@@ -14,21 +14,16 @@ const getCartFromStorage = (): { items: CartItem[]; expiry: number } | null => {
   try {
     const savedCartData = localStorage.getItem('cart');
 
-    console.log('Loading cart from storage:', savedCartData);
-
     if (!savedCartData) return null;
 
     const cartData = JSON.parse(savedCartData);
 
     // Check if the cart data is still valid (not expired)
     if (cartData.expiry && new Date().getTime() < cartData.expiry) {
-      console.log('Valid cart data found:', cartData);
-
       return cartData;
     }
 
     // Clear expired cart data
-    console.log('Cart data expired, clearing');
     localStorage.removeItem('cart');
 
     return null;
@@ -46,7 +41,6 @@ const saveCartToStorage = (items: CartItem[]): void => {
       expiry: new Date().getTime() + 24 * 60 * 60 * 1000, // 1 day from now
     };
 
-    console.log('Saving cart to storage:', cartData);
     localStorage.setItem('cart', JSON.stringify(cartData));
   } catch (error) {
     console.error('Failed to save cart to localStorage:', error);
@@ -76,8 +70,6 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     queryKey: [CART_QUERY_KEY],
     queryFn: () => {
       const storedData = getCartFromStorage();
-
-      console.log('Query function executed, got data:', storedData);
 
       return (
         storedData || {

@@ -19,6 +19,8 @@ module.exports = {
     },
     extend: {
       backgroundImage: {
+        'gradient-primary':
+          'linear-gradient(180deg, #3375B6 0%, #0052A4 50%, #004283 100%)',
         'gradient-1':
           'linear-gradient(90deg, #4173E3 0%, #1250DC 50%, #0E40B0 100%)',
         'gradient-2':
@@ -50,18 +52,18 @@ module.exports = {
       },
       colors: {
         primary: {
-          DEFAULT: '#1250DC',
-          5: '#e7edfb',
-          10: '#d0dcf8',
-          20: '#a0b9f1',
-          30: '#7196ea',
-          40: '#4173e3',
-          50: '#1250DC',
-          60: '#0e40b0',
-          70: '#0c348f',
-          80: '#09286e',
-          90: '#061c4d',
-          100: '#04102c',
+          DEFAULT: '#0052A4',
+          5: '#E6EFF7',
+          10: '#CCDFEF',
+          20: '#99BFDF',
+          30: '#669FCF',
+          40: '#337FBF',
+          50: '#0052A4',
+          60: '#004283',
+          70: '#003162',
+          80: '#002142',
+          90: '#001021',
+          100: '#000810',
         },
         secondary: {
           DEFAULT: '#667085',
