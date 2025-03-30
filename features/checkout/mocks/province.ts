@@ -7,7 +7,7 @@ export interface Province {
 
 export const provinces: Province[] = [
   { _id: '01', name: 'Hà Nội', level: 1, parent: null },
-  { _id: '79', name: 'TP Hồ Chí Minh', level: 1, parent: null },
+  { _id: '79', name: 'Thành phố Hồ Chí Minh', level: 1, parent: null },
   { _id: '48', name: 'Đà Nẵng', level: 1, parent: null },
   { _id: '92', name: 'Cần Thơ', level: 1, parent: null },
   { _id: '31', name: 'Hải Phòng', level: 1, parent: null },
@@ -62,5 +62,5 @@ export const provinces: Province[] = [
   { _id: '93', name: 'Hậu Giang', level: 1, parent: null },
   { _id: '94', name: 'Sóc Trăng', level: 1, parent: null },
   { _id: '95', name: 'Bạc Liêu', level: 1, parent: null },
-  { _id: '96', name: 'Cà Mau', level: 1, parent: null }
+  { _id: '96', name: 'Cà Mau', level: 1, parent: null },
 ];
