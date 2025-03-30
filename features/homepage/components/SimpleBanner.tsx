@@ -25,7 +25,9 @@ export default function SimpleBanner() {
     (banner?.thumbnail?.path &&
       apiClient.getFileUrl(banner?.thumbnail?.path)) ||
     fallbackImageUrl;
-  const bannerLink = banner?.link || '#';
+  const bannerLink = banner?.slug
+    ? `/chuyen-trang-suc-khoe/${banner.slug}`
+    : '#';
 
   const BannerComponent = () => (
     <>

@@ -321,12 +321,18 @@ class ApiClient {
     };
 
     // Thêm token nếu cần
-    if (requireAuth) {
-      const token = this.getToken() || (requireAuth ? DEFAULT_TOKEN : '');
+    if (requireAuth === true) {
+      const token = this.getToken();
 
       if (token) {
         headers.Authorization = `Bearer ${token}`;
+      } else {
+        // Use default token when authentication is required but user token is not available
+        headers.Authorization = `Bearer ${DEFAULT_TOKEN}`;
       }
+    } else if (DEFAULT_TOKEN) {
+      // When requireAuth is false, still use default token if available
+      headers.Authorization = `Bearer ${DEFAULT_TOKEN}`;
     }
 
     try {
@@ -349,12 +355,18 @@ class ApiClient {
     };
 
     // Thêm token nếu cần
-    if (requireAuth) {
-      const token = this.getToken() || (requireAuth ? DEFAULT_TOKEN : '');
+    if (requireAuth === true) {
+      const token = this.getToken();
 
       if (token) {
         headers.Authorization = `Bearer ${token}`;
+      } else {
+        // Use default token when authentication is required but user token is not available
+        headers.Authorization = `Bearer ${DEFAULT_TOKEN}`;
       }
+    } else if (DEFAULT_TOKEN) {
+      // When requireAuth is false, still use default token if available
+      headers.Authorization = `Bearer ${DEFAULT_TOKEN}`;
     }
 
     try {
@@ -381,12 +393,18 @@ class ApiClient {
     };
 
     // Thêm token nếu cần
-    if (requireAuth) {
-      const token = this.getToken() || (requireAuth ? DEFAULT_TOKEN : '');
+    if (requireAuth === true) {
+      const token = this.getToken();
 
       if (token) {
         headers.Authorization = `Bearer ${token}`;
+      } else {
+        // Use default token when authentication is required but user token is not available
+        headers.Authorization = `Bearer ${DEFAULT_TOKEN}`;
       }
+    } else if (DEFAULT_TOKEN) {
+      // When requireAuth is false, still use default token if available
+      headers.Authorization = `Bearer ${DEFAULT_TOKEN}`;
     }
 
     try {
@@ -413,12 +431,18 @@ class ApiClient {
     };
 
     // Thêm token nếu cần
-    if (requireAuth) {
-      const token = this.getToken() || (requireAuth ? DEFAULT_TOKEN : '');
+    if (requireAuth === true) {
+      const token = this.getToken();
 
       if (token) {
         headers.Authorization = `Bearer ${token}`;
+      } else {
+        // Use default token when authentication is required but user token is not available
+        headers.Authorization = `Bearer ${DEFAULT_TOKEN}`;
       }
+    } else if (DEFAULT_TOKEN) {
+      // When requireAuth is false, still use default token if available
+      headers.Authorization = `Bearer ${DEFAULT_TOKEN}`;
     }
 
     try {
@@ -441,12 +465,18 @@ class ApiClient {
     };
 
     // Thêm token nếu cần
-    if (requireAuth) {
-      const token = this.getToken() || (requireAuth ? DEFAULT_TOKEN : '');
+    if (requireAuth === true) {
+      const token = this.getToken();
 
       if (token) {
         headers.Authorization = `Bearer ${token}`;
+      } else {
+        // Use default token when authentication is required but user token is not available
+        headers.Authorization = `Bearer ${DEFAULT_TOKEN}`;
       }
+    } else if (DEFAULT_TOKEN) {
+      // When requireAuth is false, still use default token if available
+      headers.Authorization = `Bearer ${DEFAULT_TOKEN}`;
     }
 
     try {
@@ -473,12 +503,18 @@ class ApiClient {
     };
 
     // Thêm token nếu cần
-    if (requireAuth) {
-      const token = this.getToken() || (requireAuth ? DEFAULT_TOKEN : '');
+    if (requireAuth === true) {
+      const token = this.getToken();
 
       if (token) {
         headers.Authorization = `Bearer ${token}`;
+      } else {
+        // Use default token when authentication is required but user token is not available
+        headers.Authorization = `Bearer ${DEFAULT_TOKEN}`;
       }
+    } else if (DEFAULT_TOKEN) {
+      // When requireAuth is false, still use default token if available
+      headers.Authorization = `Bearer ${DEFAULT_TOKEN}`;
     }
 
     try {
@@ -500,12 +536,18 @@ class ApiClient {
     };
 
     // Thêm token nếu cần
-    if (requireAuth) {
-      const token = this.getToken() || (requireAuth ? DEFAULT_TOKEN : '');
+    if (requireAuth === true) {
+      const token = this.getToken();
 
       if (token) {
         headers.Authorization = `Bearer ${token}`;
+      } else {
+        // Use default token when authentication is required but user token is not available
+        headers.Authorization = `Bearer ${DEFAULT_TOKEN}`;
       }
+    } else if (DEFAULT_TOKEN) {
+      // When requireAuth is false, still use default token if available
+      headers.Authorization = `Bearer ${DEFAULT_TOKEN}`;
     }
 
     try {
@@ -531,12 +573,18 @@ class ApiClient {
     };
 
     // Thêm token nếu cần
-    if (requireAuth) {
-      const token = this.getToken() || (requireAuth ? DEFAULT_TOKEN : '');
+    if (requireAuth === true) {
+      const token = this.getToken();
 
       if (token) {
         headers.Authorization = `Bearer ${token}`;
+      } else {
+        // Use default token when authentication is required but user token is not available
+        headers.Authorization = `Bearer ${DEFAULT_TOKEN}`;
       }
+    } else if (DEFAULT_TOKEN) {
+      // When requireAuth is false, still use default token if available
+      headers.Authorization = `Bearer ${DEFAULT_TOKEN}`;
     }
 
     try {
