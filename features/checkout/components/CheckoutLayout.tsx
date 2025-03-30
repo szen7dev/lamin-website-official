@@ -1,6 +1,5 @@
 'use client';
 
-import type { CreateOrderData } from '../api/createOrder';
 import type { Voucher } from '@/features/cart/types/voucherTypes';
 
 import { useEffect, useRef, useState } from 'react';
@@ -22,6 +21,7 @@ import { useCart } from '@/features/cart/hooks/useCart';
 import { useAuth } from '@/hooks';
 import { useToast } from '@/components/ui/use-toast';
 import { useGetContactByPhone } from '@/features/contact/hooks/useGetContactByPhone';
+import { CreateOrderData } from '@/features/order/types/orderTypes';
 
 export function CheckoutLayout() {
   const router = useRouter();
@@ -172,11 +172,11 @@ export function CheckoutLayout() {
         paymentMethod: formValues.paymentMethod,
         name: `Đơn hàng ${formValues.customerName || 'Khách hàng'}`,
         note: formValues.note || '',
-        total: totalPrice.toString(),
-        salesoff: directDiscount.toString(),
-        offer: voucherDiscount.toString(),
-        credit: pointsDiscount.toString(), // Use the pointsDiscount here
-        shippingFee: shippingFee.toString(),
+        total: totalPrice,
+        salesoff: directDiscount,
+        offer: voucherDiscount,
+        credit: pointsDiscount, // Use the pointsDiscount here
+        shippingFee: shippingFee,
         recipientAddress: formValues.address || '123 Main St, Anytown',
         areaID: formValues.ward || '',
         buyerName: formValues.customerName || 'Khách hàng',
@@ -227,30 +227,16 @@ export function CheckoutLayout() {
 
             // Store order information in context instead of URL parameters
             const orderInfo = {
-              orderId: data?._id || `ORD-${Date.now()}`,
-              sign: data?.sign,
-              customerName: data?.buyerName || submitData.buyerName,
-              paymentMethod: data?.paymentMethod || submitData.paymentMethod,
-              total: data?.total?.toString() || submitData.total,
-              subtotal: subtotal.toString(),
-              directDiscount: directDiscount.toString(),
+              orderId: data?._id,
+              total: data?.total,
+              subtotal: subtotal,
+              directDiscount: directDiscount,
               voucherDiscount: submitData.offer || data.offer,
-              pointsDiscount: pointsDiscount.toString(),
-              shippingFee:
-                data?.shippingFee?.toString() || submitData.shippingFee,
-              savedAmount: (
-                parseFloat(submitData.salesoff) +
-                parseFloat(submitData.offer || '0') +
-                pointsDiscount
-              ).toString(),
-              dateOrder: data?.date || new Date().toISOString(),
-              dateInvoice: data?.createdAt || new Date().toISOString(),
-              buyerPhone: data?.buyerPhone || submitData.buyerPhone,
-              recipientAddress:
-                data?.recipientAddress || submitData.recipientAddress,
-              funda: data?.funda || '',
-              loyaltyPoints: data?.loyaltyPoints?.toString() || '0',
-              voucherCode: voucherCode || '',
+              pointsDiscount: pointsDiscount,
+              shippingFee: data?.shippingFee || submitData.shippingFee,
+              savedAmount:
+                submitData.salesoff + submitData.offer || 0 + pointsDiscount,
+              loyaltyPoints: submitData.credit,
             };
 
             // Set the order info in context

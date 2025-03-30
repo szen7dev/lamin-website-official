@@ -1,6 +1,5 @@
 'use client';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import {
@@ -9,56 +8,26 @@ import {
 } from '@/features/checkout/utils/paymentMethods';
 import { useOrder } from '@/contexts/OrderContext';
 import { SuccessIcon } from '@/components/icons';
+import { useGetOrderById } from '@/features/checkout/hooks/useGetOrderById';
+import { formattedDeliveryDate } from '@/utils';
 
 export default function CheckoutSuccessPage() {
   const router = useRouter();
   const { orderInfo } = useOrder();
-
-  const [paymentMethodText, setPaymentMethodText] = useState('');
-
-  useEffect(() => {
-    // If no order info in context, redirect back to cart
-    if (!orderInfo) {
-      router.push('/cart');
-
-      return;
-    }
-
-    // Set the payment method text using the utility
-    setPaymentMethodText(getPaymentMethodText(orderInfo.paymentMethod));
-  }, [orderInfo, router]);
+  const {
+    order,
+    isLoading: isLoadingOrder,
+    error: loadingOrderError,
+  } = useGetOrderById(orderInfo?.orderId || '');
 
   // If no order info, show loading or redirect
-  if (!orderInfo) {
+  if (isLoadingOrder) {
     return (
       <div className="flex justify-center items-center h-screen">
         Loading...
       </div>
     );
   }
-
-  // Format the order date
-  const orderDate = orderInfo.dateInvoice
-    ? new Date(orderInfo.dateInvoice).toLocaleDateString('vi-VN', {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-      })
-    : new Date().toLocaleDateString('vi-VN', {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-      });
-
-  // Get next day for delivery estimate
-  const deliveryDate = new Date(orderInfo.dateInvoice || new Date());
-
-  deliveryDate.setDate(deliveryDate.getDate() + 1);
-  const formattedDeliveryDate = deliveryDate.toLocaleDateString('vi-VN', {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-  });
 
   // Handle view order details click
   const handleViewOrderDetails = () => {
@@ -86,29 +55,35 @@ export default function CheckoutSuccessPage() {
             Đặt hàng thành công
           </h2>
           <p className="text-grayscale-50 text-base font-normal">
-            Nhà thuốc Lamin 123G Thụy Khuê đã tiếp nhận đơn hàng
+            {order.funda.name} đã tiếp nhận đơn hàng
           </p>
         </div>
         <div className="rounded-lg">
           <div className="flex flex-col justify-between">
             <div>
-              <div className="text-grayscale-50 text-base font-medium">
-                <span>Thời gian nhận hàng dự kiến:</span>
-                <p className="text-grayscale-90 font-medium text-base  mb-4 ">
-                  Từ 08:00 - 18:00, {formattedDeliveryDate}
-                </p>
-              </div>
+              {order.deliveryStartETA && order.deliveryEndETA && (
+                <div className="text-grayscale-50 text-base font-medium">
+                  <span>Thời gian nhận hàng dự kiến:</span>
+                  <p className="text-grayscale-90 font-medium text-base  mb-4 ">
+                    Từ{' '}
+                    {formattedDeliveryDate(
+                      order.deliveryStartETA,
+                      order.deliveryEndETA,
+                    )}
+                  </p>
+                </div>
+              )}
               <div className="text-grayscale-50 text-base font-medium mb-4">
                 <span>Phương thức thanh toán:</span>
                 <div className="flex gap-2 items-center">
                   <Image
-                    alt={`${getPaymentMethodText(orderInfo.paymentMethod)}`}
+                    alt={`${getPaymentMethodText(order.paymentMethod)}`}
                     height={20}
-                    src={`${getPaymentMethodIcon(orderInfo.paymentMethod)}`}
+                    src={`${getPaymentMethodIcon(order.paymentMethod)}`}
                     width={20}
                   />
                   <p className="text-grayscale-90 font-medium text-base">
-                    {`${getPaymentMethodText(orderInfo.paymentMethod)}`}
+                    {`${getPaymentMethodText(order.paymentMethod)}`}
                   </p>
                 </div>
                 <div className="flex gap-2 items-center">

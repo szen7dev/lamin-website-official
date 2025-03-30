@@ -1,37 +1,8 @@
 import apiClient from '@/services/api/apiClient';
-
-export interface OrderProduct {
-  productID: string;
-  quantity: number;
-  unitPrice: number;
-  listedUnitprice: number;
-  name: string;
-  note: string;
-}
-
-export interface CreateOrderData {
-  optionSeller: number;
-  customerID?: string;
-  outin: number;
-  type: number;
-  paymentMethod: string;
-  voucherID?: string;
-  name: string;
-  note: string;
-  total: string;
-  offer: string;
-  salesoff: string;
-  credit: string;
-  shippingFee: string;
-  recipientAddress: string;
-  areaID: string;
-  buyerName: string;
-  buyerPhone: string;
-  buyerEmail: string;
-  recipientName: string;
-  recipientPhone: string;
-  products: OrderProduct[];
-}
+import {
+  CreateOrderData,
+  CreateOrderResponse,
+} from '@/features/order/types/orderTypes';
 
 /**
  * Creates a new order
@@ -40,10 +11,11 @@ export interface CreateOrderData {
  */
 export const createOrder = async (data: CreateOrderData) => {
   try {
-    const response = await apiClient.postNormalizedResponse<CreateOrderData>(
-      '/api/store/orders/insert-full',
-      data,
-    );
+    const response: CreateOrderResponse =
+      await apiClient.postNormalizedResponse<CreateOrderResponse>(
+        '/api/store/orders/insert-full',
+        data,
+      );
 
     return response;
   } catch (error) {

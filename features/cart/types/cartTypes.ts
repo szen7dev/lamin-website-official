@@ -15,6 +15,7 @@ export interface CartItem {
   image?: string;
   discount?: number;
   slug?: string;
+  amount?: number;
 }
 
 export interface Cart {

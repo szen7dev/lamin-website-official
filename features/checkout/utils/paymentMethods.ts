@@ -12,36 +12,6 @@ export const PAYMENT_METHODS = [
     label: 'Thanh toán bằng chuyển khoản (QR Code)',
     icon: '/images/payment/qrcode.png',
   },
-  {
-    id: '3',
-    value: '3',
-    label: 'Thanh toán qua chuyển khoản ngân hàng',
-    icon: '/images/payment/bank.png',
-  },
-  {
-    id: '4',
-    value: '4',
-    label: 'Thanh toán qua thẻ tín dụng',
-    icon: '/images/payment/creditCard.png',
-  },
-  {
-    id: '5',
-    value: '5',
-    label: 'Thanh toán qua ZaloPay',
-    icon: '/images/payment/zalopay.png',
-  },
-  {
-    id: '6',
-    value: '6',
-    label: 'Thanh toán qua MoMo',
-    icon: '/images/payment/momo.png',
-  },
-  {
-    id: '7',
-    value: '7',
-    label: 'Thanh toán qua VNPay',
-    icon: '/images/payment/vnpay.png',
-  },
 ];
 
 /**

@@ -11,11 +11,21 @@ export enum AREA_LEVELS {
  * Base area interface representing a geographical area
  */
 export interface Area {
+  childs: AreaChild[];
   _id: string;
-  level: number;
   name: string;
+  level: number;
+  parent: Area | null;
+  sign?: string;
+}
+
+export interface AreaChild {
+  _id: string;
+  name: string;
+  level: number;
+  parent: AreaParent;
   sign: string;
-  parent?: AreaParent;
+  childs: AreaChild[];
 }
 
 /**
@@ -34,11 +44,6 @@ export interface AreaParent {
  */
 export interface GetAreaListParams {
   keyword?: string;
-  level?: number;
-  select?: string;
-  parentId?: string;
-  limit?: number;
-  page?: number;
 }
 
 /**
