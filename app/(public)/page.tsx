@@ -73,9 +73,9 @@ export default function HomePage() {
   return (
     <main className="flex min-h-screen flex-col bg-background">
       {/* Hero Section with Banner - Server Component for immediate display */}
-      <section aria-labelledby="hero-heading" className="w-full">
+      {/* <section aria-labelledby="hero-heading" className="w-full">
         <SimpleBanner />
-      </section>
+      </section> */}
 
       {/* Promotions - Server Component for immediate display */}
       <section
