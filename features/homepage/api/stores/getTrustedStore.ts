@@ -10,20 +10,33 @@ import { apiClient, DEFAULT_OPTION_SELLER } from '@/services/api/apiClient';
 export const getTrustedStore = async (
   params: GetTrustedStoreParams = {},
 ): Promise<TrustedStore[] | TrustedStore> => {
-  // Set default parameters if not provided
-  const queryParams = {
-    optionSeller: params.optionSeller ?? DEFAULT_OPTION_SELLER,
-    select: params.select ?? 'name sign location address rating numberOfRating',
-    ...(params.populates && { populates: JSON.stringify(params.populates) }),
-    // Include fundaID if provided
-    ...(params.fundaID && { fundaID: params.fundaID }),
-  };
+  try {
+    // Set default parameters if not provided
+    const queryParams = {
+      optionSeller: DEFAULT_OPTION_SELLER,
+      select:
+        params.select || 'name sign location address rating numberOfRating',
+      option: 1,
+      // Format populates parameter correctly - ensure it's an array if provided
+      ...(params.populates && {
+        populates: Array.isArray(params.populates)
+          ? JSON.stringify(params.populates)
+          : JSON.stringify([params.populates]),
+      }),
+      // Include fundaID if provided
+      ...(params.fundaID && { fundaID: params.fundaID }),
+    };
 
-  // Fetch trusted store data from API
-  const trustedStore = await apiClient.getNormalizedResponse<
-    TrustedStore[] | TrustedStore
-  >('/api/item/fundas', queryParams, false); // Set requireAuth to false
+    // Fetch trusted store data from API
+    const trustedStore = await apiClient.getNormalizedResponse<
+      TrustedStore[] | TrustedStore
+    >('/api/item/fundas', queryParams, false); // Set requireAuth to false
 
-  // Return the response data
-  return trustedStore;
+    // Return the response data
+    return trustedStore;
+  } catch (error) {
+    console.error('Error fetching trusted store data:', error);
+    // Re-throw the error after logging it for debugging
+    throw error;
+  }
 };
