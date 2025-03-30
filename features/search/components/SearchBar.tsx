@@ -69,7 +69,7 @@ export default function SearchBar() {
     return (
       <div className="fixed inset-0 z-50 flex flex-col bg-white">
         {/* Blue header bar */}
-        <div className="flex items-center gap-2 bg-gradient-3 p-3">
+        <div className="flex items-center gap-2 bg-gradient-primary p-3">
           <Button
             className="text-white"
             size="sm"

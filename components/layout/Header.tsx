@@ -21,7 +21,7 @@ import { CartDropdown } from '@/features/cart/components/CartDropdown';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { useCart } from '@/features/cart/hooks/useCart';
 import { Separator } from '@/components/ui/separator';
-import { LoginModal } from '@/components/ui/LoginModal';
+import { LoginModal } from '@/components/modal/LoginModal';
 import { useContactInfo } from '@/hooks/useContactInfo';
 import { CartIcon, PhoneIcon, UserIcon } from '@/components/icons';
 import { useGetSearchKeywordList } from '@/features/search/hooks/keyword/useGetSearchKeywordList';
@@ -168,7 +168,7 @@ export function Header() {
   );
 
   return (
-    <header className="w-full bg-gradient-3">
+    <header className="w-full bg-gradient-primary">
       {/* Top Bar */}
       <div className="container mx-auto px-4 py-4 md:py-6">
         <div className="flex flex-col md:flex-row md:justify-between md:gap-8">
@@ -444,7 +444,7 @@ export function Header() {
               <X className="h-7 w-7" />
             </button>
           </div>
-          <div className="container bg-gradient-3 py-3">
+          <div className="container bg-gradient-primary py-3">
             <p className="text-grayscale-5 text-base font-normal mb-3">
               Đăng nhập để hưởng những đặc quyền dành riêng cho thành viên
             </p>

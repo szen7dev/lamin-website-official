@@ -1,75 +1,92 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
-import { CommentList, type Comment } from './shared/CommentList';
+import { useGetCommentsByProductID } from '../hooks/useGetReviews';
+
+import { CommentList, Comment } from './shared/CommentList';
 
 import { Button } from '@/components/ui/button';
 import { cn } from '@/utils/helpers';
+import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/hooks';
+import { LoginModal } from '@/components/modal/LoginModal';
+import { ReviewModal } from '@/components/modal/ReviewModal';
 
-// interface ProductQAProps {
-//   productId: string;
-// }/
+interface ProductQAProps {
+  productId: string;
+}
 
-export default function ProductQA() {
+export default function ProductQA({ productId }: ProductQAProps) {
+  const { toast } = useToast();
+
   const [selectedFilter, setSelectedFilter] = useState<
     'newest' | 'oldest' | 'helpful'
   >('newest');
 
-  // This would come from a hook in real implementation
-  const questions: Comment[] = [
-    {
-      id: '1',
-      author: { name: 'Chúc Hương' },
-      content: 'đây là men vi sinh hay men tiêu hóa',
-      createdAt: new Date(Date.now() - 12 * 24 * 60 * 60 * 1000).toISOString(),
-      replies: [
-        {
-          id: '1-reply',
-          author: { name: 'Mai Phương', isStaff: true },
-          content:
-            'Chào bạn Chúc Hương\nDạ sản phẩm là hỗn dịch uống men vi sinh ạ.\nNhà thuốc thông tin đến bạn.\nThân mến!',
-          createdAt: new Date(
-            Date.now() - 11 * 24 * 60 * 60 * 1000,
-          ).toISOString(),
+  const { user } = useAuth();
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+
+  const {
+    data: allQuestions,
+    isLoading,
+    isError,
+  } = useGetCommentsByProductID({
+    goodsID: productId,
+    type: 1,
+  });
+
+  // Convert ProductReview[] to Comment[]
+  const formattedComments = useMemo(() => {
+    if (!allQuestions) return [];
+
+    return allQuestions.map(
+      (review): Comment => ({
+        _id: review._id,
+        author: {
+          _id: review.author._id,
+          fullname: review.author.fullname,
+          phone: review.author.phone,
+          image: review.author.image || null,
+          createAt: review.author.createAt,
+          rating: review.author.rating,
         },
-      ],
-    },
-    {
-      id: '2',
-      author: { name: 'Thu Thảo' },
-      content: 'đây là men vi sinh hay men tiêu hóa',
-      createdAt: new Date(Date.now() - 12 * 24 * 60 * 60 * 1000).toISOString(),
-      replies: [
-        {
-          id: '2-reply',
-          author: { name: 'Mai Phương', isStaff: true },
-          content:
-            'Chào bạn Thu Thảo\nDạ sản phẩm là hỗn dịch uống men vi sinh ạ.\nNhà thuốc thông tin đến bạn.\nThân mến!',
-          createdAt: new Date(
-            Date.now() - 11 * 24 * 60 * 60 * 1000,
-          ).toISOString(),
-        },
-      ],
-    },
-    {
-      id: '3',
-      author: { name: 'Thu Hiền' },
-      content: 'đây là men vi sinh hay men tiêu hóa',
-      createdAt: new Date(Date.now() - 12 * 24 * 60 * 60 * 1000).toISOString(),
-      replies: [
-        {
-          id: '3-reply',
-          author: { name: 'Mai Phương', isStaff: true },
-          content:
-            'Chào bạn Thu Hiền\nDạ sản phẩm là hỗn dịch uống men vi sinh ạ.\nNhà thuốc thông tin đến bạn.\nThân mến!',
-          createdAt: new Date(
-            Date.now() - 11 * 24 * 60 * 60 * 1000,
-          ).toISOString(),
-        },
-      ],
-    },
-  ];
+        content: review.content,
+        createAt: review.createAt,
+        rating: review.rating,
+        lastestReply: review.lastestReply
+          ? {
+              _id: review.lastestReply._id,
+              author: {
+                _id: review.lastestReply.author._id,
+                fullname: review.lastestReply.author.fullname,
+                phone: review.lastestReply.author.phone,
+                image: review.lastestReply.author.image || null,
+                createAt: review.lastestReply.author.createAt,
+                rating: review.lastestReply.author.rating,
+                isStaff: true, // Assuming replies are from staff
+              },
+              content: review.lastestReply.content,
+              createAt: review.lastestReply.createAt,
+            }
+          : undefined,
+      }),
+    );
+  }, [allQuestions]);
+
+  const handleCommentButtonClick = () => {
+    if (user) {
+      setIsReviewModalOpen(true);
+    } else {
+      setIsLoginModalOpen(true);
+    }
+  };
+
+  const handleReviewSubmit = () => {
+    // This is handled by the ReviewModal's internal logic
+    setIsReviewModalOpen(false);
+  };
 
   return (
     <div className="space-y-6">
@@ -77,9 +94,13 @@ export default function ProductQA() {
       <div>
         <div className="flex items-center gap-2">
           <h2 className="text-xl font-bold text-grayscale-90">Hỏi đáp</h2>
-          <span className="text-gray-500">({questions.length} bình luận)</span>
+          <span className="text-gray-500">
+            ({allQuestions?.length || 0} bình luận)
+          </span>
         </div>
-        <Button className="mt-4 bg-primary-50 text-white hover:bg-primary-50/80 rounded-full text-sm font-medium px-5">
+        <Button
+          className="mt-4 bg-primary-50 text-white hover:bg-primary-50/80 rounded-full text-sm font-medium px-5"
+          onClick={handleCommentButtonClick}>
           Gửi bình luận
         </Button>
       </div>
@@ -111,7 +132,28 @@ export default function ProductQA() {
       </div>
 
       {/* Questions List */}
-      <CommentList comments={questions} />
+      <CommentList
+        comments={formattedComments}
+        productId={productId}
+        type={1}
+      />
+
+      {/* Login Modal */}
+      <LoginModal
+        content="Vui lòng đăng nhập để có thể gửi bình luận"
+        isOpen={isLoginModalOpen}
+        onClose={() => setIsLoginModalOpen(false)}
+      />
+
+      {/* Review Modal for Q&A */}
+      <ReviewModal
+        header="Hỏi đáp"
+        isOpen={isReviewModalOpen}
+        productId={productId}
+        type={1}
+        onClose={() => setIsReviewModalOpen(false)}
+        onSubmit={handleReviewSubmit}
+      />
     </div>
   );
 }

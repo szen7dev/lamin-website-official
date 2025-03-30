@@ -1,6 +1,6 @@
 'use client';
 
-import { notFound, useParams } from 'next/navigation';
+import { notFound, useParams, usePathname } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -21,6 +21,7 @@ import {
 } from '@/components/icons';
 import { apiClient } from '@/services';
 import { Separator } from '@/components/ui/separator';
+import { useToast } from '@/hooks/use-toast';
 
 export default function ArticleDetailContent() {
   const { slug } = useParams();
@@ -31,6 +32,8 @@ export default function ArticleDetailContent() {
       select: '_id name fullname image path size note position',
     },
   });
+  const { toast } = useToast();
+  const pathname = usePathname();
 
   if (isLoading) {
     return <Skeleton className="h-5 w-full rounded" />;
@@ -46,11 +49,44 @@ export default function ArticleDetailContent() {
   }
 
   // Format date safely
-  const formatDateSafely = (date: Date | string | undefined) => {
-    if (!date) return '';
-    const dateString = date instanceof Date ? date.toISOString() : String(date);
+  const formatDateSafely = (dateInput?: string | Date) => {
+    if (!dateInput) return '';
 
-    return formatDate(dateString);
+    return formatDate(dateInput);
+  };
+
+  const handleShareToFacebook = () => {
+    const url = `${window.location.origin}${pathname}`;
+
+    // First copy the URL to clipboard
+    navigator.clipboard
+      .writeText(url)
+      .then(() => {
+        // Show toast notification for successful copy
+        toast({
+          title: 'URL đã được sao chép!',
+          description:
+            'URL đã được sao chép vào clipboard và mở Facebook để chia sẻ.',
+        });
+
+        // Then open Facebook share dialog
+        const shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodeURIComponent(article?.title || 'Bài viết hay')}`;
+
+        window.open(shareUrl, '_blank', 'width=600,height=400');
+      })
+      .catch(err => {
+        toast({
+          title: 'Không thể sao chép URL',
+          description:
+            'Đã xảy ra lỗi khi sao chép URL, nhưng vẫn mở Facebook để chia sẻ.',
+          variant: 'destructive',
+        });
+
+        // Still try to open Facebook share dialog even if copy fails
+        const shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodeURIComponent(article?.title || 'Bài viết hay')}`;
+
+        window.open(shareUrl, '_blank', 'width=600,height=400');
+      });
   };
 
   return (
@@ -84,7 +120,8 @@ export default function ArticleDetailContent() {
               <Button
                 className="flex items-center gap-2 rounded-sm bg-[#1877F2] text-white hover:bg-[#1877F2]/90"
                 size={'sm'}
-                variant="default">
+                variant="default"
+                onClick={handleShareToFacebook}>
                 <FacebookPngIcon className="w-[20px] h-[20px]" />
                 <span className="text-xs font-medium">Chia sẻ</span>
               </Button>
@@ -109,7 +146,8 @@ export default function ArticleDetailContent() {
               <Button
                 className="flex items-center gap-2 rounded-sm bg-[#1877F2] text-white hover:bg-[#1877F2]/90"
                 size={'sm'}
-                variant="default">
+                variant="default"
+                onClick={handleShareToFacebook}>
                 <FacebookPngIcon className="w-[20px] h-[20px]" />
                 <span className="text-xs font-medium">Chia sẻ</span>
               </Button>

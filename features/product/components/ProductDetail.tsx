@@ -29,7 +29,6 @@ export default function ProductDetail({
   isError,
   isLoading,
 }: ProductDetailProps) {
-  // Only return the fully rendered component when we have all data
   return (
     <div className="min-h-screen bg-background pb-8 sm:pb-12 pt-4 sm:pt-6">
       <div className="container mx-auto sm:px-4">
@@ -91,12 +90,15 @@ export default function ProductDetail({
 
         {/* Reviews Section */}
         <section className="mt-12 bg-white p-6 rounded-lg">
-          <ProductReviews productId={adaptedProduct.id || ''} />
+          <ProductReviews
+            product={adaptedProduct}
+            productId={adaptedProduct._id || ''}
+          />
         </section>
 
         {/* Q&A Section */}
         <section className="mt-12 bg-white p-6 rounded-lg">
-          <ProductQA />
+          <ProductQA productId={adaptedProduct._id || ''} />
         </section>
       </div>
     </div>

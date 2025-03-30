@@ -15,7 +15,7 @@ export default function CoachExperts() {
   return (
     <section
       aria-labelledby="coaches-heading"
-      className="rounded-2xl bg-gradient-3 px-4 py-5">
+      className="rounded-2xl bg-gradient-primary px-4 py-5">
       <header className="mb-8">
         <h2
           className="mb-2 text-[22px] font-semibold text-white sm:text-[28px]"
@@ -51,31 +51,37 @@ export default function CoachExperts() {
               : '/placeholder.svg';
 
             return (
-              <li key={coach._id} className="rounded-xl bg-white p-4">
-                <article className="flex items-center gap-4">
-                  <Image
-                    alt={coach.name}
-                    className="rounded-full"
-                    height={80}
-                    src={imageUrl}
-                    width={80}
-                  />
-                  <div className="min-w-0 flex-1">
-                    <span className="text-sm text-grayscale-40">
-                      {coach.field &&
-                      typeof coach.field === 'object' &&
-                      coach.field.name
-                        ? coach.field.name
-                        : typeof coach.field === 'string'
-                          ? coach.field
-                          : 'Bác sĩ chuyên khoa'}
-                    </span>
-                    <h3 className="text-lg font-semibold text-grayscale-90 truncate">
-                      {coach.name}
-                    </h3>
-                    <p className="text-sm text-primary">{experience}</p>
-                  </div>
-                </article>
+              <li
+                key={coach._id}
+                className="rounded-xl bg-white p-4 transition-all duration-300 hover:shadow-lg">
+                <Link
+                  className="decoration-transparent block transition-transform duration-300 hover:scale-[1.02]"
+                  href={`/doi-ngu-chuyen-mon/${coach._id}`}>
+                  <article className="flex items-center gap-4">
+                    <Image
+                      alt={coach.name}
+                      className="rounded-full"
+                      height={80}
+                      src={imageUrl}
+                      width={80}
+                    />
+                    <div className="min-w-0 flex-1">
+                      <span className="text-sm text-grayscale-40">
+                        {coach.field &&
+                        typeof coach.field === 'object' &&
+                        coach.field.name
+                          ? coach.field.name
+                          : typeof coach.field === 'string'
+                            ? coach.field
+                            : 'Bác sĩ chuyên khoa'}
+                      </span>
+                      <h3 className="text-lg font-semibold text-grayscale-90 truncate">
+                        {coach.name}
+                      </h3>
+                      <p className="text-sm text-primary">{experience}</p>
+                    </div>
+                  </article>
+                </Link>
               </li>
             );
           })
