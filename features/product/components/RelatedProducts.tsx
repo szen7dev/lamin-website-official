@@ -5,7 +5,6 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 import ProductCard from '@/features/product/components/ProductCard';
 import { cn } from '@/lib/utils';
-import apiClient from '@/services/api/apiClient';
 import { Goods } from '@/features/search/types/goodsTypes';
 
 interface RelatedProductsProps {
@@ -74,55 +73,6 @@ export default function RelatedProducts({
   };
 
   if (!products?.length) return null;
-
-  const transformedProducts = products.map(product => {
-    const units =
-      product.variants?.map(variant => ({
-        label: variant.name,
-        value: variant._id,
-      })) || [];
-
-    // let discountPercent;
-
-    // if (
-    //   product.currentVariant?.originalPrice &&
-    //   product.currentVariant?.price
-    // ) {
-    //   discountPercent = Math.round(
-    //     ((product.currentVariant.originalPrice - product.currentVariant.price) /
-    //       product.currentVariant.originalPrice) *
-    //       100,
-    //   );
-    // }
-
-    return {
-      _id: product._id,
-      slug: product.slug,
-      image:
-        apiClient.getFileUrl(product.images?.[0]?.path || '/placeholder.svg') ||
-        '/placeholder.svg?height=200&width=200',
-      name: product.name,
-      price: product.sellingUnitprice || 0,
-      originalPrice: product.currentVariant?.originalPrice,
-      sellingUnitPrice: product.sellingUnitprice,
-      listUnitPrice: product.listedUnitprice,
-      thumbnail: product.thumbnail,
-      unit: product.unit || product.currentVariant?.name || 'Hộp',
-      // packageInfo: product.packageInfo || product.currentVariant?.specification,
-      // discount: discountPercent > 0 ? discountPercent : undefined,
-      units: units.length > 0 ? units : undefined,
-      category: {
-        _id: product.category?._id || '',
-        name: product.category?.name || 'Danh mục',
-        slug: product.category?.slug || 'all',
-      },
-    };
-  });
-
-  const visibleProducts = transformedProducts.slice(
-    currentIndex * itemsPerPage,
-    (currentIndex + 1) * itemsPerPage,
-  );
 
   return (
     <div className="relative py-6">

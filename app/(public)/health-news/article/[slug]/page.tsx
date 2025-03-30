@@ -129,7 +129,7 @@ function ArticleDetailSkeleton() {
 // Main page component
 export default async function ArticleDetailPage() {
   return (
-    <main className="py-8">
+    <main className="md:py-8">
       <div className="container mx-auto">
         {/* Breadcrumb - Navigation path */}
         <DynamicBreadcrumb />

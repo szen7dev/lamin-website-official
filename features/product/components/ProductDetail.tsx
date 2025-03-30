@@ -29,17 +29,18 @@ export default function ProductDetail({
   isError,
   isLoading,
 }: ProductDetailProps) {
-  // Only return the fully rendered component when we have all data
   return (
     <div className="min-h-screen bg-background pb-8 sm:pb-12 pt-4 sm:pt-6">
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto sm:px-4">
         {/* Breadcrumb */}
         <nav aria-label="Breadcrumb">
           <DynamicBreadcrumb />
         </nav>
+      </div>
 
+      <div className="container mx-auto px-0 sm:px-4">
         {/* Product Detail Section */}
-        <div className="mt-6 grid grid-cols-1 gap-8 lg:grid-cols-2 bg-white p-6 rounded-lg">
+        <section className="mt-6 grid grid-cols-1 gap-8 lg:grid-cols-2 bg-white p-6 rounded-none sm:rounded-lg">
           {/* Left Column - Product Gallery */}
           <div>
             <ProductGallery
@@ -60,15 +61,15 @@ export default function ProductDetail({
               vouchers={vouchers}
             />
           </div>
-        </div>
+        </section>
 
         {/* Product Tabs Section */}
-        <section className="mt-12 bg-white p-6 rounded-lg">
+        <section className="mt-12 bg-white p-6 rounded-none sm:rounded-lg">
           <ProductTabs product={adaptedProduct} />
         </section>
 
         {/* FAQ Section */}
-        <section className="mt-12 bg-white p-6 rounded-lg">
+        <section className="mt-12 bg-white p-6 rounded-none sm:rounded-lg">
           <h2 className="text-xl font-bold text-grayscale-90 mb-6">
             Câu hỏi thường gặp
           </h2>
@@ -80,7 +81,7 @@ export default function ProductDetail({
         </section>
 
         {/* Related Products Section */}
-        <section className="mt-12">
+        <section className="mt-12 bg-white p-6 rounded-none sm:rounded-lg ">
           <h2 className="text-xl font-bold text-grayscale-90">
             Sản phẩm liên quan
           </h2>
@@ -89,15 +90,15 @@ export default function ProductDetail({
 
         {/* Reviews Section */}
         <section className="mt-12 bg-white p-6 rounded-lg">
-          <h2 className="text-xl font-bold text-grayscale-90 mb-6 border-b-2 pb-5">
-            Đánh giá sản phẩm
-          </h2>
-          <ProductReviews productId={adaptedProduct.id || ''} />
+          <ProductReviews
+            product={adaptedProduct}
+            productId={adaptedProduct._id || ''}
+          />
         </section>
 
         {/* Q&A Section */}
         <section className="mt-12 bg-white p-6 rounded-lg">
-          <ProductQA />
+          <ProductQA productId={adaptedProduct._id || ''} />
         </section>
       </div>
     </div>

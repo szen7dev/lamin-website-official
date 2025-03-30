@@ -2,9 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { ChevronLeft, ChevronRight, X } from 'lucide-react';
+import { ChevronLeft, ChevronRight, X, ZoomIn, ZoomOut } from 'lucide-react';
 
-import { Button } from '@/components/ui/button';
 import { cn } from '@/utils/helpers';
 
 interface ImageGalleryModalProps {
@@ -25,6 +24,10 @@ export default function ImageGalleryModal({
   initialIndex = 0,
 }: ImageGalleryModalProps) {
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
+  const [zoomLevel, setZoomLevel] = useState(1); // Default zoom level is 1 (100%)
+  const MAX_ZOOM = 3; // Maximum zoom level (300%)
+  const MIN_ZOOM = 0.5; // Minimum zoom level (50%)
+  const ZOOM_STEP = 0.5; // Zoom step increment/decrement
 
   useEffect(() => {
     // Prevent scrolling when modal is open
@@ -64,6 +67,11 @@ export default function ImageGalleryModal({
     };
   }, [onClose]);
 
+  // Reset zoom level when changing images
+  useEffect(() => {
+    setZoomLevel(1);
+  }, [currentIndex]);
+
   const handlePrevious = () => {
     setCurrentIndex(prev => (prev === 0 ? images.length - 1 : prev - 1));
   };
@@ -72,80 +80,108 @@ export default function ImageGalleryModal({
     setCurrentIndex(prev => (prev === images.length - 1 ? 0 : prev + 1));
   };
 
+  const handleZoomIn = () => {
+    setZoomLevel(prev => Math.min(prev + ZOOM_STEP, MAX_ZOOM));
+  };
+
+  const handleZoomOut = () => {
+    setZoomLevel(prev => Math.max(prev - ZOOM_STEP, MIN_ZOOM));
+  };
+
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4">
-      {/* Close button */}
-      <button
-        aria-label="Close gallery"
-        className="absolute right-4 top-4 z-10 rounded-full bg-black/50 p-2 text-white hover:bg-black/70"
-        onClick={onClose}>
-        <X className="h-6 w-6" />
-      </button>
+      {/* Modal Container with rounded borders */}
+      <div className="relative bg-white rounded-xl w-full max-w-3xl h-[80vh] flex flex-col overflow-hidden">
+        {/* Close button */}
+        <button
+          aria-label="Close gallery"
+          className="absolute right-3 top-3 z-10 rounded-full bg-black/40 backdrop-blur-sm p-1.5 text-white hover:bg-black/60"
+          onClick={onClose}>
+          <X className="h-4 w-4" />
+        </button>
 
-      {/* Image counter */}
-      <div className="absolute left-4 top-4 z-10 rounded-full bg-black/50 px-3 py-1 text-sm text-white">
-        {currentIndex + 1} / {images.length}
-      </div>
+        {/* Main image container */}
+        <div className="relative flex-1 w-full bg-gray-50 flex items-center justify-center">
+          <div
+            className="relative h-full w-full flex items-center justify-center"
+            style={{
+              transform: `scale(${zoomLevel})`,
+              transition: 'transform 0.2s ease-in-out',
+            }}>
+            <Image
+              alt={
+                images[currentIndex].alt || `Gallery image ${currentIndex + 1}`
+              }
+              className="object-contain max-h-full"
+              height={500}
+              src={images[currentIndex].url || '/placeholder.svg'}
+              width={500}
+            />
+          </div>
 
-      {/* Main image */}
-      <div className="relative h-full w-full max-w-4xl">
-        <div className="absolute inset-0 flex items-center justify-center">
-          <Image
-            fill
-            alt={
-              images[currentIndex].alt || `Gallery image ${currentIndex + 1}`
-            }
-            className="object-contain"
-            sizes="(max-width: 768px) 100vw, 80vw"
-            src={images[currentIndex].url || '/placeholder.svg'}
-          />
-        </div>
+          {/* Pagination indicator */}
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/40 backdrop-blur-sm px-2.5 py-0.5 rounded-full text-xs font-medium text-white">
+            {currentIndex + 1}/{images.length}
+          </div>
 
-        {/* Navigation buttons */}
-        <div className="absolute inset-0 flex items-center justify-between p-4">
-          <Button
-            className="h-10 w-10 rounded-full bg-black/30 border-0 backdrop-blur-sm hover:bg-black/40"
-            size="sm"
-            variant="outline"
-            onClick={handlePrevious}>
-            <ChevronLeft className="h-6 w-6 text-white" />
-            <span className="sr-only">Previous image</span>
-          </Button>
-          <Button
-            className="h-10 w-10 rounded-full bg-black/30 border-0 backdrop-blur-sm hover:bg-black/40"
-            size="sm"
-            variant="outline"
-            onClick={handleNext}>
-            <ChevronRight className="h-6 w-6 text-white" />
-            <span className="sr-only">Next image</span>
-          </Button>
-        </div>
-      </div>
-
-      {/* Thumbnails */}
-      <div className="absolute bottom-4 left-1/2 flex -translate-x-1/2 space-x-2 overflow-x-auto p-2">
-        {images.map((image, index) => (
+          {/* Navigation buttons */}
           <button
-            key={image.id || `modal-thumb-${index}`}
-            className={cn(
-              'h-16 w-16 flex-shrink-0 rounded border-2',
-              index === currentIndex
-                ? 'border-white'
-                : 'border-transparent opacity-60 hover:opacity-100',
-            )}
-            onClick={() => setCurrentIndex(index)}>
-            <div className="relative h-full w-full overflow-hidden rounded">
-              <Image
-                fill
-                alt={image.alt || `Thumbnail ${index + 1}`}
-                className="object-cover"
-                src={image.url || '/placeholder.svg'}
-              />
-            </div>
+            aria-label="Previous image"
+            className="absolute left-3 top-1/2 -translate-y-1/2 rounded-full bg-black/40 backdrop-blur-sm p-1.5 text-white hover:bg-black/60"
+            onClick={handlePrevious}>
+            <ChevronLeft className="h-5 w-5" />
           </button>
-        ))}
+          <button
+            aria-label="Next image"
+            className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full bg-black/40 backdrop-blur-sm p-1.5 text-white hover:bg-black/60"
+            onClick={handleNext}>
+            <ChevronRight className="h-5 w-5" />
+          </button>
+
+          {/* Zoom controls */}
+          <div className="absolute bottom-12 left-1/2 -translate-x-1/2 z-10 flex gap-3">
+            <button
+              aria-label="Zoom out"
+              className="rounded-full bg-black/40 backdrop-blur-sm p-1.5 text-white hover:bg-black/60"
+              onClick={handleZoomOut}>
+              <ZoomOut className="h-4 w-4" />
+            </button>
+            <button
+              aria-label="Zoom in"
+              className="rounded-full bg-black/40 backdrop-blur-sm p-1.5 text-white hover:bg-black/60"
+              onClick={handleZoomIn}>
+              <ZoomIn className="h-4 w-4" />
+            </button>
+          </div>
+        </div>
+
+        {/* Thumbnails strip */}
+        <div className="w-full bg-white py-3 px-4 border-gray-200">
+          <div className="flex items-center justify-center gap-1.5 overflow-x-auto py-0.5">
+            {images.map((image, index) => (
+              <button
+                key={image.id || `modal-thumb-${index}`}
+                className={cn(
+                  'h-12 w-12 flex-shrink-0 rounded-md border-2 transition-all',
+                  index === currentIndex
+                    ? 'border-primary-50 shadow-sm'
+                    : 'border-transparent opacity-70 hover:opacity-100',
+                )}
+                onClick={() => setCurrentIndex(index)}>
+                <div className="relative h-full w-full overflow-hidden rounded-sm">
+                  <Image
+                    fill
+                    alt={image.alt || `Thumbnail ${index + 1}`}
+                    className="object-cover"
+                    src={image.url || '/placeholder.svg'}
+                  />
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );

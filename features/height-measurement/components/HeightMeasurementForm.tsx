@@ -113,7 +113,7 @@ export default function HeightMeasurementForm() {
           <label
             className="flex items-center text-xs sm:text-sm text-grayscale-90"
             htmlFor="name">
-            <span aria-hidden="true" className="text-error-5 mr-1">
+            <span aria-hidden="true" className="text-error mr-1">
               *
             </span>
             Tên bé
@@ -129,7 +129,7 @@ export default function HeightMeasurementForm() {
             aria-invalid={errors.name ? 'true' : 'false'}
           />
           {errors.name && (
-            <p className="text-xs sm:text-sm text-error-5" id="name-error">
+            <p className="text-xs sm:text-sm text-error" id="name-error">
               {errors.name.message}
             </p>
           )}
@@ -140,7 +140,7 @@ export default function HeightMeasurementForm() {
           <label
             className="flex items-center text-xs sm:text-sm text-grayscale-90"
             htmlFor="birthDate">
-            <span aria-hidden="true" className="text-error-5 mr-1">
+            <span aria-hidden="true" className="text-error mr-1">
               *
             </span>
             Ngày sinh
@@ -157,7 +157,7 @@ export default function HeightMeasurementForm() {
             aria-invalid={errors.birthDate ? 'true' : 'false'}
           />
           {errors.birthDate && (
-            <p className="text-xs sm:text-sm text-error-5" id="birthDate-error">
+            <p className="text-xs sm:text-sm text-error" id="birthDate-error">
               {errors.birthDate.message}
             </p>
           )}
@@ -168,7 +168,7 @@ export default function HeightMeasurementForm() {
           <label
             className="flex items-center text-xs sm:text-sm text-grayscale-90"
             htmlFor="weight">
-            <span aria-hidden="true" className="text-error-5 mr-1">
+            <span aria-hidden="true" className="text-error mr-1">
               *
             </span>
             Cân nặng (kg)
@@ -185,7 +185,7 @@ export default function HeightMeasurementForm() {
             aria-invalid={errors.weight ? 'true' : 'false'}
           />
           {errors.weight && (
-            <p className="text-xs sm:text-sm text-error-5" id="weight-error">
+            <p className="text-xs sm:text-sm text-error" id="weight-error">
               {errors.weight.message}
             </p>
           )}
@@ -196,7 +196,7 @@ export default function HeightMeasurementForm() {
           <label
             className="flex items-center text-xs sm:text-sm text-grayscale-90"
             htmlFor="height">
-            <span aria-hidden="true" className="text-error-5 mr-1">
+            <span aria-hidden="true" className="text-error mr-1">
               *
             </span>
             Chiều cao hiện tại (cm)
@@ -213,7 +213,7 @@ export default function HeightMeasurementForm() {
             aria-invalid={errors.height ? 'true' : 'false'}
           />
           {errors.height && (
-            <p className="text-xs sm:text-sm text-error-5" id="height-error">
+            <p className="text-xs sm:text-sm text-error" id="height-error">
               {errors.height.message}
             </p>
           )}
@@ -225,7 +225,7 @@ export default function HeightMeasurementForm() {
         <label
           className="flex items-center text-xs sm:text-sm text-grayscale-90"
           htmlFor="phone">
-          <span aria-hidden="true" className="text-error-5 mr-1">
+          <span aria-hidden="true" className="text-error mr-1">
             *
           </span>
           Số điện thoại của bạn
@@ -248,7 +248,7 @@ export default function HeightMeasurementForm() {
           aria-invalid={errors.phone ? 'true' : 'false'}
         />
         {errors.phone && (
-          <p className="text-xs sm:text-sm text-error-5" id="phone-error">
+          <p className="text-xs sm:text-sm text-error" id="phone-error">
             {errors.phone.message}
           </p>
         )}
@@ -257,7 +257,7 @@ export default function HeightMeasurementForm() {
       {/* Gender */}
       <fieldset className="space-y-1 sm:space-y-2">
         <legend className="flex items-center text-xs sm:text-sm text-grayscale-90">
-          <span aria-hidden="true" className="text-error-5 mr-1">
+          <span aria-hidden="true" className="text-error mr-1">
             *
           </span>
           Giới tính
@@ -289,7 +289,7 @@ export default function HeightMeasurementForm() {
           </label>
         </div>
         {errors.gender && (
-          <p className="text-xs sm:text-sm text-error-5" id="gender-error">
+          <p className="text-xs sm:text-sm text-error" id="gender-error">
             {errors.gender.message}
           </p>
         )}

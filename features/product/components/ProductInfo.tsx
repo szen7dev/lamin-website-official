@@ -8,6 +8,7 @@ import type {
 import { useEffect, useState } from 'react';
 import { Loader2, Minus, Plus, Star } from 'lucide-react';
 import Image from 'next/image';
+import { usePathname } from 'next/navigation';
 
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/features/cart/hooks/useCart';
@@ -42,6 +43,9 @@ export default function ProductInfo({
     null,
   );
   const { addItem, isLoading: isAddingToCart } = useCart();
+  const { toast } = useToast();
+  const pathname = usePathname();
+
   // Create variants from the goods info
   const createVariantsFromGoodsInfo = () => {
     if (!product) return [];
@@ -77,8 +81,6 @@ export default function ProductInfo({
   const handleVariantChange = (variant: ProductVariant) => {
     setSelectedVariant(variant);
   };
-
-  const { toast } = useToast();
 
   const handleAddToCart = () => {
     if (!product || !selectedVariant) {
@@ -134,6 +136,40 @@ export default function ProductInfo({
         behavior: 'smooth',
       });
     }
+  };
+
+  const handleShareToFacebook = () => {
+    const url = `${window.location.origin}${pathname}`;
+
+    // First copy the URL to clipboard
+    navigator.clipboard
+      .writeText(url)
+      .then(() => {
+        // Show toast notification for successful copy
+        toast({
+          title: 'URL đã được sao chép!',
+          description:
+            'URL đã được sao chép vào clipboard và mở Facebook để chia sẻ.',
+        });
+
+        // Then open Facebook share dialog
+        const shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodeURIComponent(product.name)}`;
+
+        window.open(shareUrl, '_blank', 'width=600,height=400');
+      })
+      .catch(err => {
+        toast({
+          title: 'Không thể sao chép URL',
+          description:
+            'Đã xảy ra lỗi khi sao chép URL, nhưng vẫn mở Facebook để chia sẻ.',
+          variant: 'destructive',
+        });
+
+        // Still try to open Facebook share dialog even if copy fails
+        const shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodeURIComponent(product.name)}`;
+
+        window.open(shareUrl, '_blank', 'width=600,height=400');
+      });
   };
 
   if (isLoading) {
@@ -194,7 +230,8 @@ export default function ProductInfo({
           <Button
             className="h-8 rounded-sm bg-[#1877F2] px-2 text-white hover:bg-[#1877F2]/80 hover:border-[1px] hover:text-white"
             size="sm"
-            variant="ghost">
+            variant="ghost"
+            onClick={handleShareToFacebook}>
             <span className="flex items-center gap-2">
               <FacebookBranchIcon
                 className="w-4 h-4"
@@ -396,7 +433,7 @@ export default function ProductInfo({
       </div>
 
       {/* Policy Cards */}
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-rows-3 sm:grid-cols-3 gap-3">
         <div className="flex items-start gap-3">
           <div className="flex h-10 w-10 p-2 items-center justify-center rounded-full bg-[#0D6EFD]/10">
             <ClockIcon className="h-6 w-6 text-[#0D6EFD]" />
@@ -411,7 +448,7 @@ export default function ProductInfo({
           </div>
         </div>
         <div className="flex items-start gap-3">
-          <div className="flex h-10 w-14 p-2 items-center justify-center rounded-full bg-[#0D6EFD]/10">
+          <div className="flex h-10 w-10 p-2 items-center justify-center rounded-full bg-[#0D6EFD]/10">
             <TransportIcon />
           </div>
           <div>

@@ -6,10 +6,11 @@ import { Modal } from '@/components/ui/Modal';
 
 interface LoginModalProps {
   isOpen: boolean;
+  content?: string;
   onClose: () => void;
 }
 
-export function LoginModal({ isOpen, onClose }: LoginModalProps) {
+export function LoginModal({ isOpen, content, onClose }: LoginModalProps) {
   const router = useRouter();
 
   const handleContinue = () => {
@@ -60,7 +61,8 @@ export function LoginModal({ isOpen, onClose }: LoginModalProps) {
 
         <h2 className="text-xl font-bold mb-2">Đăng nhập</h2>
         <p className="text-gray-600 mb-6">
-          Vui lòng đăng nhập để hưởng những đặc quyền dành cho thành viên.
+          {content ||
+            'Vui lòng đăng nhập để hưởng những đặc quyền dành cho thành viên.'}
         </p>
 
         <div className="w-full space-y-3">

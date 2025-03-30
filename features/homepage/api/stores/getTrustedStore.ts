@@ -14,7 +14,7 @@ export const getTrustedStore = async (
   const queryParams = {
     optionSeller: params.optionSeller ?? DEFAULT_OPTION_SELLER,
     select: params.select ?? 'name sign location address rating numberOfRating',
-    populates: params.populates ? JSON.stringify(params.populates) : undefined,
+    ...(params.populates && { populates: JSON.stringify(params.populates) }),
     // Include fundaID if provided
     ...(params.fundaID && { fundaID: params.fundaID }),
   };
@@ -22,7 +22,7 @@ export const getTrustedStore = async (
   // Fetch trusted store data from API
   const trustedStore = await apiClient.getNormalizedResponse<
     TrustedStore[] | TrustedStore
-  >('/api/item/fundas', queryParams);
+  >('/api/item/fundas', queryParams, false); // Set requireAuth to false
 
   // Return the response data
   return trustedStore;
