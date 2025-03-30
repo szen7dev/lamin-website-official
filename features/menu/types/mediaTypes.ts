@@ -57,3 +57,14 @@ export type MediaMenuResponse =
       listRecords: MediaItem[];
     }
   | MediaItem[];
+
+export enum MenuItemType {
+  DEFAULT = 1,
+  HEALTH_NEWS = 2,
+}
+
+export interface MenuItemTypeConfig {
+  hasContentArea: boolean;
+  getLevel2Url: (slug: string) => string;
+  getLevel3Url: (slug: string) => string;
+}

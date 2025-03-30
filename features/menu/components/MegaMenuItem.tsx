@@ -89,7 +89,7 @@ export default function MegaMenuItem({
       {hasDropdown && isHovered && (
         <div
           ref={dropdownRef}
-          className="absolute left-0 top-full z-50 min-w-[800px] rounded-lg bg-white p-6 shadow-lg"
+          className="absolute left-0 top-full z-50 flex-wrap rounded-lg bg-white p-6 shadow-lg"
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}>
           {children}

@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 import MegaMenuItem from './MegaMenuItem';
 import MegaMenuItemLink from './MegaMenuItemLink';
@@ -11,9 +12,9 @@ import MegaMenuColumn from './MegaMenuColumn';
 import { useGetMediasMenu } from '@/features/menu/hooks/useGetMediasMenu';
 import { useGetBestSellers } from '@/features/menu/hooks/useGetBestSellers';
 import { MediaItem } from '@/features/menu/types/mediaTypes';
+import { getMenuTypeConfig } from '@/features/menu/services/menuTypeConfig';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import apiClient from '@/services/api/apiClient';
-import Image from 'next/image';
 
 // Format menu data based on levels
 interface FormattedMenuData {
@@ -148,14 +149,12 @@ export default function MegaMenu() {
   // Track expanded items at each level for mobile view
   const [expandedLevel1Items, setExpandedLevel1Items] = useState<string[]>([]);
   const [expandedLevel2Items, setExpandedLevel2Items] = useState<string[]>([]);
-  const [expandedLevel3Items, setExpandedLevel3Items] = useState<string[]>([]);
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const isMobile = useMediaQuery('(max-width: 768px)');
   const menuRef = useRef<HTMLDivElement>(null);
   const activeTimerRef = useRef<NodeJS.Timeout | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const [isDropdownHovered, setIsDropdownHovered] = useState(false);
 
   // Get level 2 items for the active level 1 item
   const level2Items = activeLevel1Item
@@ -171,6 +170,7 @@ export default function MegaMenu() {
   const categoryProducts = level3Items.map((item: MediaItem) => ({
     id: item._id,
     name: item.name,
+    slug: item.slug,
     image:
       item.thumbnail &&
       typeof item.thumbnail === 'object' &&
@@ -221,18 +221,11 @@ export default function MegaMenu() {
     );
   };
 
-  const toggleLevel3Item = (id: string) => {
-    setExpandedLevel3Items(prev =>
-      prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id],
-    );
-  };
-
   // Close expanded items when switching to desktop
   useEffect(() => {
     if (!isMobile) {
       setExpandedLevel1Items([]);
       setExpandedLevel2Items([]);
-      setExpandedLevel3Items([]);
       setMobileMenuOpen(false);
     }
   }, [isMobile]);
@@ -301,6 +294,7 @@ export default function MegaMenu() {
             {formattedMenu.level1Items.map(item => {
               const hasDropdown =
                 formattedMenu.level2ItemsByParent[item._id]?.length > 0;
+              const menuTypeConfig = getMenuTypeConfig(item.type);
 
               return (
                 <li key={item._id} className="relative">
@@ -314,7 +308,6 @@ export default function MegaMenu() {
                         ref={dropdownRef}
                         className="flex pb-2"
                         onMouseEnter={() => {
-                          setIsDropdownHovered(true);
                           // Ensure we have an active level 2 item when entering the dropdown
                           if (
                             activeLevel2Item === null &&
@@ -322,8 +315,7 @@ export default function MegaMenu() {
                           ) {
                             setActiveLevel2Item(level2Items[0]._id);
                           }
-                        }}
-                        onMouseLeave={() => setIsDropdownHovered(false)}>
+                        }}>
                         {/* Level 2 items (sidebar) */}
                         <div className="w-64 bg-white rounded-l-lg border-r border-grayscale-10">
                           {(
@@ -331,7 +323,7 @@ export default function MegaMenu() {
                           ).map((category: MediaItem) => (
                             <MegaMenuItemLink
                               key={category._id}
-                              href={`/categories/${category.slug}`}
+                              href={menuTypeConfig.getLevel2Url(category.slug)}
                               icon={
                                 category.thumbnail &&
                                 typeof category.thumbnail === 'object'
@@ -347,23 +339,26 @@ export default function MegaMenu() {
                           ))}
                         </div>
 
-                        {/* Content area with level 3 items and best sellers */}
-                        <div
-                          className="flex-1 bg-[#F1F4FD] p-3"
-                          onMouseEnter={() => {
-                            // Ensure active level 2 item stays selected when hovering content area
-                            if (
-                              activeLevel2Item === null &&
-                              level2Items.length > 0
-                            ) {
-                              setActiveLevel2Item(level2Items[0]._id);
-                            }
-                          }}>
-                          <MegaMenuColumn
-                            bestSellingProducts={bestSellingProducts}
-                            categoryProducts={categoryProducts}
-                          />
-                        </div>
+                        {/* Content area with level 3 items and best sellers - only show based on type config */}
+                        {menuTypeConfig.hasContentArea && (
+                          <div
+                            className="flex-1 bg-[#F1F4FD] p-3 min-w-[600px]"
+                            onMouseEnter={() => {
+                              // Ensure active level 2 item stays selected when hovering content area
+                              if (
+                                activeLevel2Item === null &&
+                                level2Items.length > 0
+                              ) {
+                                setActiveLevel2Item(level2Items[0]._id);
+                              }
+                            }}>
+                            <MegaMenuColumn
+                              bestSellingProducts={bestSellingProducts}
+                              categoryProducts={categoryProducts}
+                              menuType={item.type}
+                            />
+                          </div>
+                        )}
                       </div>
                     )}
                   </MegaMenuItem>
@@ -460,7 +455,9 @@ export default function MegaMenu() {
                                 ) : (
                                   <Link
                                     className="text-[14px] text-grayscale-80 py-1.5 block w-full decoration-transparent"
-                                    href={`/${level2Item.slug}`}>
+                                    href={getMenuTypeConfig(
+                                      item.type,
+                                    ).getLevel2Url(level2Item.slug)}>
                                     {level2Item.name}
                                   </Link>
                                 )}
@@ -485,7 +482,9 @@ export default function MegaMenu() {
                                         className="border-l border-grayscale-20 pl-2">
                                         <Link
                                           className="text-[13px] text-grayscale-70 py-1 block decoration-transparent"
-                                          href={`/${level3Item.slug}`}>
+                                          href={getMenuTypeConfig(
+                                            item.type,
+                                          ).getLevel3Url(level3Item.slug)}>
                                           {level3Item.name}
                                         </Link>
                                       </li>

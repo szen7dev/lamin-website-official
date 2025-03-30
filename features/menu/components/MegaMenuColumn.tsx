@@ -2,10 +2,14 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { ChevronRight } from 'lucide-react';
 
+import { getMenuTypeConfig } from '@/features/menu/services/menuTypeConfig';
+import { MenuItemType } from '@/features/menu/types/mediaTypes';
+
 interface CategoryProduct {
   id: string;
   name: string;
   image: string;
+  slug: string;
 }
 
 interface BestSellingProduct {
@@ -25,12 +29,17 @@ interface BestSellingProduct {
 interface MegaMenuColumnProps {
   categoryProducts?: CategoryProduct[];
   bestSellingProducts?: BestSellingProduct[];
+  menuType?: number;
 }
 
 export default function MegaMenuColumn({
   categoryProducts,
   bestSellingProducts,
+  menuType = MenuItemType.DEFAULT,
 }: MegaMenuColumnProps) {
+  // Get the appropriate menu type configuration
+  const menuTypeConfig = getMenuTypeConfig(menuType);
+
   return (
     <div className="space-y-6 ">
       {/* Category Products Grid */}
@@ -40,7 +49,7 @@ export default function MegaMenuColumn({
             <Link
               key={product.id}
               className="flex items-center gap-3 rounded-lg bg-white p-3 shadow-02 transition-shadow hover:shadow-md decoration-transparent"
-              href={`/products/${product.id}`}
+              href={menuTypeConfig.getLevel3Url(product.slug)}
               style={{ textDecoration: 'none' }}>
               <Image
                 alt={product.name}
