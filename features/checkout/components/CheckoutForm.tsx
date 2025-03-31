@@ -171,7 +171,7 @@ export const CheckoutForm = forwardRef<CheckoutFormRef, CheckoutFormProps>(
       <div className="space-y-6">
         {/* Delivery Method Section */}
         <div className="flex items-center justify-between">
-          <h2 className="text-base font-medium">Chọn hình thức nhận hàng</h2>
+          <h2 className="text-base font-medium">Hình thức nhận hàng</h2>
           {/* <div className="flex overflow-hidden border border-gray-200 rounded-lg w-1/2">
             <button
               className={`flex-1 py-1 px-3 font-sm transition-colors rounded-l-xl ${
