@@ -27,6 +27,7 @@ const vietnameseTextMap: Record<string, string> = {
   'gioi-thieu': 'Giới thiệu',
   'dang-nhap': 'Đăng nhập',
   'dang-ky': 'Đăng ký',
+  'chu-de': 'Chủ đề',
 
   // Sub-sections
   'ket-qua': 'Kết quả',
@@ -74,7 +75,7 @@ export function DynamicBreadcrumb() {
           <BreadcrumbLink asChild>
             <Link
               aria-label="Trang chủ"
-              className="decoration-transparent"
+              className="decoration-transparent text-primary"
               href="/">
               Trang chủ
             </Link>
@@ -89,7 +90,9 @@ export function DynamicBreadcrumb() {
             ) : (
               <>
                 <BreadcrumbLink asChild>
-                  <Link className="decoration-transparent" href={item.href}>
+                  <Link
+                    className="decoration-transparent text-primary"
+                    href={item.href}>
                     {item.label}
                   </Link>
                 </BreadcrumbLink>

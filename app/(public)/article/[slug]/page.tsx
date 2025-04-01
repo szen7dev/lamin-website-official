@@ -45,7 +45,7 @@ function ArticleDetailSkeleton() {
       <div className="container mx-auto px-4">
         <DynamicBreadcrumb />
 
-        <main className="mx-auto max-w-3xl">
+        <section className="mx-auto max-w-3xl">
           <article>
             {/* Title Skeleton */}
             <header className="mb-6 mt-6">
@@ -120,7 +120,7 @@ function ArticleDetailSkeleton() {
               </div>
             </div>
           </article>
-        </main>
+        </section>
       </div>
     </div>
   );
@@ -129,7 +129,7 @@ function ArticleDetailSkeleton() {
 // Main page component
 export default async function ArticleDetailPage() {
   return (
-    <main className="md:py-8">
+    <section className="md:py-8">
       <div className="container mx-auto">
         {/* Breadcrumb - Navigation path */}
         <DynamicBreadcrumb />
@@ -141,6 +141,6 @@ export default async function ArticleDetailPage() {
           </Suspense>
         </article>
       </div>
-    </main>
+    </section>
   );
 }

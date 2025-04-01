@@ -11,7 +11,7 @@ const redirects = new Map([
   ['/health-news', '/chuyen-trang-suc-khoe'],
   ['/contact', '/lien-he'],
   ['/store-locations', '/he-thong-cua-hang'],
-  ['/health-news/article', '/chuyen-trang-suc-khoe/bai-viet'],
+  ['/bai-viet', '/chuyen-trang-suc-khoe'],
   ['/checkout', '/thanh-toan'],
   ['/cart', '/gio-hang'],
 ]);
@@ -25,7 +25,7 @@ const rewrites = new Map([
   ['/chuyen-trang-suc-khoe', '/health-news'],
   ['/lien-he', '/contact'],
   ['/he-thong-cua-hang', '/store-locations'],
-  ['/chuyen-trang-suc-khoe/bai-viet', '/health-news/article'],
+  ['/bai-viet', '/article'],
   ['/thanh-toan', '/checkout'],
   ['/gio-hang', '/cart'],
 ]);
@@ -75,23 +75,33 @@ export async function middleware(request: NextRequest) {
   }
 
   // Check for dynamic article path
-  if (
-    pathname.startsWith('/health-news/article/') &&
-    pathname !== '/health-news/article'
-  ) {
-    const slug = pathname.replace('/health-news/article/', '');
-    const newPath = `/chuyen-trang-suc-khoe/bai-viet/${slug}`;
+  if (pathname.startsWith('/article/') && pathname !== '/article') {
+    const slug = pathname.replace('/article/', '');
+    const newPath = `/bai-viet/${slug}`;
 
     return NextResponse.redirect(new URL(newPath, request.url));
   }
 
+  // Check for dynamic article path
+  if (pathname.startsWith('/article-tags/') && pathname !== '/article-tags') {
+    const slug = pathname.replace('/article-tags/', '');
+    const newPath = `/chu-de/${slug}`;
+
+    return NextResponse.redirect(new URL(newPath, request.url));
+  }
+
+  // Check for dynamic article path
+  if (pathname.startsWith('/chu-de/') && pathname !== '/chu-de') {
+    const slug = pathname.replace('/chu-de/', '');
+    const newPath = `/article-tags/${slug}`;
+
+    return NextResponse.rewrite(new URL(newPath, request.url));
+  }
+
   // Check for dynamic Vietnamese article path
-  if (
-    pathname.startsWith('/chuyen-trang-suc-khoe/bai-viet/') &&
-    pathname !== '/chuyen-trang-suc-khoe/bai-viet'
-  ) {
-    const slug = pathname.replace('/chuyen-trang-suc-khoe/bai-viet/', '');
-    const newPath = `/health-news/article/${slug}`;
+  if (pathname.startsWith('/bai-viet/') && pathname !== '/bai-viet') {
+    const slug = pathname.replace('/bai-viet/', '');
+    const newPath = `/article/${slug}`;
 
     return NextResponse.rewrite(new URL(newPath, request.url));
   }
