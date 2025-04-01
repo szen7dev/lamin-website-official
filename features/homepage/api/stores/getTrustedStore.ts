@@ -27,6 +27,7 @@ export const getTrustedStore = async (
       ...(params.fundaID && { fundaID: params.fundaID }),
       ...(params.limit && { limit: params.limit }),
       ...(params.lastestID && { lastestID: params.lastestID }),
+      ...(params.keyword && { keyword: params.keyword }),
     };
 
     // Fetch trusted store data from API
