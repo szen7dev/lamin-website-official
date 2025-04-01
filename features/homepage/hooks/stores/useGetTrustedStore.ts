@@ -18,6 +18,7 @@ export const useGetTrustedStore = (params: GetTrustedStoreParams = {}) => {
   } = useSuspenseQuery({
     queryKey: ['trustedStore', params],
     queryFn: () => getTrustedStore(params),
+    refetchOnMount: true,
   });
 
   // Ensure storeData is always an array
@@ -37,6 +38,6 @@ export const useGetTrustedStore = (params: GetTrustedStoreParams = {}) => {
     singleStore: isSingleStore ? storeData[0] : null,
     isLoading,
     error,
-    response,
+    response, // Return the full response for metadata access
   };
 };

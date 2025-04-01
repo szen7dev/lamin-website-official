@@ -2011,7 +2011,7 @@ electron-to-chromium@^1.5.73:
     clsx "^2.1.1"
     cmdk "1.0.4"
     date-fns "4.1.0"
-    elela "file:../../../../../Library/Caches/Yarn/v6/npm-elela-0.1.0-057a9512-8d15-491c-a84e-a6d3b76935c8-1742741372158/node_modules/elela"
+    elela "file:C:/Users/ASUS/AppData/Local/Yarn/Cache/v6/npm-elela-0.1.0-9d948932-fc6f-4773-bc9a-1d189cb5a302-1743483602349/node_modules/elela"
     embla-carousel-react "8.5.1"
     input-otp "1.4.1"
     lucide-react "^0.454.0"

@@ -11,13 +11,18 @@ import { GetCoachParams } from '../../homepage/types/coachTypes';
  * @returns Query result with coach data
  */
 export const useGetCoach = (params: GetCoachParams = {}) => {
-  const { data, isLoading, error } = useSuspenseQuery({
+  const {
+    data: { coaches, response },
+    isLoading,
+    error,
+  } = useSuspenseQuery({
     queryKey: ['coaches', params],
     queryFn: () => getCoach(params),
   });
 
   return {
-    coaches: data || [],
+    coaches,
+    response,
     isLoading,
     error,
   };

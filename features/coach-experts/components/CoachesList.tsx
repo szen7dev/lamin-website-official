@@ -2,24 +2,71 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Search } from 'lucide-react';
 
 import { useGetCoach } from '@/features/coach-experts/hooks/useGetCoach';
 import { apiClient } from '@/services/api/apiClient';
 import { Input } from '@/components/ui/input';
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationNext,
+  PaginationPrevious,
+} from '@/components/ui/pagination';
+import { cn } from '@/lib/utils';
 
 export default function CoachesList() {
   const [searchTerm, setSearchTerm] = useState('');
-  const { coaches, isLoading } = useGetCoach({ limit: 12 });
-  const currentYear = new Date().getFullYear();
+  const [submittedSearchTerm, setSubmittedSearchTerm] = useState('');
+  const [lastestID, setLastestID] = useState('');
+  const [nextCursor, setNextCursor] = useState('');
+  const [prevCursorStack, setPrevCursorStack] = useState<string[]>([]);
 
-  // Filter coaches based on search term
-  const filteredCoaches = coaches.filter(
-    coach =>
-      coach.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      coach.field?.name.toLowerCase().includes(searchTerm.toLowerCase()),
-  );
+  const { coaches, response, isLoading } = useGetCoach({
+    select: 'image name field position',
+    limit: 9,
+    keyword: submittedSearchTerm,
+    lastestID,
+  });
+
+  // Effect to update nextCursor when response changes
+  useEffect(() => {
+    const cursor = response?.data?.nextCursor || response?.nextCursor || '';
+
+    setNextCursor(cursor);
+  }, [response]);
+
+  const handleSearch = () => {
+    setSubmittedSearchTerm(searchTerm);
+    setLastestID('');
+    setPrevCursorStack([]); // Reset cursor history on new search
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      handleSearch();
+    }
+  };
+
+  // Handle Previous button click
+  const handlePrev = () => {
+    if (prevCursorStack.length > 0) {
+      const previousID = prevCursorStack[prevCursorStack.length - 1];
+
+      setPrevCursorStack(prev => prev.slice(0, -1)); // Remove last cursor from stack
+      setLastestID(previousID); // Set lastestID to the popped cursor
+    }
+  };
+
+  // Handle Next button click
+  const handleNext = () => {
+    if (nextCursor) {
+      setPrevCursorStack(prev => [...prev, lastestID]); // Add current cursor to stack
+      setLastestID(nextCursor); // Set lastestID to the next cursor
+    }
+  };
 
   return (
     <>
@@ -27,13 +74,20 @@ export default function CoachesList() {
       <section className="container mx-auto mb-12">
         <div className="mx-auto max-w-2xl">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-grayscale-40" />
+            <button
+              aria-label="Tìm kiếm"
+              className="absolute left-3 top-1/2 -translate-y-1/2 p-1 text-grayscale-40 hover:text-grayscale-60 z-10"
+              type="button"
+              onClick={handleSearch}>
+              <Search className="h-5 w-5" />
+            </button>
             <Input
               className="pl-10 py-6 text-base rounded-2xl bg-white"
               placeholder="Tìm kiếm đội ngũ chuyên môn..."
               type="text"
               value={searchTerm}
               onChange={e => setSearchTerm(e.target.value)}
+              onKeyDown={handleKeyDown}
             />
           </div>
         </div>
@@ -63,26 +117,18 @@ export default function CoachesList() {
               </div>
             ))}
           </div>
-        ) : filteredCoaches.length > 0 ? (
+        ) : coaches.length > 0 ? (
           <div className="flex flex-col space-y-6">
             {/* Group coaches into rows of 3 (or fewer for the last row) */}
-            {Array.from({ length: Math.ceil(filteredCoaches.length / 3) }).map(
+            {Array.from({ length: Math.ceil(coaches.length / 3) }).map(
               (_, rowIndex) => {
                 const startIdx = rowIndex * 3;
-                const rowCoaches = filteredCoaches.slice(
-                  startIdx,
-                  startIdx + 3,
-                );
+                const rowCoaches = coaches.slice(startIdx, startIdx + 3);
 
                 return (
                   <div key={`row-${rowIndex}`} className="space-y-6">
                     <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
                       {rowCoaches.map(coach => {
-                        // Calculate experience based on graduation year
-                        const experience = coach.graduationYear
-                          ? `${currentYear - coach.graduationYear} năm kinh nghiệm`
-                          : 'Chuyên gia';
-
                         // Get image URL using apiClient.getContactImageUrl
                         const imageUrl = coach.image
                           ? apiClient.getContactImageUrl(coach.image)
@@ -113,7 +159,7 @@ export default function CoachesList() {
                                   {coach.name}
                                 </h3>
                                 <span className="text-xs text-primary">
-                                  {experience}
+                                  {coach.position?.name || 'Chuyên gia'}
                                 </span>
                               </div>
                             </div>
@@ -135,6 +181,41 @@ export default function CoachesList() {
           </div>
         )}
       </section>
+
+      {/* Pagination Section */}
+      {(prevCursorStack.length > 0 || nextCursor) && (
+        <section className="container mx-auto mb-12 flex justify-end">
+          <Pagination>
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious
+                  className={cn({
+                    'pointer-events-none opacity-50':
+                      prevCursorStack.length === 0,
+                  })}
+                  href="#"
+                  onClick={e => {
+                    e.preventDefault();
+                    handlePrev();
+                  }}
+                />
+              </PaginationItem>
+              <PaginationItem>
+                <PaginationNext
+                  className={cn({
+                    'pointer-events-none opacity-50': !nextCursor,
+                  })}
+                  href="#"
+                  onClick={e => {
+                    e.preventDefault();
+                    handleNext();
+                  }}
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+        </section>
+      )}
     </>
   );
 }

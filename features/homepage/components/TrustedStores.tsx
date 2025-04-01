@@ -1,11 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay, Navigation, Pagination } from 'swiper/modules';
-import { Star, ChevronRight, AlertCircle, ChevronLeft } from 'lucide-react';
-import { useRef, useState } from 'react';
-import { Swiper as SwiperClass } from 'swiper';
+import { Star, ChevronRight, AlertCircle } from 'lucide-react';
 
 import { useGetTrustedStore } from '../hooks/stores/useGetTrustedStore';
 
@@ -46,7 +42,10 @@ const benefits = [
 ];
 
 export default function TrustedStores() {
-  const { trustedStore, isLoading, error } = useGetTrustedStore();
+  const { trustedStore, isLoading, error } = useGetTrustedStore({
+    limit: 4,
+  });
+
   // Loading skeleton UI
   const renderLoadingSkeleton = () => (
     <section
@@ -116,28 +115,6 @@ export default function TrustedStores() {
     </section>
   );
 
-  const swiperRef = useRef<SwiperClass | null>(null);
-
-  const [slidesPerView, setSlidesPerView] = useState(4);
-
-  const handleSwiper = (swiper: SwiperClass) => {
-    swiperRef.current = swiper;
-
-    const updateNavState = () => {
-      setSlidesPerView(swiper.params.slidesPerView as number);
-    };
-
-    updateNavState();
-    swiper.on('slideChange', updateNavState);
-    swiper.on('resize', updateNavState);
-
-    swiper.on('breakpoint', () => {
-      setTimeout(() => {
-        setSlidesPerView(swiper.params.slidesPerView as number);
-      }, 50);
-    });
-  };
-
   return (
     <div className="space-y-3 sm:space-y-6">
       {/* Trusted Stores Section */}
@@ -169,80 +146,41 @@ export default function TrustedStores() {
             </Link>
           </div>
 
-          <div className="relative">
-            <Swiper
-              breakpoints={{
-                640: { slidesPerView: 2 },
-                768: { slidesPerView: 3 },
-                1024: { slidesPerView: 4 },
-              }}
-              className="trusted-stores-swiper"
-              // modules={[Navigation]}
-              modules={[Navigation, Pagination, Autoplay]}
-              // pagination={{
-              //   clickable: true,
-              //   bulletActiveClass: 'bg-primary opacity-100',
-              //   bulletClass:
-              //     'inline-block w-2 h-2 rounded-full bg-grayscale-30 opacity-70 mx-1 cursor-pointer transition-all',
-              // }}
-              pagination={false}
-              slidesPerView={1}
-              spaceBetween={8}
-              onSwiper={handleSwiper}>
-              {Array.isArray(trustedStore) && trustedStore.length > 0 ? (
-                trustedStore.map(store => (
-                  <SwiperSlide key={store._id}>
-                    <article className="flex items-center gap-3 sm:gap-4 rounded-xl bg-white p-3 sm:p-4">
-                      <div className="flex items-center justify-center rounded-full bg-primary-5 p-3">
-                        <StoreIcon className="h-7 w-7" />
-                      </div>
-
-                      <div>
-                        <p className="font-medium text-sm sm:text-base text-grayscale-90 truncate text-ellipsis overflow-hidden">
-                          {store.name}
-                        </p>
-                        <div className="flex items-center gap-1.5">
-                          <div className="flex">
-                            <Star className="h-3 w-3 sm:h-4 sm:w-4 fill-yellow-400 text-yellow-400" />
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <span className="font-medium text-xs sm:text-sm text-grayscale-90">
-                              {store?.rating || 0}
-                            </span>
-                            <span className="font-normal text-xs sm:text-sm text-grayscale-40">
-                              ({store?.numberOfRating || 0} đánh giá)
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    </article>
-                  </SwiperSlide>
-                ))
-              ) : (
-                <SwiperSlide>
-                  <div className="flex items-center justify-center h-24 rounded-xl bg-white p-4">
-                    <p className="text-grayscale-50">Không có nhà thuốc nào</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4">
+            {Array.isArray(trustedStore) && trustedStore.length > 0 ? (
+              trustedStore.map(store => (
+                <article
+                  key={store._id}
+                  className="flex items-center gap-3 sm:gap-4 rounded-xl bg-white p-3 sm:p-4">
+                  <div className="flex items-center justify-center rounded-full bg-primary-5 p-3">
+                    <StoreIcon className="h-7 w-7" />
                   </div>
-                </SwiperSlide>
-              )}
-              {/* Custom Navigation Buttons - Refined positioning and styling */}
-              {Array.isArray(trustedStore) &&
-                trustedStore.length > slidesPerView && (
-                  <>
-                    <button
-                      className="absolute top-1/2 left-1 -translate-y-1/2 bg-black/50 text-white p-1 rounded-full z-10 hover:bg-grayscale-50/60"
-                      onClick={() => swiperRef.current?.slidePrev()}>
-                      <ChevronLeft className="w-5 h-5 text-white stroke-[1.5]" />
-                    </button>
 
-                    <button
-                      className="absolute top-1/2 right-1 -translate-y-1/2 bg-black/50 text-white p-1 rounded-full z-10 hover:bg-grayscale-50/60"
-                      onClick={() => swiperRef.current?.slideNext()}>
-                      <ChevronRight className="w-5 h-5 text-white stroke-[1.5]" />
-                    </button>
-                  </>
-                )}
-            </Swiper>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-medium text-sm sm:text-base text-grayscale-90 truncate max-w-full">
+                      {store.name}
+                    </p>
+                    <div className="flex items-center gap-1.5">
+                      <div className="flex">
+                        <Star className="h-3 w-3 sm:h-4 sm:w-4 fill-yellow-400 text-yellow-400" />
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <span className="font-medium text-xs sm:text-sm text-grayscale-90">
+                          {store?.rating || 0}
+                        </span>
+                        <span className="font-normal text-xs sm:text-sm text-grayscale-40">
+                          ({store?.numberOfRating || 0} đánh giá)
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </article>
+              ))
+            ) : (
+              <div className="col-span-full flex items-center justify-center h-24 rounded-xl bg-white/10 p-4">
+                <p className="text-grayscale-50">Không có nhà thuốc nào</p>
+              </div>
+            )}
           </div>
         </section>
       )}
