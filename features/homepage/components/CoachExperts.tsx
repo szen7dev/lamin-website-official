@@ -9,7 +9,9 @@ import { useGetCoach } from '../../coach-experts/hooks/useGetCoach';
 import { apiClient } from '@/services/api/apiClient';
 
 export default function CoachExperts() {
-  const { coaches, isLoading } = useGetCoach();
+  const { coaches, isLoading } = useGetCoach({
+    limit: 3,
+  });
   const currentYear = new Date().getFullYear();
 
   return (
