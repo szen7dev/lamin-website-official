@@ -262,12 +262,12 @@ export function CartItems({
                 <span>{item.unit || 'Đơn vị'}</span>
               )}
             </div>
-            {item.discount && (
+            {/* {item.discount && (
               <div className="mt-2 inline-flex items-center gap-1 bg-blue-50 text-blue-600 p-2.5 md:p-4 rounded-md md:rounded-lg text-sm  ml-7">
                 <span className="text-xs">%</span>
                 Giảm ngay {item.discount}% áp dụng đến 16/03
               </div>
-            )}
+            )} */}
           </div>
         ))}
       </div>
