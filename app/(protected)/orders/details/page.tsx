@@ -93,22 +93,24 @@ export default function OrderInfo() {
           </div>
           <div className="bg-white p-4 rounded-lg shadow-md">
             <div className="">
-              <div className="flex items-center justify-between ml-3 mb-4 w-20">
+              <div className="flex items-center justify-between mx-3 mb-4">
                 {[0, 1, 2, 3].map(step => (
-                  <div key={step} className="flex items-center">
-                    <div
-                      className={`w-6 h-6 rounded-full flex items-center justify-center text-white ${order.status >= step ? 'bg-green-500' : 'bg-gray-300'}`}>
-                      {order.status > step ? '✔' : ''}
+                  <>
+                    <div key={step} className="flex items-center">
+                      <div
+                        className={`w-6 h-6 rounded-full flex items-center justify-center text-white ${order.status >= step ? 'bg-green-500' : 'bg-gray-300'}`}>
+                        {order.status > step ? '✔' : ''}
+                      </div>
                     </div>
                     {step < 3 && (
                       <div
-                        className={`w-40 h-1 ${order.status > step ? 'bg-green-500' : 'bg-gray-300'}`}
+                        className={`grow h-1 ${order.status > step ? 'bg-green-500' : 'bg-gray-300'}`}
                       />
                     )}
-                  </div>
+                  </>
                 ))}
               </div>
-              <div className="flex items-center text-sm text-grayscale-50 mb-2 gap-[120px]">
+              <div className="flex justify-between items-center text-xs md:text-sm text-grayscale-50 mb-2">
                 <span>Đặt hàng</span>
                 <span>Xử lý đơn</span>
                 <span>Đang giao</span>
@@ -116,49 +118,49 @@ export default function OrderInfo() {
               </div>
               <div className="flex justify-between items-center text-xs border-b pb-2 mb-2">
                 {orderCreatedAt ? (
-                  <p className="text-sm text-gray-600 w-[120px] text-left">
+                  <p className="text-xs md:text-sm text-gray-600 w-[120px] text-left">
                     {orderCreatedAt.getHours() + 1}:00,{' '}
                     {orderCreatedAt.getDate()}/{orderCreatedAt.getMonth() + 1}/
                     {orderCreatedAt.getFullYear()}
                   </p>
                 ) : (
-                  <p className="text-sm text-gray-600 w-[120px] text-left">
+                  <p className="text-xs md:text-sm text-gray-600 w-[120px] text-left">
                     Chưa xác định
                   </p>
                 )}
                 {orderProcessingTime ? (
-                  <p className="text-sm text-gray-600 w-[120px] text-center">
+                  <p className="text-xs md:text-sm text-gray-600 w-[120px] text-center">
                     {orderProcessingTime.getHours()}:00,{' '}
                     {orderProcessingTime.getDate()}/
                     {orderProcessingTime.getMonth()}/
                     {orderProcessingTime.getFullYear()}
                   </p>
                 ) : (
-                  <p className="text-sm text-gray-600 w-[120px] text-center">
+                  <p className="text-xs md:text-sm text-gray-600 w-[120px] text-center">
                     Chưa xác định
                   </p>
                 )}
                 {orderDeliveryStartTime ? (
-                  <p className="text-sm text-gray-600 w-[120px] text-center">
+                  <p className="text-xs md:text-sm text-gray-600 w-[120px] text-center">
                     {orderDeliveryStartTime.getHours()}:00,{' '}
                     {orderDeliveryStartTime.getDate()}/
                     {orderDeliveryStartTime.getMonth()}/
                     {orderDeliveryStartTime.getFullYear()}
                   </p>
                 ) : (
-                  <p className="text-sm text-gray-600 w-[120px] text-center">
+                  <p className="text-xs md:text-sm text-gray-600 w-[120px] text-center">
                     Chưa xác định
                   </p>
                 )}
                 {orderDeliveredTime ? (
-                  <p className="text-sm text-gray-600 w-[120px] text-right">
+                  <p className="text-xs md:text-sm text-gray-600 w-[120px] text-right">
                     {orderDeliveredTime.getHours()}:00,{' '}
                     {orderDeliveredTime.getDate()}/
                     {orderDeliveredTime.getMonth()}/
                     {orderDeliveredTime.getFullYear()}
                   </p>
                 ) : (
-                  <p className="text-sm text-gray-600 w-[120px] text-right">
+                  <p className="text-xs md:text-sm text-gray-600 w-[120px] text-right">
                     Chưa xác định
                   </p>
                 )}
