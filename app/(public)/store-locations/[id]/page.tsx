@@ -9,7 +9,7 @@ import { DynamicBreadcrumb } from '@/components/dynamic-breadcrumb';
 
 export default function StoreDetailPage() {
   return (
-    <main className="py-8">
+    <section className="py-8">
       {/* Breadcrumb */}
       <div className="container mx-auto mb-6">
         <DynamicBreadcrumb />
@@ -17,6 +17,6 @@ export default function StoreDetailPage() {
       <Suspense fallback={<Loading />}>
         <ClientStoreDetail />
       </Suspense>
-    </main>
+    </section>
   );
 }

@@ -14,4 +14,5 @@ export interface Populate {
 export interface Thumbnail {
   _id: string;
   path: string;
+  name: string;
 }

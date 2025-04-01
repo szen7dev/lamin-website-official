@@ -1,9 +1,11 @@
 import { Metadata } from 'next';
+import { Suspense } from 'react';
 
 import { ClientCoachDetail } from './client';
 
 import { getDetailCoach } from '@/features/coach-experts/api/getDetailCoach';
 import { generateMetadata as generateSeoMetadata } from '@/utils/seo';
+import Loading from '@/app/loading';
 
 interface CoachDetailPageProps {
   params: {
@@ -15,9 +17,10 @@ export async function generateMetadata({
   params,
 }: CoachDetailPageProps): Promise<Metadata> {
   try {
+    const { id } = await Promise.resolve(params);
     // Fetch the coach data server-side for metadata
     const coach = await getDetailCoach({
-      contactID: params.id,
+      contactID: id,
     });
 
     const fieldDisplay = coach.field
@@ -45,7 +48,18 @@ export async function generateMetadata({
   }
 }
 
-export default function CoachDetailPage({ params }: CoachDetailPageProps) {
+export default async function CoachDetailPage({
+  params,
+}: {
+  params: { id: string };
+}) {
+  // Access the id directly from params
+  const { id } = await Promise.resolve(params);
+
   // This is a server component that renders the client component
-  return <ClientCoachDetail id={params.id} />;
+  return (
+    <Suspense fallback={<Loading />}>
+      <ClientCoachDetail id={id} />
+    </Suspense>
+  );
 }

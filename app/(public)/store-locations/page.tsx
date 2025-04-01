@@ -17,7 +17,7 @@ export function generateMetadata(): Metadata {
 
 export default function StoreLocationsPage() {
   return (
-    <main className="py-8">
+    <section className="py-8">
       {/* Breadcrumb */}
       <div className="container mx-auto">
         <DynamicBreadcrumb />
@@ -36,6 +36,6 @@ export default function StoreLocationsPage() {
       <Suspense fallback={<Loading />}>
         <StoreList />
       </Suspense>
-    </main>
+    </section>
   );
 }
