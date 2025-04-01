@@ -74,17 +74,19 @@ export default function OrderInfo() {
       <div className="container mx-auto px-4 md:px-10 my-10 grid grid-cols-1 md:grid-cols-3 gap-5">
         <div className="col-span-1 md:col-span-2 bg-white rounded-xl shadow-md p-4">
           <div className="flex justify-between items-center mb-4">
-            <div className="flex items-center gap-2">
+            <div className="flex flex-col md:flex-row  gap-2">
               <h2 className="text-lg font-semibold">
                 Đơn hàng {orderCreatedAt.toLocaleDateString()}
               </h2>
-              <CircleIcon fill="#B9C0D4" height={6} width={6} />
-              <p className="text-sm text-gray-600">Giao hàng tận nơi</p>
+              <div className="flex items-center gap-2">
+                <CircleIcon fill="#B9C0D4" height={6} width={6} />
+                <p className="text-sm text-gray-600">Giao hàng tận nơi</p>
 
-              <CircleIcon fill="#B9C0D4" height={6} width={6} />
-              <p className="text-sm text-gray-600">
-                #{order.sign || '2742456'}
-              </p>
+                <CircleIcon fill="#B9C0D4" height={6} width={6} />
+                <p className="text-sm text-gray-600">
+                  #{order.sign || '2742456'}
+                </p>
+              </div>
             </div>
             <div className="flex items-center gap-2">
               <CircleIcon fill="#FEC430" height={6} width={6} />
