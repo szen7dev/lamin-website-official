@@ -2,44 +2,98 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Search, Star } from 'lucide-react';
+import React from 'react';
 
-import { apiClient } from '@/services/api/apiClient';
 import { Input } from '@/components/ui/input';
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationNext,
+  PaginationPrevious,
+} from '@/components/ui/pagination';
 import { useGetTrustedStore } from '@/features/homepage';
+import apiClient from '@/services/api/apiClient';
+import { cn } from '@/lib/utils';
 
 export default function StoreList() {
   const [searchTerm, setSearchTerm] = useState('');
+  const [lastestID, setLastestID] = useState('');
+  const [submittedSearchTerm, setSubmittedSearchTerm] = useState('');
+  const [nextCursor, setNextCursor] = useState('');
+  const [prevCursorStack, setPrevCursorStack] = useState<string[]>([]);
 
-  const { trustedStore, isLoading } = useGetTrustedStore({
+  const itemsPerPage = 8;
+
+  const { trustedStore, isLoading, response } = useGetTrustedStore({
     populates: {
       path: 'thumbnail area3 area2 area1',
       select: 'path name',
     },
     select: 'name sign location address rating numberOfRating',
+    limit: itemsPerPage,
+    keyword: submittedSearchTerm,
+    lastestID,
   });
 
-  // Filter stores based on search term
-  const filteredStores = Array.isArray(trustedStore)
-    ? trustedStore.filter(store =>
-        store.name.toLowerCase().includes(searchTerm.toLowerCase()),
-      )
-    : [];
+  useEffect(() => {
+    const cursor = response?.data?.nextCursor || response?.nextCursor || '';
+
+    setNextCursor(cursor);
+  }, [response]);
+
+  const handleSearch = () => {
+    setSubmittedSearchTerm(searchTerm);
+    setLastestID('');
+    setPrevCursorStack([]);
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      handleSearch();
+    }
+  };
+
+  const handlePrev = () => {
+    if (prevCursorStack.length > 0) {
+      const previousID = prevCursorStack[prevCursorStack.length - 1];
+
+      setPrevCursorStack(prev => prev.slice(0, -1));
+      setLastestID(previousID);
+    }
+  };
+
+  const handleNext = () => {
+    if (nextCursor) {
+      setPrevCursorStack(prev => [...prev, lastestID]);
+      setLastestID(nextCursor);
+    }
+  };
 
   return (
     <>
       {/* Search Section */}
       <section className="container mx-auto mb-12">
         <div className="mx-auto max-w-3xl">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-grayscale-40" />
+          <div className="relative flex items-center">
+            {/* Search Icon Button */}
+            <button
+              aria-label="Tìm kiếm"
+              className="absolute left-3 top-1/2 -translate-y-1/2 p-1 text-grayscale-40 hover:text-grayscale-60 z-10"
+              type="button"
+              onClick={handleSearch}>
+              <Search className="h-5 w-5" />
+            </button>
+            {/* Input field */}
             <Input
-              className="pl-10 py-6 text-base rounded-2xl bg-white"
+              className="pl-10 py-6 text-base rounded-2xl bg-white w-full"
               placeholder="Tìm kiếm các cửa hàng trên toàn quốc..."
               type="text"
               value={searchTerm}
               onChange={e => setSearchTerm(e.target.value)}
+              onKeyDown={handleKeyDown}
             />
           </div>
         </div>
@@ -65,10 +119,9 @@ export default function StoreList() {
               </div>
             ))}
           </div>
-        ) : filteredStores.length > 0 ? (
+        ) : trustedStore.length > 0 ? (
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-            {filteredStores.map(store => {
-              // Get image URL
+            {trustedStore.map(store => {
               const imageUrl = store.thumbnail?.path
                 ? apiClient.getFileUrl(store.thumbnail.path)
                 : '/placeholder.svg';
@@ -131,6 +184,41 @@ export default function StoreList() {
           </div>
         )}
       </section>
+
+      {/* Pagination Section */}
+      {(prevCursorStack.length > 0 || nextCursor) && (
+        <section className="container mx-auto mb-12 flex justify-end">
+          <Pagination>
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious
+                  className={cn({
+                    'pointer-events-none opacity-50':
+                      prevCursorStack.length === 0,
+                  })}
+                  href="#"
+                  onClick={e => {
+                    e.preventDefault();
+                    handlePrev();
+                  }}
+                />
+              </PaginationItem>
+              <PaginationItem>
+                <PaginationNext
+                  className={cn({
+                    'pointer-events-none opacity-50': !nextCursor,
+                  })}
+                  href="#"
+                  onClick={e => {
+                    e.preventDefault();
+                    handleNext();
+                  }}
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+        </section>
+      )}
     </>
   );
 }

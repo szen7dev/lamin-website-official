@@ -97,6 +97,9 @@ export interface GetCoachParams {
   status?: number;
   page?: number;
   sort?: string;
+  keyword?: string;
+  lastestID?: string;
+  select?: string;
 }
 
 export interface GetDetailCoachParams {
