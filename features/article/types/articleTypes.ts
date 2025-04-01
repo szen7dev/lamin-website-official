@@ -8,6 +8,19 @@ export interface UserUpdate {
   note: string;
 }
 
+export interface Category {
+  _id: string;
+  name: string;
+  slug: string;
+}
+
+export interface Post {
+  title: string;
+  slug: string;
+  description: string;
+  thumbnail: Thumbnail;
+}
+
 // Types for article feature
 export interface Article {
   _id: string;
@@ -30,16 +43,16 @@ export interface Article {
   thumbnail: Thumbnail;
   summary: string;
   description: string;
-  modifyAt: Date;
-  createAt: Date;
+  modifyAt: string;
+  createAt: string;
   __v: number;
   userUpdate: UserUpdate;
   caption?: string;
-  updateAt?: Date;
+  updateAt?: string;
 }
 
 export interface ArticleCategory {
-  id: string;
+  _id: string;
   name: string;
   slug: string;
   description?: string;
@@ -50,7 +63,7 @@ export interface ArticleCategory {
 
 // Update the Author interface to include experience field
 export interface Author {
-  id: string;
+  _id: string;
   name: string;
   slug: string;
   avatarUrl?: string;
@@ -66,7 +79,7 @@ export interface Author {
 }
 
 export interface ArticleComment {
-  id: string;
+  _id: string;
   articleId: string;
   author: {
     name: string;
@@ -94,6 +107,14 @@ export interface ArticleListParams {
   verified?: boolean;
   optionSeller?: number;
   populates?: Populate;
+  menuSlug?: string;
+  lastestID?: string;
+  option?: number;
+}
+
+export interface ArticleProperty {
+  category: Category;
+  posts: Post[];
 }
 
 // Service Interface

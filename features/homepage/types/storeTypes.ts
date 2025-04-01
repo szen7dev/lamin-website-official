@@ -6,7 +6,7 @@ export interface Area {
 }
 
 export interface TrustedStore {
-  _id: number;
+  _id: string;
   name: string;
   rating: number;
   numberOfRating: number;
@@ -25,4 +25,6 @@ export interface GetTrustedStoreParams {
   populates?: Populate;
   keyword?: string;
   fundaID?: string;
+  limit?: number;
+  lastestID?: string;
 }

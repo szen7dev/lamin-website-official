@@ -29,7 +29,7 @@ export default function ArticleDetailContent() {
     slug: slug as string,
     populates: {
       path: 'author category thumbnail userUpdate position tags name',
-      select: '_id name fullname image path size note position',
+      select: '_id name fullname image path size note position slug',
     },
   });
   const { toast } = useToast();
@@ -255,7 +255,7 @@ export default function ArticleDetailContent() {
                 <Link
                   key={tag._id || tag}
                   className="decoration-transparent rounded-full bg-grayscale-10 px-2 sm:px-3 py-1 text-xs sm:text-sm text-grayscale-40 hover:bg-grayscale-20"
-                  href={`/chuyen-trang-suc-khoe?tag=${tag.name || tag}`}>
+                  href={`/chu-de/${tag.slug || tag}`}>
                   {tag.name || tag}
                 </Link>
               ))}

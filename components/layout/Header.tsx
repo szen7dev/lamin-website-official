@@ -325,7 +325,7 @@ export function Header() {
 
                 <div className={`relative ${totalItems > 0 ? 'group' : ''}`}>
                   <Link
-                    className="hover:no-underline h-10 flex items-center gap-2 rounded-full bg-primary px-3 md:px-6 py-2 text-white hover:bg-primary/70 text-xs md:text-sm"
+                    className="hover:no-underline h-10 flex items-center gap-2 rounded-full bg-primary px-3 md:px-6 py-2 text-white hover:bg-primary/70 text-xs md:text-sm border border-white"
                     href="/cart">
                     <CartIcon height={15} width={17} />
                     <span className="font-medium">Giỏ Hàng</span>

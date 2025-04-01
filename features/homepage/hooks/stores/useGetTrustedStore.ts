@@ -3,34 +3,40 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 
 import { getTrustedStore } from '../../api/stores/getTrustedStore';
-import { GetTrustedStoreParams, TrustedStore } from '../../types/storeTypes';
+import { GetTrustedStoreParams } from '../../types/storeTypes';
 
 /**
- * Hook to fetch trusted store data
+ * Custom hook to fetch trusted store data
  * @param params Query parameters for the API request
  * @returns Query result with trusted store data and a helper for getting a single store
  */
 export const useGetTrustedStore = (params: GetTrustedStoreParams = {}) => {
-  const { data, isLoading, error } = useSuspenseQuery({
+  const {
+    data: { trustedStore, response },
+    isLoading,
+    error,
+  } = useSuspenseQuery({
     queryKey: ['trustedStore', params],
     queryFn: () => getTrustedStore(params),
   });
 
-  // Handle both array and object responses
-  const storeData = data || [];
+  // Ensure storeData is always an array
+  const storeData = Array.isArray(trustedStore)
+    ? trustedStore
+    : trustedStore
+      ? [trustedStore]
+      : [];
 
-  // If fundaID is provided, we expect a single store object
-  // If not, we expect an array of stores
-  const isSingleStore = !Array.isArray(storeData) && !!storeData;
+  // Check if we're requesting a single store by fundaID
+  const isSingleStore = params.fundaID && storeData.length === 1;
 
   return {
-    trustedStore: isSingleStore
-      ? storeData
-      : Array.isArray(storeData)
-        ? storeData
-        : [],
-    singleStore: isSingleStore ? (storeData as TrustedStore) : null,
+    // Always return an array for trustedStore
+    trustedStore: storeData,
+    // Keep singleStore for convenience when querying a specific store
+    singleStore: isSingleStore ? storeData[0] : null,
     isLoading,
     error,
+    response,
   };
 };

@@ -1,3 +1,6 @@
+import { Author, UserUpdate } from '@/features/article/types/articleTypes';
+import { Thumbnail } from '@/types';
+
 export interface NewsAuthor {
   _id: string;
   image: string;
@@ -26,18 +29,23 @@ export interface News {
   amountView: number;
   state: number;
   company: string;
-  author: NewsAuthor;
+  author: Author | string;
   title: string;
   content: string;
   slug: string;
-  category: NewsCategory;
-  thumbnail: NewsThumbnail;
+  category: {
+    _id: string;
+    name: string;
+  };
+  thumbnail: Thumbnail;
   summary: string;
   description: string;
   modifyAt: string;
   createAt: string;
   __v: number;
-  userUpdate: string;
+  userUpdate: UserUpdate;
+  caption?: string;
+  updateAt?: string;
 }
 
 export interface GetNewsParams {

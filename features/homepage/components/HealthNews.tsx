@@ -3,18 +3,42 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { ChevronRight } from 'lucide-react';
+import { usePathname } from 'next/navigation';
 
 import { useGetNews } from '../hooks/news/useGetNews';
 
 import { apiClient } from '@/services/api/apiClient';
 import { NewspaperIcon } from '@/components/icons';
 import { Separator } from '@/components/ui/separator';
-export default function HealthNews() {
-  const { news, isLoading } = useGetNews();
+import { useGetArticleTagList } from '@/features/article/hooks/useGetArticleTagList';
+
+interface HealthNewsProps {
+  haveHeader?: boolean;
+  haveSlug?: boolean;
+}
+
+export default function HealthNews({
+  haveHeader = true,
+  haveSlug = false,
+}: HealthNewsProps) {
+  const { news, isLoading: isNewsLoading } = useGetNews();
+
+  const slug = usePathname()?.replace(/^\/+|\/+$/g, '');
+  const { articlesTags, isLoading: isTagLoading } = useGetArticleTagList({
+    menuSlug: slug,
+    limit: 5,
+    option: 1,
+  });
+  const isLoading = isNewsLoading || isTagLoading;
+  const articlesDisplay = haveSlug ? articlesTags : news;
 
   // Separate main article (first item) from related articles
-  const mainArticle = news && news.length > 0 ? news[0] : null;
-  const relatedArticles = news && news.length > 1 ? news.slice(1) : [];
+  const mainArticle =
+    articlesDisplay && articlesDisplay.length > 0 ? articlesDisplay[0] : null;
+  const relatedArticles =
+    articlesDisplay && articlesDisplay.length > 1
+      ? articlesDisplay.slice(1)
+      : [];
 
   // Helper function to get image URL
   const getImageUrl = (thumbnail?: { path?: string }) => {
@@ -26,7 +50,7 @@ export default function HealthNews() {
   // Helper function to create article URL
   const getArticleUrl = (article: any) => {
     return article?.slug
-      ? `/chuyen-trang-suc-khoe/bai-viet/${article.slug}`
+      ? `/bai-viet/${article.slug}`
       : '/chuyen-trang-suc-khoe';
   };
 
@@ -61,30 +85,31 @@ export default function HealthNews() {
 
   return (
     <section aria-labelledby="health-news-title">
-      {/* Header */}
-      <div className="mb-6 flex items-center gap-2">
-        <div className="flex items-center gap-2">
-          <NewspaperIcon />
+      {haveHeader && (
+        <div className="mb-6 flex items-center gap-2">
+          <div className="flex items-center gap-2">
+            <NewspaperIcon />
 
-          <h2
-            className="text-lg font-semibold text-grayscale-90"
-            id="health-news-title">
-            Góc Sức Khỏe
-          </h2>
+            <h2
+              className="text-lg font-semibold text-grayscale-90"
+              id="health-news-title">
+              Góc Sức Khỏe
+            </h2>
+          </div>
+          <div className="h-5">
+            <Separator
+              className="h-full bg-grayscale-30"
+              orientation="vertical"
+            />
+          </div>
+          <Link
+            className="flex items-center gap-1 text-primary-40 font-normal text-sm hover:underline decoration-transparent"
+            href="/chuyen-trang-suc-khoe">
+            Xem thêm
+            <ChevronRight className="h-4 w-4" />
+          </Link>
         </div>
-        <div className="h-5">
-          <Separator
-            className="h-full bg-grayscale-30"
-            orientation="vertical"
-          />
-        </div>
-        <Link
-          className="flex items-center gap-1 text-primary-40 font-normal text-sm hover:underline decoration-transparent"
-          href="/chuyen-trang-suc-khoe">
-          Xem thêm
-          <ChevronRight className="h-4 w-4" />
-        </Link>
-      </div>
+      )}
 
       {/* Content Grid */}
       <div className="grid gap-6 md:grid-cols-3">

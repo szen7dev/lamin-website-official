@@ -8,8 +8,8 @@ export const MENU_TYPE_CONFIGS: Record<number, MenuItemTypeConfig> = {
   },
   [MenuItemType.HEALTH_NEWS]: {
     hasContentArea: false,
-    getLevel2Url: (slug: string) => `/health-news/article/${slug}`,
-    getLevel3Url: (slug: string) => `/health-news/article/${slug}`,
+    getLevel2Url: (slug: string) => `/chu-de/${slug}`,
+    getLevel3Url: (slug: string) => `/chu-de/${slug}`,
   },
 };
 

@@ -92,7 +92,8 @@ export default function ArticleCard({
     );
   }
 
-  const { title, slug, summary, thumbnail, createAt, description } = article;
+  const { title, slug, summary, thumbnail, createAt, description, _id } =
+    article;
 
   // Format date safely
   const formatDateSafely = (date: Date | string | undefined) => {
@@ -107,12 +108,12 @@ export default function ArticleCard({
       <article className="group relative">
         <Link
           className="decoration-transparent block"
-          href={`/chuyen-trang-suc-khoe/bai-viet/${slug}`}>
+          href={`/bai-viet/${slug}`}>
           <div className="relative aspect-[16/9] w-full">
             {thumbnail ? (
               <Image
                 fill
-                alt={title}
+                alt={title ? title : _id}
                 className="object-cover transition-transform duration-300 group-hover:scale-105 rounded-t-lg"
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 src={apiClient.getFileUrl(thumbnail.path)}
@@ -147,12 +148,12 @@ export default function ArticleCard({
       <article className="group">
         <Link
           className="decoration-transparent flex gap-4"
-          href={`/chuyen-trang-suc-khoe/bai-viet/${slug}`}>
+          href={`/bai-viet/${slug}`}>
           <div className="relative h-20 w-32 flex-shrink-0">
             {thumbnail ? (
               <Image
                 fill
-                alt={title}
+                alt={title ? title : _id}
                 className="object-cover transition-transform duration-300 group-hover:scale-105 rounded-lg"
                 src={apiClient.getFileUrl(thumbnail.path)}
               />
@@ -180,14 +181,12 @@ export default function ArticleCard({
   // Default variant
   return (
     <article className="group">
-      <Link
-        className="decoration-transparent block"
-        href={`/chuyen-trang-suc-khoe/bai-viet/${slug}`}>
+      <Link className="decoration-transparent block" href={`/bai-viet/${slug}`}>
         <div className="relative aspect-[4/3] w-full">
           {thumbnail ? (
             <Image
               fill
-              alt={title}
+              alt={title ? title : _id}
               className="object-cover transition-transform duration-300 group-hover:scale-105 rounded-lg"
               src={apiClient.getFileUrl(thumbnail.path)}
             />

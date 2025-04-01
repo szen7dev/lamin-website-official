@@ -9,7 +9,13 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { apiClient } from '@/services';
 import { NewspaperIcon } from '@/components/icons';
 
-export default function RelatedArticles() {
+interface RelatedAritcleProps {
+  haveHeader?: boolean;
+}
+
+export default function RelatedArticles({
+  haveHeader = true,
+}: RelatedAritcleProps) {
   const {
     articles: articleList,
     isLoading: isLoadingList,
@@ -46,7 +52,7 @@ export default function RelatedArticles() {
   if (isLoadingList) {
     return (
       <div className="space-y-6">
-        {header}
+        {haveHeader && header}
         {/* Skeleton Article Cards */}
         <div className="space-y-4">
           {Array.from({ length: 3 }, (_, i) => (
@@ -87,7 +93,7 @@ export default function RelatedArticles() {
   // If articles are available
   return (
     <div className="space-y-4">
-      {header}
+      {haveHeader && header}
       {/* Article Cards */}
       <div className="space-y-4">
         {articleList.slice(1, 4).map(article => (
@@ -96,7 +102,7 @@ export default function RelatedArticles() {
             className="overflow-hidden hover:bg-gray-50 rounded-sm py-2">
             <Link
               className="flex justify- gap-6 items-center decoration-transparent"
-              href={`/chuyen-trang-suc-khoe/bai-viet/${article.slug}`}>
+              href={`/bai-viet/${article.slug}`}>
               {/* Article Image */}
               <div className="relative h-20 w-32 flex-shrink-0 rounded-sm overflow-hidden">
                 {article.thumbnail ? (

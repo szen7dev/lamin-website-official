@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 
 import dynamic from 'next/dynamic';
 
-import SimpleBanner from '@/features/homepage/components/SimpleBanner';
 import GridBanner from '@/features/homepage/components/GridBanner';
 import BestSellingProducts from '@/features/menu/components/BestSellingProducts';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
@@ -58,8 +57,7 @@ const HealthNews = dynamic(
 
 export const metadata: Metadata = generateSeoMetadata({
   title: 'Lamin-Giải pháp tăng cao toàn diện cho trẻ',
-  description:
-    'Giải pháp tăng cao toàn diện cho trẻ',
+  description: 'Giải pháp tăng cao toàn diện cho trẻ',
   keywords: [
     'nhà thuốc',
     'thuốc',
@@ -71,7 +69,7 @@ export const metadata: Metadata = generateSeoMetadata({
 
 export default function HomePage() {
   return (
-    <main className="flex min-h-screen flex-col bg-background">
+    <div className="flex min-h-screen flex-col bg-background">
       {/* Hero Section with Banner - Server Component for immediate display */}
       {/* <section aria-labelledby="hero-heading" className="w-full">
         <SimpleBanner />
@@ -142,6 +140,6 @@ export default function HomePage() {
         </h2>
         <TrustedStores />
       </section>
-    </main>
+    </div>
   );
 }
