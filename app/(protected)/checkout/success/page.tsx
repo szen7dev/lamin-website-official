@@ -14,11 +14,9 @@ import { formattedDeliveryDate } from '@/utils';
 export default function CheckoutSuccessPage() {
   const router = useRouter();
   const { orderInfo } = useOrder();
-  const {
-    order,
-    isLoading: isLoadingOrder,
-    error: loadingOrderError,
-  } = useGetOrderById(orderInfo?.orderId || '');
+  const { order, isLoading: isLoadingOrder } = useGetOrderById(
+    orderInfo?.orderId || '',
+  );
 
   // If no order info, show loading or redirect
   if (isLoadingOrder) {
@@ -27,6 +25,12 @@ export default function CheckoutSuccessPage() {
         Loading...
       </div>
     );
+  }
+
+  if (!orderInfo) {
+    router.push('/cart');
+
+    return null;
   }
 
   // Handle view order details click
@@ -55,7 +59,7 @@ export default function CheckoutSuccessPage() {
             Đặt hàng thành công
           </h2>
           <p className="text-grayscale-50 text-base font-normal">
-            {order.funda.name} đã tiếp nhận đơn hàng
+            {order.funda?.name} đã tiếp nhận đơn hàng
           </p>
         </div>
         <div className="rounded-lg">

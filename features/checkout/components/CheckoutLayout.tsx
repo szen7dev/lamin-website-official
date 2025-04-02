@@ -6,6 +6,8 @@ import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { useCreateOrder } from '../hooks/useCreateOrder';
+import { IPaymentData } from '../types/paymentTypes';
+import { paymentService } from '../services/paymentService';
 
 import {
   CheckoutForm,
@@ -50,13 +52,10 @@ export function CheckoutLayout() {
   const formRef = useRef<CheckoutFormRef>(null);
 
   // Contact lookup hook - initialized with empty string, only enabled when we need it
-  const {
-    data: contactData,
-    isLoading: isContactLoading,
-    refetch: refetchContact,
-  } = useGetContactByPhone({
-    phone: phoneNumberToLookup,
-  });
+  const { data: contactData, isLoading: isContactLoading } =
+    useGetContactByPhone({
+      phone: phoneNumberToLookup,
+    });
 
   const handleSelectAll = (checked: boolean) => {
     setSelectedItems(checked ? cartItems.map(item => item.id) : []);
@@ -210,7 +209,7 @@ export function CheckoutLayout() {
       // Use the mutation function from useCreateOrder
       await new Promise<void>((resolve, reject) => {
         createOrder(submitData, {
-          onSuccess: response => {
+          onSuccess: async response => {
             // Add proper error handling for the response
             const data = response || {};
 
@@ -243,10 +242,56 @@ export function CheckoutLayout() {
             setOrderInfo(orderInfo);
 
             // Redirect based on payment method - now without query parameters
-            if (submitData.paymentMethod === '1') {
-              router.push('/checkout/success');
-            } else {
-              router.push('/checkout/confirmation');
+
+            switch (submitData.paymentMethod) {
+              case '1':
+                router.push('/checkout/success');
+                break;
+              case '2':
+                const paymentData: IPaymentData = {
+                  orderID: data?._id || '',
+                  orderDescription: `Đơn hàng ${data?.name || ''}`,
+                  amount: data?.total || 0,
+                  callbackURL: `${window.location.origin}/checkout/confirmation`,
+                  userID: user?.id,
+                };
+
+                const paymentResponse =
+                  await paymentService.getPaymentUrl(paymentData);
+
+                if (paymentResponse && paymentResponse.neo_ResponseData) {
+                  const {
+                    qrData,
+                    bankAccount,
+                    bankAccountName,
+                    bankName,
+                    remark,
+                  } = paymentResponse.neo_ResponseData;
+
+                  const params = new URLSearchParams({
+                    txId: paymentResponse.txId,
+                    total: data?.total?.toString() || '',
+                    orderId: data?._id || '',
+                    paymentMethod: submitData.paymentMethod,
+                    customerName: submitData.buyerName || '',
+                    qrData,
+                    bankAccount,
+                    bankAccountName,
+                    bankName,
+                    remark,
+                  });
+
+                  router.push(`/checkout/confirmation?${params.toString()}`);
+                } else {
+                  toast({
+                    title: 'Lỗi',
+                    description: 'Không thể lấy URL thanh toán',
+                    variant: 'destructive',
+                  });
+                }
+                break;
+              default:
+                break;
             }
 
             resolve();
