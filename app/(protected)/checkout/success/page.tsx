@@ -40,7 +40,7 @@ export default function CheckoutSuccessPage() {
   };
 
   return (
-    <div className="flex flex-col items-center mx-auto pb-10">
+    <div className="flex flex-col items-center mx-auto pb-10 px-5">
       <div className="">
         <Image
           alt="QR Code"
@@ -49,7 +49,7 @@ export default function CheckoutSuccessPage() {
           width={150}
         />
       </div>
-      <div className="bg-white p-6 w-[500px] rounded-xl">
+      <div className="bg-white p-6 max-w-lg w-full rounded-xl">
         <div className="mb-4 border-b-2 border-grayscale-10 pb-4 ">
           <h2 className="text-[22px] font-semibold text-primary-50">
             Đặt hàng thành công

@@ -18,6 +18,7 @@ import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { VoucherIcon } from '@/components/icons';
 import { useAuth } from '@/hooks';
+import Image from 'next/image';
 
 interface PromotionModalProps {
   isOpen: boolean;
@@ -91,7 +92,7 @@ export function PromotionModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md !animate-slide-up">
         <DialogHeader>
           <DialogTitle>Mã khuyến mãi</DialogTitle>
         </DialogHeader>
@@ -174,7 +175,15 @@ export function PromotionModal({
                 </Button>
               </div>
             ) : (
-              <div className="py-4 text-center">
+              <div className="py-10 text-center text-gray-500">
+                <div className="flex justify-center items-center mb-6">
+                  <Image
+                    alt="Empty Coupon"
+                    height={150}
+                    src="/images/EmptyCoupon.png"
+                    width={150}
+                  />
+                </div>
                 Không có mã khuyến mãi nào khả dụng
               </div>
             )}
