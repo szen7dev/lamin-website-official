@@ -251,14 +251,22 @@ export function Header() {
                       </Link>
                     </div>
                   </div>
-                  <div className="rounded-sm p-1 bg-white w-10 h-10">
+                  <div className="rounded-sm p-1 bg-white w-10 h-10 relative overflow-hidden">
                     <Image
-                      priority
                       alt="QR Code"
-                      className="object-contain"
-                      height={100}
-                      src="/images/qrCode.png"
-                      width={100}
+                      className="object-contain absolute inset-0"
+                      height={40}
+                      loading="lazy"
+                      priority={false}
+                      sizes="40px"
+                      src="/images/qrCode.webp"
+                      width={40}
+                      onError={e => {
+                        const target = e.target as HTMLImageElement;
+
+                        target.onerror = null;
+                        target.src = '/images/fallback-qr.png';
+                      }}
                     />
                   </div>
                 </div>
@@ -376,14 +384,22 @@ export function Header() {
               <div className="text-xs font-medium">Quét Mã QR kênh CSKH</div>
               {/* <div className="text-sm font-bold">Tặng bộ Voucher 1 triệu</div> */}
             </div>
-            <div className="bg-white p-2 rounded-b-xl w-full flex-1 flex items-center justify-center">
+            <div className="bg-white p-2 rounded-b-xl w-full flex-1 flex items-center justify-center relative overflow-hidden">
               <Image
-                priority
                 alt="QR Code"
                 className="object-contain"
                 height={100}
-                src="/images/qrCode.png"
+                loading="lazy"
+                priority={false}
+                sizes="100px"
+                src="/images/qrCode.webp"
                 width={100}
+                onError={e => {
+                  const target = e.target as HTMLImageElement;
+
+                  target.onerror = null;
+                  target.src = '/images/fallback-qr.png';
+                }}
               />
             </div>
           </div>

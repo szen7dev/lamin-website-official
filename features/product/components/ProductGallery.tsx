@@ -58,6 +58,11 @@ export default function ProductGallery({ images }: ProductGalleryProps) {
     );
   };
 
+  const handleImageClick = () => {
+    setModalOpen(true);
+    console.log('Image clicked');
+  };
+
   if (!processedImages.length) {
     return (
       <div className="aspect-square w-full rounded-lg bg-grayscale-10 flex items-center justify-center">
@@ -73,14 +78,20 @@ export default function ProductGallery({ images }: ProductGalleryProps) {
         <div className="relative aspect-square w-full">
           <div className="absolute inset-0 rounded-lg overflow-hidden bg-white">
             {processedImages[currentImage].url ? (
-              <Image
-                fill
-                alt={processedImages[currentImage].alt}
-                className="object-contain"
-                priority={currentImage === 0}
-                sizes={`(min-width: 1024px) 50vw, 100vw`}
-                src={processedImages[currentImage].url}
-              />
+              <button
+                aria-label="View product image in gallery"
+                className="relative w-full h-full cursor-pointer bg-transparent border-0 p-0"
+                type="button"
+                onDoubleClick={handleImageClick}>
+                <Image
+                  fill
+                  alt={processedImages[currentImage].alt}
+                  className="object-contain"
+                  priority={currentImage === 0}
+                  sizes={`(min-width: 1024px) 50vw, 100vw`}
+                  src={processedImages[currentImage].url}
+                />
+              </button>
             ) : (
               <div className="w-full h-full flex items-center justify-center">
                 <Skeleton className="w-full h-full" />
@@ -90,9 +101,9 @@ export default function ProductGallery({ images }: ProductGalleryProps) {
 
           {/* Navigation Buttons - Only show if there's more than one image */}
           {processedImages.length > 1 && (
-            <div className="absolute inset-0 flex items-center justify-between p-4">
+            <div className="absolute inset-0 flex items-center justify-between p-4 z-20 pointer-events-none">
               <Button
-                className="h-10 w-10 rounded-full bg-black/30 border-0 backdrop-blur-sm hover:bg-black/40"
+                className="h-10 w-10 rounded-full bg-black/30 border-0 backdrop-blur-sm hover:bg-black/40 pointer-events-auto"
                 size="sm"
                 variant="outline"
                 onClick={handlePrevious}>
@@ -100,7 +111,7 @@ export default function ProductGallery({ images }: ProductGalleryProps) {
                 <span className="sr-only">Previous image</span>
               </Button>
               <Button
-                className="h-10 w-10 rounded-full bg-black/30 border-0 backdrop-blur-sm hover:bg-black/40"
+                className="h-10 w-10 rounded-full bg-black/30 border-0 backdrop-blur-sm hover:bg-black/40 pointer-events-auto"
                 size="sm"
                 variant="outline"
                 onClick={handleNext}>
