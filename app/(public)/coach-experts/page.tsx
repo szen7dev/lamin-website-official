@@ -70,7 +70,7 @@ export default function CoachExpertsPage() {
                 <Image
                   alt="Hat Icon"
                   height={48}
-                  src="/images/hat_icon.png"
+                  src="/images/hat_icon.webp"
                   width={48}
                 />
               </div>

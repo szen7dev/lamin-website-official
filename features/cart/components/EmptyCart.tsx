@@ -29,7 +29,7 @@ export function EmptyCart() {
             priority
             alt="Giỏ hàng trống"
             height={213}
-            src="/images/EmptyCart.png"
+            src="/images/EmptyCart.webp"
             width={400}
           />
         </div>
@@ -76,7 +76,7 @@ export function EmptyCart() {
           alt="Giỏ hàng trống"
           className="h-auto w-600"
           height={600}
-          src="/images/EmptyCart.png"
+          src="/images/EmptyCart.webp"
           width={213}
         />
       </div>
