@@ -2011,7 +2011,7 @@ electron-to-chromium@^1.5.73:
     clsx "^2.1.1"
     cmdk "1.0.4"
     date-fns "4.1.0"
-    elela "file:C:/Users/ASUS/AppData/Local/Yarn/Cache/v6/npm-elela-0.1.0-9d948932-fc6f-4773-bc9a-1d189cb5a302-1743483602349/node_modules/elela"
+    elela "file:../../../../../../../Users/macintoshhd/Library/Caches/Yarn/v6/npm-elela-0.1.0-6eb78fa5-3ea2-4e2e-a9b4-73954cb647ce-1743573998584/node_modules/elela"
     embla-carousel-react "8.5.1"
     input-otp "1.4.1"
     lucide-react "^0.454.0"
@@ -3586,6 +3586,11 @@ punycode@^2.1.0:
   version "2.3.1"
   resolved "https://registry.yarnpkg.com/punycode/-/punycode-2.3.1.tgz#027422e2faec0b25e1549c3e1bd8309b9133b6e5"
   integrity sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg==
+
+qrcode.react@^4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/qrcode.react/-/qrcode.react-4.2.0.tgz#1bce8363f348197d145c0da640929a24c83cbca3"
+  integrity sha512-QpgqWi8rD9DsS9EP3z7BT+5lY5SFhsqGjpgW5DY/i3mK4M9DTBNz3ErMi8BWYEfI3L0d8GIbGmcdFAS1uIRGjA==
 
 queue-microtask@^1.2.2:
   version "1.2.3"

@@ -2,14 +2,25 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { QRCodeCanvas } from 'qrcode.react';
 
 import { DownloadIcon } from '@/components/icons';
 import { formatCurrency } from '@/utils/format';
+import { apiClient } from '@/services';
+
+enum PaymentStatusCode {
+  Pending = -2,
+  Success = 0,
+  Failed = 1,
+  Expired = -1,
+}
 
 export default function CheckoutConfirmationPage() {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const [timeRemaining, setTimeRemaining] = useState(15 * 60); // 15 minutes in seconds
+  const [paymentStatus, setPaymentStatus] = useState('pending');
 
   // Get all order information from URL params
   const [orderInfo, setOrderInfo] = useState({
@@ -18,7 +29,55 @@ export default function CheckoutConfirmationPage() {
     paymentMethod: '',
     customerName: '',
     items: '',
+    qrData: '',
+    bankAccount: '',
+    bankAccountName: '',
+    bankName: '',
+    remark: '',
+    txId: '',
   });
+
+  // Function to poll payment status
+  const pollPaymentStatus = async (txId: string) => {
+    try {
+      const { data } = await apiClient.get(`/api/payment/transactions/${txId}`);
+
+      switch (data.status) {
+        case PaymentStatusCode.Success:
+          setPaymentStatus('success');
+          router.push('/checkout/success');
+          break;
+        case PaymentStatusCode.Failed:
+          setPaymentStatus('failed');
+          router.push('/checkout/failed');
+          break;
+        default:
+          break;
+      }
+    } catch (error) {
+      console.error('Error polling payment status:', error);
+    }
+  };
+
+  // Set up polling interval
+  useEffect(() => {
+    const txId = searchParams.get('txId');
+
+    if (!txId) return;
+
+    // Initial check
+    pollPaymentStatus(txId);
+
+    // Set up polling interval - every 5 seconds
+    const pollingInterval = setInterval(() => {
+      if (paymentStatus === 'pending') {
+        pollPaymentStatus(txId);
+      }
+    }, 5000);
+
+    // Cleanup interval
+    return () => clearInterval(pollingInterval);
+  }, [searchParams, paymentStatus]);
 
   // Function to handle QR code download
   const handleDownloadQR = () => {
@@ -39,6 +98,12 @@ export default function CheckoutConfirmationPage() {
     const paymentMethod = searchParams.get('paymentMethod') || '';
     const customerName = searchParams.get('customerName') || '';
     const items = searchParams.get('items') || '';
+    const qrData = searchParams.get('qrData') || '';
+    const bankAccount = searchParams.get('bankAccount') || '';
+    const bankAccountName = searchParams.get('bankAccountName') || '';
+    const bankName = searchParams.get('bankName') || '';
+    const remark = searchParams.get('remark') || '';
+    const txId = searchParams.get('txId') || '';
 
     setOrderInfo({
       total,
@@ -46,6 +111,12 @@ export default function CheckoutConfirmationPage() {
       paymentMethod,
       customerName,
       items,
+      qrData,
+      bankAccount,
+      bankAccountName,
+      bankName,
+      remark,
+      txId,
     });
   }, [searchParams]);
 
@@ -118,12 +189,13 @@ export default function CheckoutConfirmationPage() {
               <span>Hướng dẫn sử dụng</span>
             </Link>
             <div className="flex justify-center my-4">
-              <Image
+              <QRCodeCanvas size={232} value={orderInfo.qrData} />
+              {/* <Image
                 alt="QR Code"
                 height={232}
                 src="/images/qrcode-checkout.png"
                 width={232}
-              />
+              /> */}
             </div>
 
             <button
@@ -146,28 +218,28 @@ export default function CheckoutConfirmationPage() {
                 Ngân hàng:
               </div>
               <div className="text-grayscale-90 font-medium text-base mb-4">
-                Ngân hàng TMCP Việt Nam Thịnh Vượng (VPBank)
+                {orderInfo.bankName}
               </div>
 
               <div className="text-grayscale-50 text-base font-medium mb-1">
                 Số tài khoản:
               </div>
               <div className="text-grayscale-90 font-medium text-base mb-4">
-                00000000
+                {orderInfo.bankAccount}
               </div>
 
               <div className="text-grayscale-50 text-base font-medium mb-1">
                 Chủ tài khoản:
               </div>
               <div className="text-grayscale-90 font-medium text-base mb-4">
-                Công ty Cổ Phần Dược Phẩm Lamin
+                {orderInfo.bankAccountName}
               </div>
 
               <div className="text-grayscale-50 text-base font-medium mb-1">
                 Mã giao dịch:
               </div>
               <div className="text-grayscale-90 font-medium text-base mb-4">
-                {orderInfo.orderId || '2632345'}
+                {orderInfo.remark || orderInfo.orderId}
               </div>
             </div>
 
