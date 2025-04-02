@@ -178,7 +178,7 @@ export function CartSummary({
               alt="Point Coin"
               className=""
               height={16}
-              src="/images/PointCoinImg.png"
+              src="/images/PointCoinImg.webp"
               width={16}
             />
             <span className="font-normal text-sm">
@@ -245,7 +245,7 @@ export function CartSummary({
               alt="Point Coin"
               className="w-4 h-4"
               height={16}
-              src="/images/PointCoinImg.png"
+              src="/images/PointCoinImg.webp"
               width={16}
             />
             <span className="text-[#F79009]">{summary.rewardPoints} điểm</span>

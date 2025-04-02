@@ -43,7 +43,7 @@ function ProgressBar({
           <Image
             alt="Flame"
             height={20}
-            src="/images/FireIcon.png"
+            src="/images/FireIcon.webp"
             width={20}
           />
         )}
