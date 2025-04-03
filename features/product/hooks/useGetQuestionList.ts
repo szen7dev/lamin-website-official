@@ -26,17 +26,10 @@ export const useGetQuestionList = (params: QuestionListParams) => {
   });
 
   return {
-    questionList: data?.data?.listRecords || [],
-    pagination: {
-      totalCount: data?.data?.totalRecord || 0,
-      totalPages: data?.data?.totalPage || 0,
-      nextCursor: data?.data?.nextCursor || null,
-      currentLimit: data?.data?.limit || null,
-    },
+    questionList: data || [],
     isLoading,
     isError,
     error,
     refetch,
-    hasData: !!data?.data?.listRecords?.length,
   };
 };
