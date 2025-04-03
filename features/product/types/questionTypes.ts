@@ -20,15 +20,6 @@ export interface QuestionList {
 }
 
 /**
- * Represents the API response for question list
- */
-export interface QuestionListResponse {
-  error: boolean;
-  data: QuestionList;
-  status: number;
-}
-
-/**
  * Parameters for fetching question list
  */
 export interface QuestionListParams {
