@@ -355,7 +355,7 @@ export default function ProductInfo({
               <Image
                 alt="price-tag"
                 height={20}
-                src="/images/PriceTag.webp"
+                src="/images/PriceTag.png"
                 width={20}
               />
             </div>
