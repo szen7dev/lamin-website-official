@@ -82,6 +82,7 @@ export default function ProductGallery({ images }: ProductGalleryProps) {
                 aria-label="View product image in gallery"
                 className="relative w-full h-full cursor-pointer bg-transparent border-0 p-0"
                 type="button"
+                onClick={handleImageClick}
                 onDoubleClick={handleImageClick}>
                 <Image
                   fill
