@@ -20,7 +20,6 @@ export const useGetGoodsList = (params: GoodsListParams = {}) => {
     queryKey: ['GOODS_LIST', params],
     queryFn: () => getGoodsList(params),
     staleTime: 1000 * 60 * 5, // 5 minutes
-    enabled: !!params.keyword,
   });
 
   return {
