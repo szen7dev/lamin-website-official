@@ -1,6 +1,6 @@
 import {
+  Question,
   QuestionListParams,
-  QuestionListResponse,
 } from '@/features/product/types/questionTypes';
 import apiClient from '@/services/api/apiClient';
 
@@ -11,22 +11,21 @@ import apiClient from '@/services/api/apiClient';
  */
 export const getQuestionList = async (
   params: QuestionListParams,
-): Promise<QuestionListResponse> => {
+): Promise<Question[]> => {
   try {
     const queryParams = {
       select: 'name note goods',
       ...(params.slug ? { slug: params.slug } : {}),
-      ...(params.goodsId ? { goodsId: params.goodsId } : {}),
+      ...(params.goodsId ? { goodsID: params.goodsId } : {}),
       ...(params.limit ? { limit: params.limit } : {}),
       ...(params.page ? { page: params.page } : {}),
       ...(params.cursor ? { cursor: params.cursor } : {}),
     };
 
-    const response =
-      await apiClient.getNormalizedResponse<QuestionListResponse>(
-        '/api/medias/question',
-        queryParams,
-      );
+    const response = await apiClient.getNormalizedResponse<Question[]>(
+      '/api/medias/question',
+      queryParams,
+    );
 
     return response;
   } catch (error) {
