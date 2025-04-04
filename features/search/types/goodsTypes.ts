@@ -57,4 +57,5 @@ export interface GoodsListParams {
   limit?: number;
   page?: number;
   status?: number;
+  menuSlug?: string;
 }
