@@ -5,14 +5,26 @@ import { ArrowLeft } from 'lucide-react';
 import { DynamicBreadcrumb } from '@/components/dynamic-breadcrumb';
 import { Skeleton } from '@/components/ui/skeleton';
 import { apiClient } from '@/services/api/apiClient';
+import { CoachDocument } from '@/features/homepage/types/coachTypes';
+import { formatDate } from '@/utils';
 
 interface CoachDetailProps {
   coach: any;
   isLoading: boolean;
   error: Error | null;
+  document: CoachDocument[];
+  education: CoachDocument[];
 }
 
-export function CoachDetail({ coach, isLoading, error }: CoachDetailProps) {
+export function CoachDetail({
+  coach,
+  isLoading,
+  error,
+  document,
+  education,
+}: CoachDetailProps) {
+  console.log('document', document);
+  console.log('education', education);
   // Handle loading state
   if (isLoading) {
     return (
@@ -166,32 +178,30 @@ export function CoachDetail({ coach, isLoading, error }: CoachDetailProps) {
           <div className="mt-4">
             <h3 className="mb-2 font-medium">Quá trình công tác</h3>
             <ul className="ml-6 list-disc space-y-2">
-              {coach.workStartDate && (
-                <li>
-                  2003 - 2006: Bác sĩ điều trị, Bệnh viện Da khoa Đống Đa, Hà
-                  Nội.
-                </li>
-              )}
-              <li>
-                2006 - 2011: Bác sĩ điều trị, Bệnh viện Bệnh Nhiệt đới Trung
-                ương.
-              </li>
-              <li>
-                2018 - Nay: Có văn chuyên môn trong lĩnh vực Tiêm chủng Vắc xin,
-                đặc biệt là lĩnh vực xử trí các phản ứng sau tiêm.
-              </li>
+              {document.length > 0 &&
+                document.map(item => (
+                  <li key={item._id}>
+                    {formatDate(item.fromDate)} - {formatDate(item.toDate)}:{' '}
+                    {item.name && item.workplace
+                      ? `${item.name}, ${item.workplace}`
+                      : item.name || item.workplace}
+                  </li>
+                ))}
             </ul>
           </div>
 
           <div className="mt-6">
             <h3 className="mb-2 font-medium">Quá trình đào tạo</h3>
             <ul className="ml-6 list-disc space-y-2">
-              <li>1996 - 2002: Bác sĩ Y khoa, trường Đại học Y Hà Nội.</li>
-              <li>2002 - 2003: Chuyên khoa định hướng, Đại học Y Hà Nội.</li>
-              <li>
-                2020 - Nay: Nghiên cứu sinh, Khoa Y học Lâm sàng các bệnh Nhiệt
-                đới, Trường Đại học Mahidol, Vương quốc Thái Lan.
-              </li>
+              {education.length > 0 &&
+                education.map(item => (
+                  <li key={item._id}>
+                    {formatDate(item.fromDate)} - {formatDate(item.toDate)}:{' '}
+                    {item.educationalBackground2?.name && item.workplace
+                      ? `${item.educationalBackground2?.name}, ${item.workplace}`
+                      : item.educationalBackground2?.name || item.workplace}
+                  </li>
+                ))}
             </ul>
           </div>
         </div>

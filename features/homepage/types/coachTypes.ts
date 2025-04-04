@@ -91,6 +91,32 @@ export interface Coach {
   position: Position;
 }
 
+export interface CoachDocument {
+  _id: string;
+  type: number;
+  number: number;
+  files: string[];
+  company: {
+    _id: string;
+    name: string;
+    sign: string;
+  };
+  contact: {
+    _id: string;
+    type: number;
+    name: string;
+  };
+  workplace: string;
+  createAt: string;
+  fromDate: string;
+  toDate: string;
+  name: string;
+  educationalBackground2: {
+    _id: string;
+    name: string;
+  };
+}
+
 export interface GetCoachParams {
   optionSeller?: number;
   limit?: number;
@@ -106,4 +132,5 @@ export interface GetDetailCoachParams {
   contactID: string;
   populates?: Populate;
   select?: string;
+  type?: number;
 }
