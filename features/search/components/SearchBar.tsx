@@ -14,6 +14,7 @@ import { FileInfo } from '@/features/search/types/goodsTypes';
 import apiClient from '@/services/api/apiClient';
 import { Button } from '@/components/ui/button';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
+import { useSearchParams } from 'next/navigation';
 
 interface SearchBarProps {
   selectedKeyword: string;
@@ -24,8 +25,9 @@ export default function SearchBar({
   selectedKeyword,
   onClearSearch,
 }: SearchBarProps) {
+  const searchParams = useSearchParams();
   const [isFocused, setIsFocused] = useState(false);
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState(searchParams.get('q') || '');
   const [debouncedQuery, setDebouncedQuery] = useState('');
   const searchRef = useRef<HTMLDivElement>(null);
   const isMobile = useMediaQuery('(max-width: 768px)');
@@ -130,7 +132,7 @@ export default function SearchBar({
             <div className="flex flex-wrap gap-2">
               {keywords.slice(0, 8).map(keyword => (
                 <Link
-                  key={keyword.keyword}
+                  key={keyword._id}
                   className="decoration-transparent rounded-full bg-grayscale-5 px-4 py-2 text-sm text-grayscale-90 hover:bg-grayscale-10"
                   href={`/search?q=${encodeURIComponent(keyword.keyword)}`}
                   onClick={() => {
@@ -240,7 +242,7 @@ export default function SearchBar({
           <div className="flex flex-wrap gap-2">
             {keywords.slice(0, 8).map(keyword => (
               <Link
-                key={keyword.keyword}
+                key={keyword._id}
                 className="decoration-transparent rounded-full bg-grayscale-5 px-4 py-2 text-sm text-grayscale-90 hover:bg-grayscale-10"
                 href={`/search?q=${encodeURIComponent(keyword.keyword)}`}
                 onClick={() => {

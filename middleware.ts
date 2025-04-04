@@ -31,7 +31,7 @@ const rewrites = new Map([
 ]);
 
 export async function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl;
+  const { pathname, search } = request.nextUrl;
 
   // Check for dynamic coach experts path
   if (pathname.startsWith('/coach-experts/') && pathname !== '/coach-experts') {
@@ -129,6 +129,36 @@ export async function middleware(request: NextRequest) {
   ) {
     const id = pathname.replace('/he-thong-cua-hang/', '');
     const newPath = `/store-locations/${id}`;
+
+    return NextResponse.rewrite(new URL(newPath, request.url));
+  }
+
+  // Check for dynamic category path
+  if (pathname.startsWith('/category/') && pathname !== '/category') {
+    const slug = pathname.replace('/category/', '');
+    const newPath = `/danh-muc/${slug}`;
+
+    return NextResponse.redirect(new URL(newPath, request.url));
+  }
+
+  // Check for dynamic danh-muc path
+  if (pathname.startsWith('/danh-muc/') && pathname !== '/danh-muc') {
+    const slug = pathname.replace('/danh-muc/', '');
+    const newPath = `/category/${slug}`;
+
+    return NextResponse.rewrite(new URL(newPath, request.url));
+  }
+
+  // Check for dynamic search path
+  if (pathname.startsWith('/search')) {
+    const newPath = `/tim-kiem${search}`;
+
+    return NextResponse.redirect(new URL(newPath, request.url));
+  }
+
+  // Check for dynamic tim-kiem path
+  if (pathname.startsWith('/tim-kiem')) {
+    const newPath = `/search${search}`;
 
     return NextResponse.rewrite(new URL(newPath, request.url));
   }
