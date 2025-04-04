@@ -28,6 +28,8 @@ const vietnameseTextMap: Record<string, string> = {
   'dang-nhap': 'Đăng nhập',
   'dang-ky': 'Đăng ký',
   'chu-de': 'Chủ đề',
+  'danh-muc': 'Danh mục',
+  'tim-kiem': 'Tìm kiếm',
 
   // Sub-sections
   'ket-qua': 'Kết quả',

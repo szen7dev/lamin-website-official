@@ -1,8 +1,6 @@
 'use client';
 import { useState } from 'react';
 
-import { Product } from '../types/productListType';
-
 import ProductCard from './ProductCard';
 
 import { useGetGoodsList } from '@/features/search/hooks/goods/useGetGoodsList';
@@ -17,10 +15,19 @@ type SortType =
   | 'rating-asc'
   | 'rating-desc';
 
-function ProductList() {
-  const { goodsList, error, isLoading } = useGetGoodsList({});
+function ProductList({
+  params,
+  searchParams,
+}: {
+  params?: { slug: string };
+  searchParams?: { [key: string]: string | string[] | undefined };
+}) {
+  const { goodsList, error, isLoading } = useGetGoodsList({
+    menuSlug: params?.slug,
+    keyword: searchParams?.q as string,
+  });
 
-  const [activeSortButon, setActiveSortButton] = useState<SortType>();
+  const [sortBy, setSortBy] = useState<SortType>();
   const [layout, setLayout] = useState<'grid' | 'list'>('grid');
 
   const sortButtons: { label: string; sortBy: SortType }[] = [
@@ -42,9 +49,9 @@ function ProductList() {
     return (
       <button
         key={button.sortBy}
-        className={`bg-white px-3 py-2 text-sm rounded-full ${activeSortButon === button.sortBy ? 'outline outline-1 outline-primary text-primary' : 'text-black'}`}
+        className={`bg-white px-3 py-2 text-sm rounded-full ${sortBy === button.sortBy ? 'outline outline-1 outline-primary text-primary' : 'text-black'}`}
         onClick={() => {
-          setActiveSortButton(button.sortBy);
+          setSortBy(button.sortBy);
         }}>
         {button.label}
       </button>
@@ -61,6 +68,14 @@ function ProductList() {
       </div>
 
       <div className="container mx-auto px-0 sm:px-4">
+        {!!searchParams?.q && (
+          <div className="bg-white p-5 rounded-lg mb-5">
+            Tìm thấy <span className="font-semibold">{goodsList.length}</span>{' '}
+            sản phẩm với từ khóa{' '}
+            <span className="font-semibold">{`"${searchParams?.q as string}"`}</span>
+          </div>
+        )}
+
         <div className="flex justify-between items-center pb-4">
           <h3>Danh sách sản phẩm</h3>
           <div className="flex gap-5 items-center text-grayscale-50">
@@ -85,18 +100,22 @@ function ProductList() {
           </div>
         </div>
 
-        <ul className="grid grid-cols-2 gap-3 sm:gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
-          {goodsList?.map(product => (
-            <li key={product._id}>
-              <ProductCard
-                error={error}
-                isLoading={isLoading}
-                product={product}
-                variant="simple"
-              />
-            </li>
-          ))}
-        </ul>
+        {goodsList?.length > 0 ? (
+          <ul className="grid grid-cols-2 gap-3 sm:gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+            {goodsList.map(product => (
+              <li key={product._id}>
+                <ProductCard
+                  error={error}
+                  isLoading={isLoading}
+                  product={product}
+                  variant="simple"
+                />
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <div>Không có sản phẩm nào</div>
+        )}
       </div>
     </div>
   );

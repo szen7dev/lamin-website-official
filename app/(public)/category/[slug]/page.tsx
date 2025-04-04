@@ -12,10 +12,10 @@ export async function generateMetadata({
     return generateSeoMetadata({
       title: `Danh sách sản phẩm`,
       description: 'Xem danh sách sản phẩm',
-      keywords: ['sản phẩm', 'danh sách', 'sản phẩm'],
+      keywords: ['sản phẩm', 'danh sách'],
     });
   } catch (error) {
-    // Fallback metadata if product data can't be fetched
+    // Fallback metadata if product list can't be fetched
     return generateSeoMetadata({
       title: 'Danh sách sản phẩm',
       description: 'Xem danh sách sản phẩm',
@@ -31,5 +31,5 @@ export default async function ProductListPage({
   const resolvedParams = await Promise.resolve(params);
   const { slug } = resolvedParams;
 
-  return <ProductList />;
+  return <ProductList params={{ slug }} />;
 }
