@@ -98,7 +98,7 @@ export default function HomePage() {
       {/* Deal Slider - Client Component for carousel */}
       <section
         aria-labelledby="deals-heading"
-        className="container mx-auto px-3 sm:px-4 py-4 sm:py-6">
+        className="container mx-auto px-3 sm:px-4">
         <h2 className="sr-only" id="deals-heading">
           Ưu đãi hấp dẫn
         </h2>

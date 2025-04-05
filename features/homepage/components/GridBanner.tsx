@@ -15,6 +15,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
+import Link from 'next/link';
 
 export default function GridBanner() {
   const { banners: leftSlides } = useGetMediasHomepage({
@@ -24,6 +25,8 @@ export default function GridBanner() {
   const { banners: rightSlides } = useGetMediasHomepage({
     type: 3,
   });
+
+  const left = [...(leftSlides || []), ...(leftSlides || [])];
 
   const swiperRef = useRef<SwiperClass | null>(null);
 
@@ -38,7 +41,7 @@ export default function GridBanner() {
               disableOnInteraction: false,
             }}
             className="h-full"
-            loop={(leftSlides?.length || 0) > 1}
+            loop={(left?.length || 0) > 1}
             modules={[Navigation, Pagination, Autoplay]}
             pagination={{
               bulletActiveClass: 'bg-primary opacity-100',
@@ -47,24 +50,26 @@ export default function GridBanner() {
               clickable: true,
             }}
             onSwiper={swiper => (swiperRef.current = swiper)}>
-            {leftSlides?.map((slide, index) => (
+            {left?.map((slide, index) => (
               <SwiperSlide key={slide._id} className="relative h-full">
                 {slide.thumbnail?.path ? (
-                  <Image
-                    fill
-                    alt={slide.name}
-                    className="object-cover"
-                    priority={index === 0}
-                    sizes="(max-width: 768px) 100vw, 60vw"
-                    src={apiClient.getFileUrl(slide.thumbnail.path)}
-                  />
+                  <Link href={slide.slug}>
+                    <Image
+                      fill
+                      alt={slide.name}
+                      className="object-cover"
+                      priority={index === 0}
+                      sizes="(max-width: 768px) 100vw, 60vw"
+                      src={apiClient.getFileUrl(slide.thumbnail.path)}
+                    />
+                  </Link>
                 ) : (
                   <Skeleton className="h-full w-full" />
                 )}
               </SwiperSlide>
             ))}
             {/* Custom Navigation Buttons - Refined positioning and styling */}
-            {(leftSlides?.length || 0) > 1 && (
+            {(left?.length || 0) > 1 && (
               <>
                 <button
                   className="absolute top-1/2 left-4 -translate-y-1/2 bg-black/50 text-white p-2 rounded-full z-10 hover:bg-grayscale-50/60"

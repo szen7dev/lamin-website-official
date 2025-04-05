@@ -2,11 +2,15 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import { Loader2 } from 'lucide-react';
 
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
 import { ComboProduct } from '@/features/homepage/types/comboTypes';
 import { apiClient } from '@/services/api/apiClient';
+import { useCart } from '@/hooks';
+import { Button } from '@/components/ui/button';
+import { useToast } from '@/hooks/use-toast';
 
 export interface ProductUnit {
   label: string;
@@ -28,31 +32,73 @@ export default function ProductCard({
   error,
   isLoading,
 }: ProductCardProps) {
+  const {
+    addItem,
+    showCartDropdown,
+    hideCartDropdown,
+    isLoading: isAddingToCart,
+  } = useCart();
+  const { toast } = useToast();
+
+  const imageUrl = product.thumbnail?.path
+    ? apiClient.getFileUrl(product.thumbnail.path)
+    : undefined;
+
   const handleAddToCart = () => {
-    // if (!product) return;
-    //
-    // const priceAsNumber =
-    //   typeof product.listedUnitprice === 'string'
-    //     ? Number.parseFloat(product.listedUnitprice)
-    //     : product.listedUnitprice;
-    //
-    // const originalPriceAsNumber = product.sellingUnitprice
-    //   ? typeof product.sellingUnitprice === 'string'
-    //     ? Number.parseFloat(product.sellingUnitprice)
-    //     : product.sellingUnitprice
-    //   : undefined;
-    //
-    // addToCart({
-    //   id: `${product._id}`,
-    //   name: product.name,
-    //   price: priceAsNumber || 0,
-    //   originalPrice: originalPriceAsNumber,
-    //   quantity: product.quantity || 1,
-    //   unit: product.unit || 'Hộp',
-    //   image: product.thumbnail?.path
-    //     ? apiClient.getFileUrl(product.thumbnail.path)
-    //     : '/placeholder.svg',
-    // });
+    if (!product) {
+      toast({
+        title: 'Lỗi khi thêm vào giỏ hàng',
+        description: 'Đã xảy ra lỗi, vui lòng thử lại sau.',
+        variant: 'destructive',
+      });
+
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      });
+
+      return;
+    }
+
+    try {
+      addItem({
+        id: `${product._id}`,
+        name: product.name || '',
+        slug: product.slug,
+        price: product?.sellingUnitprice || 0,
+        originalPrice: product?.listedUnitprice || 0,
+        salesoff:
+          (product?.listedUnitprice ?? 0) - (product?.sellingUnitprice ?? 0),
+        quantity: 1,
+        unit: product.unit || '',
+        image: imageUrl,
+        category: {
+          _id: product.category?._id || '',
+          name: product.category?.name || '',
+          slug: product.category?.slug || '',
+        },
+      });
+
+      toast({
+        title: 'Thêm vào giỏ hàng thành công',
+        description: `Sản phẩm đã được thêm vào giỏ hàng.`,
+        variant: 'success',
+      });
+    } catch (error) {
+      toast({
+        title: 'Lỗi khi thêm vào giỏ hàng',
+        description: 'Đã xảy ra lỗi, vui lòng thử lại sau.',
+        variant: 'destructive',
+      });
+    }
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+    showCartDropdown();
+    setTimeout(() => {
+      hideCartDropdown();
+    }, 3000);
   };
 
   // Format price with Vietnamese currency
@@ -115,10 +161,6 @@ export default function ProductCard({
       </div>
     );
   }
-
-  const imageUrl = product.thumbnail?.path
-    ? apiClient.getFileUrl(product.thumbnail.path)
-    : undefined;
 
   return (
     <div
@@ -215,13 +257,19 @@ export default function ProductCard({
           Thêm vào giỏ
         </button>
       ) : (
-        <Link
+        <Button
           className="decoration-transparent mt-auto w-full rounded-full bg-primary hover:bg-primary-60 text-white py-2 px-4 text-center text-sm sm:text-base font-medium transition-colors no-underline"
-          href={{
-            pathname: `/san-pham/${product.slug}`,
-          }}>
-          Chọn Mua
-        </Link>
+          disabled={isAddingToCart}
+          onClick={handleAddToCart}>
+          {isAddingToCart ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Đang thêm...
+            </>
+          ) : (
+            'Chọn mua'
+          )}
+        </Button>
       )}
     </div>
   );

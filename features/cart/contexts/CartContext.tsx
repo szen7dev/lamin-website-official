@@ -57,6 +57,10 @@ type CartContextType = {
   updateQuantity: (id: string, quantity: number) => void;
   updateUnit: (id: string, unit: string) => void;
   clearCart: () => void;
+  isCartDropdownVisible: boolean;
+  showCartDropdown: () => void;
+  hideCartDropdown: (delay?: number) => void;
+  cartAnimationFlag: boolean;
 };
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -64,6 +68,9 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const queryClient = useQueryClient();
   const [isLoading, setIsLoading] = useState(false);
+  const [isCartDropdownVisible, setCartDropdownVisible] = useState(false);
+  const [cartAnimationFlag, setCartAnimationFlag] = useState(false);
+  let debounceTimeout: NodeJS.Timeout | null = null;
 
   // Use React Query to fetch and cache cart data
   const { data: cartData } = useQuery({
@@ -193,6 +200,21 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     }
   }, [updateCartMutation]);
 
+  const showCartDropdown = () => {
+    if (debounceTimeout) {
+      clearTimeout(debounceTimeout); // Clear any existing timeout
+    }
+    setCartDropdownVisible(true);
+    setCartAnimationFlag(true);
+  };
+
+  const hideCartDropdown = (delay: number = 300) => {
+    setCartAnimationFlag(false);
+    debounceTimeout = setTimeout(() => {
+      setCartDropdownVisible(false);
+    }, delay);
+  };
+
   return (
     <CartContext.Provider
       value={{
@@ -205,6 +227,10 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         updateQuantity,
         updateUnit,
         clearCart,
+        isCartDropdownVisible,
+        showCartDropdown,
+        hideCartDropdown,
+        cartAnimationFlag,
       }}>
       {children}
     </CartContext.Provider>
