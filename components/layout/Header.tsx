@@ -551,7 +551,7 @@ function CartButton() {
       </Link>
 
       {/* Dropdown content */}
-      {isCartDropdownVisible && (
+      {isCartDropdownVisible && totalItems > 0 && (
         <div
           className={`absolute right-0 top-full z-50 mt-1 w-[400px] p-0 bg-white rounded-md shadow-lg transition-all duration-300 ${
             cartAnimationFlag ? 'opacity-100 visible' : 'opacity-0 invisible'
