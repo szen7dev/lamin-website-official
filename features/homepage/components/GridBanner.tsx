@@ -26,8 +26,6 @@ export default function GridBanner() {
     type: 3,
   });
 
-  const left = [...(leftSlides || []), ...(leftSlides || [])];
-
   const swiperRef = useRef<SwiperClass | null>(null);
 
   return (
@@ -41,7 +39,7 @@ export default function GridBanner() {
               disableOnInteraction: false,
             }}
             className="h-full"
-            loop={(left?.length || 0) > 1}
+            loop={(leftSlides?.length || 0) > 1}
             modules={[Navigation, Pagination, Autoplay]}
             pagination={{
               bulletActiveClass: 'bg-primary opacity-100',
@@ -50,7 +48,7 @@ export default function GridBanner() {
               clickable: true,
             }}
             onSwiper={swiper => (swiperRef.current = swiper)}>
-            {left?.map((slide, index) => (
+            {leftSlides?.map((slide, index) => (
               <SwiperSlide key={slide._id} className="relative h-full">
                 {slide.thumbnail?.path ? (
                   <Link href={slide.slug}>
@@ -69,7 +67,7 @@ export default function GridBanner() {
               </SwiperSlide>
             ))}
             {/* Custom Navigation Buttons - Refined positioning and styling */}
-            {(left?.length || 0) > 1 && (
+            {(leftSlides?.length || 0) > 1 && (
               <>
                 <button
                   className="absolute top-1/2 left-4 -translate-y-1/2 bg-black/50 text-white p-2 rounded-full z-10 hover:bg-grayscale-50/60"
