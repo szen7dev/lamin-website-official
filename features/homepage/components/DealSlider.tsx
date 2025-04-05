@@ -12,6 +12,7 @@ import { useGetSaledCombo } from '../hooks/combo/useGetSaledCombo';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { apiClient } from '@/services/api/apiClient';
 import { useToast } from '@/hooks/use-toast';
+import { isAfter } from 'date-fns';
 
 // Progress Bar Component
 function ProgressBar({
@@ -160,10 +161,14 @@ export default function DealSlider() {
     );
   }
 
+  if (expiredDate && isAfter(new Date(), expiredDate)) {
+    return null;
+  }
+
   return (
     <section
       aria-labelledby="deals-heading"
-      className="rounded-xl overflow-hidden bg-gradient-primary p-4">
+      className="rounded-xl overflow-hidden bg-gradient-primary p-4 my-4 sm:my-6">
       <header className="mb-4 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <h2

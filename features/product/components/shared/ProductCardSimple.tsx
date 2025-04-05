@@ -5,6 +5,10 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { Skeleton } from '@/components/ui/skeleton';
+import { useCart } from '@/hooks';
+import { Button } from '@/components/ui/button';
+import { Loader2 } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 interface ProductUnit {
   label: string;
@@ -23,11 +27,80 @@ interface ProductCardSimpleProps {
     packageInfo?: string;
     discount?: string | number;
     units: ProductUnit[];
+    category: {
+      _id: string;
+      name: string;
+      slug: string;
+    };
   };
 }
 
 export default function ProductCardSimple({ product }: ProductCardSimpleProps) {
+  const {
+    addItem,
+    showCartDropdown,
+    hideCartDropdown,
+    isLoading: isAddingToCart,
+  } = useCart();
+  const { toast } = useToast();
   const [selectedUnit, setSelectedUnit] = useState(product.units[0].value);
+
+  const handleAddToCart = () => {
+    if (!product) {
+      toast({
+        title: 'Lỗi khi thêm vào giỏ hàng',
+        description: 'Đã xảy ra lỗi, vui lòng thử lại sau.',
+        variant: 'destructive',
+      });
+
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      });
+
+      return;
+    }
+
+    try {
+      addItem({
+        id: `${product.id}`,
+        name: product.name || '',
+        slug: product.slug,
+        price: Number(product?.price) || 0,
+        originalPrice: Number(product?.originalPrice) || 0,
+        salesoff:
+          (Number(product?.originalPrice) ?? 0) - (Number(product?.price) ?? 0),
+        quantity: 1,
+        unit: product.unit || '',
+        image: product.image,
+        category: {
+          _id: product.category?._id || '',
+          name: product.category?.name || '',
+          slug: product.category?.slug || '',
+        },
+      });
+
+      toast({
+        title: 'Thêm vào giỏ hàng thành công',
+        description: `Sản phẩm đã được thêm vào giỏ hàng.`,
+        variant: 'success',
+      });
+    } catch (error) {
+      toast({
+        title: 'Lỗi khi thêm vào giỏ hàng',
+        description: 'Đã xảy ra lỗi, vui lòng thử lại sau.',
+        variant: 'destructive',
+      });
+    }
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+    showCartDropdown();
+    setTimeout(() => {
+      hideCartDropdown();
+    }, 3000);
+  };
 
   return (
     <div className="relative rounded-xl border border-grayscale-20 bg-white p-3 sm:p-4 shadow-sm h-full flex flex-col">
@@ -108,14 +181,19 @@ export default function ProductCardSimple({ product }: ProductCardSimpleProps) {
       </p>
 
       {/* Buy Button */}
-      <Link
+      <Button
         className="decoration-transparent mt-auto w-full rounded-full bg-primary hover:bg-primary-60 text-white py-2 px-4 text-center text-sm sm:text-base font-medium transition-colors no-underline"
-        href={{
-          pathname: `/product/${product.slug}`,
-          query: { goodsId: product.id },
-        }}>
-        Chọn Mua
-      </Link>
+        disabled={isAddingToCart}
+        onClick={handleAddToCart}>
+        {isAddingToCart ? (
+          <>
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            Đang thêm...
+          </>
+        ) : (
+          'Chọn mua'
+        )}
+      </Button>
     </div>
   );
 }
