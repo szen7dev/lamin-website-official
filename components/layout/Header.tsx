@@ -331,26 +331,7 @@ export function Header() {
                   </Button>
                 )}
 
-                <div className={`relative ${totalItems > 0 ? 'group' : ''}`}>
-                  <Link
-                    className="hover:no-underline h-10 flex items-center gap-2 rounded-full bg-primary px-3 md:px-6 py-2 text-white hover:bg-primary/70 text-xs md:text-sm border border-white"
-                    href="/cart">
-                    <CartIcon height={15} width={17} />
-                    <span className="font-medium">Giỏ Hàng</span>
-                    {totalItems > 0 && (
-                      <span className="absolute left-8 top-1 flex h-4 w-4 items-center justify-center rounded-full bg-error-30 text-xs font-bold text-white">
-                        {totalItems}
-                      </span>
-                    )}
-                  </Link>
-
-                  {/* Dropdown content that appears on hover only when items exist */}
-                  {totalItems > 0 && (
-                    <div className="absolute right-0 top-full z-50 mt-1 w-[400px] p-0 bg-white rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
-                      <CartDropdown />
-                    </div>
-                  )}
-                </div>
+                <CartButton />
               </div>
             </div>
 
@@ -525,5 +506,59 @@ export function Header() {
         onClose={() => setLoginModalOpen(false)}
       />
     </header>
+  );
+}
+
+function CartButton() {
+  const {
+    totalItems,
+    isCartDropdownVisible,
+    cartAnimationFlag,
+    showCartDropdown,
+    hideCartDropdown,
+  } = useCart();
+
+  let debounceTimer: NodeJS.Timeout | null = null;
+
+  const handleMouseEnter = () => {
+    if (debounceTimer) {
+      clearTimeout(debounceTimer);
+    }
+    showCartDropdown();
+  };
+
+  const handleMouseLeave = () => {
+    debounceTimer = setTimeout(() => {
+      hideCartDropdown();
+    }, 300);
+  };
+
+  return (
+    <div
+      className="relative"
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}>
+      <Link
+        className="hover:no-underline h-10 flex items-center gap-2 rounded-full bg-primary px-3 md:px-6 py-2 text-white hover:bg-primary/70 text-xs md:text-sm border border-white"
+        href="/cart">
+        <CartIcon height={15} width={17} />
+        <span className="font-medium">Giỏ Hàng</span>
+        {totalItems > 0 && (
+          <span className="absolute left-8 top-1 flex h-4 w-4 items-center justify-center rounded-full bg-error-30 text-xs font-bold text-white">
+            {totalItems}
+          </span>
+        )}
+      </Link>
+
+      {/* Dropdown content */}
+      {isCartDropdownVisible && totalItems > 0 && (
+        <div
+          className={`absolute right-0 top-full z-50 mt-1 w-[400px] p-0 bg-white rounded-md shadow-lg transition-all duration-300 ${
+            cartAnimationFlag ? 'opacity-100 visible' : 'opacity-0 invisible'
+          }`}>
+          <CartDropdown />
+        </div>
+      )}
+    </div>
   );
 }

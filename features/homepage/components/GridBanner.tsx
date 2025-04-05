@@ -15,6 +15,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
+import Link from 'next/link';
 
 export default function GridBanner() {
   const { banners: leftSlides } = useGetMediasHomepage({
@@ -50,14 +51,16 @@ export default function GridBanner() {
             {leftSlides?.map((slide, index) => (
               <SwiperSlide key={slide._id} className="relative h-full">
                 {slide.thumbnail?.path ? (
-                  <Image
-                    fill
-                    alt={slide.name}
-                    className="object-cover"
-                    priority={index === 0}
-                    sizes="(max-width: 768px) 100vw, 60vw"
-                    src={apiClient.getFileUrl(slide.thumbnail.path)}
-                  />
+                  <Link href={slide.slug}>
+                    <Image
+                      fill
+                      alt={slide.name}
+                      className="object-cover"
+                      priority={index === 0}
+                      sizes="(max-width: 768px) 100vw, 60vw"
+                      src={apiClient.getFileUrl(slide.thumbnail.path)}
+                    />
+                  </Link>
                 ) : (
                   <Skeleton className="h-full w-full" />
                 )}
