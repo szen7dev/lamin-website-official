@@ -191,7 +191,7 @@ export function Footer() {
                   </p>
                 </li>
                 <li className="flex justify-between sm:block">
-                  <p className="text-grayscale-40">Trung tâm tư vấn</p>
+                  <p className="text-grayscale-40">Trung tâm chăm sóc, dịch vụ</p>
                   <p className="font-normal text-primary">
                     {contactInfo?.hotline2}
                   </p>
