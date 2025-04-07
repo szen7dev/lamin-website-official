@@ -82,13 +82,13 @@ export default function MegaMenuColumn({
                 Bán chạy nhất
               </h3>
             </div>
-            <Link
+            {/* <Link
               className="flex items-center gap-1 text-sm text-primary-40 ml-3 hover:underline decoration-transparent"
               href="#"
               style={{ textDecoration: 'none' }}>
               Xem thêm
               <ChevronRight className="h-3 w-3" />
-            </Link>
+            </Link> */}
           </div>
 
           <div className="grid grid-cols-5 gap-6">
