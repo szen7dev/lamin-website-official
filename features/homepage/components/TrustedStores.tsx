@@ -18,7 +18,7 @@ const benefits = [
   {
     id: 1,
     icon: <PillIcon />,
-    title: 'Thuốc chính hãng',
+    title: 'Sản phẩm chính hãng',
     description: 'Đa dạng và chuyên sâu',
   },
   {

@@ -58,8 +58,7 @@ export default function CoachExpertsPage() {
                 Giàu kinh nghiệm
               </h3>
               <p className="text-sm text-grayscale-60">
-                Đội ngũ bác sĩ và dược sĩ giàu kinh nghiệm có thâm niên trong
-                ngành, được tư nghiệp cả trong và ngoài nước.
+                Đội ngũ chuyên gia (bác sỹ, dược sỹ) giàu kinh nghiệm trong lĩnh vực chăm sóc sức khỏe chủ động.
               </p>
             </div>
           </div>
@@ -80,9 +79,7 @@ export default function CoachExpertsPage() {
                 Nghiệp vụ chuyên môn cao
               </h3>
               <p className="text-sm text-grayscale-60">
-                Các bác sĩ và dược sĩ hiện đang công tác và giảng dạy tại bệnh
-                viện hàng đầu cả nước, nghiệp vụ chuyên môn cao ở lĩnh vực y
-                dược.
+                Các bác sĩ, dược sĩ tập trung chuyên môn sâu với các giải pháp và sản phẩm có nguồn gốc từ dược liệu (đặc biệt là Nam dược-dược liệu quý tại Việt Nam) và vi sinh
               </p>
             </div>
           </div>
@@ -103,8 +100,7 @@ export default function CoachExpertsPage() {
                 Tâm huyết và tận tâm
               </h3>
               <p className="text-sm text-grayscale-60">
-                Luôn sẵn sàng tư vấn và hỗ trợ chăm sóc sức khỏe cho mọi người
-                bằng sự tận tâm và nhiệt huyết.
+                Phục vụ mà không đặt nặng quyền lợi, chỉ đơn giản là thực sự muốn làm điều tốt nhất cho khách hàng như chính người thân của mình
               </p>
             </div>
           </div>

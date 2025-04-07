@@ -86,14 +86,7 @@ export function Footer() {
 
             <ul className="space-y-2 text-sm hidden sm:block">
               {[
-                'Bệnh viện',
-                'Góc sức khoẻ',
-                'Tra cứu thuốc',
-                'Tra cứu dược chất',
-                'Tra cứu dược liệu',
-                'Bệnh thường gặp',
-                'Đội ngũ chuyên môn',
-                'Tin tức tuyển dụng',
+                'Điểm đo cao',
               ].map((item, index) => (
                 <li key={index} className="flex items-center">
                   <Link
@@ -108,14 +101,7 @@ export function Footer() {
             {openSections['learnMore'] && (
               <ul className="space-y-2 text-sm">
                 {[
-                  'Bệnh viện',
-                  'Góc sức khoẻ',
-                  'Tra cứu thuốc',
-                  'Tra cứu dược chất',
-                  'Tra cứu dược liệu',
-                  'Bệnh thường gặp',
-                  'Đội ngũ chuyên môn',
-                  'Tin tức tuyển dụng',
+                  'Đội ngũ chuyên môn'
                 ].map((item, index) => (
                   <li key={index} className="flex items-center">
                     <Link
@@ -153,12 +139,7 @@ export function Footer() {
 
             <ul className="space-y-2 text-sm hidden sm:block">
               {[
-                'Thực phẩm chức năng',
-                'Dược mỹ phẩm',
-                'Chăm sóc cá nhân',
-                'Trang thiết bị y tế',
-                'Đặt thuốc online',
-                'Trung tâm Tiêm chủng',
+                'Điểm đo cao',
               ].map((item, index) => (
                 <li key={index} className="flex items-center">
                   <Link
@@ -173,12 +154,7 @@ export function Footer() {
             {openSections['category'] && (
               <ul className="space-y-2 text-sm">
                 {[
-                  'Thực phẩm chức năng',
-                  'Dược mỹ phẩm',
-                  'Chăm sóc cá nhân',
-                  'Trang thiết bị y tế',
-                  'Đặt thuốc online',
-                  'Trung tâm Tiêm chủng',
+                  'Điểm đo cao',
                 ].map((item, index) => (
                   <li key={index} className="flex items-center">
                     <Link
@@ -215,13 +191,13 @@ export function Footer() {
                   </p>
                 </li>
                 <li className="flex justify-between sm:block">
-                  <p className="text-grayscale-40">Trung tâm Vắc Xin</p>
+                  <p className="text-grayscale-40">Trung tâm tư vấn</p>
                   <p className="font-normal text-primary">
                     {contactInfo?.hotline2}
                   </p>
                 </li>
                 <li className="flex justify-between sm:block">
-                  <p className="text-grayscale-40">Góp ý - Khiếu nại</p>
+                  <p className="text-grayscale-40">Góp ý khiếu nại</p>
                   <p className="font-normal text-primary">
                     {contactInfo?.hotline3}
                   </p>
@@ -379,7 +355,7 @@ export function Footer() {
             <span>• Địa chỉ: {contactInfo?.address}</span> <br />
             <span>• Số điện thoại: {contactInfo?.phone}</span> <br />
             <span>• Email: {contactInfo?.email}</span> <br />
-            <span>• Người quản lý nội dung: {contactInfo?.content}</span>
+            <span>• Quản lý nội dung: {contactInfo?.content}</span>
           </address>
         </div>
       </div>
