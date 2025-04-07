@@ -180,13 +180,13 @@ export default function DealSlider() {
           </h2>
           <CountdownTimer expiredDate={expiredDate} />
         </div>
-        <Link
+        {/* <Link
           aria-label="Xem thêm sản phẩm khuyến mãi"
           className="hidden md:flex items-center justify-center gap-1 rounded-full bg-white px-4 py-2 text-sm font-medium text-primary hover:bg-white/90 decoration-transparent"
           href="/deals">
           Xem thêm
           <ChevronRight aria-hidden="true" className="h-4 w-4" />
-        </Link>
+        </Link> */}
       </header>
 
       {isDesktop ? (
