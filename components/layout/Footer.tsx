@@ -355,7 +355,7 @@ export function Footer() {
             <span>• Địa chỉ: {contactInfo?.address}</span> <br />
             <span>• Số điện thoại: {contactInfo?.phone}</span> <br />
             <span>• Email: {contactInfo?.email}</span> <br />
-            <span>• Quản lý nội dung: {contactInfo?.content}</span>
+            <span>• Người chịu trách nhiệm nội dung: {contactInfo?.content}</span>
           </address>
         </div>
       </div>

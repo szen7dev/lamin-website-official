@@ -19,7 +19,7 @@ const benefits = [
     id: 1,
     icon: <PillIcon />,
     title: 'Sản phẩm chính hãng',
-    description: 'Đa dạng và chuyên sâu',
+    description: 'Nguồn gốc từ Dược liệu và vi sinh',
   },
   {
     id: 2,
