@@ -67,7 +67,7 @@ export function Header() {
       return contactInfo[0].hotline1;
     }
 
-    return '1800 646458';
+    return '1800 646458';//
   };
 
   // Close mobile menu when screen size changes to desktop
