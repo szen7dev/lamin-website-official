@@ -27,4 +27,5 @@ export interface GetTrustedStoreParams {
   fundaID?: string;
   limit?: number;
   lastestID?: string;
+  internal?: number;
 }
