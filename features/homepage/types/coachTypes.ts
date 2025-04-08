@@ -126,6 +126,7 @@ export interface GetCoachParams {
   keyword?: string;
   lastestID?: string;
   select?: string;
+  type?: number;
 }
 
 export interface GetDetailCoachParams {

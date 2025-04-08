@@ -28,6 +28,7 @@ export const getTrustedStore = async (
       ...(params.limit && { limit: params.limit }),
       ...(params.lastestID && { lastestID: params.lastestID }),
       ...(params.keyword && { keyword: params.keyword }),
+      ...(params.internal && { internal: params.internal }),
     };
 
     // Fetch trusted store data from API
