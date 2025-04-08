@@ -6,6 +6,10 @@ import { useGetBestSellingCombo } from '@/features/homepage/hooks/combo/useGetBe
 export default function BestSellingProducts() {
   const { combos: products, isLoading, error } = useGetBestSellingCombo();
 
+  if (!products?.length) {
+    return <></>;
+  }
+
   return (
     <section aria-labelledby="bestselling-title" className="py-4 sm:py-6">
       {/* Section Title */}

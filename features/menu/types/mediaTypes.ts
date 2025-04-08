@@ -65,6 +65,7 @@ export enum MenuItemType {
 
 export interface MenuItemTypeConfig {
   hasContentArea: boolean;
+  getLevel1Url?: (slug: string) => string;
   getLevel2Url: (slug: string) => string;
   getLevel3Url: (slug: string) => string;
 }

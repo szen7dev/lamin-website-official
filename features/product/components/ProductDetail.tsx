@@ -34,7 +34,7 @@ export default function ProductDetail({
       <div className="container mx-auto sm:px-4">
         {/* Breadcrumb */}
         <nav aria-label="Breadcrumb">
-          <DynamicBreadcrumb />
+          <DynamicBreadcrumb name={`${productInfo?.name}`} />
         </nav>
       </div>
 

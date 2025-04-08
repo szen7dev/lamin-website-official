@@ -6,13 +6,13 @@ import { Navigation, Grid } from 'swiper/modules';
 import { ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
+import { isAfter } from 'date-fns';
 
 import { useGetSaledCombo } from '../hooks/combo/useGetSaledCombo';
 
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { apiClient } from '@/services/api/apiClient';
 import { useToast } from '@/hooks/use-toast';
-import { isAfter } from 'date-fns';
 
 // Progress Bar Component
 function ProgressBar({
@@ -161,6 +161,10 @@ export default function DealSlider() {
     );
   }
 
+  if (combos?.length === 0) {
+    return <></>;
+  }
+
   if (expiredDate && isAfter(new Date(), expiredDate)) {
     return null;
   }
@@ -237,7 +241,7 @@ export default function DealSlider() {
                     </span>
                     <div className="aspect-square">
                       <Image
-                        alt={product.name}
+                        alt={product.name || 'San pham'}
                         className="h-full w-full object-contain"
                         height={200}
                         src={thumbnailUrl}

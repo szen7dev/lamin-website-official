@@ -33,7 +33,7 @@ export default function MegaMenuItemLink({
     <div className="w-full" onMouseEnter={handleMouseEnter}>
       <Link
         className={cn(
-          'flex items-center rounded-md gap-3 px-4 mr-2 py-3 text-sm transition-colors hover:bg-[#F1F4FD] hover:mr-0 hover:border-0 border-b-[1.5px] decoration-transparent',
+          'flex items-center text-primary rounded-md gap-3 px-4 mr-2 py-3 text-sm transition-colors hover:bg-[#F1F4FD] hover:mr-0 hover:border-0 border-b-[1.5px] decoration-transparent',
           isActive && 'bg-[#F1F4FD] font-medium',
           className,
         )}

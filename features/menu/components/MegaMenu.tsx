@@ -300,7 +300,10 @@ export default function MegaMenu() {
                 <li key={item._id} className="relative">
                   <MegaMenuItem
                     hasDropdown={hasDropdown}
-                    href={`/${item.slug}`}
+                    href={
+                      menuTypeConfig.getLevel1Url?.(item.slug) ||
+                      `/${item.slug}`
+                    }
                     isActive={item._id === activeLevel1Item}
                     label={item.name}>
                     {hasDropdown && (

@@ -127,17 +127,29 @@ function ArticleDetailSkeleton() {
 }
 
 // Main page component
-export default async function ArticleDetailPage() {
+export default async function ArticleDetailPage({
+  params,
+}: {
+  params: { slug: string };
+}) {
+  const article = await getArticleDetail({
+    slug: params.slug,
+    populates: {
+      path: 'author category thumbnail userUpdate position tags name',
+      select: '_id name fullname image path size note position slug',
+    },
+  });
+
   return (
     <section className="md:py-8">
       <div className="container mx-auto">
         {/* Breadcrumb - Navigation path */}
-        <DynamicBreadcrumb />
+        <DynamicBreadcrumb name={`${article?.title}`} />
       </div>
       <div className="container mx-auto mb-12">
         <article>
           <Suspense fallback={<ArticleDetailSkeleton />}>
-            <ArticleDetailContent />
+            <ArticleDetailContent article={article} />
           </Suspense>
         </article>
       </div>
