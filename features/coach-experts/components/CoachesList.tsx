@@ -29,6 +29,7 @@ export default function CoachesList() {
     limit: 9,
     keyword: submittedSearchTerm,
     lastestID,
+    type: 3,
   });
 
   // Effect to update nextCursor when response changes

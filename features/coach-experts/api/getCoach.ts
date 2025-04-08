@@ -21,6 +21,7 @@ export const getCoach = async (
     ...(params.limit && { limit: params.limit }),
     ...(params.keyword && { keyword: params.keyword }),
     ...(params.lastestID && { lastestID: params.lastestID }),
+    ...(params.type && { type: params.type }),
   };
 
   // Fetch coaches data from API

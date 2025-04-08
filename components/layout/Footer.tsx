@@ -7,8 +7,12 @@ import { useState } from 'react';
 
 import { useContactInfo } from '@/hooks/useContactInfo';
 import { FacebookIcon, ZaloIcon } from '@/components/icons';
+import { useGetMediasHomepage } from '@/features';
 
 export function Footer() {
+  const { banners: aboutUs } = useGetMediasHomepage({ type: 8 });
+  const { banners: learnMore } = useGetMediasHomepage({ type: 9 });
+  const { banners: category } = useGetMediasHomepage({ type: 10 });
   const { data: contactInfo } = useContactInfo();
   const [openSections, setOpenSections] = useState<{ [key: string]: boolean }>(
     {},
@@ -19,6 +23,17 @@ export function Footer() {
       ...prev,
       [section]: !prev[section], // Chỉ cập nhật trạng thái mục được click
     }));
+  };
+
+  const renderFooterLink = (item?: { slug: string; name: string }) => {
+    return (
+      <Link
+        key={item?.slug}
+        className="text-grayscale-40 hover:text-primary decoration-transparent text-sm hidden sm:block"
+        href={`/${item?.slug}`}>
+        {item?.name}
+      </Link>
+    );
   };
 
   return (
@@ -47,19 +62,15 @@ export function Footer() {
               </button>
             </div>
 
-            <Link
-              className="text-grayscale-40 hover:text-primary decoration-transparent text-sm hidden sm:block"
-              href="#">
-              {contactInfo?.name}
-            </Link>
+            {aboutUs?.map(item => renderFooterLink(item))}
 
-            {openSections['about'] && (
+            {/* {openSections['about'] && (
               <Link
                 className="text-grayscale-40 hover:text-primary decoration-transparent text-sm"
-                href="#">
-                {contactInfo?.name}
+                href={aboutUs?.slug}>
+                {aboutUs?.name}
               </Link>
-            )}
+            )} */}
           </div>
 
           {/* Learn More Column */}
@@ -84,25 +95,11 @@ export function Footer() {
               </button>
             </div>
 
-            <ul className="space-y-2 text-sm hidden sm:block">
-              {[
-                'Điểm đo cao',
-              ].map((item, index) => (
-                <li key={index} className="flex items-center">
-                  <Link
-                    className="text-grayscale-40 hover:text-primary decoration-transparent"
-                    href="#">
-                    {item}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            {learnMore?.map(item => renderFooterLink(item))}
 
-            {openSections['learnMore'] && (
+            {/* {openSections['learnMore'] && (
               <ul className="space-y-2 text-sm">
-                {[
-                  'Đội ngũ chuyên môn'
-                ].map((item, index) => (
+                {['Đội ngũ chuyên môn'].map((item, index) => (
                   <li key={index} className="flex items-center">
                     <Link
                       className="text-grayscale-40 hover:text-primary decoration-transparent"
@@ -112,7 +109,7 @@ export function Footer() {
                   </li>
                 ))}
               </ul>
-            )}
+            )} */}
           </div>
 
           {/* Categories Column */}
@@ -137,25 +134,11 @@ export function Footer() {
               </button>
             </div>
 
-            <ul className="space-y-2 text-sm hidden sm:block">
-              {[
-                'Điểm đo cao',
-              ].map((item, index) => (
-                <li key={index} className="flex items-center">
-                  <Link
-                    className="text-grayscale-40 hover:text-primary decoration-transparent"
-                    href="#">
-                    {item}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            {category?.map(item => renderFooterLink(item))}
 
-            {openSections['category'] && (
+            {/* {openSections['category'] && (
               <ul className="space-y-2 text-sm">
-                {[
-                  'Điểm đo cao',
-                ].map((item, index) => (
+                {['Điểm đo cao'].map((item, index) => (
                   <li key={index} className="flex items-center">
                     <Link
                       className="text-grayscale-40 hover:text-primary decoration-transparent"
@@ -165,7 +148,7 @@ export function Footer() {
                   </li>
                 ))}
               </ul>
-            )}
+            )} */}
           </div>
 
           {/* Contact & Certifications Column */}
@@ -191,7 +174,9 @@ export function Footer() {
                   </p>
                 </li>
                 <li className="flex justify-between sm:block">
-                  <p className="text-grayscale-40">Trung tâm chăm sóc, dịch vụ</p>
+                  <p className="text-grayscale-40">
+                    Trung tâm chăm sóc, dịch vụ
+                  </p>
                   <p className="font-normal text-primary">
                     {contactInfo?.hotline2}
                   </p>
@@ -355,7 +340,9 @@ export function Footer() {
             <span>• Địa chỉ: {contactInfo?.address}</span> <br />
             <span>• Số điện thoại: {contactInfo?.phone}</span> <br />
             <span>• Email: {contactInfo?.email}</span> <br />
-            <span>• Người chịu trách nhiệm nội dung: {contactInfo?.content}</span>
+            <span>
+              • Người chịu trách nhiệm nội dung: {contactInfo?.content}
+            </span>
           </address>
         </div>
       </div>
