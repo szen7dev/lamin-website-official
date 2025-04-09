@@ -18,6 +18,7 @@ export function ClientCoachDetail({ id }: ClientCoachDetailProps) {
     isLoading: coachLoading,
   } = useGetDetailCoach({
     contactID: id,
+    type: 3,
   });
 
   const {

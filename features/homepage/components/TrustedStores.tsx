@@ -44,6 +44,7 @@ const benefits = [
 export default function TrustedStores() {
   const { trustedStore, isLoading, error } = useGetTrustedStore({
     limit: 4,
+    internal: 2,
   });
 
   // Loading skeleton UI

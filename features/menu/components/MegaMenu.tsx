@@ -300,7 +300,7 @@ export default function MegaMenu() {
                 <li key={item._id} className="relative">
                   <MegaMenuItem
                     hasDropdown={hasDropdown}
-                    href={`/${menuTypeConfig.getLevel2Url(item.slug)}`}
+                    href={`${menuTypeConfig.getLevel2Url(item.slug)}`}
                     isActive={item._id === activeLevel1Item}
                     label={item.name}>
                     {hasDropdown && (
@@ -323,7 +323,7 @@ export default function MegaMenu() {
                           ).map((category: MediaItem) => (
                             <MegaMenuItemLink
                               key={category._id}
-                              href={`/${menuTypeConfig.getLevel2Url(category.slug)}`}
+                              href={`${menuTypeConfig.getLevel2Url(category.slug)}`}
                               icon={
                                 category.thumbnail &&
                                 typeof category.thumbnail === 'object'

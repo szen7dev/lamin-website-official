@@ -12,7 +12,7 @@ import {
   User,
   X,
 } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import SearchBar from '@/features/search/components/SearchBar';
@@ -67,7 +67,7 @@ export function Header() {
       return contactInfo[0].hotline1;
     }
 
-    return '1800 646458';//
+    return '1800 646458'; //
   };
 
   // Close mobile menu when screen size changes to desktop
@@ -518,17 +518,22 @@ function CartButton() {
     hideCartDropdown,
   } = useCart();
 
-  let debounceTimer: NodeJS.Timeout | null = null;
+  const debounceTimer = useRef<NodeJS.Timeout | null>(null);
 
   const handleMouseEnter = () => {
-    if (debounceTimer) {
-      clearTimeout(debounceTimer);
+    if (debounceTimer.current) {
+      clearTimeout(debounceTimer.current);
     }
+
     showCartDropdown();
   };
 
   const handleMouseLeave = () => {
-    debounceTimer = setTimeout(() => {
+    if (debounceTimer.current) {
+      clearTimeout(debounceTimer.current);
+    }
+
+    debounceTimer.current = setTimeout(() => {
       hideCartDropdown();
     }, 300);
   };

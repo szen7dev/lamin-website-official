@@ -9,7 +9,7 @@ import { apiClient } from '@/services';
 import { Button } from '@/components/ui/button';
 
 export default function ArticleContactList() {
-  const { coaches, isLoading, error } = useGetCoach({ limit: 5 });
+  const { coaches, isLoading, error } = useGetCoach({ limit: 5, type: 3 });
 
   // Skeleton component for loading state
   const ContactSkeleton = () => (
