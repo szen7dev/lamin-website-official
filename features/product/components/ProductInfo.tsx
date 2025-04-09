@@ -108,7 +108,7 @@ export default function ProductInfo({
         salesoff: product.listedUnitprice - product.sellingUnitprice || 0,
         quantity,
         unit: selectedVariant.name,
-        image: apiClient.getFileUrl(product.images?.[0].path) || '',
+        image: apiClient.getFileUrl(product.images?.[0]?.path) || '',
         category: {
           _id: product.category?._id || '',
           name: product.category?.name || '',

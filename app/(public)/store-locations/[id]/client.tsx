@@ -18,6 +18,7 @@ export function ClientStoreDetail() {
     },
     select:
       'name sign location address rating numberOfRating description phone',
+    internal: 2,
   });
 
   // If store is not found and not loading, return 404
