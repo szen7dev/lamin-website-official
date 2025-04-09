@@ -11,6 +11,7 @@ import { apiClient } from '@/services/api/apiClient';
 export default function CoachExperts() {
   const { coaches, isLoading } = useGetCoach({
     limit: 3,
+    type: 3,
   });
   const currentYear = new Date().getFullYear();
 

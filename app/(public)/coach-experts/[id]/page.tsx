@@ -21,6 +21,7 @@ export async function generateMetadata({
     // Fetch the coach data server-side for metadata
     const coach = await getDetailCoach({
       contactID: id,
+      type: 3,
     });
 
     const fieldDisplay = coach.field
