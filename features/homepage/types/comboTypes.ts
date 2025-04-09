@@ -8,9 +8,9 @@ export interface ComboProduct {
     slug: string;
   };
   quantity?: number;
-  sellingUnitprice?: number | undefined;
-  listedUnitprice?: number | undefined;
-  name?: string;
+  sellingUnitprice: number;
+  listedUnitprice: number;
+  name: string;
   unit?: string;
   expired?: string;
   unitNote?: string;

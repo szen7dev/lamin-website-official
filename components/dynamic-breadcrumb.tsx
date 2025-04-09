@@ -39,7 +39,7 @@ const vietnameseTextMap: Record<string, string> = {
   'bai-viet': 'Bài viết',
 };
 
-export function DynamicBreadcrumb() {
+export function DynamicBreadcrumb({ name }: { name?: string }) {
   const pathname = usePathname();
 
   // Skip rendering breadcrumbs on homepage
@@ -55,13 +55,18 @@ export function DynamicBreadcrumb() {
     // Create the path for this breadcrumb item
     const href = `/${segments.slice(0, index + 1).join('/')}`;
 
-    // Get Vietnamese text from mapping or format the segment for display
-    const label =
-      vietnameseTextMap[segment] ||
-      segment.replace(/-/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
-
     // Check if this is the last segment (current page)
     const isLastItem = index === segments.length - 1;
+
+    // Get Vietnamese text from mapping or format the segment for display
+    // If this is the last item and name is provided, use name instead
+    const label =
+      isLastItem && name
+        ? name
+        : vietnameseTextMap[segment] ||
+          segment
+            .replace(/-/g, ' ')
+            .replace(/\b\w/g, char => char.toUpperCase());
 
     return {
       href,

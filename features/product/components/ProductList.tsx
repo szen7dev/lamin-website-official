@@ -107,7 +107,10 @@ function ProductList({
                 <ProductCard
                   error={error}
                   isLoading={isLoading}
-                  product={product}
+                  product={{
+                    ...product,
+                    listedUnitprice: product.listedUnitprice || 0,
+                  }}
                   variant="simple"
                 />
               </li>

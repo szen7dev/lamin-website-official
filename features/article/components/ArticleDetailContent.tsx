@@ -23,9 +23,9 @@ import { apiClient } from '@/services';
 import { Separator } from '@/components/ui/separator';
 import { useToast } from '@/hooks/use-toast';
 
-export default function ArticleDetailContent() {
+export default function ArticleDetailContent({ article }: { article: any }) {
   const { slug } = useParams();
-  const { article, isLoading, error } = useGetArticleDetail({
+  const { isLoading, error } = useGetArticleDetail({
     slug: slug as string,
     populates: {
       path: 'author category thumbnail userUpdate position tags name',
@@ -255,7 +255,7 @@ export default function ArticleDetailContent() {
                 <Link
                   key={tag._id || tag}
                   className="decoration-transparent rounded-full bg-grayscale-10 px-2 sm:px-3 py-1 text-xs sm:text-sm text-grayscale-40 hover:bg-grayscale-20"
-                  href={`/chu-de/${tag.slug || tag}`}>
+                  href={`/chu-de/${tag.slug}`}>
                   {tag.name || tag}
                 </Link>
               ))}
