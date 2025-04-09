@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { ChevronRight } from 'lucide-react';
 
 import { getMenuTypeConfig } from '@/features/menu/services/menuTypeConfig';
 import { MenuItemType } from '@/features/menu/types/mediaTypes';

@@ -3,6 +3,7 @@ import { MenuItemType, MenuItemTypeConfig } from '../types/mediaTypes';
 export const MENU_TYPE_CONFIGS: Record<number, MenuItemTypeConfig> = {
   [MenuItemType.CATEGORY]: {
     hasContentArea: true,
+    getLevel1Url: (slug: string) => `/danh-muc/${slug}`,
     getLevel2Url: (slug: string) => `/danh-muc/${slug}`,
     getLevel3Url: (slug: string) => `/danh-muc/${slug}`,
   },
