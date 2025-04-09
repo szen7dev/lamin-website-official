@@ -36,6 +36,7 @@ export default function StoreList() {
     limit: itemsPerPage,
     keyword: submittedSearchTerm,
     lastestID,
+    internal: 2,
   });
 
   useEffect(() => {

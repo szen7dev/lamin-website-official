@@ -59,8 +59,9 @@ export type MediaMenuResponse =
   | MediaItem[];
 
 export enum MenuItemType {
-  DEFAULT = 1,
+  CATEGORY = 1,
   HEALTH_NEWS = 2,
+  DEFAULT = 3,
 }
 
 export interface MenuItemTypeConfig {

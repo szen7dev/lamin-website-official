@@ -326,7 +326,7 @@ export default function MegaMenu() {
                           ).map((category: MediaItem) => (
                             <MegaMenuItemLink
                               key={category._id}
-                              href={menuTypeConfig.getLevel2Url(category.slug)}
+                              href={`${menuTypeConfig.getLevel2Url(category.slug)}`}
                               icon={
                                 category.thumbnail &&
                                 typeof category.thumbnail === 'object'
