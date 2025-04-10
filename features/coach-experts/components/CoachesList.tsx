@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Search } from 'lucide-react';
 
 import { useGetCoach } from '@/features/coach-experts/hooks/useGetCoach';
@@ -23,6 +23,7 @@ export default function CoachesList() {
   const [lastestID, setLastestID] = useState('');
   const [nextCursor, setNextCursor] = useState('');
   const [prevCursorStack, setPrevCursorStack] = useState<string[]>([]);
+  const debounceSearch = useRef<NodeJS.Timeout | null>(null);
 
   const { coaches, response, isLoading } = useGetCoach({
     select: 'image name field position',
@@ -39,14 +40,36 @@ export default function CoachesList() {
     setNextCursor(cursor);
   }, [response]);
 
+  useEffect(() => {
+    return () => {
+      if (debounceSearch.current) {
+        clearTimeout(debounceSearch.current);
+      }
+    };
+  }, []);
+
   const handleSearch = () => {
     setSubmittedSearchTerm(searchTerm);
     setLastestID('');
     setPrevCursorStack([]); // Reset cursor history on new search
   };
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+
+    if (debounceSearch.current) {
+      clearTimeout(debounceSearch.current);
+    }
+    debounceSearch.current = setTimeout(() => {
+      handleSearch();
+    }, 500);
+  };
+
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
+      if (debounceSearch.current) {
+        clearTimeout(debounceSearch.current);
+      }
       handleSearch();
     }
   };
@@ -87,7 +110,7 @@ export default function CoachesList() {
               placeholder="Tìm kiếm đội ngũ chuyên môn..."
               type="text"
               value={searchTerm}
-              onChange={e => setSearchTerm(e.target.value)}
+              onChange={handleChange}
               onKeyDown={handleKeyDown}
             />
           </div>
