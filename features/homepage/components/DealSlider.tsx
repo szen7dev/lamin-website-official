@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Grid } from 'swiper/modules';
-import { ChevronRight } from 'lucide-react';
+import { ChevronRight, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { isAfter } from 'date-fns';
@@ -13,6 +13,9 @@ import { useGetSaledCombo } from '../hooks/combo/useGetSaledCombo';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { apiClient } from '@/services/api/apiClient';
 import { useToast } from '@/hooks/use-toast';
+import { Button } from '@/components/ui/button';
+import { useCart } from '@/hooks';
+import { ComboProduct } from '../types/comboTypes';
 
 // Progress Bar Component
 function ProgressBar({
@@ -124,19 +127,18 @@ function CountdownTimer({ expiredDate }: { expiredDate: Date | undefined }) {
 const formatPrice = (price: number): string =>
   new Intl.NumberFormat('vi-VN').format(price) + 'đ';
 
-const calculateDiscount = (listed: number, selling: number): string => {
-  if (!listed || listed <= 0) return '0%';
-  const discount = Math.round(((listed - selling) / listed) * 100);
-
-  return `-${discount}%`;
-};
-
 export default function DealSlider() {
   // Initialize with false to avoid hydration mismatch
   const [isDesktop, setIsDesktop] = useState(false);
   const isDesktopQuery = useMediaQuery('(min-width: 768px)');
 
   // Fetch combo data from API
+  const {
+    addItem,
+    showCartDropdown,
+    hideCartDropdown,
+    isLoading: isAddingToCart,
+  } = useCart();
   const { combos, isLoading } = useGetSaledCombo();
   const productsCombo = combos?.[0]?.products || [];
   const expiredDate = combos?.[0]?.expired;
@@ -168,6 +170,81 @@ export default function DealSlider() {
   if (expiredDate && isAfter(new Date(), expiredDate)) {
     return null;
   }
+
+  const handleAddToCart = (product: ComboProduct) => {
+    // Check if the promotion has expired
+    if (expiredDate) {
+      const now = new Date();
+      const expirationDate = new Date(expiredDate);
+
+      if (expirationDate.getTime() <= now.getTime()) {
+        // Show toast message for expired promotion
+        toast({
+          title: 'Thông báo',
+          description: 'Sản phẩm này đã hết khuyến mại, vui lòng thử lại sau',
+          variant: 'destructive',
+        });
+
+        return;
+      }
+    }
+
+    // If not expired, add product to cart
+    if (!product) {
+      toast({
+        title: 'Lỗi khi thêm vào giỏ hàng',
+        description: 'Đã xảy ra lỗi, vui lòng thử lại sau.',
+        variant: 'destructive',
+      });
+
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      });
+
+      return;
+    }
+
+    try {
+      addItem({
+        id: `${product._id}`,
+        name: product.name || '',
+        slug: product.slug,
+        price: product?.sellingUnitprice || 0,
+        originalPrice: product?.listedUnitprice || 0,
+        salesoff:
+          (product?.listedUnitprice ?? 0) - (product?.sellingUnitprice ?? 0),
+        quantity: 1,
+        unit: product.unit || '',
+        image: product.thumbnail?.path || '',
+        category: {
+          _id: product.category?._id || '',
+          name: product.category?.name || '',
+          slug: product.category?.slug || '',
+        },
+      });
+
+      toast({
+        title: 'Thêm vào giỏ hàng thành công',
+        description: `Sản phẩm đã được thêm vào giỏ hàng.`,
+        variant: 'success',
+      });
+    } catch (error) {
+      toast({
+        title: 'Lỗi khi thêm vào giỏ hàng',
+        description: 'Đã xảy ra lỗi, vui lòng thử lại sau.',
+        variant: 'destructive',
+      });
+    }
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+    showCartDropdown();
+    setTimeout(() => {
+      hideCartDropdown();
+    }, 3000);
+  };
 
   return (
     <section
@@ -223,10 +300,16 @@ export default function DealSlider() {
           slidesPerView={3}
           spaceBetween={16}>
           {productsCombo.map(product => {
-            const discount = calculateDiscount(
-              product.listedUnitprice,
-              product.sellingUnitprice,
-            );
+            const discountAmount =
+              product?.listedUnitprice && product?.sellingUnitprice
+                ? Number(
+                    (
+                      ((product.listedUnitprice - product.sellingUnitprice) /
+                        product.listedUnitprice) *
+                      100
+                    ).toFixed(0),
+                  )
+                : 0;
             const thumbnailUrl = product.thumbnail
               ? apiClient.getFileUrl(product.thumbnail.path)
               : '/placeholder.svg';
@@ -234,26 +317,42 @@ export default function DealSlider() {
 
             return (
               <SwiperSlide key={product._id}>
-                <article className="rounded-lg bg-white overflow-hidden">
+                <article className="rounded-lg bg-white overflow-hidden relative">
                   <div className="relative">
-                    <span className="absolute left-0 top-0 z-10 rounded-br-lg bg-error px-2 py-1 text-xs font-medium text-white">
-                      {discount}
-                    </span>
-                    <div className="aspect-square">
-                      <Image
-                        alt={product.name || 'San pham'}
-                        className="h-full w-full object-contain"
-                        height={200}
-                        src={thumbnailUrl}
-                        width={200}
-                      />
-                    </div>
+                    {discountAmount > 0 && (
+                      <span className="absolute top-0 left-0 z-10">
+                        <div className="bg-gradient-5 text-white text-xs font-medium px-2 py-1 rounded-tl-xl rounded-br-xl">
+                          {`-${discountAmount}%`}
+                        </div>
+                      </span>
+                    )}
+                    <Link
+                      className="no-underline decoration-transparent"
+                      href={{
+                        pathname: `/san-pham/${product.slug}`,
+                      }}>
+                      <div className="aspect-square">
+                        <Image
+                          alt={product.name || 'San pham'}
+                          className="h-full w-full object-contain"
+                          height={200}
+                          src={thumbnailUrl}
+                          width={200}
+                        />
+                      </div>
+                    </Link>
                   </div>
 
                   <div className="p-3">
-                    <h3 className="mb-2 line-clamp-2 min-h-[2.5rem] text-sm font-medium text-grayscale-90">
-                      {product.name}
-                    </h3>
+                    <Link
+                      className="no-underline decoration-transparent"
+                      href={{
+                        pathname: `/san-pham/${product.slug}`,
+                      }}>
+                      <h3 className="mb-2 line-clamp-2 min-h-[2.5rem] text-sm font-medium text-grayscale-90">
+                        {product.name}
+                      </h3>
+                    </Link>
 
                     <div className="mb-2">
                       <div className="flex items-baseline gap-1">
@@ -264,43 +363,29 @@ export default function DealSlider() {
                           /{product.unit}
                         </span>
                       </div>
-                      <p className="text-xs text-grayscale-40 line-through">
-                        {formatPrice(product.listedUnitprice)}
-                      </p>
+                      {product?.listedUnitprice && discountAmount > 0 && (
+                        <span className="text-xs sm:text-sm text-grayscale-40 line-through">
+                          {formatPrice(product?.listedUnitprice)}
+                        </span>
+                      )}
                     </div>
 
                     <div className="mb-3">
                       <ProgressBar height="h-6" progress={soldProgress} />
                     </div>
 
-                    <button
-                      className="block w-full rounded-full bg-primary py-2 text-center text-sm font-medium text-white hover:bg-primary-60"
-                      onClick={e => {
-                        e.preventDefault();
-
-                        // Check if the promotion has expired
-                        if (expiredDate) {
-                          const now = new Date();
-                          const expirationDate = new Date(expiredDate);
-
-                          if (expirationDate.getTime() <= now.getTime()) {
-                            // Show toast message for expired promotion
-                            toast({
-                              title: 'Thông báo',
-                              description:
-                                'Sản phẩm này đã hết khuyến mại, vui lòng thử lại sau',
-                              variant: 'destructive',
-                            });
-
-                            return;
-                          }
-                        }
-
-                        // If not expired, navigate to the product page
-                        window.location.href = `/product/combo/${product._id}`;
-                      }}>
-                      Chọn Mua
-                    </button>
+                    <Button
+                      className="mt-auto w-full rounded-full bg-primary hover:bg-primary-60 text-white py-2 px-4 text-center text-sm sm:text-base font-medium transition-colors"
+                      onClick={() => handleAddToCart(product)}>
+                      {isAddingToCart ? (
+                        <>
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          Đang thêm...
+                        </>
+                      ) : (
+                        'Chọn mua'
+                      )}
+                    </Button>
                   </div>
                 </article>
               </SwiperSlide>
@@ -310,10 +395,16 @@ export default function DealSlider() {
       ) : (
         <div className="space-y-3">
           {mobileDeals.map(product => {
-            const discount = calculateDiscount(
-              product.listedUnitprice,
-              product.sellingUnitprice,
-            );
+            const discountAmount =
+              product?.listedUnitprice && product?.sellingUnitprice
+                ? Number(
+                    (
+                      ((product.listedUnitprice - product.sellingUnitprice) /
+                        product.listedUnitprice) *
+                      100
+                    ).toFixed(0),
+                  )
+                : 0;
             const thumbnailUrl = product.thumbnail
               ? apiClient.getFileUrl(product.thumbnail.path)
               : '/placeholder.svg';
@@ -323,28 +414,44 @@ export default function DealSlider() {
               <article
                 key={product._id}
                 className="relative rounded-lg bg-white overflow-hidden">
-                <span className="absolute left-0 top-0 z-10 rounded-br-lg bg-error px-2 py-1 text-xs font-medium text-white">
-                  {discount}
-                </span>
+                {discountAmount > 0 && (
+                  <span className="absolute top-0 left-0 z-10">
+                    <div className="bg-gradient-5 text-white text-xs font-medium px-2 py-1 rounded-tl-xl rounded-br-xl">
+                      {`-${discountAmount}%`}
+                    </div>
+                  </span>
+                )}
 
                 <div className="p-3 pt-6">
                   <div className="flex">
                     <div className="w-1/3 self-start">
-                      <div className="aspect-square w-full">
-                        <Image
-                          alt={product.name}
-                          className="h-full w-full object-contain"
-                          height={100}
-                          src={thumbnailUrl}
-                          width={100}
-                        />
-                      </div>
+                      <Link
+                        className="no-underline decoration-transparent"
+                        href={{
+                          pathname: `/san-pham/${product.slug}`,
+                        }}>
+                        <div className="aspect-square w-full">
+                          <Image
+                            alt={product.name || 'San pham'}
+                            className="h-full w-full object-contain"
+                            height={200}
+                            src={thumbnailUrl}
+                            width={200}
+                          />
+                        </div>
+                      </Link>
                     </div>
 
                     <div className="flex flex-col pl-3 w-2/3">
-                      <h3 className="mb-1 line-clamp-2 text-sm font-medium text-grayscale-90">
-                        {product.name}
-                      </h3>
+                      <Link
+                        className="no-underline decoration-transparent"
+                        href={{
+                          pathname: `/san-pham/${product.slug}`,
+                        }}>
+                        <h3 className="mb-1 line-clamp-2 text-sm font-medium text-grayscale-90">
+                          {product.name}
+                        </h3>
+                      </Link>
 
                       <div className="mb-2 flex items-baseline gap-2">
                         <div className="flex items-baseline">
@@ -355,43 +462,29 @@ export default function DealSlider() {
                             /{product.unit}
                           </span>
                         </div>
-                        <span className="text-xs text-grayscale-40 line-through">
-                          {formatPrice(product.listedUnitprice)}
-                        </span>
+                        {product?.listedUnitprice && discountAmount > 0 && (
+                          <span className="text-xs sm:text-sm text-grayscale-40 line-through">
+                            {formatPrice(product?.listedUnitprice)}
+                          </span>
+                        )}
                       </div>
 
                       <div className="mb-2">
                         <ProgressBar height="h-7" progress={soldProgress} />
                       </div>
 
-                      <button
-                        className="block w-full rounded-full bg-primary py-1.5 text-center text-sm font-medium text-white hover:bg-primary-60"
-                        onClick={e => {
-                          e.preventDefault();
-
-                          // Check if the promotion has expired
-                          if (expiredDate) {
-                            const now = new Date();
-                            const expirationDate = new Date(expiredDate);
-
-                            if (expirationDate.getTime() <= now.getTime()) {
-                              // Show toast message for expired promotion
-                              toast({
-                                title: 'Thông báo',
-                                description:
-                                  'Sản phẩm này đã hết khuyến mại, vui lòng thử lại sau',
-                                variant: 'destructive',
-                              });
-
-                              return;
-                            }
-                          }
-
-                          // If not expired, navigate to the product page
-                          window.location.href = `/product/combo/${product._id}`;
-                        }}>
-                        Chọn Mua
-                      </button>
+                      <Button
+                        className="mt-auto w-full rounded-full bg-primary hover:bg-primary-60 text-white py-2 px-4 text-center text-sm sm:text-base font-medium transition-colors"
+                        onClick={() => handleAddToCart(product)}>
+                        {isAddingToCart ? (
+                          <>
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            Đang thêm...
+                          </>
+                        ) : (
+                          'Chọn mua'
+                        )}
+                      </Button>
                     </div>
                   </div>
                 </div>
