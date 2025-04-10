@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Search, Star } from 'lucide-react';
 import React from 'react';
 
@@ -24,6 +24,7 @@ export default function StoreList() {
   const [submittedSearchTerm, setSubmittedSearchTerm] = useState('');
   const [nextCursor, setNextCursor] = useState('');
   const [prevCursorStack, setPrevCursorStack] = useState<string[]>([]);
+  const debounceSearch = useRef<NodeJS.Timeout | null>(null);
 
   const itemsPerPage = 8;
 
@@ -45,14 +46,36 @@ export default function StoreList() {
     setNextCursor(cursor);
   }, [response]);
 
+  useEffect(() => {
+    return () => {
+      if (debounceSearch.current) {
+        clearTimeout(debounceSearch.current);
+      }
+    };
+  }, []);
+
   const handleSearch = () => {
-    setSubmittedSearchTerm(searchTerm);
     setLastestID('');
     setPrevCursorStack([]);
+    setSubmittedSearchTerm(searchTerm.trim());
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+
+    if (debounceSearch.current) {
+      clearTimeout(debounceSearch.current);
+    }
+    debounceSearch.current = setTimeout(() => {
+      handleSearch();
+    }, 500);
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
+      if (debounceSearch.current) {
+        clearTimeout(debounceSearch.current);
+      }
       handleSearch();
     }
   };
@@ -93,7 +116,7 @@ export default function StoreList() {
               placeholder="Tìm kiếm các cửa hàng trên toàn quốc..."
               type="text"
               value={searchTerm}
-              onChange={e => setSearchTerm(e.target.value)}
+              onChange={handleChange}
               onKeyDown={handleKeyDown}
             />
           </div>

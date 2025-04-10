@@ -18,7 +18,7 @@ export const getSaledCombo = async (
     populates: JSON.stringify(
       params.populates ?? {
         path: 'products',
-        select: 'name sign unit sellingUnitprice listedUnitprice expired',
+        select: 'name sign unit sellingUnitprice listedUnitprice expired slug',
         populate: {
           path: 'thumbnail',
           select: 'path',
