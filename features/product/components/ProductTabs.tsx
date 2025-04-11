@@ -255,12 +255,12 @@ export default function ProductTabs({ product }: ProductTabsProps) {
             )}
 
             {/* Usage Section */}
-            {product.usage && (
+            {product.instructions && (
               <section className="mt-8" id="usage">
                 <h2 className="mb-4 text-base sm:text-lg font-semibold sm:font-medium text-gray-900">
                   Cách dùng {product.name}
                 </h2>
-                <p className="mb-2 text-gray-700">{product.usage}</p>
+                <p className="mb-2 text-gray-700">{product.instructions}</p>
               </section>
             )}
 
@@ -285,34 +285,25 @@ export default function ProductTabs({ product }: ProductTabsProps) {
 
             {/* Warnings Section */}
             <section className="mt-8" id="warnings">
-              <h2 className="mb-4 text-base sm:text-lg font-semibold sm:font-medium text-gray-900">
-                Lưu ý
-              </h2>
-              <div className="mt-4 rounded-lg bg-orange-50 p-4">
-                <div className="flex items-start">
-                  <AlertTriangle className="mr-3 h-5 w-5 text-orange-500" />
-                  <div>
-                    <p className="font-medium text-orange-800">Lưu ý</p>
-                    <ul className="mt-2 list-disc space-y-2 pl-5 text-orange-700">
-                      <li>
-                        Không sử dụng cho người mẫn cảm/kiêng kỵ với bất kỳ
-                        thành phần nào của sản phẩm.
-                      </li>
-                      <li>
-                        Người đang sử dụng thuốc, phụ nữ có thai hoặc đang cho
-                        con bú cần tham khảo ý kiến chuyên gia y tế trước khi sử
-                        dụng.
-                      </li>
-                      <li>
-                        Sản phẩm này không phải là thuốc và không có tác dụng
-                        thay thế thuốc chữa bệnh.
-                      </li>
-                      <li>Đọc kỹ hướng dẫn sử dụng trước khi dùng.</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </section>
+               <div className="mt-4 rounded-lg bg-orange-50 p-4">
+                 <div className="flex items-start">
+                   <AlertTriangle className="mr-3 h-5 w-5 text-orange-500" />
+                   <div>
+                     <p className="font-medium text-orange-800">Lưu ý</p>
+                     {product.sideEffects ? (
+                        <ul className="mt-2 list-disc space-y-2 pl-5 text-orange-700">
+                          <li>{product.sideEffects}</li>
+                        </ul>
+                      ) : (
+                        <ul className="mt-2 list-disc space-y-2 pl-5 text-orange-700">
+                        <li>Chưa có lưu ý với sản phẩm</li>
+                      </ul>
+                      )}
+                   </div>
+                 </div>
+               </div>
+             </section>
+
 
             {/* Storage Section */}
             {product.storage ? (
