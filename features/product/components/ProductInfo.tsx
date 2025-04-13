@@ -314,7 +314,10 @@ export default function ProductInfo({
           <>
             <div className="col-span-2 text-[#6B7280]">Thành phần</div>
             <div className="col-span-3 space-y-1">
-              <div className="text-[#111827]">{product.ingredients}</div>
+              <div className="text-[#111827]">
+                {/* {product.ingredients} */}
+                <div dangerouslySetInnerHTML={{ __html: product.ingredients }} />
+              </div>
             </div>
           </>
         )}
@@ -323,7 +326,8 @@ export default function ProductInfo({
           <>
             <div className="col-span-2 text-[#6B7280]">Cách dùng</div>
             <div className="col-span-3 text-[#111827]">
-              {product.instructions}
+              {/* {product.instructions} */}
+              <div dangerouslySetInnerHTML={{ __html: product.instructions }} />
             </div>
           </>
         )}
@@ -331,14 +335,18 @@ export default function ProductInfo({
         {product.storage && (
           <>
             <div className="col-span-2 text-[#6B7280]">Bảo quản</div>
-            <div className="col-span-3 text-[#111827]">{product.storage}</div>
+            <div className="col-span-3 text-[#111827]">
+              {/* {product.storage} */}
+              <div dangerouslySetInnerHTML={{ __html: product.storage }} />
+            </div>
           </>
         )}
         {product.description && (
           <>
             <div className="col-span-2 text-[#6B7280]">Mô tả ngắn</div>
             <div className="col-span-3 text-grayscale-90 line-clamp-3">
-              {product.description}
+              {/* {product.description} */}
+              <div dangerouslySetInnerHTML={{ __html: product.description }} />
             </div>
           </>
         )}
