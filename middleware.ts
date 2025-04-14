@@ -30,8 +30,30 @@ const rewrites = new Map([
   ['/gio-hang', '/cart'],
 ]);
 
+// Check if user is authenticated
+const isAuthenticated = (request: NextRequest) => {
+  // Check for authentication token in cookies
+  const authToken = request.cookies.get('auth-token')?.value;
+
+  // You can add additional validation here if needed
+  return !!authToken;
+};
+
 export async function middleware(request: NextRequest) {
   const { pathname, search } = request.nextUrl;
+
+  // Handle authentication for /account routes
+  if (pathname.startsWith('/account')) {
+    // If not authenticated, redirect to login page
+    if (!isAuthenticated(request)) {
+      const loginUrl = new URL('/login', request.url);
+
+      // Add a redirect parameter to return to the original page after login
+      loginUrl.searchParams.set('redirect', pathname);
+
+      return NextResponse.redirect(loginUrl);
+    }
+  }
 
   // Check for dynamic coach experts path
   if (pathname.startsWith('/coach-experts/') && pathname !== '/coach-experts') {
@@ -176,11 +198,18 @@ export async function middleware(request: NextRequest) {
   }
 
   // Authentication middleware logic
-  const isAuthenticated = request.cookies.has('auth-token');
   const isProtectedRoute = request.nextUrl.pathname.startsWith('/(protected)');
+  const isAccountRoute = request.nextUrl.pathname.startsWith('/account');
 
-  if (isProtectedRoute && !isAuthenticated) {
-    return NextResponse.redirect(new URL('/login', request.url));
+  if ((isProtectedRoute || isAccountRoute) && !isAuthenticated(request)) {
+    // Save the original URL to redirect back after login
+    const loginUrl = new URL('/login', request.url);
+
+    if (isAccountRoute) {
+      loginUrl.searchParams.set('redirect', request.nextUrl.pathname);
+    }
+
+    return NextResponse.redirect(loginUrl);
   }
 
   return NextResponse.next();

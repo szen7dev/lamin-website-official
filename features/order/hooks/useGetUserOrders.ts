@@ -9,9 +9,14 @@ import { getUserOrders } from '../api/getUserOrders';
  * @param params - Parameters for fetching orders
  * @returns Object containing order list, loading state, and error
  */
-export const useGetUserOrders = (params: { customerID: string }) => {
+export const useGetUserOrders = (params: {
+  customerID: string;
+  keyword?: string;
+  outin?: number;
+  type?: number;
+}) => {
   const { data, isLoading, error, refetch, isError } = useQuery({
-    queryKey: ['GET_USER_ORDERS', params.customerID],
+    queryKey: ['GET_USER_ORDERS', params],
     queryFn: () => getUserOrders(params),
     staleTime: 1000 * 60 * 5, // 5 minutes
     enabled: !!params.customerID, // Only fetch if customerID is provided

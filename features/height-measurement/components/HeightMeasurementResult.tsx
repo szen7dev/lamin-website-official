@@ -405,21 +405,19 @@ export default function HeightMeasurementResult({
   return (
     <article
       aria-labelledby="height-measurement-result-title"
-      className="flex flex-col md:flex-row gap-4 sm:gap-6">
+      className="flex flex-col md:flex-row overflow-hidden">
       <h2 className="sr-only" id="height-measurement-result-title">
         Kết quả phân tích đo cao
       </h2>
 
       {/* Column 1: Age and Height Table */}
       <aside className="w-full md:w-[200px] shrink-0 order-2 md:order-1">
-        <div className="rounded-lg border border-grayscale-20">
-          <header className="grid grid-cols-2 bg-primary text-center text-xs sm:text-sm font-medium text-white">
-            <div className="border-r border-white/10 px-2 sm:px-4 py-2">
-              Tuổi
-            </div>
+        <div className="border-r border-grayscale-20  rounded-tl-2xl h-full">
+          <header className="grid grid-cols-2 bg-primary text-center text-xs sm:text-sm font-medium text-white rounded-tl-2xl">
+            <div className="px-2 sm:px-4 py-2">Tuổi</div>
             <div className="px-2 sm:px-4 py-2">Chiều cao (cm)</div>
           </header>
-          <div className="max-h-[300px] md:max-h-[600px] overflow-y-auto">
+          <div>
             {processedData.heightData
               .filter(item => {
                 // Tính tuổi hiện tại
@@ -431,12 +429,10 @@ export default function HeightMeasurementResult({
               .map((item, index, filteredArray) => (
                 <div
                   key={item.age}
-                  className={`grid grid-cols-2 border-t border-grayscale-20 text-center text-xs sm:text-sm ${
+                  className={`grid grid-cols-2 text-center text-xs sm:text-sm ${
                     index === filteredArray.length - 1 ? 'text-[#FF0000]' : ''
                   }`}>
-                  <div className="border-r border-grayscale-20 px-2 sm:px-4 py-2">
-                    {item.age}
-                  </div>
+                  <div className="px-2 sm:px-4 py-2">{item.age}</div>
                   <div className="px-2 sm:px-4 py-2">{item.height}</div>
                 </div>
               ))}
@@ -445,25 +441,28 @@ export default function HeightMeasurementResult({
       </aside>
 
       {/* Column 2: Growth Chart and Info */}
-      <section className="flex-1 space-y-3 sm:space-y-4 order-1 md:order-2">
+      <section className="flex-1 space-y-3 sm:space-y-4 order-1 md:order-2 w-3/4">
         {/* Row 1: Growth Rate */}
         <div
           aria-label="Đường tăng trưởng"
-          className="flex items-center gap-2 sm:gap-4">
+          className="flex items-center gap-2 sm:gap-4 p-3 border-b border-grayscale-20">
           <div className="whitespace-nowrap text-sm sm:text-base font-medium">
             Đường tăng trưởng: {processedData.growthRate}
           </div>
-          <div
-            aria-valuemax={100}
-            aria-valuemin={0}
-            aria-valuenow={processedData.growthRate}
-            className="h-6 sm:h-8 flex-1 rounded-md bg-[#F37021]"
-            role="progressbar"
-          />
+          <div className="flex-1 h-6 sm:h-8 bg-gray-100 rounded-md overflow-hidden">
+            <div
+              aria-valuemax={100}
+              aria-valuemin={0}
+              aria-valuenow={processedData.growthRate}
+              className="h-full rounded-md bg-[#F37021]"
+              role="progressbar"
+              style={{ width: `${processedData.growthRate}%` }}
+            />
+          </div>
         </div>
 
         {/* Row 2: Chart Area */}
-        <div className="grid grid-cols-1 md:grid-cols-[auto_1fr] gap-2">
+        <div className="grid grid-cols-1 md:grid-cols-[auto_1fr] gap-2 p-3">
           {/* Percentile Legend */}
           <div
             aria-label="Chú thích biểu đồ"
@@ -484,13 +483,13 @@ export default function HeightMeasurementResult({
           </div>
 
           {/* Chart */}
-          <figure className="h-[300px] sm:h-[400px] rounded-lg border border-grayscale-20 p-2 sm:p-4">
+          <figure className="h-[300px] sm:h-[400px] p-2 sm:p-4">
             <canvas ref={chartRef} aria-label="Biểu đồ dự đoán chiều cao" />
           </figure>
         </div>
 
         {/* Row 3: Analysis Text */}
-        <div className="space-y-1 sm:space-y-2 text-xs sm:text-sm">
+        <div className="space-y-1 sm:space-y-2 text-xs sm:text-sm p-3 border-t border-grayscale-20">
           <p>
             • Chiều cao: {processedData.height}cm. Bé{' '}
             {apiResponse?.growTrack.hdfs > 0 ? 'cao' : 'thấp'} hơn so với chiều
