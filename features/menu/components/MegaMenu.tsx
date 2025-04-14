@@ -320,7 +320,7 @@ export default function MegaMenu() {
                           }
                         }}>
                         {/* Level 2 items (sidebar) */}
-                        <div className="w-64 bg-white rounded-l-lg border-r border-grayscale-10">
+                        <div className="w-64 bg-white rounded-l-lg border-grayscale-10">
                           {(
                             formattedMenu.level2ItemsByParent[item._id] || []
                           ).map((category: MediaItem) => (

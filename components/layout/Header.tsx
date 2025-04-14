@@ -259,7 +259,7 @@ export function Header() {
                       loading="lazy"
                       priority={false}
                       sizes="40px"
-                      src="/images/qrCode.webp"
+                      src="/images/qrCode.jpg"
                       width={40}
                       onError={e => {
                         const target = e.target as HTMLImageElement;
@@ -361,20 +361,20 @@ export function Header() {
 
           {/* QR Code Section - Hidden on mobile */}
           <div className="hidden md:flex w-[143px] flex-shrink-0 flex-col items-center justify-center rounded-xl bg-[#F37021] self-stretch">
-            <div className="text-center text-white p-2">
-              <div className="text-xs font-medium">Quét Mã QR kênh CSKH</div>
+            <div className="text-center text-white p-1">
+              <div className="text-xs font-medium">Quan tâm Zalo OA Trung tâm CSKH Lamin</div>
               {/* <div className="text-sm font-bold">Tặng bộ Voucher 1 triệu</div> */}
             </div>
-            <div className="bg-white p-2 rounded-b-xl w-full flex-1 flex items-center justify-center relative overflow-hidden">
+            <div className="bg-white p-1 rounded-b-xl w-full flex-1 flex items-center justify-center relative overflow-hidden">
               <Image
                 alt="QR Code"
                 className="object-contain"
-                height={100}
+                height={120}
                 loading="lazy"
                 priority={false}
-                sizes="100px"
-                src="/images/qrCode.webp"
-                width={100}
+                sizes="120px"
+                src="/images/qrCode.jpg"
+                width={120}
                 onError={e => {
                   const target = e.target as HTMLImageElement;
 

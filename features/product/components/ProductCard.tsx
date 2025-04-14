@@ -109,10 +109,16 @@ export default function ProductCard({
     }).format(price);
   };
 
-  const discountText =
+  const discountAmount =
     product?.listedUnitprice && product?.sellingUnitprice
-      ? `-${(((product.listedUnitprice - product.sellingUnitprice) / product.listedUnitprice) * 100).toFixed(0)}%`
-      : undefined;
+      ? Number(
+          (
+            ((product.listedUnitprice - product.sellingUnitprice) /
+              product.listedUnitprice) *
+            100
+          ).toFixed(0),
+        )
+      : 0;
 
   // Loading state
   if (isLoading) {
@@ -169,10 +175,10 @@ export default function ProductCard({
         className,
       )}>
       {/* Discount Badge */}
-      {discountText && (
+      {discountAmount > 0 && (
         <span className="absolute top-0 left-0 z-10">
           <div className="bg-gradient-5 text-white text-xs font-medium px-2 py-1 rounded-tl-xl rounded-br-xl">
-            {discountText}
+            {`-${discountAmount}%`}
           </div>
         </span>
       )}
@@ -235,9 +241,9 @@ export default function ProductCard({
             </span>
           )}
         </div>
-        {product.listedUnitprice && (
+        {product?.listedUnitprice && discountAmount > 0 && (
           <span className="text-xs sm:text-sm text-grayscale-40 line-through">
-            {formatPrice(product.listedUnitprice)}
+            {formatPrice(product?.listedUnitprice)}
           </span>
         )}
       </div>
@@ -251,14 +257,14 @@ export default function ProductCard({
 
       {/* Buy Button */}
       {variant === 'default' ? (
-        <button
+        <Button
           className="mt-auto w-full rounded-full bg-primary hover:bg-primary-60 text-white py-2 px-4 text-center text-sm sm:text-base font-medium transition-colors"
           onClick={handleAddToCart}>
           Thêm vào giỏ
-        </button>
+        </Button>
       ) : (
         <Button
-          className="decoration-transparent mt-auto w-full rounded-full bg-primary hover:bg-primary-60 text-white py-2 px-4 text-center text-sm sm:text-base font-medium transition-colors no-underline"
+          className="mt-auto w-full rounded-full bg-primary hover:bg-primary-60 text-white py-2 px-4 text-center text-sm sm:text-base font-medium transition-colors"
           disabled={isAddingToCart}
           onClick={handleAddToCart}>
           {isAddingToCart ? (

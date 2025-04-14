@@ -321,7 +321,7 @@ export function Footer() {
                   alt="QR Code"
                   className="rounded-lg"
                   height={120}
-                  src="/images/qrCode.webp"
+                  src="/images/qrCode.jpg"
                   style={{ width: 'auto' }}
                   width={120}
                 />
