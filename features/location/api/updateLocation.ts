@@ -1,6 +1,6 @@
 import {
   Coach,
-  GetDetailCoachParams,
+  UpdateContactParams,
 } from '@/features/homepage/types/coachTypes';
 import { apiClient } from '@/services/api/apiClient';
 
@@ -9,31 +9,32 @@ import { apiClient } from '@/services/api/apiClient';
  * @param params - Parameters for fetching coach details
  * @returns Promise with coach data
  */
-export const getDetailCoach = async (
-  params: GetDetailCoachParams,
+export const updateLocation = async (
+  params: UpdateContactParams,
 ): Promise<Coach> => {
   // Prepare query parameters
   const queryParams: Record<string, any> = {
     contactID: params.contactID,
-    populates:
-      params.populates ||
-      JSON.stringify({
-        path: 'company position department area field',
-        select: 'name sign position note',
-      }),
-    select: 'name phone note image email address',
+    name: params.name,
+    phone: params.phone,
+    email: params.email,
+    // province: params.province,
+    // district: params.district,
+    address: params.address,
+    note: params.note,
+    // areaID: params.areaID,
   };
 
   try {
     // Make API call to get coach details
-    const coach = await apiClient.getNormalizedResponse<Coach>(
+    const coach = await apiClient.putNormalizedResponse<Coach>(
       '/api/item/contacts',
       queryParams,
     );
 
     return coach;
   } catch (error) {
-    console.error('Error fetching coach details:', error);
+    console.error('Error update contact coach:', error);
     throw error;
   }
 };

@@ -89,6 +89,7 @@ export interface Coach {
   field: Field;
   note: string;
   position: Position;
+  address?: string;
 }
 
 export interface CoachDocument {
@@ -134,4 +135,16 @@ export interface GetDetailCoachParams {
   populates?: Populate;
   select?: string;
   type?: number;
+}
+
+export interface UpdateContactParams {
+  contactID: string;
+  name?: string;
+  phone?: string;
+  email?: string;
+  // province?: string;
+  // district?: string;
+  address?: string;
+  note?: string;
+  // areaID?: string;
 }
