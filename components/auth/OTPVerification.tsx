@@ -158,7 +158,7 @@ export function OTPVerification({
               width={80}
             />
             <div className="text-center">
-              <div className="text-sm font-medium text-primary">NHÀ THUỐC</div>
+              <div className="text-sm font-medium text-primary">CỬA HÀNG</div>
               <div className="text-xl font-bold text-primary leading-tight">
                 LAMIN
               </div>

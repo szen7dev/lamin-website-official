@@ -390,10 +390,10 @@ export default function ProductTabs({ product }: ProductTabsProps) {
                 </span>
               </div>
             </div>
-            <p className="text-sm text-grayscale-50">
+            {/* <p className="text-sm text-grayscale-50">
               Tốt nghiệp Đại học Dược Hà Nội, với hơn 10 năm kinh nghiệm trong
               lĩnh vực Dược phẩm
-            </p>
+            </p> */}
           </div>
         </div>
       </div>

@@ -186,7 +186,7 @@ export default function LoginPage() {
                   width={80}
                 />
                 <div className="text-left font-extrabold text-[#034EA2]">
-                  <div className="text-sm">NHÀ THUỐC</div>
+                  <div className="text-sm">CỬA HÀNG</div>
                   <div className="text-xl leading-tight">LAMIN</div>
                 </div>
               </div>

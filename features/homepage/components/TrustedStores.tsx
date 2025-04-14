@@ -30,8 +30,8 @@ const benefits = [
   {
     id: 3,
     icon: <ShieldIcon />,
-    title: 'Cam kết 100%',
-    description: 'Chất lượng sản phẩm',
+    title: 'Cam kết sản phẩm',
+    description: 'Đúng chất lượng theo công bố',
   },
   {
     id: 4,
@@ -91,10 +91,10 @@ export default function TrustedStores() {
           <h2
             className="text-xl sm:text-2xl md:text-3xl font-semibold text-white"
             id="trusted-stores-heading">
-            Nhà thuốc uy tín
+            Cửa hàng uy tín
           </h2>
           <p className="text-sm sm:text-base text-white/80">
-            Mua thuốc tại các nhà thuốc uy tín trên toàn quốc
+           Theo danh sách được công bố tại Website lamin.com.vn
           </p>
         </div>
         <Link className="decoration-transparent" href="/stores">
@@ -179,7 +179,7 @@ export default function TrustedStores() {
               ))
             ) : (
               <div className="col-span-full flex items-center justify-center h-24 rounded-xl bg-white/10 p-4">
-                <p className="text-grayscale-50">Không có nhà thuốc nào</p>
+                <p className="text-grayscale-50">Không có cửa hàng nào</p>
               </div>
             )}
           </div>

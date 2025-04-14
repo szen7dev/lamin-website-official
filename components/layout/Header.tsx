@@ -219,12 +219,6 @@ export function Header() {
                     style={{ width: 'auto' }}
                     width={80}
                   />
-                  {/* <div className="text-white">
-                    <div className="text-xs font-medium">NHÀ THUỐC</div>
-                    <div className="text-base font-bold leading-none">
-                      LONG CHÂU
-                    </div>
-                  </div> */}
                 </Link>
                 <div className="col-span-1 ml-auto flex gap-2">
                   <div className=" relative p-1 bg-primary-50 w-10 h-10 flex items-center justify-center rounded-full">
@@ -294,12 +288,6 @@ export function Header() {
                     style={{ width: 'auto' }}
                     width={40}
                   />
-                  {/* <div className="text-white">
-                    <div className="text-xs font-medium">NHÀ THUỐC</div>
-                    <div className="text-lg font-bold leading-none">
-                      LONG CHÂU
-                    </div>
-                  </div> */}
                 </Link>
 
                 {/* Contact and Download - Hidden on mobile, visible on medium screens */}
