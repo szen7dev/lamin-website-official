@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input';
 import { formatCurrency, formatDate } from '@/utils';
 import { useGetUserOrders } from '@/features/order/hooks/useGetUserOrders';
 import { useAuth } from '@/hooks';
+import { apiClient } from '@/services';
 
 type OrderStatus = 0 | 2 | 3 | 5 | 4 | 7;
 
@@ -23,8 +24,7 @@ export default function OrdersPage() {
   const { user } = useAuth();
   const [activeTab, setActiveTab] = useState<OrderStatus>(0);
   const { orderList, isLoading, isError, error } = useGetUserOrders({
-    customerID: '6447bd863e99e50011d47d82',
-    // customerID: user?.id || '',
+    customerID: user?.id || '',
   });
 
   console.log('orderList', orderList);
@@ -104,7 +104,10 @@ export default function OrdersPage() {
                     alt={item.name}
                     className="w-full h-full object-cover"
                     height={80}
-                    src={item?.thumbnail?.path || '/placeholder.svg'}
+                    src={
+                      apiClient.getFileUrl(item?.thumbnail?.path) ||
+                      '/placeholder.svg'
+                    }
                     width={80}
                   />
                 </div>
