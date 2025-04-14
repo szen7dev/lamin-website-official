@@ -209,7 +209,10 @@ export default function ProductTabs({ product }: ProductTabsProps) {
               <h2 className="mb-4 text-lg sm:text-lg font-semibold sm:font-medium text-gray-900">
                 {product.name} là gì?
               </h2>
-              <p className="mb-4 text-gray-700">{product.description}</p>
+              <div
+                dangerouslySetInnerHTML={{ __html: product.description || '' }}
+                className="mb-4 text-gray-700"
+              />
             </section>
 
             {/* features Section */}
@@ -219,7 +222,11 @@ export default function ProductTabs({ product }: ProductTabsProps) {
                   Đặc điểm nổi bật của sản phẩm
                 </h2>
                 <div className="mt-4 overflow-hidden border-gray-200">
-                  <p className="text-gray-700">{product.features}</p>
+                  <p
+                    className="text-gray-700"
+                    dangerouslySetInnerHTML={{
+                      __html: product.features || '',
+                    }}></p>
                 </div>
               </section>
             ) : (
@@ -240,7 +247,11 @@ export default function ProductTabs({ product }: ProductTabsProps) {
                   Thành phần của sản phẩm
                 </h2>
                 <div className="mt-4 overflow-hidden border-gray-200">
-                  <p className="text-gray-700">{product.ingredients}</p>
+                  <p
+                    className="text-gray-700"
+                    dangerouslySetInnerHTML={{
+                      __html: product.ingredients || '',
+                    }}></p>
                 </div>
               </section>
             ) : (
@@ -260,7 +271,9 @@ export default function ProductTabs({ product }: ProductTabsProps) {
                 <h2 className="mb-4 text-base sm:text-lg font-semibold sm:font-medium text-gray-900">
                   Cách dùng {product.name}
                 </h2>
-                <p className="mb-2 text-gray-700">{product.usage}</p>
+                <p
+                  className="mb-2 text-gray-700"
+                  dangerouslySetInnerHTML={{ __html: product.usage || '' }}></p>
               </section>
             )}
 
@@ -270,7 +283,11 @@ export default function ProductTabs({ product }: ProductTabsProps) {
                 <h2 className="mb-4 text-base sm:text-lg font-semibold sm:font-medium text-gray-900">
                   Tác dụng phụ
                 </h2>
-                <p className="mb-2 text-gray-700">{product.sideEffects}</p>
+                <p
+                  className="mb-2 text-gray-700"
+                  dangerouslySetInnerHTML={{
+                    __html: product.sideEffects || '',
+                  }}></p>
               </section>
             ) : (
               <section className="mt-8" id="sideEffects">
@@ -320,7 +337,11 @@ export default function ProductTabs({ product }: ProductTabsProps) {
                 <h2 className="mb-4 text-base sm:text-lg font-semibold sm:font-medium text-gray-900">
                   Bảo quản
                 </h2>
-                <p className="text-gray-700">{product.storage}</p>
+                <p
+                  className="text-gray-700"
+                  dangerouslySetInnerHTML={{
+                    __html: product.storage || '',
+                  }}></p>
               </section>
             ) : (
               <section className="mt-8" id="storage">

@@ -24,6 +24,7 @@ interface BaseOrderFields {
 }
 
 export interface OrderProduct {
+  _id: string;
   productID: string;
   quantity: number;
   unitPrice: number;
@@ -45,7 +46,7 @@ export interface Customer {
 
 // Main order type with additional fields for full order
 export interface Order extends BaseOrderFields {
-  id: string;
+  _id: string;
   sign: string;
   createAt: string;
   amount: number;
@@ -59,6 +60,7 @@ export interface Order extends BaseOrderFields {
   deliveryStartTime?: string;
   deliveredTime?: string;
   funda: Funda;
+  date: string;
 }
 
 // Type for creating a new order

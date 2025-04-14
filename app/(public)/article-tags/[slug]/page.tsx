@@ -6,6 +6,7 @@ import { ClientArticleTagList } from './client';
 import { DynamicBreadcrumb } from '@/components/dynamic-breadcrumb';
 import Loading from '@/app/loading';
 import { generateMetadata as generateSeoMetadata } from '@/utils/seo';
+import { getMenuBySlug } from '@/features/menu/api/getMenuBySlug';
 
 // Dynamic metadata generation based on slug
 export async function generateMetadata({
@@ -35,12 +36,13 @@ export default async function ArticleTagPage({
 }) {
   // Access the slug directly from params
   const { slug } = await Promise.resolve(params);
+  const menuInfo = await getMenuBySlug({ slug });
 
   return (
     <section className="py-8">
       <div className="container">
         {/* Breadcrumb */}
-        <DynamicBreadcrumb />
+        <DynamicBreadcrumb name={menuInfo.name} />
 
         {/* Article Tag List Component */}
         <Suspense fallback={<Loading />}>
