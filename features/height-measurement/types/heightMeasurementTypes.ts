@@ -112,3 +112,31 @@ export interface GrowTrackListApiResponse {
   };
   status: number;
 }
+
+export interface HeightHistoryParams {
+  limit: number;
+  phone: string;
+}
+
+export interface HeightHistory {
+  _id: string;
+  status: number;
+  date: string;
+  desiredHeight: number;
+  gender: number;
+  height: number;
+  weight: number;
+  files: any[];
+  state: number;
+  company: string;
+  userCreate: string;
+  phone: string;
+  birthday: string;
+  note: string;
+  namecv: string;
+  modifyAt: string;
+  createAt: string;
+  __v: number;
+  name?: string;
+  userUpdate?: string;
+}
