@@ -1001,3 +1001,101 @@ export const ListLayoutIcon: React.FC<IconSvgProps> = ({
     />
   </svg>
 );
+
+export const UserProfileIcon: React.FC<IconSvgProps> = ({
+  size,
+  width = '20',
+  height = '20',
+  ...props
+}) => (
+  <svg
+    fill="none"
+    height={size || height}
+    viewBox="0 0 20 20"
+    width={size || width}
+    xmlns="http://www.w3.org/2000/svg"
+    {...props}>
+    <path
+      d="M4.168 16.849C4.41551 16.0252 4.92197 15.3032 5.61225 14.79C6.30252 14.2768 7.13985 13.9997 8 14H12C12.8613 13.9997 13.6996 14.2774 14.3904 14.7918C15.0812 15.3062 15.5875 16.0298 15.834 16.855M1 10C1 11.1819 1.23279 12.3522 1.68508 13.4442C2.13738 14.5361 2.80031 15.5282 3.63604 16.364C4.47177 17.1997 5.46392 17.8626 6.55585 18.3149C7.64778 18.7672 8.8181 19 10 19C11.1819 19 12.3522 18.7672 13.4442 18.3149C14.5361 17.8626 15.5282 17.1997 16.364 16.364C17.1997 15.5282 17.8626 14.5361 18.3149 13.4442C18.7672 12.3522 19 11.1819 19 10C19 8.8181 18.7672 7.64778 18.3149 6.55585C17.8626 5.46392 17.1997 4.47177 16.364 3.63604C15.5282 2.80031 14.5361 2.13738 13.4442 1.68508C12.3522 1.23279 11.1819 1 10 1C8.8181 1 7.64778 1.23279 6.55585 1.68508C5.46392 2.13738 4.47177 2.80031 3.63604 3.63604C2.80031 4.47177 2.13738 5.46392 1.68508 6.55585C1.23279 7.64778 1 8.8181 1 10ZM7 8C7 8.79565 7.31607 9.55871 7.87868 10.1213C8.44129 10.6839 9.20435 11 10 11C10.7956 11 11.5587 10.6839 12.1213 10.1213C12.6839 9.55871 13 8.79565 13 8C13 7.20435 12.6839 6.44129 12.1213 5.87868C11.5587 5.31607 10.7956 5 10 5C9.20435 5 8.44129 5.31607 7.87868 5.87868C7.31607 6.44129 7 7.20435 7 8Z"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="2"
+    />
+  </svg>
+);
+
+export const MapPinIcon: React.FC<IconSvgProps> = ({
+  size,
+  width = '18',
+  height = '21',
+  ...props
+}) => (
+  <svg
+    fill="none"
+    height={size || height}
+    viewBox="0 0 18 21"
+    width={size || width}
+    xmlns="http://www.w3.org/2000/svg"
+    {...props}>
+    <path
+      d="M6 9.00002C6 9.79566 6.31607 10.5587 6.87868 11.1213C7.44129 11.6839 8.20435 12 9 12C9.79565 12 10.5587 11.6839 11.1213 11.1213C11.6839 10.5587 12 9.79566 12 9.00002C12 8.20437 11.6839 7.4413 11.1213 6.87869C10.5587 6.31609 9.79565 6.00002 9 6.00002C8.20435 6.00002 7.44129 6.31609 6.87868 6.87869C6.31607 7.4413 6 8.20437 6 9.00002Z"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="2"
+    />
+    <path
+      d="M14.657 14.657L10.414 18.9C10.039 19.2746 9.53059 19.4851 9.0005 19.4851C8.47042 19.4851 7.96202 19.2746 7.587 18.9L3.343 14.657C2.22422 13.5382 1.46234 12.1127 1.15369 10.5609C0.845043 9.00904 1.00349 7.40053 1.60901 5.93874C2.21452 4.47696 3.2399 3.22755 4.55548 2.34852C5.87107 1.46949 7.41777 1.00031 9 1.00031C10.5822 1.00031 12.1289 1.46949 13.4445 2.34852C14.7601 3.22755 15.7855 4.47696 16.391 5.93874C16.9965 7.40053 17.155 9.00904 16.8463 10.5609C16.5377 12.1127 15.7758 13.5382 14.657 14.657Z"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="2"
+    />
+  </svg>
+);
+
+export const PackageIcon: React.FC<IconSvgProps> = ({
+  size,
+  width = '18',
+  height = '20',
+  ...props
+}) => (
+  <svg
+    fill="none"
+    height={size || height}
+    viewBox="0 0 18 20"
+    width={size || width}
+    xmlns="http://www.w3.org/2000/svg"
+    {...props}>
+    <path
+      d="M17 5.5L9 1L1 5.5M17 5.5V14.5L9 19M17 5.5L9 10M9 19L1 14.5V5.5M9 19V10M1 5.5L9 10M13 3.25L5 7.75"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="2"
+    />
+  </svg>
+);
+
+export const ChevronNoArrowIcon: React.FC<IconSvgProps> = ({
+  width = '8',
+  height = '12',
+  ...props
+}) => (
+  <svg
+    fill="none"
+    height={height}
+    viewBox="0 0 8 12"
+    width={width}
+    xmlns="http://www.w3.org/2000/svg"
+    {...props}>
+    <path
+      d="M1.5 1L6.5 6L1.5 11"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="2"
+    />
+  </svg>
+);

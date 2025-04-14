@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 
 import { generateMetadata as generateSeoMetadata } from '@/utils/seo';
 import ProductList from '@/features/product/components/ProductList';
+import { getMenuBySlug } from '@/features/menu/api/getMenuBySlug';
 
 export async function generateMetadata({
   params,
@@ -30,6 +31,7 @@ export default async function ProductListPage({
 }) {
   const resolvedParams = await Promise.resolve(params);
   const { slug } = resolvedParams;
+  const menuInfo = await getMenuBySlug({ slug });
 
-  return <ProductList params={{ slug }} />;
+  return <ProductList params={{ slug }} menuInfo={menuInfo} />;
 }

@@ -187,7 +187,7 @@ export default function MegaMenu() {
       ? apiClient.getFileUrl(product.thumbnail?.path)
       : '/placeholder.svg',
     price: product.sellingUnitprice,
-    originalPrice: Math.round(product.sellingUnitprice * 1.2), // Estimate original price as 20% higher if not provided
+    originalPrice: product.listedUnitprice, // Estimate original price as 20% higher if not provided
     unit: product.unit || 'hộp',
     category: product.category,
     slug: product.slug,

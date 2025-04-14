@@ -126,7 +126,7 @@ export function Header() {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-56">
         <DropdownMenuItem asChild>
-          <Link className="decoration-transparent" href="/profile">
+          <Link className="decoration-transparent" href="/account">
             Tài khoản của tôi
           </Link>
         </DropdownMenuItem>

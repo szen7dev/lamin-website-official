@@ -9,12 +9,14 @@ import { useRouter } from 'next/navigation';
 
 import { login as loginApi } from '@/features/auth/api/login';
 import { apiClient } from '@/services/api/apiClient';
+import { updateUser, UserUpdateParams } from '@/features/auth/api/updateUser';
 
 type AuthContextType = {
   user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
   login: (email: string, password: string) => Promise<LoginResponse>;
+  updateUser: (params: UserUpdateParams) => Promise<any>;
   loginWithOTP: (phone: string, otp: string) => Promise<LoginResponse>;
   logout: () => Promise<void>;
 };
@@ -48,6 +50,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           const userFullname = localStorage.getItem('user_fullname') || '';
           const userLoyaltyPoints =
             localStorage.getItem('user_loyalty_points') || '';
+          const userGender = localStorage.getItem('user_gender') || '';
+          const userBirthDay = localStorage.getItem('user_birthDay') || '';
 
           // Try to reconstruct user object from localStorage
           setUser({
@@ -57,6 +61,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             email: userEmail,
             image: userImage,
             fullname: userFullname,
+            gender: parseInt(userGender) as 1 | 2 | 3,
+            birthDay: userBirthDay,
             contacts: [{ remainLoyaltyPoints: parseInt(userLoyaltyPoints) }],
           });
         }
@@ -83,6 +89,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     localStorage.removeItem('user_image');
     localStorage.removeItem('user_fullname');
     localStorage.removeItem('user_loyalty_points');
+    localStorage.removeItem('user_gender');
+    localStorage.removeItem('user_birthDay');
     // Add any other user properties that were stored
   };
 
@@ -102,6 +110,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         userData.contacts[0].remainLoyaltyPoints.toString(),
       );
     }
+    if (userData.gender)
+      localStorage.setItem('user_gender', userData.gender.toString());
+    if (userData.birthDay)
+      localStorage.setItem('user_birthDay', userData.birthDay);
     // Store additional user properties as needed
   }, []);
 
@@ -128,8 +140,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           };
 
           // Store in state and localStorage
-          setUser(userData);
-          storeUserData(userData);
+          setUser(userData as User);
+          storeUserData(userData as User);
         }
       }
 
@@ -163,8 +175,51 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           };
 
           // Store in state and localStorage
-          setUser(userData);
+          setUser(userData as User);
+          storeUserData(userData as User);
+        }
+      }
+
+      return response;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleUserUpdate = async (
+    params: UserUpdateParams,
+  ): Promise<LoginResponse> => {
+    setIsLoading(true);
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    try {
+      // Use the login function with phone as email and OTP as password
+      const response = await updateUser({
+        fullname: params.fullname,
+        phone: params.phone,
+        gender: params.gender,
+        birthDay: params.birthDay,
+        email: params.email,
+      });
+
+      if (!response.error) {
+        // Store user data
+        if (response.data) {
+          const userData = {
+            id: response.data._id,
+            image: response.data.avatar,
+            fullname: response.data.fullname,
+            gender: response.data.gender,
+            birthDay: response.data.birthDay,
+            name: response.data.name,
+            phone: response.data.phone,
+            email: response.data.email,
+          };
+
           storeUserData(userData);
+          setUser(userData);
         }
       }
 
@@ -196,6 +251,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         user,
         isAuthenticated: !!user,
         isLoading,
+        updateUser: handleUserUpdate,
         login,
         loginWithOTP,
         logout,
