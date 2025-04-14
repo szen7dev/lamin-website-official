@@ -7,6 +7,7 @@ export interface BestSellerItem {
   _id: string;
   name: string;
   sellingUnitprice: number;
+  listedUnitprice: number;
   unit: string;
   thumbnail: Thumbnail;
   slug: string;

@@ -209,8 +209,10 @@ export default function ProductTabs({ product }: ProductTabsProps) {
               <h2 className="mb-4 text-lg sm:text-lg font-semibold sm:font-medium text-gray-900">
                 {product.name} là gì?
               </h2>
-              {/* <p className="mb-4 text-gray-700">{product.description}</p> */}
-              <div dangerouslySetInnerHTML={{ __html: product.description }} />
+              <div
+                dangerouslySetInnerHTML={{ __html: product.description || '' }}
+                className="mb-4 text-gray-700"
+              />
             </section>
 
             {/* features Section */}
@@ -220,8 +222,12 @@ export default function ProductTabs({ product }: ProductTabsProps) {
                   Đặc điểm nổi bật của sản phẩm
                 </h2>
                 <div className="mt-4 overflow-hidden border-gray-200">
-                  {/* <p className="text-gray-700">{product.features}</p> */}
-                  <div dangerouslySetInnerHTML={{ __html: product.features }} />
+                  <p
+                    dangerouslySetInnerHTML={{
+                      __html: product.features || '',
+                    }}
+                    className="text-gray-700"
+                  />
                 </div>
               </section>
             ) : (
@@ -242,8 +248,12 @@ export default function ProductTabs({ product }: ProductTabsProps) {
                   Thành phần của sản phẩm
                 </h2>
                 <div className="mt-4 overflow-hidden border-gray-200">
-                  {/* <p className="text-gray-700">{product.ingredients}</p> */}
-                  <div dangerouslySetInnerHTML={{ __html: product.ingredients }} />
+                  <p
+                    dangerouslySetInnerHTML={{
+                      __html: product.ingredients || '',
+                    }}
+                    className="text-gray-700"
+                  />
                 </div>
               </section>
             ) : (
@@ -263,8 +273,10 @@ export default function ProductTabs({ product }: ProductTabsProps) {
                 <h2 className="mb-4 text-base sm:text-lg font-semibold sm:font-medium text-gray-900">
                   Cách dùng {product.name}
                 </h2>
-                {/* <p className="mb-2 text-gray-700">{product.instructions}</p> */}
-                <div dangerouslySetInnerHTML={{ __html: product.instructions }} />
+                <p
+                  dangerouslySetInnerHTML={{ __html: product.usage || '' }}
+                  className="mb-2 text-gray-700"
+                />
               </section>
             )}
 
@@ -274,8 +286,12 @@ export default function ProductTabs({ product }: ProductTabsProps) {
                 <h2 className="mb-4 text-base sm:text-lg font-semibold sm:font-medium text-gray-900">
                   Tác dụng phụ
                 </h2>
-                {/* <p className="mb-2 text-gray-700">{product.sideEffects}</p> */}
-                <div dangerouslySetInnerHTML={{ __html: product.sideEffects }} />
+                <p
+                  dangerouslySetInnerHTML={{
+                    __html: product.sideEffects || '',
+                  }}
+                  className="mb-2 text-gray-700"
+                />
               </section>
             ) : (
               <section className="mt-8" id="sideEffects">
@@ -290,26 +306,29 @@ export default function ProductTabs({ product }: ProductTabsProps) {
 
             {/* Warnings Section */}
             <section className="mt-8" id="warnings">
-               <div className="mt-4 rounded-lg bg-orange-50 p-4">
-                 <div className="flex items-start">
-                   <AlertTriangle className="mr-3 h-5 w-5 text-orange-500" />
-                   <div>
-                     <p className="font-medium text-orange-800">Lưu ý</p>
-                     {product.sideEffects ? (
-                        <ul className="mt-2 list-disc space-y-2 pl-5 text-orange-700">
-                          {/* <li>{product.sideEffects}</li> */}
-                          <div dangerouslySetInnerHTML={{ __html: product.sideEffects }} />
-                        </ul>
-                      ) : (
-                        <ul className="mt-2 list-disc space-y-2 pl-5 text-orange-700">
+              <div className="mt-4 rounded-lg bg-orange-50 p-4">
+                <div className="flex items-start">
+                  <AlertTriangle className="mr-3 h-5 w-5 text-orange-500" />
+                  <div>
+                    <p className="font-medium text-orange-800">Lưu ý</p>
+                    {product.sideEffects ? (
+                      <ul className="mt-2 list-disc space-y-2 pl-5 text-orange-700">
+                        {/* <li>{product.sideEffects}</li> */}
+                        <div
+                          dangerouslySetInnerHTML={{
+                            __html: product.sideEffects,
+                          }}
+                        />
+                      </ul>
+                    ) : (
+                      <ul className="mt-2 list-disc space-y-2 pl-5 text-orange-700">
                         <li>Chưa có lưu ý với sản phẩm</li>
                       </ul>
-                      )}
-                   </div>
-                 </div>
-               </div>
-             </section>
-
+                    )}
+                  </div>
+                </div>
+              </div>
+            </section>
 
             {/* Storage Section */}
             {product.storage ? (
@@ -317,8 +336,12 @@ export default function ProductTabs({ product }: ProductTabsProps) {
                 <h2 className="mb-4 text-base sm:text-lg font-semibold sm:font-medium text-gray-900">
                   Bảo quản
                 </h2>
-                {/* <p className="text-gray-700">{product.storage}</p> */}
-                <div dangerouslySetInnerHTML={{ __html: product.storage }} />
+                <p
+                  dangerouslySetInnerHTML={{
+                    __html: product.storage || '',
+                  }}
+                  className="text-gray-700"
+                />
               </section>
             ) : (
               <section className="mt-8" id="storage">

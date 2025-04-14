@@ -6,6 +6,8 @@ import ProductCard from './ProductCard';
 import { useGetGoodsList } from '@/features/search/hooks/goods/useGetGoodsList';
 import { DynamicBreadcrumb } from '@/components/dynamic-breadcrumb';
 import { GridLayoutIcon, ListLayoutIcon } from '@/components/icons';
+import { useGetMenuBySlug } from '@/features/menu/hooks/useGetMenuBySlug';
+import { MediaItem } from '@/features/menu/types/mediaTypes';
 
 type SortType =
   | 'price-asc'
@@ -18,9 +20,11 @@ type SortType =
 function ProductList({
   params,
   searchParams,
+  menuInfo,
 }: {
   params?: { slug: string };
   searchParams?: { [key: string]: string | string[] | undefined };
+  menuInfo?: MediaItem;
 }) {
   const { goodsList, error, isLoading } = useGetGoodsList({
     menuSlug: params?.slug,
@@ -63,7 +67,7 @@ function ProductList({
       <div className="container mx-auto sm:px-4">
         {/* Breadcrumb */}
         <nav aria-label="Breadcrumb">
-          <DynamicBreadcrumb />
+          <DynamicBreadcrumb name={menuInfo?.name} />
         </nav>
       </div>
 

@@ -314,10 +314,10 @@ export default function ProductInfo({
           <>
             <div className="col-span-2 text-[#6B7280]">Thành phần</div>
             <div className="col-span-3 space-y-1">
-              <div className="text-[#111827]">
-                {/* {product.ingredients} */}
-                <div dangerouslySetInnerHTML={{ __html: product.ingredients }} />
-              </div>
+              <div
+                dangerouslySetInnerHTML={{ __html: product.ingredients }}
+                className="text-[#111827]"
+              />
             </div>
           </>
         )}
@@ -325,29 +325,29 @@ export default function ProductInfo({
         {product.instructions && (
           <>
             <div className="col-span-2 text-[#6B7280]">Cách dùng</div>
-            <div className="col-span-3 text-[#111827]">
-              {/* {product.instructions} */}
-              <div dangerouslySetInnerHTML={{ __html: product.instructions }} />
-            </div>
+            <div
+              dangerouslySetInnerHTML={{ __html: product.instructions }}
+              className="col-span-3 text-[#111827]"
+            />
           </>
         )}
 
         {product.storage && (
           <>
             <div className="col-span-2 text-[#6B7280]">Bảo quản</div>
-            <div className="col-span-3 text-[#111827]">
-              {/* {product.storage} */}
-              <div dangerouslySetInnerHTML={{ __html: product.storage }} />
-            </div>
+            <div
+              dangerouslySetInnerHTML={{ __html: product.storage }}
+              className="col-span-3 text-[#111827]"
+            />
           </>
         )}
         {product.description && (
           <>
             <div className="col-span-2 text-[#6B7280]">Mô tả ngắn</div>
-            <div className="col-span-3 text-grayscale-90 line-clamp-3">
-              {/* {product.description} */}
-              <div dangerouslySetInnerHTML={{ __html: product.description }} />
-            </div>
+            <div
+              dangerouslySetInnerHTML={{ __html: product.description }}
+              className="col-span-3 text-grayscale-90 line-clamp-3"
+            />
           </>
         )}
       </div>
