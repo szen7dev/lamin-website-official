@@ -40,7 +40,7 @@ export function EmptyCart() {
             Bạn chưa có sản phẩm nào trong giỏ
           </h2>
           <p className="mb-6 text-base text-center font-normal text-gray-600">
-            Cùng khám phá hàng ngàn sản phẩm tại Nhà thuốc LAMIN nhé!
+            Cùng khám phá các sản phẩm tại LAMIN nhé
           </p>
         </div>
 
@@ -86,7 +86,7 @@ export function EmptyCart() {
         Bạn chưa có sản phẩm nào trong giỏ
       </h2>
       <p className="mb-6 text-center text-gray-600">
-        Cùng khám phá hàng ngàn sản phẩm tại Nhà thuốc LAMIN nhé!
+        Cùng khám phá các sản phẩm tại LAMIN nhé
       </p>
 
       {/* Explore button */}

@@ -90,6 +90,18 @@ export interface Coach {
   note: string;
   position: Position;
   address?: string;
+  area: {
+    _id: string;
+    name: string;
+    parent: {
+      _id: string;
+      name: string;
+      parent: {
+        _id: string;
+        name: string;
+      };
+    };
+  };
 }
 
 export interface CoachDocument {

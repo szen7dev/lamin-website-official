@@ -274,7 +274,7 @@ export default function ProductTabs({ product }: ProductTabsProps) {
                   Cách dùng {product.name}
                 </h2>
                 <p
-                  dangerouslySetInnerHTML={{ __html: product.usage || '' }}
+                  dangerouslySetInnerHTML={{ __html: product.instructions || '' }}
                   className="mb-2 text-gray-700"
                 />
               </section>
@@ -311,12 +311,11 @@ export default function ProductTabs({ product }: ProductTabsProps) {
                   <AlertTriangle className="mr-3 h-5 w-5 text-orange-500" />
                   <div>
                     <p className="font-medium text-orange-800">Lưu ý</p>
-                    {product.sideEffects ? (
+                    {product.warnings ? (
                       <ul className="mt-2 list-disc space-y-2 pl-5 text-orange-700">
-                        {/* <li>{product.sideEffects}</li> */}
                         <div
                           dangerouslySetInnerHTML={{
-                            __html: product.sideEffects,
+                            __html: product.warnings,
                           }}
                         />
                       </ul>
@@ -391,10 +390,10 @@ export default function ProductTabs({ product }: ProductTabsProps) {
                 </span>
               </div>
             </div>
-            <p className="text-sm text-grayscale-50">
+            {/* <p className="text-sm text-grayscale-50">
               Tốt nghiệp Đại học Dược Hà Nội, với hơn 10 năm kinh nghiệm trong
               lĩnh vực Dược phẩm
-            </p>
+            </p> */}
           </div>
         </div>
       </div>

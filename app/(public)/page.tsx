@@ -59,11 +59,11 @@ export const metadata: Metadata = generateSeoMetadata({
   title: 'Lamin-Giải pháp tăng cao toàn diện cho trẻ',
   description: 'Giải pháp tăng cao toàn diện cho trẻ',
   keywords: [
-    'nhà thuốc',
-    'thuốc',
+    'cửa hàng thực phẩm bảo vệ sức khỏe',
+    'thực phẩm bảo vệ sức khỏe',
     'sức khỏe',
     'tư vấn sức khỏe',
-    'mua thuốc online',
+    'mua thực phẩm bảo vệ sức khỏe online',
   ],
 });
 

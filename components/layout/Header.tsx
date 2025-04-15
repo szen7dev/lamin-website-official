@@ -126,22 +126,30 @@ export function Header() {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-56">
         <DropdownMenuItem asChild>
-          <Link className="decoration-transparent" href="/account">
+          <Link
+            className="decoration-transparent cursor-pointer"
+            href="/account/info">
             Tài khoản của tôi
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <Link className="decoration-transparent" href="/orders">
+          <Link
+            className="decoration-transparent cursor-pointer"
+            href="/account/orders">
             Đơn hàng của tôi
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <Link className="decoration-transparent" href="/favorites">
-            Danh sách yêu thích
+          <Link
+            className="decoration-transparent cursor-pointer"
+            href="/account/height-measure-history">
+            Lịch sử đo cao
           </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="text-red-500" onClick={handleLogout}>
+        <DropdownMenuItem
+          className="text-red-500 cursor-pointer"
+          onClick={handleLogout}>
           <LogOut className="mr-2 h-4 w-4" />
           <span>Đăng xuất</span>
         </DropdownMenuItem>
@@ -211,12 +219,6 @@ export function Header() {
                     style={{ width: 'auto' }}
                     width={80}
                   />
-                  {/* <div className="text-white">
-                    <div className="text-xs font-medium">NHÀ THUỐC</div>
-                    <div className="text-base font-bold leading-none">
-                      LONG CHÂU
-                    </div>
-                  </div> */}
                 </Link>
                 <div className="col-span-1 ml-auto flex gap-2">
                   <div className=" relative p-1 bg-primary-50 w-10 h-10 flex items-center justify-center rounded-full">
@@ -286,12 +288,6 @@ export function Header() {
                     style={{ width: 'auto' }}
                     width={40}
                   />
-                  {/* <div className="text-white">
-                    <div className="text-xs font-medium">NHÀ THUỐC</div>
-                    <div className="text-lg font-bold leading-none">
-                      LONG CHÂU
-                    </div>
-                  </div> */}
                 </Link>
 
                 {/* Contact and Download - Hidden on mobile, visible on medium screens */}
@@ -362,7 +358,9 @@ export function Header() {
           {/* QR Code Section - Hidden on mobile */}
           <div className="hidden md:flex w-[143px] flex-shrink-0 flex-col items-center justify-center rounded-xl bg-[#F37021] self-stretch">
             <div className="text-center text-white p-1">
-              <div className="text-xs font-medium">Quan tâm Zalo OA Trung tâm CSKH Lamin</div>
+              <div className="text-xs font-medium">
+                Quan tâm Zalo OA Trung tâm CSKH Lamin
+              </div>
               {/* <div className="text-sm font-bold">Tặng bộ Voucher 1 triệu</div> */}
             </div>
             <div className="bg-white p-1 rounded-b-xl w-full flex-1 flex items-center justify-center relative overflow-hidden">

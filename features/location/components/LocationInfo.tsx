@@ -7,12 +7,8 @@ import { useAuth } from '@/hooks';
 export default function LocationInfo() {
   const { user } = useAuth();
   const customerID = user?.id;
-  const {
-    data: customer,
-    error: customerError,
-    isLoading: customerLoading,
-  } = useGetDetailCoach({
-    contactID: customerID,
+  const { data: customer } = useGetDetailCoach({
+    contactID: customerID || '',
   });
 
   return (
@@ -51,6 +47,8 @@ export default function LocationInfo() {
               {customer?.address ||
                 `C2605, N04B-T1, Chung cư Đoàn Ngoại giao, Phường Xuân Tảo, Quận
               Bắc Từ Liêm, Hà Nội`}
+              {customer?.area?.name}, {customer?.area?.parent?.name},{' '}
+              {customer?.area?.parent?.parent?.name}
             </p>
           </div>
           <button className="py-1 px-4 font-medium text-[#0052A4] border border-[#0052A4] text-sm bg-[#e5eef6] hover:bg-blue-200 rounded-full">

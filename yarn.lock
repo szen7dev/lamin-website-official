@@ -1738,6 +1738,18 @@ concat-map@0.0.1:
   resolved "https://registry.yarnpkg.com/concat-map/-/concat-map-0.0.1.tgz#d8a96bd77fd68df7793a73036a3ba0d5405d477b"
   integrity sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==
 
+cookie@^1.0.1:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/cookie/-/cookie-1.0.2.tgz#27360701532116bd3f1f9416929d176afe1e4610"
+  integrity sha512-9Kr/j4O16ISv8zBBhJoi4bXOYNTkFLOqSL3UDB0njXxCXNezjeyVrJyGOWtgfs/q2km1gwBcfH8q1yEGoMYunA==
+
+cookies-next@^5.1.0:
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/cookies-next/-/cookies-next-5.1.0.tgz#b6e1c7d11a4e1d38ed0586a7847cd0f403c539e1"
+  integrity sha512-9Ekne+q8hfziJtnT9c1yDUBqT0eDMGgPrfPl4bpR3xwQHLTd/8gbSf6+IEkP/pjGsDZt1TGbC6emYmFYRbIXwQ==
+  dependencies:
+    cookie "^1.0.1"
+
 cross-spawn@^7.0.2, cross-spawn@^7.0.6:
   version "7.0.6"
   resolved "https://registry.yarnpkg.com/cross-spawn/-/cross-spawn-7.0.6.tgz#8a58fe78f00dcd70c370451759dfbfaf03e8ee9f"
@@ -2011,12 +2023,14 @@ electron-to-chromium@^1.5.73:
     clsx "^2.1.1"
     cmdk "1.0.4"
     date-fns "4.1.0"
-    elela "file:../../../../../../../Users/macintoshhd/Library/Caches/Yarn/v6/npm-elela-0.1.0-6eb78fa5-3ea2-4e2e-a9b4-73954cb647ce-1743573998584/node_modules/elela"
+    elela "file:C:/Users/ASUS/AppData/Local/Yarn/Cache/v6/npm-elela-0.1.0-e14c3b3d-b93b-4a1a-9ad4-262ddedd1e22-1744685166030/node_modules/elela"
     embla-carousel-react "8.5.1"
+    framer-motion "^12.7.2"
     input-otp "1.4.1"
     lucide-react "^0.454.0"
     next "15.1.0"
     next-themes latest
+    qrcode.react "^4.2.0"
     react "^19"
     react-day-picker "8.10.1"
     react-dom "^19"
@@ -2594,6 +2608,15 @@ fraction.js@^4.3.7:
   version "4.3.7"
   resolved "https://registry.yarnpkg.com/fraction.js/-/fraction.js-4.3.7.tgz#06ca0085157e42fda7f9e726e79fefc4068840f7"
   integrity sha512-ZsDfxO51wGAXREY55a7la9LScWpwv9RxIrYABrlvOFBlH/ShPnrtsXeuUIfXKKOVicNxQ+o8JTbJvjS4M89yew==
+
+framer-motion@^12.7.2:
+  version "12.7.2"
+  resolved "https://registry.yarnpkg.com/framer-motion/-/framer-motion-12.7.2.tgz#2f2dad1577fbc93468900a53b99e056e852a6e04"
+  integrity sha512-0vLY/JqYqieojTriuIR+UTCBVbj89eNUxXTkb01Xg8gSiTXDeuscOvoYm8vvgRGLMYGsCuJ31kDsTy081kPKFw==
+  dependencies:
+    motion-dom "^12.7.2"
+    motion-utils "^12.7.2"
+    tslib "^2.4.0"
 
 fs.realpath@^1.0.0:
   version "1.0.0"
@@ -3238,6 +3261,18 @@ minimist@^1.2.0, minimist@^1.2.6:
   version "7.1.2"
   resolved "https://registry.yarnpkg.com/minipass/-/minipass-7.1.2.tgz#93a9626ce5e5e66bd4db86849e7515e92340a707"
   integrity sha512-qOOzS1cBTWYF4BH8fVePDBOO9iptMnGUEZwNc/cMWnTV2nVLZ7VoNWEPHkYczZA0pdoA7dl6e7FL659nX9S2aw==
+
+motion-dom@^12.7.2:
+  version "12.7.2"
+  resolved "https://registry.yarnpkg.com/motion-dom/-/motion-dom-12.7.2.tgz#407afd5443c066d47ac42e0dac788d0cc23f6ab6"
+  integrity sha512-7+sytBQyb9XRRH6lyLRQf+R6y2BE79J2EgTijTSxYgGt+ufpnoRDPgru9KHvA125tTHnbAXDzeTUb9OvscSitA==
+  dependencies:
+    motion-utils "^12.7.2"
+
+motion-utils@^12.7.2:
+  version "12.7.2"
+  resolved "https://registry.yarnpkg.com/motion-utils/-/motion-utils-12.7.2.tgz#99b673d8851583b325bd0c8b0f04c5bf42b9b818"
+  integrity sha512-XhZwqctxyJs89oX00zn3OGCuIIpVevbTa+u82usWBC6pSHUd2AoNWiYa7Du8tJxJy9TFbZ82pcn5t7NOm1PHAw==
 
 ms@^2.1.1, ms@^2.1.3:
   version "2.1.3"

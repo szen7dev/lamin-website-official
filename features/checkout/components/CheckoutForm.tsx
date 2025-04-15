@@ -193,7 +193,7 @@ export const CheckoutForm = forwardRef<CheckoutFormRef, CheckoutFormProps>(
               disabled={isSubmitting}
               type="button"
               onClick={() => setDeliveryMethod('pickup')}>
-              Nhận tại nhà thuốc
+              Nhận tại cửa hàng
             </button>
           </div> */}
         </div>

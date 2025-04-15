@@ -178,9 +178,10 @@ export async function middleware(request: NextRequest) {
   // Authentication middleware logic
   const isAuthenticated = request.cookies.has('auth-token');
   const isProtectedRoute = request.nextUrl.pathname.startsWith('/(protected)');
+  const isAccountRoute = request.nextUrl.pathname.startsWith('/account');
 
-  if (isProtectedRoute && !isAuthenticated) {
-    return NextResponse.redirect(new URL('/login', request.url));
+  if ((isProtectedRoute || isAccountRoute) && !isAuthenticated) {
+    return NextResponse.redirect(new URL('/auth/login', request.url));
   }
 
   return NextResponse.next();
