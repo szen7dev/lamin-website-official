@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { deleteCookie, getCookie } from 'cookies-next';
 
 import { getEnv } from '@/config/env';
 
@@ -16,7 +17,7 @@ const api = axios.create({
 api.interceptors.request.use(config => {
   // Add auth token if available (client-side only)
   if (typeof window !== 'undefined') {
-    const token = localStorage.getItem('auth-token');
+    const token = getCookie('auth-token');
 
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
@@ -34,7 +35,7 @@ api.interceptors.response.use(
     if (error.response?.status === 401) {
       // Clear auth token and redirect to login
       if (typeof window !== 'undefined') {
-        localStorage.removeItem('auth-token');
+        deleteCookie('auth-token');
         window.location.href = '/login';
       }
     }
