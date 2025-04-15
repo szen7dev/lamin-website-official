@@ -24,8 +24,8 @@ export const getUserOrders = async (params: {
       }),
       select: 'name date userCreate amount type outin customer status',
       optionSeller: DEFAULT_OPTION_SELLER,
-      ...(params.outin && { outin: params.outin || 1 }),
-      ...(params.type && { type: params.type || 5 }),
+      outin: params.outin || 1,
+      type: params.type || 5,
       ...(params.keyword && { keyword: params.keyword }),
     };
 
