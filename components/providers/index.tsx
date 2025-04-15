@@ -11,6 +11,7 @@ import { Toaster } from '@/components/ui/toaster';
 import { NavigationProgress } from '@/components/ui/navigation-progress';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { OrderProvider } from '@/contexts/OrderContext';
+import { ContactProvider } from '@/contexts';
 
 export interface ProvidersProps {
   children: React.ReactNode;
@@ -47,13 +48,15 @@ export function Providers({ children, themeProps }: ProvidersProps) {
         {...themeProps}>
         <AuthProvider>
           <OrderProvider>
-            {mounted ? (
-              <>
-                <NavigationProgress />
-                {children}
-                <Toaster />
-              </>
-            ) : null}
+            <ContactProvider>
+              {mounted ? (
+                <>
+                  <NavigationProgress />
+                  {children}
+                  <Toaster />
+                </>
+              ) : null}
+            </ContactProvider>
           </OrderProvider>
         </AuthProvider>
       </NextThemesProvider>
