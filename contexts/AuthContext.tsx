@@ -6,6 +6,7 @@ import type { LoginResponse } from '@/features/auth/api/login';
 
 import { createContext, useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { setCookie, getCookie, deleteCookie } from 'cookies-next';
 
 import { login as loginApi } from '@/features/auth/api/login';
 import { apiClient } from '@/services/api/apiClient';
@@ -34,12 +35,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        // Check if token exists in localStorage
-        const token = localStorage.getItem('auth_token');
+        // Check if token exists in cookies
+        const token = getCookie('auth-token');
 
         if (token) {
           // Set token in apiClient
-          apiClient.setToken(token);
+          apiClient.setToken(token as string);
 
           // Get user data from localStorage
           const userId = localStorage.getItem('user_id') || '';
@@ -79,9 +80,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     checkAuth();
   }, []);
 
-  // Clear all user data from localStorage
+  // Clear all user data from localStorage and cookies
   const clearUserData = () => {
-    localStorage.removeItem('auth_token');
+    deleteCookie('auth-token');
     localStorage.removeItem('user_id');
     localStorage.removeItem('user_name');
     localStorage.removeItem('user_phone');
@@ -127,8 +128,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const response = await loginApi({ email, password });
 
       if (response.success && response.token) {
-        // Store token
-        localStorage.setItem('auth_token', response.token);
+        // Store token in cookie
+        setCookie('auth-token', response.token, { maxAge: 60 * 60 * 24 * 7 }); // 7 days
         apiClient.setToken(response.token);
 
         // Store user data
@@ -162,8 +163,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const response = await loginApi({ email: phone, password: otp });
 
       if (response.success && response.token) {
-        // Store token
-        localStorage.setItem('auth_token', response.token);
+        // Store token in cookie
+        setCookie('auth-token', response.token, { maxAge: 60 * 60 * 24 * 7 }); // 7 days
         apiClient.setToken(response.token);
 
         // Store user data
@@ -235,6 +236,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       // Clear auth data
       clearUserData();
+      deleteCookie('auth-token');
       apiClient.clearToken();
       setUser(null);
 
