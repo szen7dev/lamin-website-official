@@ -128,21 +128,21 @@ export function Header() {
         <DropdownMenuItem asChild>
           <Link
             className="decoration-transparent cursor-pointer"
-            href="/account/info">
+            href="/tai-khoan/thong-tin-ca-nhan">
             Tài khoản của tôi
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Link
             className="decoration-transparent cursor-pointer"
-            href="/account/orders">
+            href="/tai-khoan/don-hang">
             Đơn hàng của tôi
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Link
             className="decoration-transparent cursor-pointer"
-            href="/account/height-measure-history">
+            href="/tai-khoan/lich-su-do-cao">
             Lịch sử đo cao
           </Link>
         </DropdownMenuItem>
