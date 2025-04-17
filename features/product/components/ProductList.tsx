@@ -1,13 +1,13 @@
 'use client';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import ProductCard from './ProductCard';
 
 import { useGetGoodsList } from '@/features/search/hooks/goods/useGetGoodsList';
 import { DynamicBreadcrumb } from '@/components/dynamic-breadcrumb';
 import { GridLayoutIcon, ListLayoutIcon } from '@/components/icons';
-import { useGetMenuBySlug } from '@/features/menu/hooks/useGetMenuBySlug';
 import { MediaItem } from '@/features/menu/types/mediaTypes';
+import { useGetBestSellingCombo } from '@/features/homepage/hooks/combo/useGetBestSellingCombo';
 
 type SortType =
   | 'price-asc'
@@ -33,7 +33,13 @@ function ProductList({
 
   const [sortBy, setSortBy] = useState<SortType>();
   const [layout, setLayout] = useState<'grid' | 'list'>('grid');
+  const {
+    combos: products,
+    isLoading: isProductLoading,
+    error: errorProduct,
+  } = useGetBestSellingCombo();
 
+  console.log('products', products);
   const sortButtons: { label: string; sortBy: SortType }[] = [
     {
       label: 'Bán chạy',
@@ -55,12 +61,36 @@ function ProductList({
         key={button.sortBy}
         className={`bg-white px-3 py-2 text-sm rounded-full ${sortBy === button.sortBy ? 'outline outline-1 outline-primary text-primary' : 'text-black'}`}
         onClick={() => {
-          setSortBy(button.sortBy);
+          setSortBy(sortBy === button.sortBy ? undefined : button.sortBy);
+          getSortedProducts();
+          console.log('goodlist', goodsList);
         }}>
         {button.label}
       </button>
     );
   };
+  const getSortedProducts = () => {
+    if (!sortBy) return goodsList;
+    const sorted = [...goodsList];
+
+    switch (sortBy) {
+      case 'price-asc':
+        return sorted.sort((a, b) => a.sellingUnitprice - b.sellingUnitprice);
+      case 'price-desc':
+        return sorted.sort((a, b) => b.sellingUnitprice - a.sellingUnitprice);
+      case 'rating-desc':
+        const bestSellingIds = new Set(products?.map(p => p._id));
+
+        return sorted.filter(p => bestSellingIds.has(p._id));
+      default:
+        return goodsList;
+    }
+  };
+
+  const sortedProducts = useMemo(
+    () => getSortedProducts(),
+    [goodsList, sortBy],
+  );
 
   return (
     <div className="min-h-screen bg-background pb-8 sm:pb-12 pt-4 sm:pt-6">
@@ -104,13 +134,15 @@ function ProductList({
           </div>
         </div>
 
-        {goodsList?.length > 0 ? (
-          <ul className="grid grid-cols-2 gap-3 sm:gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
-            {goodsList.map(product => (
+        {sortedProducts?.length > 0 ? (
+          <ul
+            className={`rounded-full p-1 ${layout === 'list' ? 'grid grid-cols gap-3 sm:gap-4 sm:grid-cols-2' : 'grid grid-cols-2 gap-3 sm:gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5'}`}>
+            {sortedProducts.map(product => (
               <li key={product._id}>
                 <ProductCard
                   error={error}
                   isLoading={isLoading}
+                  layout={layout}
                   product={{
                     ...product,
                     listedUnitprice: product.listedUnitprice || 0,

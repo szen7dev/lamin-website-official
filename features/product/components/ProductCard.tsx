@@ -23,6 +23,7 @@ export interface ProductCardProps {
   className?: string;
   error?: unknown;
   isLoading?: boolean;
+  layout?: 'grid' | 'list';
 }
 
 export default function ProductCard({
@@ -31,6 +32,7 @@ export default function ProductCard({
   className,
   error,
   isLoading,
+  layout = 'grid',
 }: ProductCardProps) {
   const {
     addItem,
@@ -171,7 +173,8 @@ export default function ProductCard({
   return (
     <div
       className={cn(
-        'relative rounded-xl border border-grayscale-20 bg-white p-3 sm:p-4 shadow-sm h-full flex flex-col',
+        'relative rounded-xl border border-grayscale-20 bg-white p-3 sm:p-4 shadow-sm h-full ',
+        layout === 'list' ? 'grid grid-cols-2' : 'flex flex-col',
         className,
       )}>
       {/* Discount Badge */}
@@ -202,15 +205,21 @@ export default function ProductCard({
             <Skeleton className="h-full w-full" />
           )}
         </div>
-
-        {/* Product Name */}
-        <h3 className="my-2 line-clamp-2 min-h-[2.5rem] text-sm font-medium text-grayscale-90">
-          {product.name}
-        </h3>
       </Link>
 
-      {/* Unit Selection */}
-      {/* {product.unit && (
+      <div className="flex flex-col justify-between h-full">
+        <Link
+          className="block mb-3 hover:no-underline decoration-transparent"
+          href={{
+            pathname: `/san-pham/${product.slug}`,
+          }}>
+          {/* Product Name */}
+          <h3 className="my-2 line-clamp-2 min-h-[2.5rem] text-sm font-medium text-grayscale-90">
+            {product.name}
+          </h3>
+        </Link>
+        {/* Unit Selection */}
+        {/* {product.unit && (
         <div className="mb-3">
           <div className="flex w-full rounded-lg border border-grayscale-20 overflow-hidden">
             {product.unit.map(unit => (
@@ -229,54 +238,55 @@ export default function ProductCard({
         </div>
       )} */}
 
-      {/* Price */}
-      <div className="mb-2">
-        <div className="flex items-baseline gap-2">
-          <span className="text-base sm:text-lg font-bold text-primary">
-            {formatPrice(product?.sellingUnitprice || 0)}
-          </span>
-          {product.unit && (
-            <span className="text-xs sm:text-sm text-primary-50">
-              / {product.unit}
+        {/* Price */}
+        <div className="mb-2">
+          <div className="flex items-baseline gap-2">
+            <span className="text-base sm:text-lg font-bold text-primary">
+              {formatPrice(product?.sellingUnitprice || 0)}
+            </span>
+            {product.unit && (
+              <span className="text-xs sm:text-sm text-primary-50">
+                / {product.unit}
+              </span>
+            )}
+          </div>
+          {product?.listedUnitprice && discountAmount > 0 && (
+            <span className="text-xs sm:text-sm text-grayscale-40 line-through">
+              {formatPrice(product?.listedUnitprice)}
             </span>
           )}
         </div>
-        {product?.listedUnitprice && discountAmount > 0 && (
-          <span className="text-xs sm:text-sm text-grayscale-40 line-through">
-            {formatPrice(product?.listedUnitprice)}
-          </span>
+
+        {/* Package Info */}
+        {product.unitNote && (
+          <div className="mb-3 text-[10px] sm:text-xs text-grayscale-90 bg-[#f5f5f5] rounded-lg w-max px-2 py-1">
+            {product.unitNote}
+          </div>
+        )}
+
+        {/* Buy Button */}
+        {variant === 'default' ? (
+          <Button
+            className="mt-auto w-full rounded-full bg-primary hover:bg-primary-60 text-white py-2 px-4 text-center text-sm sm:text-base font-medium transition-colors"
+            onClick={handleAddToCart}>
+            Thêm vào giỏ
+          </Button>
+        ) : (
+          <Button
+            className="mt-auto w-full rounded-full bg-primary hover:bg-primary-60 text-white py-2 px-4 text-center text-sm sm:text-base font-medium transition-colors"
+            disabled={isAddingToCart}
+            onClick={handleAddToCart}>
+            {isAddingToCart ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Đang thêm...
+              </>
+            ) : (
+              'Chọn mua'
+            )}
+          </Button>
         )}
       </div>
-
-      {/* Package Info */}
-      {product.unitNote && (
-        <div className="mb-3 text-[10px] sm:text-xs text-grayscale-90 bg-[#f5f5f5] rounded-lg w-max px-2 py-1">
-          {product.unitNote}
-        </div>
-      )}
-
-      {/* Buy Button */}
-      {variant === 'default' ? (
-        <Button
-          className="mt-auto w-full rounded-full bg-primary hover:bg-primary-60 text-white py-2 px-4 text-center text-sm sm:text-base font-medium transition-colors"
-          onClick={handleAddToCart}>
-          Thêm vào giỏ
-        </Button>
-      ) : (
-        <Button
-          className="mt-auto w-full rounded-full bg-primary hover:bg-primary-60 text-white py-2 px-4 text-center text-sm sm:text-base font-medium transition-colors"
-          disabled={isAddingToCart}
-          onClick={handleAddToCart}>
-          {isAddingToCart ? (
-            <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Đang thêm...
-            </>
-          ) : (
-            'Chọn mua'
-          )}
-        </Button>
-      )}
     </div>
   );
 }
