@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation';
 
 export default function AccountPage() {
-  redirect('/account/info');
+  redirect('/tai-khoan/thong-tin-ca-nhan');
 }

@@ -14,6 +14,11 @@ const redirects = new Map([
   ['/bai-viet', '/chuyen-trang-suc-khoe'],
   ['/checkout', '/thanh-toan'],
   ['/cart', '/gio-hang'],
+  ['/about', '/ve-lamin'],
+  ['/account/info', '/tai-khoan/thong-tin-ca-nhan'],
+  ['/account/orders', '/tai-khoan/don-hang'],
+  ['/account/location', '/tai-khoan/dia-chi'],
+  ['/account/height-measure-history', '/tai-khoan/lich-su-do-cao'],
 ]);
 
 // URL rewrites mapping (visible URL -> content URL)
@@ -28,6 +33,11 @@ const rewrites = new Map([
   ['/bai-viet', '/article'],
   ['/thanh-toan', '/checkout'],
   ['/gio-hang', '/cart'],
+  ['/ve-lamin', '/about'],
+  ['/tai-khoan/thong-tin-ca-nhan', '/account/info'],
+  ['/tai-khoan/don-hang', '/account/orders'],
+  ['/tai-khoan/dia-chi', '/account/location'],
+  ['/tai-khoan/lich-su-do-cao', '/account/height-measure-history'],
 ]);
 
 export async function middleware(request: NextRequest) {

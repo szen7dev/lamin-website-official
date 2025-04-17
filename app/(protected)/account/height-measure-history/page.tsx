@@ -215,7 +215,7 @@ export default function HeightMeasureHistoryPage() {
                         <div>{item.note}</div>
                         <Link
                           className="text-primary text-sm flex items-center hover:underline"
-                          href={`/account/height-measure-history/${item.id}?name=${encodeURIComponent(item.name)}`}>
+                          href={`/tai-khoan/lich-su-do-cao/${item.id}?name=${encodeURIComponent(item.name)}`}>
                           Xem chi tiết{' '}
                           <ChevronNoArrowIcon className="w-4 h-3" />
                         </Link>
