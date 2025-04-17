@@ -11,7 +11,7 @@ import ArticleContactList from '@/features/article/components/ArticleContactList
 
 export function generateMetadata(): Metadata {
   return generateSeoMetadata({
-    title: 'Góc Sức Khỏe',
+    title: 'Về Lamin',
     description:
       'Cập nhật thông tin sức khỏe, dinh dưỡng và lời khuyên từ chuyên gia y tế',
     keywords: [
@@ -23,7 +23,7 @@ export function generateMetadata(): Metadata {
   });
 }
 
-export default async function HealthNewsPage() {
+export default async function AboutPage() {
   return (
     <div className="min-h-screen bg-background pb-8 sm:pb-12 pt-4 sm:pt-6">
       <div className="mx-auto">
@@ -40,7 +40,7 @@ export default async function HealthNewsPage() {
             {/* Title Section */}
             <header className="mb-6 sm:mb-8 container">
               <h1 className="mb-1 sm:mb-2 text-3xl sm:text-3xl font-semibold text-grayscale-90">
-                Góc Sức Khỏe
+                Về Lamin
               </h1>
             </header>
 

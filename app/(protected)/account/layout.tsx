@@ -25,10 +25,10 @@ export default function ProfileLayout({
 }) {
   const pathname = usePathname();
   const isHeightMeasurementHistory = pathname.includes(
-    '/account/height-measure-history',
+    '/tai-khoan/lich-su-do-cao',
   );
   const isDynamicHeightMeasurementHistory = pathname.match(
-    /\/account\/height-measure-history\/[^\/]+$/,
+    /\/tai-khoan\/lich-su-do-cao\/[^\/]+$/,
   );
 
   return (
@@ -38,7 +38,7 @@ export default function ProfileLayout({
           <Link
             aria-label="Quay lại trang trước"
             className="flex items-center text-primary hover:text-primary-dark transition-colors decoration-transparent"
-            href="/account/height-measure-history">
+            href="/tai-khoan/lich-su-do-cao">
             <svg
               className="h-5 w-5 mr-2"
               fill="currentColor"
@@ -103,22 +103,22 @@ function ProfileTabs() {
     {
       icon: <UserProfileIcon />,
       name: 'Thông tin cá nhân',
-      href: '/account/info',
+      href: '/tai-khoan/thong-tin-ca-nhan',
     },
     {
       icon: <PackageIcon />,
       name: 'Đơn hàng của tôi',
-      href: '/account/orders',
+      href: '/tai-khoan/don-hang',
     },
     {
       icon: <MapPinIcon />,
       name: 'Quản lý địa chỉ',
-      href: '/account/location',
+      href: '/tai-khoan/dia-chi',
     },
     {
       icon: <BarChartIcon />,
       name: 'Lịch sử đo cao',
-      href: '/account/height-measure-history',
+      href: '/tai-khoan/lich-su-do-cao',
     },
     {
       icon: <LogOut className="mr-2 h-4 w-4" />,

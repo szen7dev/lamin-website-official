@@ -37,6 +37,14 @@ const vietnameseTextMap: Record<string, string> = {
   'danh-sach': 'Danh sách',
   'thong-tin': 'Thông tin',
   'bai-viet': 'Bài viết',
+  've-lamin': 'Về Lamin',
+
+  //Account
+  'tai-khoan': 'Tài khoản',
+  'thong-tin-ca-nhan': 'Thông tin cá nhân',
+  'don-hang': 'Đơn hàng',
+  'dia-chi': 'Địa chỉ',
+  'lich-su-do-cao': 'Lịch sử đo cao',
 };
 
 export function DynamicBreadcrumb({ name }: { name?: string }) {
