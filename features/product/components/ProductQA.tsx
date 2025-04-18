@@ -8,7 +8,6 @@ import { CommentList, Comment } from './shared/CommentList';
 
 import { Button } from '@/components/ui/button';
 import { cn } from '@/utils/helpers';
-import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/hooks';
 import { LoginModal } from '@/components/modal/LoginModal';
 import { ReviewModal } from '@/components/modal/ReviewModal';
@@ -18,8 +17,6 @@ interface ProductQAProps {
 }
 
 export default function ProductQA({ productId }: ProductQAProps) {
-  const { toast } = useToast();
-
   const [selectedFilter, setSelectedFilter] = useState<
     'newest' | 'oldest' | 'helpful'
   >('newest');
@@ -28,11 +25,7 @@ export default function ProductQA({ productId }: ProductQAProps) {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
 
-  const {
-    data: allQuestions,
-    isLoading,
-    isError,
-  } = useGetCommentsByProductID({
+  const { data: allQuestions } = useGetCommentsByProductID({
     goodsID: productId,
     type: 1,
   });
@@ -74,6 +67,32 @@ export default function ProductQA({ productId }: ProductQAProps) {
       }),
     );
   }, [allQuestions]);
+
+  // Sort comments based on selected filter
+  const sortedComments = useMemo(() => {
+    if (!formattedComments.length) return [];
+
+    const commentsToSort = [...formattedComments];
+
+    switch (selectedFilter) {
+      case 'newest':
+        return commentsToSort.sort(
+          (a, b) =>
+            new Date(b.createAt).getTime() - new Date(a.createAt).getTime(),
+        );
+      case 'oldest':
+        return commentsToSort.sort(
+          (a, b) =>
+            new Date(a.createAt).getTime() - new Date(b.createAt).getTime(),
+        );
+      case 'helpful':
+        // For now, keep the original order for 'helpful'
+        // This could be enhanced later with a helpfulness metric
+        return commentsToSort;
+      default:
+        return commentsToSort;
+    }
+  }, [formattedComments, selectedFilter]);
 
   const handleCommentButtonClick = () => {
     if (user) {
@@ -132,11 +151,7 @@ export default function ProductQA({ productId }: ProductQAProps) {
       </div>
 
       {/* Questions List */}
-      <CommentList
-        comments={formattedComments}
-        productId={productId}
-        type={1}
-      />
+      <CommentList comments={sortedComments} productId={productId} type={1} />
 
       {/* Login Modal */}
       <LoginModal

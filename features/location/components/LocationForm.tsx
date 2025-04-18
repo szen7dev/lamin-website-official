@@ -38,7 +38,7 @@ import { provinces } from '@/features/checkout/mocks/province';
 const formSchema = z.object({
   name: z.string().min(2, 'Họ tên phải có ít nhất 2 ký tự'),
   phone: z.string().regex(/^[0-9]{10}$/, 'Số điện thoại không hợp lệ'),
-  email: z.string().email('Email không hợp lệ').optional(),
+  email: z.string().email('Email không hợp lệ').optional().or(z.literal('')),
   province: z.string().min(1, 'Vui lòng chọn tỉnh/thành phố'),
   district: z.string().min(1, 'Vui lòng chọn quận/huyện'),
   ward: z.string().min(1, 'Vui lòng chọn phường/xã'),
