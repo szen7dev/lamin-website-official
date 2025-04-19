@@ -173,6 +173,28 @@ export async function middleware(request: NextRequest) {
     return NextResponse.rewrite(new URL(newPath, request.url));
   }
 
+  // Check for dynamic height-measure-history path
+  if (
+    pathname.startsWith('/account/height-measure-history/') &&
+    pathname !== '/account/height-measure-history'
+  ) {
+    const id = pathname.replace('/account/height-measure-history/', '');
+    const newPath = `/tai-khoan/lich-su-do-cao/${id}${search}`;
+
+    return NextResponse.redirect(new URL(newPath, request.url));
+  }
+
+  // Check for dynamic lich-su-do-cao path
+  if (
+    pathname.startsWith('/tai-khoan/lich-su-do-cao/') &&
+    pathname !== '/tai-khoan/lich-su-do-cao'
+  ) {
+    const id = pathname.replace('/tai-khoan/lich-su-do-cao/', '');
+    const newPath = `/account/height-measure-history/${id}${search}`;
+
+    return NextResponse.rewrite(new URL(newPath, request.url));
+  }
+
   // Handle static redirects
   if (redirects.has(pathname)) {
     return NextResponse.redirect(
