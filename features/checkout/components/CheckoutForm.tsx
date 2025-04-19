@@ -40,7 +40,11 @@ const formSchema = z.object({
   // Người đặt
   customerName: z.string().min(2, 'Họ tên phải có ít nhất 2 ký tự'),
   customerPhone: z.string().regex(/^[0-9]{10}$/, 'Số điện thoại không hợp lệ'),
-  customerEmail: z.string().email('Email không hợp lệ').optional(),
+  customerEmail: z
+    .string()
+    .email('Email không hợp lệ')
+    .optional()
+    .or(z.literal('')),
 
   // Người nhận
   receiverName: z.string().min(2, 'Họ tên phải có ít nhất 2 ký tự'),

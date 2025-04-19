@@ -317,14 +317,14 @@ export default function DealSlider() {
 
             return (
               <SwiperSlide key={product._id}>
-                <article className="rounded-lg bg-white overflow-hidden relative">
+                <article className="rounded-xl bg-white overflow-hidden relative">
                   <div className="relative">
                     {discountAmount > 0 && (
-                      <span className="absolute top-0 left-0 z-10">
+                      <div className="absolute top-0 left-0 z-10">
                         <div className="bg-gradient-5 text-white text-xs font-medium px-2 py-1 rounded-tl-xl rounded-br-xl">
                           {`-${discountAmount}%`}
                         </div>
-                      </span>
+                      </div>
                     )}
                     <Link
                       className="no-underline decoration-transparent"
@@ -363,11 +363,14 @@ export default function DealSlider() {
                           /{product.unit}
                         </span>
                       </div>
-                      {product?.listedUnitprice && discountAmount > 0 && (
-                        <span className="text-xs sm:text-sm text-grayscale-40 line-through">
-                          {formatPrice(product?.listedUnitprice)}
-                        </span>
-                      )}
+
+                      <span className="text-xs sm:text-sm text-grayscale-40 line-through h-[1.25rem] block">
+                        {product?.listedUnitprice && discountAmount > 0 ? (
+                          formatPrice(product?.listedUnitprice)
+                        ) : (
+                          <span className="opacity-0">0đ</span>
+                        )}
+                      </span>
                     </div>
 
                     <div className="mb-3">
@@ -415,11 +418,11 @@ export default function DealSlider() {
                 key={product._id}
                 className="relative rounded-lg bg-white overflow-hidden">
                 {discountAmount > 0 && (
-                  <span className="absolute top-0 left-0 z-10">
+                  <div className="absolute top-0 left-0 z-10">
                     <div className="bg-gradient-5 text-white text-xs font-medium px-2 py-1 rounded-tl-xl rounded-br-xl">
                       {`-${discountAmount}%`}
                     </div>
-                  </span>
+                  </div>
                 )}
 
                 <div className="p-3 pt-6">
@@ -462,9 +465,13 @@ export default function DealSlider() {
                             /{product.unit}
                           </span>
                         </div>
-                        {product?.listedUnitprice && discountAmount > 0 && (
-                          <span className="text-xs sm:text-sm text-grayscale-40 line-through">
+                        {product?.listedUnitprice && discountAmount > 0 ? (
+                          <span className="text-xs sm:text-sm text-grayscale-40 line-through h-[1.25rem] block">
                             {formatPrice(product?.listedUnitprice)}
+                          </span>
+                        ) : (
+                          <span className="text-xs sm:text-sm text-grayscale-40 line-through h-[1.25rem] block opacity-0">
+                            0đ
                           </span>
                         )}
                       </div>
