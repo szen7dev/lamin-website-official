@@ -7,6 +7,7 @@ interface SEOProps {
   description?: string;
   keywords?: string[];
   image?: string;
+  icons?: string;
 }
 
 export function generateMetadata({
@@ -14,6 +15,7 @@ export function generateMetadata({
   description,
   keywords,
   image,
+  icons,
 }: SEOProps): Metadata {
   // Convert keywords array to comma-separated string if it exists
   const keywordsString = keywords ? keywords.join(', ') : undefined;
@@ -21,6 +23,7 @@ export function generateMetadata({
   return {
     title: title ? `${title} | ${siteConfig.name}` : siteConfig.name,
     description: description || siteConfig.description,
+    icons: icons || siteConfig.icons,
     openGraph: {
       images: [image || siteConfig.ogImage],
     },
