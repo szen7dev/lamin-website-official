@@ -4,6 +4,7 @@ export const siteConfig = {
   url: 'https://lamin.com.vn',
   ogImage: 'https://lamin.vn/og-image.jpg',
   keywords: ['pharmacy', 'health', 'medicine', 'wellness'],
+  icons: '/favicon.ico',
   links: {
     facebook: 'https://facebook.com/laminvietnam',
     instagram: 'https://instagram.com/laminvietnam',
