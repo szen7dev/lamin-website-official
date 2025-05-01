@@ -20,10 +20,10 @@ export default function HeightMeasurementPage() {
           {/* Title Section */}
           <div className="mb-4 sm:mb-6">
             <h1 className="mb-1 sm:mb-2 text-xl sm:text-[28px] font-bold text-grayscale-90">
-              Hướng dẫn chiều cao
+              Hướng dẫn đo chiều cao
             </h1>
             <p className="text-sm sm:text-base text-[#6C757D]">
-              Hãy nhập thông tin dưới đây để nhận phân tích chi tiết
+              Nhập thông tin dưới đây để xem kết quả đo cao và nhận thông tin tư vấn từ Lamin
             </p>
           </div>
 
