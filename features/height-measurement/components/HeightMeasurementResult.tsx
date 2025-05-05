@@ -335,7 +335,7 @@ export default function HeightMeasurementResult({
                 size: isMobile ? 10 : 12,
               },
             },
-            min: 80, // Điều chỉnh min để biểu đồ dễ nhìn hơn
+            min: 80,
             max: 220,
             ticks: {
               stepSize: isMobile ? 40 : 20,
@@ -364,20 +364,33 @@ export default function HeightMeasurementResult({
           id: 'heightLabels',
           afterDatasetsDraw(chart) {
             const { ctx } = chart;
-            const meta = chart.getDatasetMeta(chart.data.datasets.length - 1);
+            // Get only the predicted height dataset (last dataset)
+            const predictedDatasetIndex = chart.data.datasets.length - 1;
+            const meta = chart.getDatasetMeta(predictedDatasetIndex);
 
             meta.data.forEach((element, index) => {
               const position = element.getProps(['x', 'y']);
               const { x, y } = position;
               const height = processedData.heightData[index].height;
 
-              ctx.save();
-              ctx.textAlign = 'center';
-              ctx.textBaseline = 'bottom';
-              ctx.font = `bold ${isMobile ? '10px' : '12px'} Inter`;
-              ctx.fillStyle = '#198754';
-              ctx.fillText(`${height}cm`, x, y - (isMobile ? 6 : 10));
-              ctx.restore();
+              // Only show label if this is the predicted height dataset
+              if (
+                chart.data.datasets[predictedDatasetIndex].label === 'Dự đoán'
+              ) {
+                ctx.save();
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'bottom';
+                ctx.font = `bold ${isMobile ? '10px' : '12px'} Inter`;
+                ctx.fillStyle = '#198754';
+
+                // Position the label higher above the point
+                // Increase the offset to ensure it's above all lines
+                const labelOffset = isMobile ? 20 : 27;
+
+                ctx.fillText(`${height}`, x, y - labelOffset);
+
+                ctx.restore();
+              }
             });
           },
         },
@@ -533,12 +546,12 @@ export default function HeightMeasurementResult({
           <div className="whitespace-nowrap text-sm sm:text-base font-medium">
             Đường tăng trưởng: {processedData.P}
           </div>
-          <div className="flex-1 h-6 sm:h-8 bg-gray-100 rounded-md overflow-hidden">
+          <div className="flex-1 h-6 sm:h-8 bg-gray-100 rounded-md overflow-hidden flex items-center">
             <div
               aria-valuemax={100}
               aria-valuemin={0}
               aria-valuenow={processedData.P}
-              className="h-full rounded-md bg-[#F37021]"
+              className="h-1/2 rounded-md bg-[#F37021]"
               role="progressbar"
               style={{ width: `${processedData.P}%` }}
             />
