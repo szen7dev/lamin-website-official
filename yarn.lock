@@ -1651,6 +1651,11 @@ chart.js@latest:
   dependencies:
     "@kurkle/color" "^0.3.0"
 
+chartjs-plugin-datalabels@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/chartjs-plugin-datalabels/-/chartjs-plugin-datalabels-2.2.0.tgz#369578e131d743c2e34b5fbe2d3f9335f6639b8f"
+  integrity sha512-14ZU30lH7n89oq+A4bWaJPnAG8a7ZTk7dKf48YAzMvJjQtjrgg5Dpk9f+LbjCF6bpx3RAGTeL13IXpKQYyRvlw==
+
 chokidar@^3.6.0:
   version "3.6.0"
   resolved "https://registry.yarnpkg.com/chokidar/-/chokidar-3.6.0.tgz#197c6cc669ef2a8dc5e7b4d97ee4e092c3eb0d5b"
@@ -2022,8 +2027,9 @@ electron-to-chromium@^1.5.73:
     class-variance-authority "^0.7.1"
     clsx "^2.1.1"
     cmdk "1.0.4"
+    cookies-next "^5.1.0"
     date-fns "4.1.0"
-    elela "file:C:/Users/ASUS/AppData/Local/Yarn/Cache/v6/npm-elela-0.1.0-e14c3b3d-b93b-4a1a-9ad4-262ddedd1e22-1744685166030/node_modules/elela"
+    elela "file:C:/Users/ASUS/AppData/Local/Yarn/Cache/v6/npm-elela-0.1.0-0dc16682-1cbc-4dcb-882f-1f52bab94517-1746433833101/node_modules/elela"
     embla-carousel-react "8.5.1"
     framer-motion "^12.7.2"
     input-otp "1.4.1"

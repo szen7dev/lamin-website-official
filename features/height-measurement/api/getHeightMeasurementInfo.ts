@@ -14,7 +14,7 @@ export const getHeightMeasurementInfo = async (
       trackID: trackId,
     };
 
-    const { data, response } = await apiClient.get<GrowTrackApiResponse, any>(
+    const { data, response } = await apiClient.get<GrowTrackApiResponse>(
       `/api/crm/grow_track`,
       queryParams,
     );

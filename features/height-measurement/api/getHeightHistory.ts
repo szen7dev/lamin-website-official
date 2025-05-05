@@ -16,7 +16,7 @@ export const getHeightHistory = async (
     const queryParams = {
       optionSeller: DEFAULT_OPTION_SELLER,
       select:
-        'createAt name gender birthday height weight desiredHeight phone note',
+        'date name parentName gender birthday height weight desiredHeight phone note percentile',
       ...(params.limit ? { limit: params.limit } : {}),
       ...(params.phone ? { phone: params.phone } : {}),
     };
