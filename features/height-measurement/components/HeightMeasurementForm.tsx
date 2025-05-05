@@ -34,7 +34,7 @@ export default function HeightMeasurementForm() {
       email: '',
       desiredHeight: '',
       routine: '',
-      date: '' as unknown as Date,
+      date: new Date(),
       name: '',
       birthDate: '' as unknown as Date,
       weight: '',
@@ -57,6 +57,9 @@ export default function HeightMeasurementForm() {
     }
 
     try {
+      // Always use today's date for the measurement date
+      formData.date = new Date();
+
       // Chuyển đổi birthDate từ string sang Date
       if (typeof formData.birthDate === 'string') {
         formData.birthDate = new Date(formData.birthDate);
@@ -315,20 +318,13 @@ export default function HeightMeasurementForm() {
             Ngày đo
           </label>
           <input
-            className={`w-full rounded-lg border ${errors.date ? 'border-error-5' : 'border-grayscale-20'} bg-white px-3 sm:px-4 py-2 sm:py-3 text-sm text-grayscale-90 focus:border-primary-5 focus:outline-none focus:ring-1 focus:ring-primary-5 disabled:opacity-70`}
-            disabled={isPending}
+            aria-describedby="date-description"
+            className="w-full rounded-lg border border-grayscale-20 bg-grayscale-5 px-3 sm:px-4 py-2 sm:py-3 text-sm text-grayscale-90 disabled:opacity-90"
+            disabled={true}
             id="date"
-            placeholder="Nhập ngày đo"
             type="date"
-            {...register('date', { required: 'Vui lòng chọn ngày' })}
-            aria-describedby={errors.date ? 'date-error' : undefined}
-            aria-invalid={errors.date ? 'true' : 'false'}
+            value={new Date().toISOString().split('T')[0]}
           />
-          {errors.date && (
-            <p className="text-xs sm:text-sm text-error" id="date-error">
-              {errors.date.message}
-            </p>
-          )}
         </div>
 
         {/* Birth Date */}
