@@ -9,6 +9,13 @@ export interface HeightMeasurementFormData {
   note?: string;
   optionSeller?: number;
   contactID?: string;
+  parentName: string;
+  email: string;
+  fatherHeight: string | number;
+  motherHeight: string | number;
+  date: Date;
+  desiredHeight: string | number;
+  routine: string;
 }
 
 export interface HeightMeasurementResultData {
@@ -46,17 +53,27 @@ export interface GrowTrackApiResponse {
   error: boolean;
   data: {
     _id: string;
+    type: number;
     status: number;
+    fatherHeight: number;
+    motherHeight: number;
     gender: number;
     height: number;
+    percentile: number;
+    predictedAdultHeight: number;
+    desiredHeight: number;
     weight: number;
-    files: any[];
+    images: any[];
     state: number;
     company: string;
     userCreate: string;
     phone: string;
     birthday: string;
+    date: Date;
     note: string;
+    email: string;
+    routine: string;
+    parentName: string;
     namecv: string;
     modifyAt: string;
     createAt: string;
@@ -75,11 +92,17 @@ export interface GrowTrackApiResponse {
     ageHeightP90: Array<{ age: number; height: number }>;
     ageHeightP95: Array<{ age: number; height: number }>;
     ageHeightP97: Array<{ age: number; height: number }>;
-    hdfs: any;
-    whoHS: any;
-    wdfs: any;
-    whoWS: any;
   };
+  ageInMonths: number;
+  Z: number;
+  P: number;
+  hdfs: number;
+  whoHS: number;
+  noticeH: string;
+  wdfs: number;
+  whoWS: number;
+  noticeW: string;
+  predictedAdultHeight: number;
 }
 
 export interface GrowTrackListApiResponse {
@@ -121,22 +144,29 @@ export interface HeightHistoryParams {
 export interface HeightHistory {
   _id: string;
   status: number;
-  date: string;
-  desiredHeight: number;
+  type: number;
+  fatherHeight: number;
+  motherHeight: number;
   gender: number;
   height: number;
+  percentile: number;
+  predictedAdultHeight: number;
+  desiredHeight: number;
   weight: number;
-  files: any[];
+  images: string[];
   state: number;
   company: string;
   userCreate: string;
-  phone: string;
   birthday: string;
+  date: string;
+  name: string;
+  phone: string;
+  email: string;
+  routine: string;
   note: string;
+  parentName: string;
   namecv: string;
   modifyAt: string;
   createAt: string;
   __v: number;
-  name?: string;
-  userUpdate?: string;
 }
