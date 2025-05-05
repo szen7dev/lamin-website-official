@@ -1,8 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { AlertCircle } from 'lucide-react';
+import { Chart } from 'chart.js/auto';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
+
+Chart.register(ChartDataLabels);
 
 import {
   Table,
@@ -23,6 +27,10 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 export default function HeightMeasureHistoryPage() {
   const { user } = useAuth();
   const [visibleItems, setVisibleItems] = useState(5);
+  const heightChartRef = useRef<HTMLCanvasElement | null>(null);
+  const percentileChartRef = useRef<HTMLCanvasElement | null>(null);
+  const heightChartInstance = useRef<Chart | null>(null);
+  const percentileChartInstance = useRef<Chart | null>(null);
 
   const {
     data: historyList = [],
@@ -31,7 +39,7 @@ export default function HeightMeasureHistoryPage() {
     error,
   } = useGetHeightHistory({
     phone: user?.phone || '',
-    limit: 5,
+    limit: 100, // Increased limit to get more data for charts
   });
 
   const handleShowMore = () => {
@@ -42,8 +50,9 @@ export default function HeightMeasureHistoryPage() {
   const formattedHistory =
     historyList?.map(item => ({
       id: item._id,
-      date: formatDate(item.createAt),
+      date: formatDate(item.date),
       name: item.name || user?.fullname || '',
+      parentName: item.parentName || '',
       gender: item.gender === 1 ? 'Nam' : 'Nữ',
       birthday: formatDate(item.birthday),
       height: `${item.height} cm`,
@@ -51,7 +60,215 @@ export default function HeightMeasureHistoryPage() {
       desiredHeight: `${item.desiredHeight} cm`,
       phone: item.phone,
       note: item.note || 'Đo chiều cao từ website',
+      rawDate: item.date,
+      rawHeight: item.height,
+      rawPercentile: item.percentile || 0,
     })) || [];
+
+  // Create charts when data is available
+  useEffect(() => {
+    if (
+      isLoading ||
+      formattedHistory.length === 0 ||
+      !heightChartRef.current ||
+      !percentileChartRef.current
+    ) {
+      return;
+    }
+
+    // Process data for charts - get unique dates and latest values for each date
+    const dateMap = new Map();
+
+    // Sort by date (newest first) to ensure we get the latest data for each date
+    const sortedHistory = [...formattedHistory].sort(
+      (a, b) => new Date(b.rawDate).getTime() - new Date(a.rawDate).getTime(),
+    );
+
+    // Get unique dates with latest data
+    sortedHistory.forEach(item => {
+      const dateKey = formatDate(item.rawDate);
+
+      if (!dateMap.has(dateKey)) {
+        dateMap.set(dateKey, {
+          height: item.rawHeight,
+          percentile: item.rawPercentile,
+        });
+      }
+    });
+
+    // Convert to arrays for chart data
+    const chartData = Array.from(dateMap.entries())
+      .sort((a, b) => new Date(a[0]).getTime() - new Date(b[0]).getTime()) // Sort by date (oldest first)
+      .slice(-6); // Get last 6 entries
+
+    const labels = chartData.map(([date]) => date);
+    const heightData = chartData.map(([, data]) => data.height);
+    const percentileData = chartData.map(([, data]) => data.percentile);
+
+    // Destroy existing charts if they exist
+    if (heightChartInstance.current) {
+      heightChartInstance.current.destroy();
+    }
+
+    if (percentileChartInstance.current) {
+      percentileChartInstance.current.destroy();
+    }
+
+    // Create height chart
+    heightChartInstance.current = new Chart(heightChartRef.current, {
+      type: 'bar',
+      data: {
+        labels,
+        datasets: [
+          {
+            label: 'Chiều cao (cm)',
+            data: heightData,
+            backgroundColor: '#0052A4',
+            borderColor: '#0052A4',
+            borderWidth: 1,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          title: {
+            display: true,
+            text: 'Biểu đồ đo chiều cao',
+            font: {
+              size: 16,
+              weight: 'bold',
+            },
+          },
+          legend: {
+            display: false,
+          },
+          tooltip: {
+            enabled: true,
+          },
+          datalabels: {
+            display: true,
+            color: '#000',
+            anchor: 'end',
+            align: 'top',
+            formatter: value => `${value}`,
+            font: {
+              weight: 'bold',
+              size: 12,
+            },
+          },
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            grid: {
+              display: true,
+              color: '#f0f0f0',
+            },
+            ticks: {
+              precision: 0,
+            },
+            min: 0,
+            max: 250,
+          },
+          x: {
+            grid: {
+              display: false,
+            },
+            title: {
+              display: false,
+              text: 'Ngày đo',
+            },
+          },
+        },
+      },
+    });
+
+    // Create percentile chart
+    percentileChartInstance.current = new Chart(percentileChartRef.current, {
+      type: 'bar',
+      data: {
+        labels,
+        datasets: [
+          {
+            label: 'Đường phân vị',
+            data: percentileData,
+            backgroundColor: '#00BBF2',
+            borderColor: '#00BBF2',
+            borderWidth: 1,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          title: {
+            display: true,
+            text: 'Biểu đồ đường phân vị',
+            font: {
+              size: 16,
+              weight: 'bold',
+            },
+          },
+          legend: {
+            display: false,
+          },
+          tooltip: {
+            enabled: true,
+          },
+          datalabels: {
+            display: true,
+            color: '#000',
+            anchor: 'end',
+            align: 'top',
+            formatter: value => `${value}`,
+            font: {
+              weight: 'bold',
+              size: 12,
+            },
+          },
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            grid: {
+              display: true,
+              color: '#f0f0f0',
+            },
+            ticks: {
+              precision: 1,
+            },
+            min: 0,
+            max: 25,
+          },
+          x: {
+            grid: {
+              display: false,
+            },
+            title: {
+              display: false,
+              text: 'Ngày đo',
+            },
+          },
+        },
+      },
+    });
+
+    // Cleanup function
+    return () => {
+      if (heightChartInstance.current) {
+        heightChartInstance.current.destroy();
+        heightChartInstance.current = null;
+      }
+
+      if (percentileChartInstance.current) {
+        percentileChartInstance.current.destroy();
+        percentileChartInstance.current = null;
+      }
+    };
+  }, [formattedHistory, isLoading]);
 
   // Loading skeleton component
   const TableSkeleton = () => (
@@ -94,7 +311,7 @@ export default function HeightMeasureHistoryPage() {
   );
 
   return (
-    <div className="p-6">
+    <div>
       <div className="text-lg font-semibold text-grayscale-90 mb-2">
         Lịch sử đo cao
       </div>
@@ -156,7 +373,10 @@ export default function HeightMeasureHistoryPage() {
                     Ngày đo
                   </TableHead>
                   <TableHead className="text-white font-medium text-center">
-                    Họ và tên
+                    Họ và tên con
+                  </TableHead>
+                  <TableHead className="text-white font-medium text-center">
+                    Họ và tên cha mẹ
                   </TableHead>
                   <TableHead className="text-white font-medium text-center">
                     Giới tính
@@ -191,6 +411,9 @@ export default function HeightMeasureHistoryPage() {
                     </TableCell>
                     <TableCell className="text-center border-r">
                       {item.name}
+                    </TableCell>
+                    <TableCell className="text-center border-r">
+                      {item.parentName}
                     </TableCell>
                     <TableCell className="text-center border-r">
                       {item.gender}
@@ -240,6 +463,50 @@ export default function HeightMeasureHistoryPage() {
               </Button>
             </div>
           )}
+        </div>
+      )}
+
+      {/* Charts */}
+      {!isLoading && !isError && formattedHistory.length > 0 && (
+        <div className="mt-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="bg-white rounded-2xl p-4 shadow-sm border">
+              <div className="h-[300px]">
+                <canvas
+                  ref={heightChartRef}
+                  aria-label="Biểu đồ đo chiều cao"
+                  role="img"
+                />
+              </div>
+              <div className="text-center text-sm text-grayscale-90 mt-2 flex justify-center gap-3 items-center">
+                <p>
+                  <span className="text-grayscale-50">Trục dọc:</span> Chiều cao
+                  (cm)
+                </p>
+                <p>
+                  <span className="text-grayscale-50">Trục ngang:</span> Ngày đo
+                </p>
+              </div>
+            </div>
+            <div className="bg-white rounded-2xl p-4 shadow-sm border">
+              <div className="h-[300px]">
+                <canvas
+                  ref={percentileChartRef}
+                  aria-label="Biểu đồ đường phân vị"
+                  role="img"
+                />
+              </div>
+              <div className="text-center text-sm text-grayscale-90 mt-2 flex justify-center gap-3 items-center">
+                <p>
+                  <span className="text-grayscale-50">Trục dọc:</span> Đường
+                  phân vị
+                </p>
+                <p>
+                  <span className="text-grayscale-50">Trục ngang:</span> Ngày đo
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </div>

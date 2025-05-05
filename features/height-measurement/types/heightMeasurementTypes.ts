@@ -144,22 +144,29 @@ export interface HeightHistoryParams {
 export interface HeightHistory {
   _id: string;
   status: number;
-  date: string;
-  desiredHeight: number;
+  type: number;
+  fatherHeight: number;
+  motherHeight: number;
   gender: number;
   height: number;
+  percentile: number;
+  predictedAdultHeight: number;
+  desiredHeight: number;
   weight: number;
-  files: any[];
+  images: string[];
   state: number;
   company: string;
   userCreate: string;
-  phone: string;
   birthday: string;
+  date: string;
+  name: string;
+  phone: string;
+  email: string;
+  routine: string;
   note: string;
+  parentName: string;
   namecv: string;
   modifyAt: string;
   createAt: string;
   __v: number;
-  name?: string;
-  userUpdate?: string;
 }
