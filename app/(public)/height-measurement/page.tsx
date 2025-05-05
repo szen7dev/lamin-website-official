@@ -11,19 +11,19 @@ export const metadata: Metadata = generateSeoMetadata({
 
 export default function HeightMeasurementPage() {
   return (
-    <div className="min-h-screen bg-[#f1f4fd] pb-8 sm:pb-12 pt-4 sm:pt-6">
+    <div className="min-h-screen bg-[#f1f4fd] pb-8 sm:pb-12">
       <div className="container mx-auto px-4">
-        <div className="max-w-3xl mx-auto">
+        <div className="max-w-[700px] mx-auto">
           {/* Breadcrumb */}
           <DynamicBreadcrumb />
 
           {/* Title Section */}
           <div className="mb-4 sm:mb-6">
             <h1 className="mb-1 sm:mb-2 text-xl sm:text-[28px] font-bold text-grayscale-90">
-              Hướng dẫn đo chiều cao
+              Hướng dẫn chiều cao
             </h1>
             <p className="text-sm sm:text-base text-[#6C757D]">
-              Nhập thông tin dưới đây để xem kết quả đo cao và nhận thông tin tư vấn từ Lamin
+              Hãy nhập thông tin dưới đây để nhận phân tích chi tiết
             </p>
           </div>
 

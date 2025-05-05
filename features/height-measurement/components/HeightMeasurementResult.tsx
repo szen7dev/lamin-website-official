@@ -54,6 +54,15 @@ const fallbackData = {
     'Chơi các môn thể thao kéo dãn như Bơi, Xà, Nhảy Dây',
     'Bổ sung Protein, Canxi, D3, K2',
   ],
+  noticeH: 'Đạt chuẩn',
+  hdfs: 2.156,
+  whoHS: 114.156,
+  noticeW: 'Đạt chuẩn',
+  wdfs: 2.156,
+  whoWS: 114.156,
+  weight: 50,
+  predictedAdultHeight: 161,
+  P: 36,
 };
 
 interface HeightMeasurementResultProps {
@@ -95,12 +104,54 @@ export default function HeightMeasurementResult({
         Array.isArray(growTrackData.ageHeightNow)
       ) {
         // Sử dụng dữ liệu ageHeightNow nếu có
-        heightData = growTrackData.ageHeightNow;
+        heightData = growTrackData.ageHeightNow.map(item => ({
+          age: Number(item.age),
+          height: Number(item.height),
+        }));
+
+        // Sort data by age to ensure proper display
+        heightData.sort((a, b) => a.age - b.age);
+
+        // Log the data to help with debugging
+        console.log('Height data from API:', heightData);
+
+        // Extend data to age 20 if it doesn't already go that far
+        const maxAgeInData = Math.max(...heightData.map(item => item.age));
+
+        if (maxAgeInData < 20) {
+          // Get the last height value
+          const lastHeight = heightData[heightData.length - 1]?.height || 0;
+
+          // Add missing ages up to 20
+          for (let age = maxAgeInData + 1; age <= 20; age++) {
+            // For prediction data, we'll use the predicted adult height for ages 18-20
+            const height =
+              age >= 18
+                ? apiResponse.predictedAdultHeight
+                : lastHeight +
+                  ((apiResponse.predictedAdultHeight - lastHeight) /
+                    (18 - maxAgeInData)) *
+                    (age - maxAgeInData);
+
+            heightData.push({ age, height: Math.round(height * 10) / 10 });
+          }
+        }
       } else {
         heightData = fallbackData.heightData;
+
+        // Extend fallback data to age 20 if needed
+        const maxAgeInData = Math.max(...heightData.map(item => item.age));
+
+        if (maxAgeInData < 20) {
+          const lastHeight = heightData[heightData.length - 1]?.height || 0;
+
+          for (let age = maxAgeInData + 1; age <= 20; age++) {
+            heightData.push({ age, height: lastHeight });
+          }
+        }
       }
 
-      const predictedHeight = growTrackData.whoHS;
+      const predictedHeight = apiResponse.whoHS;
 
       // Tạo kết quả
       setProcessedData({
@@ -118,6 +169,15 @@ export default function HeightMeasurementResult({
           'Chơi các môn thể thao kéo dãn như Bơi, Xà, Nhảy Dây',
           'Bổ sung Protein, Canxi, D3, K2',
         ],
+        noticeH: apiResponse.noticeH || 'Đạt chuẩn',
+        hdfs: apiResponse.hdfs || 0,
+        whoHS: apiResponse.whoHS || 0,
+        noticeW: apiResponse.noticeW || 'Đạt chuẩn',
+        wdfs: apiResponse.wdfs || 0,
+        whoWS: apiResponse.whoWS || 0,
+        weight: userData.weight || 0,
+        predictedAdultHeight: apiResponse.predictedAdultHeight || 0,
+        P: apiResponse.P || 0,
       });
     } catch (error) {
       console.error('❌ Lỗi khi xử lý dữ liệu:', error);
@@ -156,23 +216,45 @@ export default function HeightMeasurementResult({
           // Percentile lines (mỏng hơn, opacity thấp hơn)
           ...percentiles.map(p => ({
             label: p.name,
-            data: Array(processedData.heightData.length)
-              .fill(0)
-              .map((_, idx) => {
-                // Lấy giá trị từ P3, P5, v.v. nếu có
-                if (growTrackData) {
-                  const pData =
-                    growTrackData[
-                      `ageHeight${p.name}` as keyof typeof growTrackData
-                    ];
+            data: processedData.heightData.map((d, idx) => {
+              // Lấy giá trị từ P3, P5, v.v. nếu có
+              if (growTrackData) {
+                const pData =
+                  growTrackData[
+                    `ageHeight${p.name}` as keyof typeof growTrackData
+                  ];
 
-                  return Array.isArray(pData) && idx < pData.length
-                    ? pData[idx].height
-                    : null;
+                if (Array.isArray(pData)) {
+                  // Find matching age in percentile data
+                  const matchingPoint = pData.find(
+                    point => Math.round(point.age) === Math.round(d.age),
+                  );
+
+                  if (matchingPoint) {
+                    return matchingPoint.height;
+                  }
+
+                  // If we're beyond the original data, extrapolate
+                  if (d.age > pData[pData.length - 1]?.age) {
+                    // For ages beyond our percentile data, extend the line with a slight increase
+                    const lastPoint = pData[pData.length - 1];
+
+                    if (lastPoint) {
+                      // Simple linear extrapolation
+                      const growthRate = 1 + (p.name === 'P50' ? 0.005 : 0.003); // Slight growth per year
+                      const yearsAfterLastPoint = d.age - lastPoint.age;
+
+                      return (
+                        lastPoint.height *
+                        Math.pow(growthRate, yearsAfterLastPoint)
+                      );
+                    }
+                  }
                 }
+              }
 
-                return null;
-              }),
+              return null;
+            }),
             borderColor: p.color,
             borderWidth: 1,
             fill: false,
@@ -204,8 +286,8 @@ export default function HeightMeasurementResult({
             text: 'Biểu đồ dự đoán chiều cao CDC',
             align: 'center',
             font: {
-              size: isMobile ? 14 : 16,
-              weight: 'bold',
+              size: isMobile ? 14 : 24,
+              weight: 'bolder',
             },
             padding: {
               bottom: isMobile ? 20 : 30,
@@ -220,6 +302,7 @@ export default function HeightMeasurementResult({
         },
         scales: {
           x: {
+            type: 'linear',
             title: {
               display: true,
               text: 'Tuổi',
@@ -228,11 +311,11 @@ export default function HeightMeasurementResult({
               },
             },
             grid: {
-              display: false, // Remove vertical grid lines
+              display: false,
             },
             ticks: {
               stepSize: isMobile ? 2 : 1,
-              callback: value => value + (isMobile ? '' : ' Tuổi'),
+              callback: value => value,
               font: {
                 size: isMobile ? 8 : 12,
               },
@@ -240,8 +323,9 @@ export default function HeightMeasurementResult({
             border: {
               width: 1,
             },
-            min: currentAge + 1, // Bắt đầu từ tuổi hiện tại thay vì 5
-            max: 20, // Kết thúc ở 20 tuổi
+            min: currentAge,
+            max: 20,
+            bounds: 'data',
           },
           y: {
             title: {
@@ -447,16 +531,16 @@ export default function HeightMeasurementResult({
           aria-label="Đường tăng trưởng"
           className="flex items-center gap-2 sm:gap-4 p-3 border-b border-grayscale-20">
           <div className="whitespace-nowrap text-sm sm:text-base font-medium">
-            Đường tăng trưởng: {processedData.growthRate}
+            Đường tăng trưởng: {processedData.P}
           </div>
           <div className="flex-1 h-6 sm:h-8 bg-gray-100 rounded-md overflow-hidden">
             <div
               aria-valuemax={100}
               aria-valuemin={0}
-              aria-valuenow={processedData.growthRate}
+              aria-valuenow={processedData.P}
               className="h-full rounded-md bg-[#F37021]"
               role="progressbar"
-              style={{ width: `${processedData.growthRate}%` }}
+              style={{ width: `${processedData.P}%` }}
             />
           </div>
         </div>
@@ -489,12 +573,18 @@ export default function HeightMeasurementResult({
         </div>
 
         {/* Row 3: Analysis Text */}
-        <div className="space-y-1 sm:space-y-2 text-xs sm:text-sm p-3 border-t border-grayscale-20">
+        <div className="space-y-1 sm:space-y-2 text-sm sm:text-sm p-3 border-t border-grayscale-20">
           <p>
-            • Chiều cao: {processedData.height}cm. Bé{' '}
-            {apiResponse?.growTrack.hdfs > 0 ? 'cao' : 'thấp'} hơn so với chiều
-            cao trung bình là {Math.abs(apiResponse?.growTrack.hdfs)}cm. Chuẩn
-            WHO: {processedData.height - apiResponse?.growTrack.hdfs}cm
+            • Chiều cao: {processedData.height}cm. {processedData.noticeH}. Bé{' '}
+            {processedData.hdfs > 0 ? 'cao' : 'thấp'} hơn so với chiều cao trung
+            bình là {Math.abs(processedData.hdfs)}cm. Chuẩn WHO:{' '}
+            {processedData.whoHS}cm
+          </p>
+          <p>
+            • Cân nặng: {processedData.weight}kg. {processedData.noticeW}. Bé{' '}
+            {processedData.wdfs > 0 ? 'nặng' : 'nhẹ'} hơn so với cân nặng trung
+            bình là {Math.abs(processedData.wdfs)}kg. Chuẩn WHO:{' '}
+            {processedData.whoWS}kg
           </p>
           <p>
             • Bé {processedData.gender === 1 ? 'Nam' : 'Nữ'},{' '}
@@ -506,23 +596,23 @@ export default function HeightMeasurementResult({
             •{' '}
             <span className="text-[#FF0000]">
               Dự đoán chiều cao khi trưởng thành:{' '}
-              {processedData.predictedHeight}cm
+              {processedData.predictedAdultHeight}cm
             </span>
-            <span className="text-grayscale-60">
+            <span className="text-grayscale-90">
               | Ngày:{' '}
               {new Date(processedData.analysisDate).toLocaleDateString('vi-VN')}{' '}
               - Coach: {processedData.coach}
             </span>
           </p>
-          <p>
+          <p className="font-medium">
             • Giải pháp tăng chiều cao (Khi con bạn trưởng thành. Chiều cao
             trung bình của bé trai là: 177cm và bé Bé Gái là: 163,5cm)
           </p>
-          <p className="text-grayscale-60">
+          <p className="text-grayscale-90">
             • Con có thể không đạt được chiều cao dự đoán nếu bị ảnh hưởng bởi
             những thói quen sinh hoạt xấu
           </p>
-          <p className="text-grayscale-60">
+          <p className="text-grayscale-90">
             • Con có thể tăng thêm 7 - 15cm so với dự đoán khi trưởng thành nếu
             bố mẹ giúp con áp dụng giải pháp tăng chiều cao của Lamin
           </p>
@@ -534,7 +624,7 @@ export default function HeightMeasurementResult({
                 <div className="flex h-4 w-4 sm:h-5 sm:w-5 items-center justify-center rounded-full bg-success-5">
                   <CheckIcon />
                 </div>
-                <span className="text-xs sm:text-sm text-grayscale-60">
+                <span className="text-xs sm:text-sm text-grayscale-90">
                   {recommendation}
                 </span>
               </li>

@@ -12,6 +12,13 @@ export const postHeightMeasurement = async (
     const queryParams = {
       contactID: params.contactID || '',
       optionSeller: params.optionSeller || DEFAULT_OPTION_SELLER,
+      parentName: params.parentName,
+      fatherHeight: Number(params.fatherHeight),
+      motherHeight: Number(params.motherHeight),
+      email: params.email,
+      desiredHeight: Number(params.desiredHeight),
+      routine: params.routine,
+      date: params.date,
       name: params.name,
       phone: params.phone,
       birthday:
