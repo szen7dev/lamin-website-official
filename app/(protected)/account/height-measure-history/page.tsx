@@ -50,7 +50,7 @@ export default function HeightMeasureHistoryPage() {
   const formattedHistory =
     historyList?.map(item => ({
       id: item._id,
-      date: formatDate(item.date),
+      date: new Date(item.date).toLocaleDateString('vi-VN'),
       name: item.name || user?.fullname || '',
       parentName: item.parentName || '',
       gender: item.gender === 1 ? 'Nam' : 'Nữ',
@@ -86,7 +86,7 @@ export default function HeightMeasureHistoryPage() {
 
     // Get unique dates with latest data
     sortedHistory.forEach(item => {
-      const dateKey = formatDate(item.rawDate);
+      const dateKey = new Date(item.rawDate).toLocaleDateString('vi-VN');
 
       if (!dateMap.has(dateKey)) {
         dateMap.set(dateKey, {
@@ -126,6 +126,9 @@ export default function HeightMeasureHistoryPage() {
             backgroundColor: '#0052A4',
             borderColor: '#0052A4',
             borderWidth: 1,
+            barPercentage: 0.5, // Control the width of bars as a percentage of the available width
+            categoryPercentage: 0.8, // Control the width of the category
+            maxBarThickness: 50, // Set maximum thickness in pixels
           },
         ],
       },
@@ -197,6 +200,9 @@ export default function HeightMeasureHistoryPage() {
             backgroundColor: '#00BBF2',
             borderColor: '#00BBF2',
             borderWidth: 1,
+            barPercentage: 0.5, // Control the width of bars as a percentage of the available width
+            categoryPercentage: 0.8, // Control the width of the category
+            maxBarThickness: 50, // Set maximum thickness in pixels
           },
         ],
       },
