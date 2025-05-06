@@ -299,6 +299,9 @@ export default function HeightMeasurementResult({
           tooltip: {
             enabled: false, // Tắt tooltip mặc định
           },
+          datalabels: {
+            display: false,
+          },
         },
         scales: {
           x: {
@@ -368,15 +371,15 @@ export default function HeightMeasurementResult({
             const predictedDatasetIndex = chart.data.datasets.length - 1;
             const meta = chart.getDatasetMeta(predictedDatasetIndex);
 
-            meta.data.forEach((element, index) => {
-              const position = element.getProps(['x', 'y']);
-              const { x, y } = position;
-              const height = processedData.heightData[index].height;
+            // Only process if this is the predicted dataset
+            if (
+              chart.data.datasets[predictedDatasetIndex].label === 'Dự đoán'
+            ) {
+              meta.data.forEach((element, index) => {
+                const position = element.getProps(['x', 'y']);
+                const { x, y } = position;
+                const height = processedData.heightData[index].height;
 
-              // Only show label if this is the predicted height dataset
-              if (
-                chart.data.datasets[predictedDatasetIndex].label === 'Dự đoán'
-              ) {
                 ctx.save();
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'bottom';
@@ -390,8 +393,8 @@ export default function HeightMeasurementResult({
                 ctx.fillText(`${height}`, x, y - labelOffset);
 
                 ctx.restore();
-              }
-            });
+              });
+            }
           },
         },
       ],
@@ -546,12 +549,12 @@ export default function HeightMeasurementResult({
           <div className="whitespace-nowrap text-sm sm:text-base font-medium">
             Đường tăng trưởng: {processedData.P}
           </div>
-          <div className="flex-1 h-6 sm:h-8 bg-gray-100 rounded-md overflow-hidden flex items-center">
+          <div className="flex-1 h-3 sm:h-4 bg-gray-100 rounded-md overflow-hidden flex items-center">
             <div
               aria-valuemax={100}
               aria-valuemin={0}
               aria-valuenow={processedData.P}
-              className="h-1/2 rounded-md bg-[#F37021]"
+              className="h-full rounded-md bg-[#F37021]"
               role="progressbar"
               style={{ width: `${processedData.P}%` }}
             />
