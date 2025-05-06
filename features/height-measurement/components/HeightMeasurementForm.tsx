@@ -34,7 +34,7 @@ export default function HeightMeasurementForm() {
       email: '',
       desiredHeight: '',
       routine: '',
-      date: new Date(),
+      date: new Date().toISOString().split('T')[0],
       name: '',
       birthDate: '' as unknown as Date,
       weight: '',
@@ -319,12 +319,17 @@ export default function HeightMeasurementForm() {
           </label>
           <input
             aria-describedby="date-description"
-            className="w-full rounded-lg border border-grayscale-20 bg-grayscale-5 px-3 sm:px-4 py-2 sm:py-3 text-sm text-grayscale-90 disabled:opacity-90"
-            disabled={true}
+            className="w-full rounded-lg border border-grayscale-20 bg-grayscale-5 px-3 sm:px-4 py-2 sm:py-3 text-sm text-grayscale-90"
             id="date"
             type="date"
-            value={new Date().toISOString().split('T')[0]}
+            {...register('date', { required: 'Vui lòng chọn ngày đo' })}
+            aria-invalid={errors.date ? 'true' : 'false'}
           />
+          {errors.date && (
+            <p className="text-xs sm:text-sm text-error" id="date-error">
+              {errors.date.message}
+            </p>
+          )}
         </div>
 
         {/* Birth Date */}

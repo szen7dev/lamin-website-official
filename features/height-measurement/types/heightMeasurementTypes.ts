@@ -13,7 +13,7 @@ export interface HeightMeasurementFormData {
   email: string;
   fatherHeight: string | number;
   motherHeight: string | number;
-  date: Date;
+  date: Date | string;
   desiredHeight: string | number;
   routine: string;
 }
