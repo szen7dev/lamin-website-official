@@ -8,15 +8,15 @@ import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import { generateMetadata as generateSeoMetadata } from '@/utils/seo';
 
 // Client components with interactivity - load without SSR to avoid hydration issues
-const FeatureShortcuts = dynamic(
-  () => import('@/features/homepage/components/FeatureShortcuts'),
-  {
-    ssr: true,
-    loading: () => (
-      <div className="h-24 w-full animate-pulse bg-gray-100 rounded-lg" />
-    ),
-  },
-);
+// const FeatureShortcuts = dynamic(
+//   () => import('@/features/homepage/components/FeatureShortcuts'),
+//   {
+//     ssr: true,
+//     loading: () => (
+//       <div className="h-24 w-full animate-pulse bg-gray-100 rounded-lg" />
+//     ),
+//   },
+// );
 
 const DealSlider = dynamic(
   () => import('@/features/homepage/components/DealSlider'),
@@ -56,8 +56,8 @@ const HealthNews = dynamic(
 );
 
 export const metadata: Metadata = generateSeoMetadata({
-  title: 'Lamin-Giải pháp tăng cao toàn diện cho trẻ',
-  description: 'Giải pháp tăng cao toàn diện cho trẻ',
+  title: 'Lamin-Nâng chiều cao Dựng tầm vóc Việt',
+  description: 'Khát vọng Nâng chiều cao Dựng tầm vóc Việt',
   keywords: [
     'cửa hàng thực phẩm bảo vệ sức khỏe',
     'thực phẩm bảo vệ sức khỏe',
@@ -86,14 +86,14 @@ export default function HomePage() {
       </section>
 
       {/* Feature Shortcuts - Client Component for interactivity */}
-      <section
+      {/* <section
         aria-labelledby="shortcuts-heading"
         className="container mx-auto px-3 sm:px-4">
         <h2 className="sr-only" id="shortcuts-heading">
           Truy cập nhanh
         </h2>
         <FeatureShortcuts />
-      </section>
+      </section> */}
 
       {/* Deal Slider - Client Component for carousel */}
       <section

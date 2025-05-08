@@ -114,7 +114,7 @@ function ProductList({
 
         <div className="flex justify-between items-center pb-4 hidden md:flex">
           <h3 className="text-lg font-semibold">Danh sách sản phẩm</h3>
-          <div className="flex gap-2 items-center text-grayscale-50">
+          {/* <div className="flex gap-2 items-center text-grayscale-50">
             Sắp xếp theo
             {sortButtons.map(btn => renderSortButton(btn))}
             <div className="flex bg-white rounded-full p-1 gap-0.5">
@@ -133,7 +133,7 @@ function ProductList({
                 <ListLayoutIcon fill={layout === 'list' ? 'white' : 'black'} />
               </button>
             </div>
-          </div>
+          </div> */}
         </div>
         <div className="bg-white pb-4 w-full p-4 md:hidden">
           <div className=" flex justify-between">

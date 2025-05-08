@@ -24,7 +24,7 @@ import { Separator } from '@/components/ui/separator';
 import { LoginModal } from '@/components/modal/LoginModal';
 import { useContactInfo } from '@/hooks/useContactInfo';
 import { CartIcon, PhoneIcon, UserIcon } from '@/components/icons';
-import { useGetSearchKeywordList } from '@/features/search/hooks/keyword/useGetSearchKeywordList';
+// import { useGetSearchKeywordList } from '@/features/search/hooks/keyword/useGetSearchKeywordList';
 import { useUpdateSearchKeyword } from '@/features/search/hooks/keyword/useUpdateSearchKeyword';
 import { useAuth } from '@/hooks/useAuth';
 import { apiClient } from '@/services/api/apiClient';
@@ -38,7 +38,7 @@ import {
 
 export function Header() {
   // Get top search keywords
-  const { keywords } = useGetSearchKeywordList();
+  // const { keywords } = useGetSearchKeywordList();
 
   // Update keyword popularity when user searches
   const { updateKeyword } = useUpdateSearchKeyword();
@@ -341,7 +341,7 @@ export function Header() {
               </div>
             </div>
 
-            <div
+            {/* <div
               className={`flex flex-wrap gap-x-4 gap-y-1 pb-1 ${isMobile ? 'pt-3' : ''}`}>
               <span className="text-sm text-white/80">Tìm kiếm phổ biến:</span>
               {keywords?.map(keyword => (
@@ -352,7 +352,7 @@ export function Header() {
                   {keyword.keyword}
                 </button>
               ))}
-            </div>
+            </div> */}
           </div>
 
           {/* QR Code Section - Hidden on mobile */}
