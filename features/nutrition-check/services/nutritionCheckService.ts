@@ -21,7 +21,7 @@ export class NutritionCheckRealService implements NutritionCheckService {
         height: Number(data.height),
         weight: Number(data.weight),
         name: data.name,
-        note: `Kiểm tra dinh dưỡng từ website Lamin Pharmacy`,
+        note: `Kiểm tra đo cao và dinh dưỡng từ website Lamin`,
       };
 
       // Gọi API survey_result theo tài liệu

@@ -208,7 +208,7 @@ export function Header() {
                   )}
                 </button>
                 <Link
-                  aria-label="Lamin Pharmacy Home"
+                  aria-label="Lamin"
                   className="col-span-1 mx-auto flex items-end gap-2"
                   href="/">
                   <Image
@@ -277,7 +277,7 @@ export function Header() {
               <div className="flex items-center sm:flex justify-items-start gap-4">
                 {/* Logo */}
                 <Link
-                  aria-label="Lamin Pharmacy Home"
+                  aria-label="Lamin"
                   className="flex items-end gap-2"
                   href="/">
                   <Image
@@ -431,7 +431,7 @@ export function Header() {
         <div className="">
           <div className="bg-primary-50 flex justify-between container">
             <Link
-              aria-label="Lamin Pharmacy Home"
+              aria-label="Lamin"
               className="col-span-1"
               href="/">
               <Image

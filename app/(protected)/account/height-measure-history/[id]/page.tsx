@@ -14,7 +14,7 @@ interface PageProps {
 }
 
 export const metadata: Metadata = generateSeoMetadata({
-  title: 'Chi tiết thông tin đo cao - Lamin Pharmacy',
+  title: 'Lamin-Chi tiết thông tin đo cao',
   description: 'Xem kết quả đo cao và nhận tư vấn về chiều cao',
 });
 

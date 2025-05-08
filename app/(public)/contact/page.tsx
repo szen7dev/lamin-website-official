@@ -5,7 +5,7 @@ import { generateMetadata as generateSeoMetadata } from '@/utils/seo';
 import { DynamicBreadcrumb } from '@/components/dynamic-breadcrumb';
 
 export const metadata: Metadata = generateSeoMetadata({
-  title: 'Liên Hệ - Lamin Pharmacy',
+  title: 'Lamin-Liên hệ',
   description: 'Liên hệ với chúng tôi để được hỗ trợ và tư vấn',
 });
 

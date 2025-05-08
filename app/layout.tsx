@@ -13,8 +13,8 @@ import { Providers } from '@/components/providers';
 import { fontSans } from '@/config/fonts';
 
 export const metadata = generateSeoMetadata({
-  title: 'Lamin Pharmacy',
-  description: 'Your trusted pharmacy partner',
+  title: 'Lamin',
+  description: 'Giải pháp nâng chiều cao Dựng tầm vóc Việt',
 });
 
 export default function RootLayout({

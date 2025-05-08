@@ -19,7 +19,7 @@ export async function generateMetadata({
 
   let seoData = {
     title: 'Bài Viết - Góc Sức Khỏe',
-    description: 'Bài viết về sức khỏe và dinh dưỡng từ Lamin Pharmacy',
+    description: 'Bài viết về sức khỏe và dinh dưỡng từ Lamin',
   };
 
   try {

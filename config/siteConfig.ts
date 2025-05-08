@@ -1,9 +1,9 @@
 export const siteConfig = {
-  name: 'Lamin Pharmacy',
-  description: 'Your trusted pharmacy partner',
+  name: 'Lamin',
+  description: 'Giải pháp nâng chiều cao Dựng tầm vóc Việt',
   url: 'https://lamin.com.vn',
   ogImage: 'https://lamin.vn/og-image.jpg',
-  keywords: ['pharmacy', 'health', 'medicine', 'wellness'],
+  keywords: ['pharmacy', 'health', 'grow', 'wellness'],
   icons: '/favicon.ico',
   links: {
     facebook: 'https://facebook.com/laminvietnam',

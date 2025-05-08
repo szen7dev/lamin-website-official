@@ -220,7 +220,7 @@ export default function ArticleDetailContent({ article }: { article: any }) {
             )}
             <div>
               <h3 className="font-medium text-grayscale-90">
-                {article?.userUpdate?.fullname || 'Lamin Pharmacy'}
+                {article?.userUpdate?.fullname || 'Lamin'}
               </h3>
               <p className="text-sm text-grayscale-60">
                 {article?.userUpdate?.position || 'Biên tập viên'}
