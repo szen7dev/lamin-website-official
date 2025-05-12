@@ -5,14 +5,9 @@ import { useQuery } from '@tanstack/react-query';
 import { getGoodsList } from '@/features/search/api/goods/getGoodsList';
 import { GoodsListParams } from '@/features/search/types/goodsTypes';
 
-/**
- * Hook for fetching goods list with optional search functionality
- * @param params - Query parameters for goods list, including keyword for search
- * @returns Object containing goods list, loading state, and error
- */
 export const useGetGoodsList = (params: GoodsListParams = {}) => {
   const {
-    data: goodsList = [],
+    data: result,
     isLoading,
     error,
     refetch,
@@ -20,14 +15,19 @@ export const useGetGoodsList = (params: GoodsListParams = {}) => {
     queryKey: ['GOODS_LIST', params],
     queryFn: () => getGoodsList(params),
     staleTime: 1000 * 60 * 5, // 5 minutes
-    enabled: !!params.keyword || !!params.categoryID || !!params.menuSlug,
+    enabled:
+      !!params.keyword ||
+      !!params.categoryID ||
+      !!params.menuSlug ||
+      !!params.lastestID,
   });
 
   return {
-    goodsList,
+    goodsList: result?.data || [],
+    response: result?.response,
     isLoading,
     error,
     refetch,
-    hasResults: goodsList.length > 0,
+    hasResults: (result?.data || []).length > 0,
   };
 };
