@@ -52,10 +52,11 @@ export interface GoodsVariant {
 export interface GoodsListParams {
   optionSeller?: number;
   usage?: number;
-  keyword?: string; // Used for search functionality
+  keyword?: string;
   categoryID?: string;
   limit?: number;
   page?: number;
   status?: number;
   menuSlug?: string;
+  lastestID?: string;
 }
