@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { ArrowLeft, Mic, Search, X } from 'lucide-react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 
 import SearchSuggestions from './SearchSuggestions';
 
@@ -14,7 +15,6 @@ import { FileInfo } from '@/features/search/types/goodsTypes';
 import apiClient from '@/services/api/apiClient';
 import { Button } from '@/components/ui/button';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
-import { useSearchParams } from 'next/navigation';
 
 interface SearchBarProps {
   selectedKeyword: string;
@@ -168,7 +168,7 @@ export default function SearchBar({
                   }
                 }
               } else if (item.thumbnail) {
-                imageUrl = apiClient.getFileUrl(item.thumbnail);
+                imageUrl = apiClient.getFileUrl(item.thumbnail.path);
               }
 
               return {
@@ -283,7 +283,7 @@ export default function SearchBar({
             }
           } else if (item.thumbnail) {
             // Some items may have a thumbnail field instead
-            imageUrl = apiClient.getFileUrl(item.thumbnail);
+            imageUrl = apiClient.getFileUrl(item.thumbnail.path);
           }
 
           return {

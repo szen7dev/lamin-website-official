@@ -33,5 +33,5 @@ export default async function ProductListPage({
   const { slug } = resolvedParams;
   const menuInfo = await getMenuBySlug({ slug });
 
-  return <ProductList params={{ slug }} menuInfo={menuInfo} />;
+  return <ProductList menuInfo={menuInfo} params={{ slug }} />;
 }
