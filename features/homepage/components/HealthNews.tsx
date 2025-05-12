@@ -93,21 +93,21 @@ export default function HealthNews({
             <h2
               className="text-lg font-semibold text-grayscale-90"
               id="health-news-title">
-              Góc Sức Khỏe
+              Bản tin truyền thông
             </h2>
           </div>
-          <div className="h-5">
+          {/* <div className="h-5">
             <Separator
               className="h-full bg-grayscale-30"
               orientation="vertical"
             />
-          </div>
-          <Link
+          </div> */}
+          {/* <Link
             className="flex items-center gap-1 text-primary-40 font-normal text-sm hover:underline decoration-transparent"
             href="/chuyen-trang-suc-khoe">
             Xem thêm
             <ChevronRight className="h-4 w-4" />
-          </Link>
+          </Link> */}
         </div>
       )}
 
