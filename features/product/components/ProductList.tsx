@@ -1,6 +1,6 @@
 'use client';
-import { useMemo, useState } from 'react';
-import { ChevronsDown } from 'lucide-react';
+import { useEffect, useMemo, useState } from 'react';
+import { ChevronsDown, Loader2 } from 'lucide-react';
 
 import ProductCard from './ProductCard';
 
@@ -9,6 +9,7 @@ import { DynamicBreadcrumb } from '@/components/dynamic-breadcrumb';
 import { GridLayoutIcon, ListLayoutIcon } from '@/components/icons';
 import { MediaItem } from '@/features/menu/types/mediaTypes';
 import { useGetBestSellingCombo } from '@/features/homepage/hooks/combo/useGetBestSellingCombo';
+import { Goods } from '@/features/search/types/goodsTypes';
 
 type SortType =
   | 'price-asc'
@@ -27,18 +28,23 @@ function ProductList({
   searchParams?: { [key: string]: string | string[] | undefined };
   menuInfo?: MediaItem;
 }) {
-  const { goodsList, error, isLoading } = useGetGoodsList({
+  const [page, setPage] = useState<number>(1);
+  const [lastestID, setLastestID] = useState<string>('');
+  const [allProducts, setAllProducts] = useState<Goods[]>([]);
+  const [hasMore, setHasMore] = useState<boolean>(true);
+  const [isLoadingMore, setIsLoadingMore] = useState<boolean>(false);
+
+  const { goodsList, response, error, isLoading } = useGetGoodsList({
     menuSlug: params?.slug,
     keyword: searchParams?.q as string,
+    lastestID,
+    limit: 10,
   });
 
   const [sortBy, setSortBy] = useState<SortType>();
   const [layout, setLayout] = useState<'grid' | 'list'>('grid');
   const { combos: products } = useGetBestSellingCombo();
-  const [visibleCount, setVisibleCount] = useState(1);
-  const productsPerPage = 1;
 
-  console.log('products', products);
   const sortButtons: { label: string; sortBy: SortType }[] = [
     {
       label: 'Bán chạy',
@@ -87,12 +93,46 @@ function ProductList({
     }
   };
 
+  useEffect(() => {
+    if (goodsList && goodsList.length > 0) {
+      if (lastestID === '') {
+        setAllProducts(getSortedProducts());
+      } else {
+        setAllProducts(prev => [...prev, ...getSortedProducts()]);
+      }
+
+      if (response?.data?.nextCursor) {
+        setHasMore(true);
+      } else if (goodsList.length < 10) {
+        setHasMore(false);
+      }
+
+      setIsLoadingMore(false);
+    } else if (goodsList && goodsList.length === 0) {
+      setHasMore(false);
+      setIsLoadingMore(false);
+    }
+  }, [goodsList, response, lastestID]);
+
+  const handleLoadMore = () => {
+    if (isLoadingMore) return;
+
+    setIsLoadingMore(true);
+    if (response?.data?.nextCursor) {
+      setLastestID(response.data.nextCursor);
+    } else if (goodsList.length > 0) {
+      setLastestID(goodsList[goodsList.length - 1]._id);
+    }
+
+    setPage(prev => prev + 1);
+  };
+
   const sortedProducts = useMemo(
     () => getSortedProducts(),
     [goodsList, sortBy],
   );
 
-  const visibleProducts = sortedProducts.slice(0, visibleCount);
+  console.log('goodsList', goodsList);
 
   return (
     <div className="min-h-3 bg-background pb-8 sm:pb-12 pt-4 sm:pt-6">
@@ -155,20 +195,20 @@ function ProductList({
               </button>
             </div>
           </div>
-          <div className="flex gap-2 items-center text-grayscale-50 mt-4">
+          {/* <div className="flex gap-2 items-center text-grayscale-50 mt-4">
             {sortButtons.map(btn => renderSortButton(btn))}
-          </div>
+          </div> */}
         </div>
 
-        {goodsList?.length > 0 ? (
+        {allProducts?.length > 0 ? (
           <div className="p-3 md:p-0">
             <ul
               className={`rounded-full p-1 ${layout === 'list' ? 'grid grid-cols gap-3 sm:gap-4 sm:grid-cols-2' : 'grid grid-cols-2 gap-3 sm:gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5'}`}>
-              {visibleProducts.map(product => (
+              {allProducts.map(product => (
                 <li key={product._id}>
                   <ProductCard
                     error={error}
-                    isLoading={isLoading}
+                    isLoading={isLoading && allProducts.length === 0}
                     layout={layout}
                     product={{
                       ...product,
@@ -179,24 +219,20 @@ function ProductList({
                 </li>
               ))}
             </ul>
-            {visibleCount < sortedProducts.length && (
+
+            {isLoadingMore && (
+              <div className="flex justify-center my-4">
+                <Loader2 className="h-6 w-6 animate-spin text-primary" />
+              </div>
+            )}
+
+            {allProducts.length > 0 && hasMore && !isLoadingMore && (
               <div className="text-center mt-4">
                 <button
-                  className="text-black font-medium text-sm hover:text-blue-600"
-                  onClick={() =>
-                    setVisibleCount(prev => prev + productsPerPage)
-                  }>
-                  <div className="flex">
-                    <ChevronsDown height={20} width={20} />
-                    <span>
-                      Xem thêm{' '}
-                      {Math.min(
-                        productsPerPage,
-                        sortedProducts.length - visibleCount,
-                      )}{' '}
-                      sản phẩm
-                    </span>
-                  </div>
+                  className="flex items-center justify-center mx-auto gap-2 text-black font-medium text-sm hover:text-primary"
+                  onClick={handleLoadMore}>
+                  <ChevronsDown height={20} width={20} />
+                  <span>Xem thêm</span>
                 </button>
               </div>
             )}
