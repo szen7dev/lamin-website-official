@@ -178,7 +178,8 @@ export default function LoginPage() {
           <div className="w-full max-w-md space-y-3 p-8 bg-gray-50 rounded-lg">
             <div className="text-center">
               <div className="flex items-center justify-center">
-                <Image
+                Hệ thống Lamin
+                {/* <Image
                   alt="Logo"
                   className="w-auto"
                   height={80}
@@ -186,9 +187,9 @@ export default function LoginPage() {
                   width={80}
                 />
                 <div className="text-left font-extrabold text-[#034EA2]">
-                  <div className="text-sm">CỬA HÀNG</div>
+                  <div className="text-sm"></div>
                   <div className="text-xl leading-tight">LAMIN</div>
-                </div>
+                </div> */}
               </div>
 
               <h2 className="mt-6 text-center text-xl font-semibold tracking-tight text-gray-900">
