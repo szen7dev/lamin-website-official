@@ -29,7 +29,7 @@ export function Footer() {
     return (
       <Link
         key={item?.slug}
-        className="text-grayscale-40 hover:text-primary decoration-transparent text-sm hidden sm:block"
+        className="text-grayscale-40 hover:text-primary decoration-transparent text-sm hidden sm:block mb-4"
         href={`/${item?.slug}`}>
         {item?.name}
       </Link>
@@ -44,13 +44,13 @@ export function Footer() {
           <div className="border-b pb-1 sm:border-0 pb-0">
             <div className="flex justify-between">
               <div className="flex">
-                <span className="text-primary">
+                {/* <span className="text-primary">
                   <Dot
                     className="text-primary -ml-2"
                     stroke="currentColor"
                     strokeWidth={5}
                   />
-                </span>
+                </span> */}
                 <h4 className="font-medium text-sm mb-4">VỀ CHÚNG TÔI</h4>
               </div>
               <button
@@ -77,13 +77,13 @@ export function Footer() {
           <div className="border-b pb-1 sm:border-0 pb-0">
             <div className="flex justify-between">
               <div className="flex">
-                <span className="text-primary">
+                {/* <span className="text-primary">
                   <Dot
                     className="text-primary -ml-2"
                     stroke="currentColor"
                     strokeWidth={5}
                   />
-                </span>
+                </span> */}
                 <h4 className="font-medium text-sm mb-4">TÌM HIỂU THÊM</h4>
               </div>
               <button
@@ -116,13 +116,13 @@ export function Footer() {
           <div className="border-b pb-1 sm:border-0 pb-0">
             <div className="flex justify-between">
               <div className="flex">
-                <span className="text-primary">
+                {/* <span className="text-primary">
                   <Dot
                     className="text-primary -ml-2"
                     stroke="currentColor"
                     strokeWidth={5}
                   />
-                </span>
+                </span> */}
                 <h4 className="font-medium text-sm mb-4">DANH MỤC</h4>
               </div>
               <button
@@ -156,13 +156,13 @@ export function Footer() {
             {/* Hotline Section */}
             <div className="border-b pb-3 sm:border-0 pb-0">
               <div className="flex">
-                <span className="text-primary">
+                {/* <span className="text-primary">
                   <Dot
                     className="text-primary -ml-2"
                     stroke="currentColor"
                     strokeWidth={5}
                   />
-                </span>
+                </span> */}
                 <h4 className="font-medium text-sm mb-4">TỔNG ĐÀI</h4>
               </div>
 
@@ -232,13 +232,13 @@ export function Footer() {
             <div className="border-b pb-3 sm:border-0 pb-0">
               <div className="flex justify-between items-center sm:flex-col sm:items-start">
                 <div className="flex">
-                  <span className="text-primary">
+                  {/* <span className="text-primary">
                     <Dot
                       className="text-primary -ml-2"
                       stroke="currentColor"
                       strokeWidth={5}
                     />
-                  </span>
+                  </span> */}
                   <h4 className="font-medium text-sm">KẾT NỐI VỚI CHÚNG TÔI</h4>
                 </div>
                 <div className="flex space-x-4 mt-3">
@@ -307,13 +307,13 @@ export function Footer() {
             <div>
               <div className="flex justify-between items-center sm:flex-col sm:items-start">
                 <div className="flex">
-                  <span className="text-primary">
+                  {/* <span className="text-primary">
                     <Dot
                       className="text-primary -ml-2"
                       stroke="currentColor"
                       strokeWidth={5}
                     />
-                  </span>
+                  </span> */}
                   <h4 className="font-medium text-sm mb-4">TẢI ỨNG DỤNG</h4>
                 </div>
                 <Image
