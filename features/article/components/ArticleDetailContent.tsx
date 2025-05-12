@@ -222,9 +222,9 @@ export default function ArticleDetailContent({ article }: { article: any }) {
               <h3 className="font-medium text-grayscale-90">
                 {article?.userUpdate?.fullname || 'Lamin'}
               </h3>
-              <p className="text-sm text-grayscale-60">
+              {/* <p className="text-sm text-grayscale-60">
                 {article?.userUpdate?.position || 'Biên tập viên'}
-              </p>
+              </p> */}
             </div>
           </div>
 
@@ -235,10 +235,10 @@ export default function ArticleDetailContent({ article }: { article: any }) {
                 Đã kiểm duyệt nội dung
               </em>
             </div>
-            <em className="text-sm text-grayscale-60">
+            {/* <em className="text-sm text-grayscale-60">
               {article?.userUpdate?.note ||
                 'Hơn 5 năm kinh nghiệm trong lĩnh vực quản lý nội dung số.'}
-            </em>
+            </em> */}
           </div>
         </footer>
 
