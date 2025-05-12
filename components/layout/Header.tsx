@@ -67,7 +67,7 @@ export function Header() {
       return contactInfo[0].hotline1;
     }
 
-    return '1800 646458'; //
+    return '1800646970'; //
   };
 
   // Close mobile menu when screen size changes to desktop
@@ -299,16 +299,16 @@ export function Header() {
                       <span className="font-normal">{getHotline()}</span>
                     </div>
                   </div>
-                  <div className="h-5">
+                  {/* <div className="h-5">
                     <Separator
                       className="h-full bg-white"
                       orientation="vertical"
                     />
-                  </div>
-                  <div className="flex items-end gap-2 text-white">
+                  </div> */}
+                  {/* <div className="flex items-end gap-2 text-white">
                     <PhoneIcon height={20} width={12} />
                     <span>Tải ứng dụng</span>
-                  </div>
+                  </div> */}
                 </div>
               </div>
 
