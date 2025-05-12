@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 
 import dynamic from 'next/dynamic';
 
-import GridBanner from '@/features/homepage/components/GridBanner';
+// import GridBanner from '@/features/homepage/components/GridBanner';
 import BestSellingProducts from '@/features/menu/components/BestSellingProducts';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import { generateMetadata as generateSeoMetadata } from '@/utils/seo';
@@ -70,20 +70,35 @@ export const metadata: Metadata = generateSeoMetadata({
 export default function HomePage() {
   return (
     <div className="flex min-h-screen flex-col bg-background">
+      {/* Health News - Server Component for SEO */}
+      <section className="container mx-auto px-3 sm:px-4 sm:py-5">
+        <HealthNews />
+      </section>
+
+      {/* Coach Experts - Server Component for SEO */}
+      <section
+        aria-labelledby="coaches-heading"
+        className="container mx-auto px-3 sm:px-4 py-6 sm:py-5">
+        <h2 className="sr-only" id="coaches-heading">
+          Chuyên gia tư vấn
+        </h2>
+        <CoachExperts />
+      </section>
+
       {/* Hero Section with Banner - Server Component for immediate display */}
       {/* <section aria-labelledby="hero-heading" className="w-full">
         <SimpleBanner />
       </section> */}
 
       {/* Promotions - Server Component for immediate display */}
-      <section
+      {/* <section
         aria-labelledby="promotions-heading"
         className="container mx-auto px-3 sm:px-4 py-4 sm:py-6">
         <h2 className="sr-only" id="promotions-heading">
           Ưu đãi nổi bật
         </h2>
         <GridBanner />
-      </section>
+      </section> */}
 
       {/* Feature Shortcuts - Client Component for interactivity */}
       {/* <section
@@ -113,21 +128,6 @@ export default function HomePage() {
           Sản phẩm bán chạy
         </h2>
         <BestSellingProducts />
-      </section>
-
-      {/* Coach Experts - Server Component for SEO */}
-      <section
-        aria-labelledby="coaches-heading"
-        className="container mx-auto px-3 sm:px-4 py-6 sm:py-5">
-        <h2 className="sr-only" id="coaches-heading">
-          Chuyên gia tư vấn
-        </h2>
-        <CoachExperts />
-      </section>
-
-      {/* Health News - Server Component for SEO */}
-      <section className="container mx-auto px-3 sm:px-4 sm:py-5">
-        <HealthNews />
       </section>
 
       {/* Trusted Stores - Client Component for carousel */}
