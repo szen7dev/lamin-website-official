@@ -25,7 +25,7 @@ export default function RelatedArticles({
       path: 'author category thumbnail userUpdate position tags name',
       select: '_id name fullname image path size note position',
     },
-    select: 'category title',
+    select: 'category title slug',
   });
 
   if (isLoadingList) {
@@ -89,6 +89,7 @@ export default function RelatedArticles({
       </div>
     );
   }
+console.log("articleList", articleList);
 
   // If articles are available
   return (

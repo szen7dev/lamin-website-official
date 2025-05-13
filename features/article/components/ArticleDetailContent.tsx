@@ -22,6 +22,7 @@ import {
 import { apiClient } from '@/services';
 import { Separator } from '@/components/ui/separator';
 import { useToast } from '@/hooks/use-toast';
+import { useEffect } from 'react';
 
 export default function ArticleDetailContent({ article }: { article: any }) {
   const { slug } = useParams();
@@ -34,6 +35,10 @@ export default function ArticleDetailContent({ article }: { article: any }) {
   });
   const { toast } = useToast();
   const pathname = usePathname();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [pathname]);
 
   if (isLoading) {
     return <Skeleton className="h-5 w-full rounded" />;
