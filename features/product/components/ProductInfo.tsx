@@ -10,6 +10,7 @@ import { Loader2, Minus, Plus, Star } from 'lucide-react';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
+
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/features/cart/hooks/useCart';
 import { cn } from '@/utils/helpers';
@@ -438,10 +439,9 @@ export default function ProductInfo({
           <Button
             className="flex-1 rounded-[100px] border-0 bg-primary-5 py-3 text-base font-medium text-[#0D6EFD] hover:bg-primary-5/80"
             variant="outline">
-              Tìm cửa hàng
+            Tìm cửa hàng
           </Button>
         </Link>
-
       </div>
 
       {/* Policy Cards */}
@@ -454,9 +454,7 @@ export default function ProductInfo({
             <p className="font-medium text-sm text-grayscale-90">
               Đổi trả trong 30 ngày
             </p>
-            <p className="text-sm text-[#6B7280]">
-              Kể từ ngày mua hàng
-            </p>
+            <p className="text-sm text-[#6B7280]">Kể từ ngày mua hàng</p>
           </div>
         </div>
         <div className="flex items-start gap-3">
@@ -478,7 +476,9 @@ export default function ProductInfo({
             <p className="font-medium text-sm text-grayscale-90">
               Cam kết sản phẩm
             </p>
-            <p className="text-sm text-[#6B7280]">Đúng chất lượng theo công bố</p>
+            <p className="text-sm text-[#6B7280]">
+              Đúng chất lượng theo công bố
+            </p>
           </div>
         </div>
       </div>

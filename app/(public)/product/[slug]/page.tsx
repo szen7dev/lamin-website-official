@@ -4,6 +4,7 @@ import { ProductDetailClient } from './client';
 
 import { generateMetadata as generateSeoMetadata } from '@/utils/seo';
 import { getGoodsInfoBySlug } from '@/features/product/api/getGoodsInfoBySlug';
+import { apiClient } from '@/services';
 
 export async function generateMetadata({
   params,
@@ -23,6 +24,7 @@ export async function generateMetadata({
         ? `${productInfo.note.substring(0, 150)}...`
         : 'Thông tin chi tiết về sản phẩm',
       keywords: ['sản phẩm', 'chi tiết', 'sản phẩm', productInfo.name],
+      image: apiClient.getFileUrl(productInfo.images?.[0]?.path),
     });
   } catch (error) {
     // Fallback metadata if product data can't be fetched
