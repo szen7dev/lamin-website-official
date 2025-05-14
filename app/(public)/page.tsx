@@ -6,6 +6,9 @@ import dynamic from 'next/dynamic';
 import BestSellingProducts from '@/features/menu/components/BestSellingProducts';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import { generateMetadata as generateSeoMetadata } from '@/utils/seo';
+import SimpleBanner from '@/features/homepage/components/SimpleBanner';
+import GridBanner from '@/features/homepage/components/GridBanner';
+import FeatureShortcuts from '@/features/homepage/components/FeatureShortcuts';
 
 // Client components with interactivity - load without SSR to avoid hydration issues
 // const FeatureShortcuts = dynamic(
@@ -70,6 +73,31 @@ export const metadata: Metadata = generateSeoMetadata({
 export default function HomePage() {
   return (
     <div className="flex min-h-screen flex-col bg-background">
+      {/* Hero Section with Banner - Server Component for immediate display */}
+      <section aria-labelledby="hero-heading" className="w-full">
+        <SimpleBanner />
+      </section>
+
+      {/* Promotions - Server Component for immediate display */}
+      <section
+        aria-labelledby="promotions-heading"
+        className="container mx-auto px-3 sm:px-4 py-4 sm:py-6">
+        <h2 className="sr-only" id="promotions-heading">
+          Ưu đãi nổi bật
+        </h2>
+        <GridBanner />
+      </section>
+
+      {/* Feature Shortcuts - Client Component for interactivity */}
+      <section
+        aria-labelledby="shortcuts-heading"
+        className="container mx-auto px-3 sm:px-4">
+        <h2 className="sr-only" id="shortcuts-heading">
+          Truy cập nhanh
+        </h2>
+        <FeatureShortcuts />
+      </section>
+
       {/* Health News - Server Component for SEO */}
       <section className="container mx-auto px-3 sm:px-4 sm:py-5">
         <HealthNews />
@@ -84,31 +112,6 @@ export default function HomePage() {
         </h2>
         <CoachExperts />
       </section>
-
-      {/* Hero Section with Banner - Server Component for immediate display */}
-      {/* <section aria-labelledby="hero-heading" className="w-full">
-        <SimpleBanner />
-      </section> */}
-
-      {/* Promotions - Server Component for immediate display */}
-      {/* <section
-        aria-labelledby="promotions-heading"
-        className="container mx-auto px-3 sm:px-4 py-4 sm:py-6">
-        <h2 className="sr-only" id="promotions-heading">
-          Ưu đãi nổi bật
-        </h2>
-        <GridBanner />
-      </section> */}
-
-      {/* Feature Shortcuts - Client Component for interactivity */}
-      {/* <section
-        aria-labelledby="shortcuts-heading"
-        className="container mx-auto px-3 sm:px-4">
-        <h2 className="sr-only" id="shortcuts-heading">
-          Truy cập nhanh
-        </h2>
-        <FeatureShortcuts />
-      </section> */}
 
       {/* Deal Slider - Client Component for carousel */}
       <section
