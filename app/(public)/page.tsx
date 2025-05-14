@@ -79,24 +79,24 @@ export default function HomePage() {
       </section>
 
       {/* Promotions - Server Component for immediate display */}
-      <section
+      {/* <section
         aria-labelledby="promotions-heading"
         className="container mx-auto px-3 sm:px-4 py-4 sm:py-6">
         <h2 className="sr-only" id="promotions-heading">
           Ưu đãi nổi bật
         </h2>
         <GridBanner />
-      </section>
+      </section> */}
 
       {/* Feature Shortcuts - Client Component for interactivity */}
-      <section
+      {/* <section
         aria-labelledby="shortcuts-heading"
         className="container mx-auto px-3 sm:px-4">
         <h2 className="sr-only" id="shortcuts-heading">
           Truy cập nhanh
         </h2>
         <FeatureShortcuts />
-      </section>
+      </section> */}
 
       {/* Health News - Server Component for SEO */}
       <section className="container mx-auto px-3 sm:px-4 sm:py-5">
