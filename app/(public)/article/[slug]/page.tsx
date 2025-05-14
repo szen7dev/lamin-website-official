@@ -7,6 +7,7 @@ import { DynamicBreadcrumb } from '@/components/dynamic-breadcrumb';
 import { Skeleton } from '@/components/ui/skeleton';
 import { getArticleDetail } from '@/features/article/api/getArticleDetail';
 import ArticleDetailContent from '@/features/article/components/ArticleDetailContent';
+import { apiClient } from '@/services';
 
 export async function generateMetadata({
   params,
@@ -20,6 +21,7 @@ export async function generateMetadata({
   let seoData = {
     title: 'Bài Viết - Góc Sức Khỏe',
     description: 'Bài viết về sức khỏe và dinh dưỡng từ Lamin',
+    image: '',
   };
 
   try {
@@ -29,6 +31,7 @@ export async function generateMetadata({
       seoData = {
         title: article.title,
         description: article.summary || article.description,
+        image: apiClient.getFileUrl(article.thumbnail.path),
       };
     }
   } catch (error) {

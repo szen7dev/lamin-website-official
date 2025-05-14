@@ -3,6 +3,7 @@
 import { notFound, useParams, usePathname } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useEffect } from 'react';
 
 import { useGetArticleDetail } from '../hooks';
 
@@ -22,7 +23,6 @@ import {
 import { apiClient } from '@/services';
 import { Separator } from '@/components/ui/separator';
 import { useToast } from '@/hooks/use-toast';
-import { useEffect } from 'react';
 
 export default function ArticleDetailContent({ article }: { article: any }) {
   const { slug } = useParams();
@@ -37,7 +37,7 @@ export default function ArticleDetailContent({ article }: { article: any }) {
   const pathname = usePathname();
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [pathname]);
 
   if (isLoading) {
