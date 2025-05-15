@@ -87,42 +87,44 @@ export default function GridBanner() {
           </div>
         )}
         {/* Right Side - Static Grid */}
-        <div className="hidden md:flex md:col-span-2 flex-col gap-4">
-          {/* Top image - Fixed height container */}
-          <div className="relative w-full h-[140px] rounded-lg overflow-hidden shadow-08">
-            {rightSlides?.[0]?.thumbnail?.path ? (
-              <Link href={rightSlides[0].slug}>
-                <Image
-                  fill
-                  priority
-                  alt="Top right image"
-                  className="object-cover"
-                  sizes="(max-width: 768px) 100vw, 40vw"
-                  src={apiClient.getFileUrl(rightSlides[0].thumbnail.path)}
-                />
-              </Link>
-            ) : (
-              <Skeleton className="h-full w-full" />
-            )}
-          </div>
+        {rightSlides && (
+          <div className="hidden md:flex md:col-span-2 flex-col gap-4">
+            {/* Top image - Fixed height container */}
+            <div className="relative w-full h-[140px] rounded-lg overflow-hidden shadow-08">
+              {rightSlides?.[0]?.thumbnail?.path ? (
+                <Link href={rightSlides[0].slug}>
+                  <Image
+                    fill
+                    priority
+                    alt="Top right image"
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, 40vw"
+                    src={apiClient.getFileUrl(rightSlides[0].thumbnail.path)}
+                  />
+                </Link>
+              ) : (
+                <Skeleton className="h-full w-full" />
+              )}
+            </div>
 
-          {/* Bottom image - Fixed height container */}
-          <div className="relative w-full h-[140px] rounded-lg overflow-hidden shadow-08">
-            {rightSlides?.[1]?.thumbnail?.path ? (
-              <Link href={rightSlides[1].slug}>
-                <Image
-                  fill
-                  alt="Bottom right image"
-                  className="object-cover"
-                  sizes="(max-width: 768px) 100vw, 40vw"
-                  src={apiClient.getFileUrl(rightSlides[1].thumbnail.path)}
-                />
-              </Link>
-            ) : (
-              <Skeleton className="h-full w-full" />
-            )}
+            {/* Bottom image - Fixed height container */}
+            <div className="relative w-full h-[140px] rounded-lg overflow-hidden shadow-08">
+              {rightSlides?.[1]?.thumbnail?.path ? (
+                <Link href={rightSlides[1].slug}>
+                  <Image
+                    fill
+                    alt="Bottom right image"
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, 40vw"
+                    src={apiClient.getFileUrl(rightSlides[1].thumbnail.path)}
+                  />
+                </Link>
+              ) : (
+                <Skeleton className="h-full w-full" />
+              )}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
