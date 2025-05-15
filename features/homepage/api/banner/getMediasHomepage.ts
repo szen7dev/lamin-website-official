@@ -14,6 +14,7 @@ export const getMediasHomepage = async (
     const queryParams = {
       select: 'name link type thumbnail slug',
       optionSeller: params.optionSeller || DEFAULT_OPTION_SELLER,
+      status: params.status || 1,
       populates: JSON.stringify({ path: 'thumbnail', select: 'path' }),
       ...params,
     };

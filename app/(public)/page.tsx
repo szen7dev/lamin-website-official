@@ -8,18 +8,17 @@ import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import { generateMetadata as generateSeoMetadata } from '@/utils/seo';
 import SimpleBanner from '@/features/homepage/components/SimpleBanner';
 import GridBanner from '@/features/homepage/components/GridBanner';
-import FeatureShortcuts from '@/features/homepage/components/FeatureShortcuts';
 
 // Client components with interactivity - load without SSR to avoid hydration issues
-// const FeatureShortcuts = dynamic(
-//   () => import('@/features/homepage/components/FeatureShortcuts'),
-//   {
-//     ssr: true,
-//     loading: () => (
-//       <div className="h-24 w-full animate-pulse bg-gray-100 rounded-lg" />
-//     ),
-//   },
-// );
+const FeatureShortcuts = dynamic(
+  () => import('@/features/homepage/components/FeatureShortcuts'),
+  {
+    ssr: true,
+    loading: () => (
+      <div className="h-24 w-full animate-pulse bg-gray-100 rounded-lg" />
+    ),
+  },
+);
 
 const DealSlider = dynamic(
   () => import('@/features/homepage/components/DealSlider'),

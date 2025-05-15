@@ -29,30 +29,34 @@ export default function SimpleBanner() {
 
   const BannerComponent = () => (
     <>
-      {/* Desktop Banner */}
-      <div className="hidden md:block w-full">
-        <Image
-          priority
-          alt={banner?.name || 'Hero Banner'}
-          className="w-full object-cover"
-          height={400}
-          sizes="(max-width: 1024px) 90vw, 1200px"
-          src={imageUrl}
-          width={1200}
-        />
-      </div>
+      {banner?.thumbnail?.path && (
+        <>
+          {/* Desktop Banner */}
+          <div className="hidden md:block w-full">
+            <Image
+              priority
+              alt={banner?.name || 'Hero Banner'}
+              className="w-full object-cover"
+              height={400}
+              sizes="(max-width: 1024px) 90vw, 1200px"
+              src={imageUrl}
+              width={1200}
+            />
+          </div>
 
-      {/* Mobile Banner */}
-      <div className="md:hidden w-full">
-        <Image
-          alt={banner?.name || 'Hero Banner'}
-          className="w-full h-[172px] object-cover"
-          height={172}
-          sizes="100vw"
-          src={imageUrl}
-          width={600}
-        />
-      </div>
+          {/* Mobile Banner */}
+          <div className="md:hidden w-full">
+            <Image
+              alt={banner?.name || 'Hero Banner'}
+              className="w-full h-[172px] object-cover"
+              height={172}
+              sizes="100vw"
+              src={imageUrl}
+              width={600}
+            />
+          </div>
+        </>
+      )}
     </>
   );
 

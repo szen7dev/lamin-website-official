@@ -20,10 +20,9 @@ import MegaMenu from '@/features/menu/components/MegaMenu';
 import { CartDropdown } from '@/features/cart/components/CartDropdown';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { useCart } from '@/features/cart/hooks/useCart';
-import { Separator } from '@/components/ui/separator';
 import { LoginModal } from '@/components/modal/LoginModal';
 import { useContactInfo } from '@/hooks/useContactInfo';
-import { CartIcon, PhoneIcon, UserIcon } from '@/components/icons';
+import { CartIcon, UserIcon } from '@/components/icons';
 // import { useGetSearchKeywordList } from '@/features/search/hooks/keyword/useGetSearchKeywordList';
 import { useUpdateSearchKeyword } from '@/features/search/hooks/keyword/useUpdateSearchKeyword';
 import { useAuth } from '@/hooks/useAuth';
@@ -190,8 +189,8 @@ export function Header() {
     <header className="w-full bg-gradient-primary">
       {/* Top Bar */}
       <div className="container mx-auto px-4 py-4 md:py-6">
-        <div className="flex flex-col md:flex-row md:justify-between md:gap-8">
-          <div className="flex flex-col grow justify-between md:h-auto">
+        <div className="flex flex-col md:flex-row md:justify-between md:gap-8 max-w-screen-2xl mx-auto">
+          <div className="flex flex-col grow justify-between md:h-auto max-w-full md:max-w-[calc(100%-160px)]">
             {/* Top Row with Logo, Actions and Auth */}
             <div className="flex flex-col space-y-4 sm:flex-row sm:space-y-0 h-max items-start sm:items-center justify-between">
               {/* Mobile Menu Button and Logo - Only visible on small screens */}
@@ -274,7 +273,7 @@ export function Header() {
                 </div>
               </div>
 
-              <div className="flex items-center sm:flex justify-items-start gap-4">
+              <div className="flex items-center sm:flex justify-items-start gap-4 flex-shrink-0">
                 {/* Logo */}
                 <Link
                   aria-label="Lamin"
@@ -313,7 +312,7 @@ export function Header() {
               </div>
 
               {/* Auth and Cart */}
-              <div className="hidden sm:flex items-center gap-2 md:gap-4 mt-4 sm:mt-0">
+              <div className="hidden sm:flex items-center gap-2 md:gap-4 mt-4 sm:mt-0 flex-shrink-0 ml-auto">
                 {/* Conditionally show user profile or login button */}
                 {isAuthenticated ? (
                   <UserProfile />
@@ -332,8 +331,8 @@ export function Header() {
             </div>
 
             {/* Search Bar Section */}
-            <div className="flex gap-4 sm:py-3 sm:mt-0">
-              <div className="flex-1">
+            <div className="flex gap-4 sm:py-3 sm:mt-0 w-full">
+              <div className="w-full max-w-4xl">
                 <SearchBar
                   selectedKeyword={selectedKeyword}
                   onClearSearch={handleClearSearch}
@@ -356,23 +355,22 @@ export function Header() {
           </div>
 
           {/* QR Code Section - Hidden on mobile */}
-          <div className="hidden md:flex w-[143px] flex-shrink-0 flex-col items-center justify-center rounded-xl bg-[#F37021] self-stretch">
+          <div className="hidden md:flex w-[130px] flex-shrink-0 flex-col items-center justify-center rounded-xl bg-[#F37021] self-center h-fit ml-auto">
             <div className="text-center text-white p-1">
-              <div className="text-xs font-medium">
+              <div className="text-xs font-medium leading-tight py-1">
                 Quan tâm Zalo OA Trung tâm CSKH Lamin
               </div>
-              {/* <div className="text-sm font-bold">Tặng bộ Voucher 1 triệu</div> */}
             </div>
-            <div className="bg-white p-1 rounded-b-xl w-full flex-1 flex items-center justify-center relative overflow-hidden">
+            <div className="bg-white p-1 rounded-b-xl w-full flex items-center justify-center relative overflow-hidden">
               <Image
                 alt="QR Code"
                 className="object-contain"
-                height={120}
+                height={90}
                 loading="lazy"
                 priority={false}
-                sizes="120px"
+                sizes="90px"
                 src="/images/qrCode.jpg"
-                width={120}
+                width={90}
                 onError={e => {
                   const target = e.target as HTMLImageElement;
 
@@ -430,10 +428,7 @@ export function Header() {
         }`}>
         <div className="">
           <div className="bg-primary-50 flex justify-between container">
-            <Link
-              aria-label="Lamin"
-              className="col-span-1"
-              href="/">
+            <Link aria-label="Lamin" className="col-span-1" href="/">
               <Image
                 alt="Logo"
                 className="h-20 w-auto"
@@ -492,9 +487,11 @@ export function Header() {
       {/* Desktop Navigation */}
       <nav
         aria-label="Desktop Navigation"
-        className={`hidden md:block flex-col justify-between top-0 bottom-0 z-50 border-t border-white/10 bg-white`}>
+        className={`hidden md:block flex-col justify-between top-0 bottom-0 z-50 border-t border-white/10 bg-white w-full`}>
         <div className="container mx-auto px-4">
-          <MegaMenu />
+          <div className="max-w-screen-2xl mx-auto">
+            <MegaMenu />
+          </div>
         </div>
       </nav>
 
