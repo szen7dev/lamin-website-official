@@ -188,7 +188,7 @@ export function Header() {
   return (
     <header className="w-full bg-gradient-primary">
       {/* Top Bar */}
-      <div className="container mx-auto px-4 py-4 md:py-6">
+      <div className="container mx-auto px-4 py-2">
         <div className="flex flex-col md:flex-row md:justify-between md:gap-8 max-w-screen-2xl mx-auto">
           <div className="flex flex-col grow justify-between md:h-auto max-w-full md:max-w-[calc(100%-160px)]">
             {/* Top Row with Logo, Actions and Auth */}
@@ -355,7 +355,7 @@ export function Header() {
           </div>
 
           {/* QR Code Section - Hidden on mobile */}
-          <div className="hidden md:flex w-[130px] flex-shrink-0 flex-col items-center justify-center rounded-xl bg-[#F37021] self-center h-fit ml-auto">
+          <div className="hidden md:flex w-[143px] flex-shrink-0 flex-col items-center justify-center rounded-xl bg-[#F37021] self-center h-fit ml-auto">
             <div className="text-center text-white p-1">
               <div className="text-xs font-medium leading-tight py-1">
                 Quan tâm Zalo OA Trung tâm CSKH Lamin
