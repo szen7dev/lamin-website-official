@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { ChevronDown, Dot } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 import { useState } from 'react';
 
 import { useContactInfo } from '@/hooks/useContactInfo';
@@ -331,15 +331,17 @@ export function Footer() {
         </div>
 
         {/* Copyright Section */}
-        <div className="mt-8 pt-8 border-t border-grayscale-20 text-sm text-grayscale-80">
+        <div className="mt-8 pt-8 border-t border-grayscale-20 text-sm text-grayscale-80 text-center">
           <p>
             &copy; {new Date().getFullYear()} {contactInfo?.name} |{' '}
             {contactInfo?.registration}
           </p>
           <address className="mt-2 not-italic">
             <span>• Địa chỉ: {contactInfo?.address}</span> <br />
-            <span>• Số điện thoại: {contactInfo?.phone}</span> <br />
-            <span>• Email: {contactInfo?.email}</span> <br />
+            <div className="flex justify-around items-center max-w-sm mx-auto">
+              <span>• Số điện thoại: {contactInfo?.phone}</span>
+              <span>• Email: {contactInfo?.email}</span>
+            </div>
             <span>
               • Người chịu trách nhiệm nội dung: {contactInfo?.content}
             </span>
