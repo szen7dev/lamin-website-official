@@ -66,8 +66,17 @@ export default function HeightMeasurementForm() {
       }
 
       // Chuyển đổi height/weight sang số
-      formData.height = Number(formData.height);
-      formData.weight = Number(formData.weight);
+      formData.height = Number(String(formData.height).replace(',', '.'));
+      formData.weight = Number(String(formData.weight).replace(',', '.'));
+      formData.desiredHeight = Number(
+        String(formData.desiredHeight).replace(',', '.'),
+      );
+      formData.fatherHeight = Number(
+        String(formData.fatherHeight).replace(',', '.'),
+      );
+      formData.motherHeight = Number(
+        String(formData.motherHeight).replace(',', '.'),
+      );
 
       // Đảm bảo gender là số
       formData.gender = Number(formData.gender);
@@ -77,7 +86,8 @@ export default function HeightMeasurementForm() {
         formData.note = 'Đo chiều cao từ website';
       }
 
-      createHeightMeasurement(formData);
+      // createHeightMeasurement(formData);
+      console.log(formData);
     } catch (err) {
       console.error('🖥️ Form Component: Error processing form data:', err);
       setError('root', {
