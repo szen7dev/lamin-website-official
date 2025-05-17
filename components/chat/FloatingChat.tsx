@@ -139,7 +139,7 @@ export function FloatingChat() {
                 ))}
                 {loading && (
                   <div className="text-xs text-gray-400 self-start">
-                    Thinking...
+                    Đang trả lời...
                   </div>
                 )}
               </div>
@@ -150,7 +150,7 @@ export function FloatingChat() {
                 ref={inputRef}
                 className="w-[90%] rounded-full border border-gray-300 py-2.5 pl-4 pr-10 focus:border-primary focus:outline-none text-sm"
                 disabled={loading}
-                placeholder="Type your message..."
+                placeholder="Nhập tin nhắn của bạn..."
                 type="text"
                 value={input}
                 onChange={e => setInput(e.target.value)}
