@@ -1,21 +1,25 @@
 'use client';
 
 import Image from 'next/image';
-import { Swiper, SwiperSlide } from 'swiper/react';
+import { Swiper as SwiperComponent } from 'swiper/react';
+import { SwiperSlide } from 'swiper/react';
 import { Navigation, Grid } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/grid';
 import { ChevronRight, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { isAfter } from 'date-fns';
 
 import { useGetSaledCombo } from '../hooks/combo/useGetSaledCombo';
+import { ComboProduct } from '../types/comboTypes';
 
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { apiClient } from '@/services/api/apiClient';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/hooks';
-import { ComboProduct } from '../types/comboTypes';
 
 // Progress Bar Component
 function ProgressBar({
@@ -229,7 +233,7 @@ export default function DealSlider() {
         description: `Sản phẩm đã được thêm vào giỏ hàng.`,
         variant: 'success',
       });
-    } catch (error) {
+    } catch {
       toast({
         title: 'Lỗi khi thêm vào giỏ hàng',
         description: 'Đã xảy ra lỗi, vui lòng thử lại sau.',
@@ -271,7 +275,7 @@ export default function DealSlider() {
       </header>
 
       {isDesktop ? (
-        <Swiper
+        <SwiperComponent
           aria-label="Sản phẩm khuyến mãi"
           breakpoints={{
             768: {
@@ -394,7 +398,7 @@ export default function DealSlider() {
               </SwiperSlide>
             );
           })}
-        </Swiper>
+        </SwiperComponent>
       ) : (
         <div className="space-y-3">
           {mobileDeals.map(product => {

@@ -1,6 +1,8 @@
 /** @type {import('next').NextConfig} */
+import withBundleAnalyzer from '@next/bundle-analyzer';
+
 const nextConfig = {
-  output: "standalone",
+  output: 'standalone',
   eslint: {
     ignoreDuringBuilds: true,
   },
@@ -12,6 +14,7 @@ const nextConfig = {
     parallelServerBuildTraces: true,
     parallelServerCompiles: true,
   },
+  productionBrowserSourceMaps: true,
   images: {
     remotePatterns: [
       {
@@ -103,4 +106,6 @@ const nextConfig = {
   },
 };
 
-export default nextConfig;
+export default withBundleAnalyzer({
+  enabled: process.env.ANALYZE === 'true',
+})(nextConfig);

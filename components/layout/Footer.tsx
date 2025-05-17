@@ -41,7 +41,7 @@ export function Footer() {
       <div className="container mx-auto px-4 py-4">
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-8">
           {/* About Us Column */}
-          <div className="border-b pb-1 sm:border-0 pb-0">
+          <div className="border-b pb-1 sm:border-0">
             <div className="flex justify-between">
               <div className="flex">
                 {/* <span className="text-primary">
@@ -74,7 +74,7 @@ export function Footer() {
           </div>
 
           {/* Learn More Column */}
-          <div className="border-b pb-1 sm:border-0 pb-0">
+          <div className="border-b pb-1 sm:border-0">
             <div className="flex justify-between">
               <div className="flex">
                 {/* <span className="text-primary">
@@ -113,7 +113,7 @@ export function Footer() {
           </div>
 
           {/* Categories Column */}
-          <div className="border-b pb-1 sm:border-0 pb-0">
+          <div className="border-b pb-1 sm:border-0">
             <div className="flex justify-between">
               <div className="flex">
                 {/* <span className="text-primary">
@@ -154,7 +154,7 @@ export function Footer() {
           {/* Contact & Certifications Column */}
           <section className="space-y-6">
             {/* Hotline Section */}
-            <div className="border-b pb-3 sm:border-0 pb-0">
+            <div className="border-b pb-3 sm:border-0">
               <div className="flex">
                 {/* <span className="text-primary">
                   <Dot
@@ -229,7 +229,7 @@ export function Footer() {
             </div> */}
 
             {/* Social Media */}
-            <div className="border-b pb-3 sm:border-0 pb-0">
+            <div className="border-b pb-3 sm:border-0">
               <div className="flex justify-between items-center sm:flex-col sm:items-start">
                 <div className="flex">
                   {/* <span className="text-primary">
