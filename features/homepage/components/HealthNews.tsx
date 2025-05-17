@@ -2,14 +2,12 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { ChevronRight } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 
 import { useGetNews } from '../hooks/news/useGetNews';
 
 import { apiClient } from '@/services/api/apiClient';
 import { NewspaperIcon } from '@/components/icons';
-import { Separator } from '@/components/ui/separator';
 import { useGetArticleTagList } from '@/features/article/hooks/useGetArticleTagList';
 
 interface HealthNewsProps {
@@ -122,10 +120,21 @@ export default function HealthNews({
               <figure className="relative mb-4 aspect-[16/9] overflow-hidden rounded-lg">
                 <Image
                   fill
+                  priority
                   alt={mainArticle.title}
+                  blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNzAwIiBoZWlnaHQ9IjQ3NSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2ZXJzaW9uPSIxLjEiLz4="
                   className="object-cover transition-transform duration-300 group-hover:scale-105"
-                  sizes="(max-width: 768px) 100vw, 66vw"
+                  fetchPriority="high"
+                  loading="eager"
+                  placeholder="blur"
+                  quality={75}
+                  sizes="(max-width: 640px) 95vw, (max-width: 768px) 90vw, 66vw"
                   src={getImageUrl(mainArticle.thumbnail)}
+                  onLoadingComplete={img => {
+                    // Mark as LCP element for browser
+                    img.setAttribute('fetchpriority', 'high');
+                    img.setAttribute('importance', 'high');
+                  }}
                 />
               </figure>
               <div className="mb-2 flex items-center gap-3">

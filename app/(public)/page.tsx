@@ -7,18 +7,17 @@ import BestSellingProducts from '@/features/menu/components/BestSellingProducts'
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import { generateMetadata as generateSeoMetadata } from '@/utils/seo';
 import SimpleBanner from '@/features/homepage/components/SimpleBanner';
-import GridBanner from '@/features/homepage/components/GridBanner';
 
 // Client components with interactivity - load without SSR to avoid hydration issues
-const FeatureShortcuts = dynamic(
-  () => import('@/features/homepage/components/FeatureShortcuts'),
-  {
-    ssr: true,
-    loading: () => (
-      <div className="h-24 w-full animate-pulse bg-gray-100 rounded-lg" />
-    ),
-  },
-);
+// const FeatureShortcuts = dynamic(
+//   () => import('@/features/homepage/components/FeatureShortcuts'),
+//   {
+//     ssr: true,
+//     loading: () => (
+//       <div className="h-24 w-full animate-pulse bg-gray-100 rounded-lg" />
+//     ),
+//   },
+// );
 
 const DealSlider = dynamic(
   () => import('@/features/homepage/components/DealSlider'),
@@ -98,14 +97,14 @@ export default function HomePage() {
       </section> */}
 
       {/* Health News - Server Component for SEO */}
-      <section className="container mx-auto px-3 sm:px-4 sm:py-5">
+      <section className="container mx-auto px-3 sm:px-4 sm:py-5 min-h-[500px] sm:min-h-0">
         <HealthNews />
       </section>
 
       {/* Coach Experts - Server Component for SEO */}
       <section
         aria-labelledby="coaches-heading"
-        className="container mx-auto px-3 sm:px-4 py-6 sm:py-5">
+        className="container mx-auto px-3 sm:px-4 py-6 sm:py-5 min-h-[450px] sm:min-h-0">
         <h2 className="sr-only" id="coaches-heading">
           Chuyên gia tư vấn
         </h2>

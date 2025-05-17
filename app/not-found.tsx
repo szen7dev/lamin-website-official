@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 
 import { ArrowLeftIcon } from '@/components/icons';
 
@@ -18,12 +18,12 @@ export default function NotFound() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-background px-4">
       <div className="max-w-lg w-full text-center">
-        <motion.div
+        <m.div
           animate={{ opacity: 1, y: 0 }}
           className="mb-8"
           initial={{ opacity: 0, y: 20 }}
           transition={{ duration: 0.5 }}>
-          <motion.h1
+          <m.h1
             animate={{ scale: 1 }}
             className="text-8xl font-bold text-primary mb-2"
             initial={{ scale: 0.5 }}
@@ -34,8 +34,8 @@ export default function NotFound() {
               delay: 0.2,
             }}>
             404
-          </motion.h1>
-          <motion.div
+          </m.h1>
+          <m.div
             animate={{ opacity: 1 }}
             initial={{ opacity: 0 }}
             transition={{ delay: 0.5, duration: 0.5 }}>
@@ -46,17 +46,17 @@ export default function NotFound() {
               Trang bạn đang tìm kiếm có thể đã bị xóa, đổi tên hoặc tạm thời
               không khả dụng.
             </p>
-          </motion.div>
-        </motion.div>
+          </m.div>
+        </m.div>
 
         {/* Animated illustration */}
-        <motion.div
+        <m.div
           animate={{ opacity: 1 }}
           className="mb-8 flex justify-center"
           initial={{ opacity: 0 }}
           transition={{ delay: 0.3, duration: 0.5 }}>
           <div className="relative w-64 h-64">
-            <motion.div
+            <m.div
               animate={{
                 scale: [1, 1.05, 1],
               }}
@@ -67,7 +67,7 @@ export default function NotFound() {
                 ease: 'easeInOut',
               }}
             />
-            <motion.div
+            <m.div
               animate={{
                 scale: [1, 1.1, 1],
               }}
@@ -79,7 +79,7 @@ export default function NotFound() {
                 delay: 0.2,
               }}
             />
-            <motion.div
+            <m.div
               animate={{
                 rotate: [0, 10, -10, 0],
               }}
@@ -103,11 +103,11 @@ export default function NotFound() {
                 <line x1="12" x2="12" y1="8" y2="12" />
                 <line x1="12" x2="12.01" y1="16" y2="16" />
               </svg>
-            </motion.div>
+            </m.div>
           </div>
-        </motion.div>
+        </m.div>
 
-        <motion.div
+        <m.div
           animate={{ opacity: 1, y: 0 }}
           initial={{ opacity: 0, y: 20 }}
           transition={{ delay: 0.7, duration: 0.5 }}>
@@ -117,7 +117,7 @@ export default function NotFound() {
             <ArrowLeftIcon className="w-4 h-4" />
             <span>Quay về trang chủ</span>
           </Link>
-        </motion.div>
+        </m.div>
       </div>
     </div>
   );

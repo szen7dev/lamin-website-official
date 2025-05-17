@@ -1,12 +1,13 @@
 'use client';
 
-import Image from 'next/image';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination, Autoplay } from 'swiper/modules';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import type { Swiper as SwiperClass } from 'swiper/types';
+
 import { useRef } from 'react';
-import { Swiper as SwiperClass } from 'swiper';
+import Image from 'next/image';
 import Link from 'next/link';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { Swiper as SwiperComponent, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 
 import { useGetMediasHomepage } from '../hooks/banner/useGetMediasHomepage';
 
@@ -34,7 +35,7 @@ export default function GridBanner() {
         {/* Left Side - Sliding Banner */}
         {leftSlides && (
           <div className="relative rounded-lg overflow-hidden md:col-span-3 shadow-08 group h-[180px] sm:h-full">
-            <Swiper
+            <SwiperComponent
               autoplay={{
                 delay: 3000,
                 disableOnInteraction: false,
@@ -83,7 +84,7 @@ export default function GridBanner() {
                   </button>
                 </>
               )}
-            </Swiper>
+            </SwiperComponent>
           </div>
         )}
         {/* Right Side - Static Grid */}
