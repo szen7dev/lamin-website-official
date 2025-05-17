@@ -24,6 +24,9 @@ export default function RootLayout({
 }) {
   return (
     <html suppressHydrationWarning lang="en">
+      <link href="https://trixgo.com" rel="preconnect" />
+      <link href={process.env.NEXT_PUBLIC_API_URL} rel="preconnect" />
+      <link href={process.env.NEXT_PUBLIC_CLOUDFRONT_URL} rel="preconnect" />
       <body
         suppressHydrationWarning
         className={clsx(

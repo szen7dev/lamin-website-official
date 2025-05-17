@@ -31,28 +31,20 @@ export default function SimpleBanner() {
     <>
       {banner?.thumbnail?.path && (
         <>
-          {/* Desktop Banner */}
-          <div className="hidden md:block w-full">
+          {/* Responsive Banner - Combined for better LCP */}
+          <div className="w-full">
             <Image
               priority
               alt={banner?.name || 'Hero Banner'}
-              className="w-full object-cover"
+              blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwMCIgaGVpZ2h0PSI0MDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmVyc2lvbj0iMS4xIi8+"
+              className="w-full object-cover md:h-auto h-[172px]"
               height={400}
-              sizes="(max-width: 1024px) 90vw, 1200px"
+              loading="eager"
+              placeholder="blur"
+              quality={80}
+              sizes="(max-width: 640px) 95vw, (max-width: 768px) 90vw, (max-width: 1536px) 90vw, 1200px"
               src={imageUrl}
               width={1200}
-            />
-          </div>
-
-          {/* Mobile Banner */}
-          <div className="md:hidden w-full">
-            <Image
-              alt={banner?.name || 'Hero Banner'}
-              className="w-full h-[172px] object-cover"
-              height={172}
-              sizes="100vw"
-              src={imageUrl}
-              width={600}
             />
           </div>
         </>
