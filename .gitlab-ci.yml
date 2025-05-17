@@ -15,6 +15,7 @@ build-docker-staging:
       NEXT_PUBLIC_CLOUDFRONT_URL=https://dntdurzwr12tp.cloudfront.net
       NEXT_PUBLIC_IMAGE_PREFIX=https://dntdurzwr12tp.cloudfront.net
       NEXT_PUBLIC_DEFAULT_TOKEN=$NEXT_PUBLIC_DEFAULT_TOKEN
+      NEXT_PUBLIC_OPENAI_API_KEY=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
       EOF
   tags:
     - docker-xlarge
@@ -35,6 +36,7 @@ build-docker-prod:
       NEXT_PUBLIC_CLOUDFRONT_URL=https://dntdurzwr12tp.cloudfront.net
       NEXT_PUBLIC_IMAGE_PREFIX=https://dntdurzwr12tp.cloudfront.net
       NEXT_PUBLIC_DEFAULT_TOKEN=$NEXT_PUBLIC_DEFAULT_TOKEN
+      NEXT_PUBLIC_OPENAI_API_KEY=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
       EOF
   tags:
     - docker-xlarge
