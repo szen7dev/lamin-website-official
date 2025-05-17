@@ -17,6 +17,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useAuth } from '@/hooks';
 import { apiClient } from '@/services';
+import { FloatingChat } from '@/components/chat/FloatingChat';
 
 export default function ProfileLayout({
   children,
@@ -159,6 +160,7 @@ function ProfileTabs() {
           </Link>
         );
       })}
+      <FloatingChat />
     </nav>
   );
 }

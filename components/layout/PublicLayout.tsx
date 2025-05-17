@@ -1,7 +1,9 @@
 import type React from 'react';
 
-import { Header } from './Header';
+import { FloatingChat } from '../chat/FloatingChat';
+
 import { Footer } from './Footer';
+import { Header } from './Header';
 
 export function PublicLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -9,6 +11,7 @@ export function PublicLayout({ children }: { children: React.ReactNode }) {
       <Header />
       <main className="flex-1">{children}</main>
       <Footer />
+      <FloatingChat />
     </div>
   );
 }
