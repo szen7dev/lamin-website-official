@@ -8,9 +8,9 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
 import { ComboProduct } from '@/features/homepage/types/comboTypes';
 import { apiClient } from '@/services/api/apiClient';
-import { useCart } from '@/hooks';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
+import { useCart } from '@/features/cart/contexts/CartContext';
 
 export interface ProductUnit {
   label: string;

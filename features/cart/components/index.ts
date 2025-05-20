@@ -1,1 +1,1 @@
-export * from './CartDropdown';
+export * from './cart-dropdown/CartDropdown';

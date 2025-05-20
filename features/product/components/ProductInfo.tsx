@@ -12,7 +12,7 @@ import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 
 import { Button } from '@/components/ui/button';
-import { useCart } from '@/features/cart/hooks/useCart';
+import { useCart } from '@/features/cart/contexts/CartContext';
 import { cn } from '@/utils/helpers';
 import apiClient from '@/services/api/apiClient';
 import { useToast } from '@/hooks/use-toast';

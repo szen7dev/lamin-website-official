@@ -5,7 +5,7 @@ import type { Voucher } from '../types/voucherTypes';
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ChevronRight, Coins, HelpCircle } from 'lucide-react';
+import { ChevronRight, HelpCircle } from 'lucide-react';
 import Image from 'next/image';
 
 import { PromotionModal } from './PromotionModal';

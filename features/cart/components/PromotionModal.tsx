@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { Clock } from 'lucide-react';
+import Image from 'next/image';
 
 import { useGetVoucher } from '../hooks/useGetVoucher';
 import { type Voucher } from '../types/voucherTypes';
@@ -18,7 +19,6 @@ import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { VoucherIcon } from '@/components/icons';
 import { useAuth } from '@/hooks';
-import Image from 'next/image';
 
 interface PromotionModalProps {
   isOpen: boolean;

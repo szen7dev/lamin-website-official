@@ -1,9 +1,9 @@
 import { apiClient } from '@/services/api/apiClient';
 
 export interface LoginParams {
-  // Can be either email or phone
+  // phone number
   email: string;
-  // Can be either password or OTP
+  // OTP
   password: string;
 }
 

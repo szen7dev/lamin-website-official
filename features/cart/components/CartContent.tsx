@@ -1,16 +1,12 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { ChevronLeft } from 'lucide-react';
-
-import { useCart } from '../hooks/useCart';
 
 import { CartItems } from './CartItems';
 import { CartSummary } from './CartSummary';
-import { EmptyCart } from './EmptyCart';
 
+import { useCart } from '@/features/cart/contexts/CartContext';
 import { useToast } from '@/components/ui/use-toast';
 
 export function CartContent() {
@@ -53,44 +49,29 @@ export function CartContent() {
 
       return;
     }
-
     router.push('/checkout');
   };
 
   return (
-    <>
-      {!items || items.length === 0 ? (
-        <EmptyCart />
-      ) : (
-        <div className="container mx-auto px-4 py-6">
-          <Link
-            className="inline-flex items-center text-blue-600 mb-6 hover:underline decoration-transparent"
-            href="/">
-            <ChevronLeft className="w-4 h-4 mr-1" />
-            Tiếp tục mua sắm
-          </Link>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-2">
-              <CartItems
-                items={items}
-                selectedItems={selectedItems}
-                onRemoveItem={removeItem}
-                onSelectAll={handleSelectAll}
-                onSelectItem={handleSelectItem}
-                onUpdateQuantity={updateQuantity}
-                onUpdateUnit={updateUnit}
-              />
-            </div>
-            <div>
-              <CartSummary
-                items={items.filter(item => selectedItems.includes(item.id))}
-                selectedItems={selectedItems}
-                onCheckout={handleCheckout}
-              />
-            </div>
-          </div>
-        </div>
-      )}
-    </>
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="lg:col-span-2">
+        <CartItems
+          items={items}
+          selectedItems={selectedItems}
+          onRemoveItem={removeItem}
+          onSelectAll={handleSelectAll}
+          onSelectItem={handleSelectItem}
+          onUpdateQuantity={updateQuantity}
+          onUpdateUnit={updateUnit}
+        />
+      </div>
+      <div>
+        <CartSummary
+          items={items.filter(item => selectedItems.includes(item.id))}
+          selectedItems={selectedItems}
+          onCheckout={handleCheckout}
+        />
+      </div>
+    </div>
   );
 }

@@ -19,7 +19,7 @@ import {
 } from '@/components/ui/select';
 import { Skeleton } from '@/components/ui/skeleton';
 import { formatPrice } from '@/utils/format';
-import { useCart } from '@/features/cart/hooks/useCart';
+import { useCart } from '@/features/cart/contexts/CartContext';
 
 interface CartItemsProps {
   items: CartItem[];
