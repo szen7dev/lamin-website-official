@@ -3,13 +3,14 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
+import { Article } from '../types/articleTypes';
+
 import { formatDate } from '@/utils/format';
 import { Skeleton } from '@/components/ui/skeleton';
-import { News } from '@/features/homepage/types/newsTypes';
 import { apiClient } from '@/services';
 
 interface ArticleCardProps {
-  article: News;
+  article: Article;
   variant?: 'default' | 'featured' | 'compact';
   isLoading?: boolean;
 }

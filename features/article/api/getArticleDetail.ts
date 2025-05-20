@@ -1,23 +1,7 @@
-import { Article } from '../types/articleTypes';
+import { Article, ArticleDetailParams } from '../types/articleTypes';
 
-import { Populate } from '@/types';
 import { apiClient, DEFAULT_OPTION_SELLER } from '@/services/api/apiClient';
 
-/**
- * Parameters for fetching article detail
- */
-export interface ArticleDetailParams {
-  slug: string;
-  optionSeller?: number;
-  select?: string;
-  populates?: Populate;
-}
-
-/**
- * Get article detail by slug
- * @param params Parameters containing slug and optionSeller
- * @returns Article detail or null if not found
- */
 export const getArticleDetail = async (
   params: ArticleDetailParams,
 ): Promise<Article | null> => {

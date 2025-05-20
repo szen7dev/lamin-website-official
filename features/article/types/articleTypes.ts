@@ -21,7 +21,6 @@ export interface Post {
   thumbnail: Thumbnail;
 }
 
-// Types for article feature
 export interface Article {
   _id: string;
   type: number;
@@ -36,10 +35,7 @@ export interface Article {
   title: string;
   content: string;
   slug: string;
-  category: {
-    _id: string;
-    name: string;
-  };
+  category: Category;
   thumbnail: Thumbnail;
   summary: string;
   description: string;
@@ -57,17 +53,17 @@ export interface ArticleCategory {
   slug: string;
   description?: string;
   thumbnailUrl?: string;
-  parentId?: string; // For nested categories
+  parentId?: string;
   order?: number;
 }
 
-// Update the Author interface to include experience field
 export interface Author {
   _id: string;
   name: string;
   slug: string;
   avatarUrl?: string;
   bio?: string;
+  email?: string;
   role?: string;
   experience?: string;
   verified?: boolean;
@@ -81,11 +77,7 @@ export interface Author {
 export interface ArticleComment {
   _id: string;
   articleId: string;
-  author: {
-    name: string;
-    email: string;
-    avatarUrl?: string;
-  };
+  author: Author;
   content: string;
   createdAt: string;
   replies?: ArticleComment[];
@@ -93,7 +85,6 @@ export interface ArticleComment {
   verified?: boolean;
 }
 
-// API Params & Responses
 export interface ArticleListParams {
   categorySlug?: string;
   search?: string;
@@ -117,22 +108,9 @@ export interface ArticleProperty {
   posts: Post[];
 }
 
-// Service Interface
-export interface ArticleService {
-  getArticles(params?: ArticleListParams): Promise<Article[]>;
-  getArticleBySlugID(slug: string): Promise<Article>;
-  getRelatedArticles(articleSlug: string, limit?: number): Promise<Article[]>;
-  // getArticleCategories(): Promise<ArticleCategory[]>;
-  // getFeaturedArticles(limit?: number): Promise<Article[]>;
-  // getPopularArticles(limit?: number): Promise<Article[]>;
-  // getArticleComments(articleId: string): Promise<ArticleComment[]>;
-  // addArticleComment(
-  //   articleId: string,
-  //   comment: Omit<ArticleComment, 'id' | 'createdAt'>,
-  // ): Promise<ArticleComment>;
-  // likeArticle(articleId: string): Promise<void>;
-  // shareArticle(
-  //   articleId: string,
-  //   platform: 'facebook' | 'twitter' | 'linkedin',
-  // ): Promise<void>;
+export interface ArticleDetailParams {
+  slug: string;
+  optionSeller?: number;
+  select?: string;
+  populates?: Populate;
 }

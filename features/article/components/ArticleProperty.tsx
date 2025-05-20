@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import React from 'react';
+import { Fragment } from 'react';
 
 import { useGetArticleProperty } from '../hooks/useGetArticleProperty';
 
@@ -12,7 +12,7 @@ import { ChevronRightIcon } from '@/components/icons';
 
 export default function ArticleProperty() {
   const slug = usePathname()?.replace(/^\/+|\/+$/g, '');
-  const { articlesProperty, isLoading, error } = useGetArticleProperty({
+  const { articlesProperty } = useGetArticleProperty({
     menuSlug: slug,
   });
 
@@ -39,7 +39,7 @@ export default function ArticleProperty() {
           {/*First content include first 2 posts*/}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative">
             {articleProperty.posts.slice(0, 2).map((post, postIndex) => (
-              <React.Fragment key={post.slug}>
+              <Fragment key={post.slug}>
                 {postIndex === 0 ? (
                   <>
                     <Link
@@ -91,7 +91,7 @@ export default function ArticleProperty() {
                     </Link>
                   </>
                 )}
-              </React.Fragment>
+              </Fragment>
             ))}
           </div>
 

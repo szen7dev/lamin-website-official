@@ -52,3 +52,41 @@ export const formattedDeliveryDate = (
 
   return formattedDeliveryDate;
 };
+
+export function normalizeResponse<T = any>(response: any): T {
+  if (!response) return response;
+
+  if (Array.isArray(response)) {
+    return response as unknown as T;
+  }
+
+  if (typeof response === 'object') {
+    if (response.data !== undefined) {
+      if (!response.error || response.status === 200) {
+        if (response.data.listRecords !== undefined) {
+          return response.data.listRecords as unknown as T;
+        }
+
+        if (
+          response.data.data &&
+          response.data.data.listRecords !== undefined
+        ) {
+          return response.data.data.listRecords as unknown as T;
+        }
+
+        return response.data as unknown as T;
+      }
+      throw {
+        message: response.message || 'Server error',
+        status: response.status,
+        data: response.data,
+      };
+    }
+
+    if (response.listRecords !== undefined) {
+      return response.listRecords as unknown as T;
+    }
+  }
+
+  return response as unknown as T;
+}

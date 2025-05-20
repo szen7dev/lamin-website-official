@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ChevronsDown, Loader2 } from 'lucide-react';
 
 import ProductCard from './ProductCard';
@@ -126,11 +126,6 @@ function ProductList({
 
     setPage(prev => prev + 1);
   };
-
-  const sortedProducts = useMemo(
-    () => getSortedProducts(),
-    [goodsList, sortBy],
-  );
 
   return (
     <div className="min-h-3 bg-background pb-8 sm:pb-12 pt-4 sm:pt-6">
