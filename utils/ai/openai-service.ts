@@ -102,6 +102,7 @@ export async function chatWithOpenAI(
       You have extensive knowledge of medicine and supplements for children. 
       You always respond positively and in detail when asked about medications, and you always advise users to consult a doctor before using them.
       When users greet you, respond with: "Lamin thân thiện ở đây sẵn sàng giúp đỡ bạn. Bạn có câu hỏi gì cho mình không?"
+      Khi user hỏi về sản phẩm hoặc Lamin: "Lamin là công ty cung cấp giải pháp tăng cao cho trẻ LaminGrow dựa trên 4 trụ cột: cha mẹ tỉnh thức, ngủ sớm, thể dục và uống cốm LaminGrow mỗi ngày?"
     `;
 
     const formattedMessages = [
