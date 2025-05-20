@@ -122,24 +122,17 @@ export default function HealthNews({
                   fill
                   priority
                   alt={mainArticle.title}
-                  blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNzAwIiBoZWlnaHQ9IjQ3NSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2ZXJzaW9uPSIxLjEiLz4="
+                  blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNzAwIiBoZWlnaHQ9IjQ3NSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNzAwIiBoZWlnaHQ9IjQ3NSIgZmlsbD0iI2YxZjFmMSIvPjwvc3ZnPg=="
                   className="object-cover transition-transform duration-300 group-hover:scale-105"
-                  fetchPriority="high"
-                  loading="eager"
                   placeholder="blur"
-                  quality={75}
-                  sizes="(max-width: 640px) 95vw, (max-width: 768px) 90vw, 66vw"
+                  quality={80}
+                  sizes="(max-width: 640px) 320px, (max-width: 768px) 480px, (max-width: 1024px) 640px, 800px"
                   src={getImageUrl(mainArticle.thumbnail)}
-                  onLoadingComplete={img => {
-                    // Mark as LCP element for browser
-                    img.setAttribute('fetchpriority', 'high');
-                    img.setAttribute('importance', 'high');
-                  }}
                 />
               </figure>
               <div className="mb-2 flex items-center gap-3">
                 {mainArticle.category && (
-                  <span className="rounded-full bg-[#f0f0f0] px-2 py-2 text-xs font-medium text-grayscale-40">
+                  <span className="rounded-full bg-[#e0e0e0] px-2 py-2 text-xs font-medium text-grayscale-70">
                     {mainArticle.category.name}
                   </span>
                 )}
@@ -176,7 +169,7 @@ export default function HealthNews({
                   </figure>
                   <div className="flex-1">
                     {article.category && (
-                      <span className="mb-1 inline-block rounded-full bg-[#f0f0f0] px-2 py-1 text-xs font-medium text-grayscale-40">
+                      <span className="mb-1 inline-block rounded-full bg-[#e0e0e0] px-2 py-1 text-xs font-medium text-grayscale-70">
                         {article.category.name}
                       </span>
                     )}

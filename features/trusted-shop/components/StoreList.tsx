@@ -2,9 +2,14 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState, useEffect, useRef } from 'react';
+import {
+  useState,
+  useEffect,
+  useRef,
+  type KeyboardEvent,
+  type ChangeEvent,
+} from 'react';
 import { Search, Star } from 'lucide-react';
-import React from 'react';
 
 import { Input } from '@/components/ui/input';
 import {
@@ -60,7 +65,7 @@ export default function StoreList() {
     setSubmittedSearchTerm(searchTerm.trim());
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
 
     if (debounceSearch.current) {
@@ -71,7 +76,7 @@ export default function StoreList() {
     }, 500);
   };
 
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
       if (debounceSearch.current) {
         clearTimeout(debounceSearch.current);

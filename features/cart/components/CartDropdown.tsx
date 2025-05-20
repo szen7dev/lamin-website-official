@@ -41,7 +41,7 @@ export function CartDropdown() {
       </div>
 
       <div className="p-4 flex items-center justify-between">
-        <p className="text-sm text-grayscale-40">{items.length} sản phẩm</p>
+        <p className="text-sm text-grayscale-70">{items.length} sản phẩm</p>
         <Button
           asChild
           className="rounded-full bg-primary hover:bg-primary/90 text-white px-6 decoration-transparent">
