@@ -1,9 +1,7 @@
-'use client';
-
 import type { CartItem } from '../types/cartTypes';
 import type { Voucher } from '../types/voucherTypes';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ChevronRight, HelpCircle } from 'lucide-react';
 import Image from 'next/image';
@@ -41,75 +39,48 @@ export function CartSummary({
   const [usePoints, setUsePoints] = useState(false);
   const [isPromoModalOpen, setIsPromoModalOpen] = useState(false);
   const [appliedVoucher, setAppliedVoucher] = useState<Voucher | null>(null);
-  const [summary, setSummary] = useState({
-    subtotal: 0,
-    directDiscount: 0,
-    pointsDiscount: 0,
-    voucherDiscount: 0,
-    total: 0,
-    rewardPoints: 0,
-    savedAmount: 0,
-  });
 
-  // Tính toán tổng tiền và các giảm giá mỗi khi có thay đổi
-  useEffect(() => {
+  // Memoized summary calculation
+  const summary = useMemo(() => {
     const selectedProducts = items.filter(item =>
       selectedItems.includes(item.id),
     );
 
-    // Tổng tiền gốc
     const subtotal = selectedProducts.reduce(
       (sum, item) => sum + item.price * item.quantity,
       0,
     );
 
-    // Giảm giá trực tiếp
     const directDiscount = selectedProducts.reduce((sum, item) => {
       if (!item.originalPrice) return sum;
 
       return sum + (item.originalPrice - item.price) * item.quantity;
     }, 0);
 
-    // Điểm thưởng (1% tổng tiền)
     const rewardPoints = Math.floor(subtotal * 0.01);
 
-    // Giảm giá từ điểm tích lũy
     const pointsDiscount =
       usePoints && user?.contacts && user?.contacts[0].remainLoyaltyPoints
         ? user?.contacts[0].remainLoyaltyPoints
         : 0;
 
-    // Pass the points discount to the parent component
-    if (onPointsDiscountChange) {
-      onPointsDiscountChange(pointsDiscount);
-    }
-
-    // Tính voucher discount nếu có
     let voucherDiscount = 0;
 
     if (appliedVoucher) {
-      // If we have a real API voucher
       if (appliedVoucher.salesoffAmount > 0) {
-        // Fixed amount discount
         voucherDiscount = appliedVoucher.salesoffAmount;
       } else if (appliedVoucher.salesoffRate > 0) {
-        // Percentage discount
         voucherDiscount = (subtotal * appliedVoucher.salesoffRate) / 100;
       }
-
-      // Check if the minimum order amount is met
       if (subtotal < appliedVoucher.minOrderAmount) {
         voucherDiscount = 0;
       }
     }
 
-    // Tổng tiết kiệm
     const savedAmount = directDiscount + pointsDiscount + voucherDiscount;
-
-    // Thành tiền
     const total = Math.max(0, subtotal - savedAmount);
 
-    setSummary({
+    return {
       subtotal,
       directDiscount,
       pointsDiscount,
@@ -117,53 +88,56 @@ export function CartSummary({
       total,
       rewardPoints,
       savedAmount,
-    });
-  }, [items, selectedItems, usePoints, appliedVoucher]);
+    };
+  }, [items, selectedItems, usePoints, appliedVoucher, user]);
 
-  const handleApplyPromotion = (voucher: Voucher | null) => {
-    setAppliedVoucher(voucher);
-
-    // Pass the voucher data to the parent component
-    if (onVoucherSelect) {
-      onVoucherSelect(voucher);
+  // Side effect: notify parent of points discount
+  useEffect(() => {
+    if (onPointsDiscountChange) {
+      onPointsDiscountChange(summary.pointsDiscount);
     }
+  }, [summary.pointsDiscount, onPointsDiscountChange]);
 
-    setIsPromoModalOpen(false);
-  };
+  // Handlers
+  const handleApplyPromotion = useCallback(
+    (voucher: Voucher | null) => {
+      setAppliedVoucher(voucher);
+      if (onVoucherSelect) onVoucherSelect(voucher);
+      setIsPromoModalOpen(false);
+    },
+    [onVoucherSelect],
+  );
 
-  const handleCheckout = () => {
+  const handleCheckout = useCallback(() => {
     if (onCheckout) {
       onCheckout();
     } else {
       router.push('/checkout');
     }
-  };
+  }, [onCheckout, router]);
 
-  const handleUsePointsChange = (checked: boolean) => {
-    setUsePoints(checked);
-
-    // If turning off points usage, reset the points discount
-    if (!checked) {
-      const newPointsDiscount = 0;
-
-      if (onPointsDiscountChange) {
-        onPointsDiscountChange(newPointsDiscount);
+  const handleUsePointsChange = useCallback(
+    (checked: boolean) => {
+      setUsePoints(checked);
+      if (!checked && onPointsDiscountChange) {
+        onPointsDiscountChange(0);
+      } else if (
+        checked &&
+        user?.contacts &&
+        user?.contacts[0].remainLoyaltyPoints &&
+        onPointsDiscountChange
+      ) {
+        onPointsDiscountChange(user.contacts[0].remainLoyaltyPoints);
       }
-    } else if (user?.contacts && user?.contacts[0].remainLoyaltyPoints) {
-      // If turning on points usage, update the points discount
-      const newPointsDiscount = user.contacts[0].remainLoyaltyPoints;
-
-      if (onPointsDiscountChange) {
-        onPointsDiscountChange(newPointsDiscount);
-      }
-    }
-  };
+    },
+    [user, onPointsDiscountChange],
+  );
 
   return (
     <div className="bg-white rounded-lg shadow p-4 space-y-4">
       <button
         aria-label="Áp dụng ưu đãi"
-        className="flex w-full items-center justify-between bg-[#EAEFFA] rounded-md text-blue-600 font-medium text-sm cursor-pointer border-none p-3"
+        className="flex w-full items-center justify-between bg-cart-promo-bg rounded-md text-blue-600 font-medium text-sm cursor-pointer border-none p-3"
         type="button"
         onClick={() => setIsPromoModalOpen(true)}>
         <span>Áp dụng ưu đãi để được giảm giá</span>
@@ -173,7 +147,6 @@ export function CartSummary({
       {user?.contacts && (
         <div className="flex items-center justify-between py-2">
           <div className="flex items-center gap-2">
-            {/* <Coins className="w-4 h-4 text-yellow-500" /> */}
             <Image
               alt="Point Coin"
               className=""
@@ -195,14 +168,12 @@ export function CartSummary({
           <span>Tổng tiền</span>
           <span className="text-black">{formatPrice(summary.subtotal)}</span>
         </div>
-
         <div className="flex justify-between text-blue-600">
           <span>Giảm giá trực tiếp</span>
           <span className="text-black">
             -{formatPrice(summary.directDiscount)}
           </span>
         </div>
-
         {usePoints && (
           <div className="flex justify-between text-blue-600">
             <span>Trừ tích điểm</span>
@@ -211,7 +182,6 @@ export function CartSummary({
             </span>
           </div>
         )}
-
         <div className="flex justify-between">
           <div className="flex items-center gap-1">
             <span>Giảm giá voucher</span>
@@ -230,7 +200,6 @@ export function CartSummary({
             {formatPrice(summary.voucherDiscount)}
           </span>
         </div>
-
         <div>
           <span>Phí vận chuyển </span>
           <span className="text-blue-600">(miễn phí)</span>
@@ -248,12 +217,12 @@ export function CartSummary({
               src="/images/PointCoinImg.webp"
               width={16}
             />
-            <span className="text-[#F79009]">{summary.rewardPoints} điểm</span>
+            <span className="text-reward-points">{summary.rewardPoints} điểm</span>
           </div>
         </div>
         <div className="text-sm flex justify-between">
           <span>Tiết kiệm được</span>
-          <span className="text-[#F79009]">
+          <span className="text-savings">
             {formatPrice(summary.savedAmount)}
           </span>
         </div>
@@ -273,13 +242,11 @@ export function CartSummary({
         </div>
 
         <Button
-          className="w-full text-white rounded-full"
+          className="w-full text-white rounded-full bg-gradient-checkout"
           disabled={selectedItems.length === 0}
           size="lg"
-          style={{
-            background: 'linear-gradient(277.59deg, #1250DC 0%, #306DE4 100%)',
-          }}
-          onClick={handleCheckout}>
+          onClick={handleCheckout}
+        >
           Mua hàng
         </Button>
 

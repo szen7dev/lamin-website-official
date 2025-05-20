@@ -11,7 +11,12 @@ import { VoucherParams } from '../types/voucherTypes';
  * @returns Object containing voucher data, loading state, and error if any
  */
 export function useGetVoucher(params: VoucherParams) {
-  const { data, isLoading, error, refetch } = useQuery({
+  const {
+    data = [],
+    isLoading,
+    error,
+    refetch,
+  } = useQuery({
     queryKey: ['GET_VOUCHERS', params],
     queryFn: () => getVouchers(params),
     enabled: !!params.customerID,
@@ -19,10 +24,5 @@ export function useGetVoucher(params: VoucherParams) {
     staleTime: 1000 * 60 * 5, // 5 minutes
   });
 
-  return {
-    data,
-    isLoading,
-    error,
-    refetch,
-  };
+  return { data, isLoading, error, refetch };
 }

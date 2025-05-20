@@ -1,69 +1,31 @@
-import type { CartItem } from '../types/cartTypes';
+// Returns a human-readable string for time left until expiry
+export function formatTimeLeft(expiryDate: Date): string {
+  const now = new Date();
+  const diffTime = expiryDate.getTime() - now.getTime();
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-/**
- * Đảm bảo số lượng là số nguyên dương
- */
-export function validateQuantity(quantity: number): number {
-  return Math.max(1, Math.floor(quantity) || 1);
+  if (diffDays <= 0) return 'Hết hạn';
+  if (diffDays === 1) return 'Còn 1 ngày';
+
+  return `Còn ${diffDays} ngày`;
 }
 
-/**
- * Tính tổng tiền hàng (chưa giảm giá)
- */
-export function calculateSubtotal(items: CartItem[]): number {
-  return items.reduce((sum, item) => {
-    const price =
-      typeof item.price === 'number' && !isNaN(item.price) ? item.price : 0;
-    const quantity =
-      typeof item.quantity === 'number' && !isNaN(item.quantity)
-        ? item.quantity
-        : 0;
+// Returns a formatted description for a voucher
+export function formatVoucherDescription(voucher: {
+  salesoffAmount: number;
+  salesoffRate: number;
+  minOrderAmount: number;
+}): string {
+  let description = '';
 
-    return sum + price * quantity;
-  }, 0);
-}
+  if (voucher.salesoffAmount > 0) {
+    description = `Giảm ${voucher.salesoffAmount.toLocaleString()}đ`;
+  } else if (voucher.salesoffRate > 0) {
+    description = `Giảm ${voucher.salesoffRate}%`;
+  }
+  if (voucher.minOrderAmount > 0) {
+    description += ` - Đơn tối thiểu ${voucher.minOrderAmount.toLocaleString()}đ`;
+  }
 
-/**
- * Tính tổng tiền giảm giá
- */
-export function calculateDiscount(items: CartItem[]): number {
-  return items.reduce((sum, item) => {
-    if (
-      !item.originalPrice ||
-      typeof item.originalPrice !== 'number' ||
-      isNaN(item.originalPrice)
-    ) {
-      return sum;
-    }
-    const originalPrice = item.originalPrice;
-    const price =
-      typeof item.price === 'number' && !isNaN(item.price) ? item.price : 0;
-    const quantity =
-      typeof item.quantity === 'number' && !isNaN(item.quantity)
-        ? item.quantity
-        : 0;
-
-    // Chỉ tính giảm giá nếu giá gốc lớn hơn giá hiện tại
-    return (
-      sum + (originalPrice > price ? (originalPrice - price) * quantity : 0)
-    );
-  }, 0);
-}
-
-/**
- * Tính điểm thưởng (1% của tổng tiền hàng)
- */
-export function calculateRewardPoints(subtotal: number): number {
-  return Math.floor(subtotal * 0.01);
-}
-
-/**
- * Tính tổng tiền phải trả
- */
-export function calculateTotal(
-  subtotal: number,
-  discount: number,
-  pointsValue: number,
-): number {
-  return Math.max(0, subtotal - discount - pointsValue);
+  return description;
 }

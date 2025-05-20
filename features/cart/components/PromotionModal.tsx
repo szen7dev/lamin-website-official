@@ -1,11 +1,15 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Clock } from 'lucide-react';
 import Image from 'next/image';
 
 import { useGetVoucher } from '../hooks/useGetVoucher';
 import { type Voucher } from '../types/voucherTypes';
+import {
+  formatTimeLeft,
+  formatVoucherDescription,
+} from '../utils/cartCalculations';
 
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -26,36 +30,6 @@ interface PromotionModalProps {
   onApplyPromotion: (voucher: Voucher | null) => void;
 }
 
-const formatTimeLeft = (expiryDate: Date): string => {
-  const now = new Date();
-  const diffTime = expiryDate.getTime() - now.getTime();
-  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-  if (diffDays <= 0) {
-    return 'Hết hạn';
-  } else if (diffDays === 1) {
-    return 'Còn 1 ngày';
-  } else {
-    return `Còn ${diffDays} ngày`;
-  }
-};
-
-const formatDescription = (voucher: Voucher): string => {
-  let description = '';
-
-  if (voucher.salesoffAmount > 0) {
-    description = `Giảm ${voucher.salesoffAmount.toLocaleString()}đ`;
-  } else if (voucher.salesoffRate > 0) {
-    description = `Giảm ${voucher.salesoffRate}%`;
-  }
-
-  if (voucher.minOrderAmount > 0) {
-    description += ` - Đơn tối thiểu ${voucher.minOrderAmount.toLocaleString()}đ`;
-  }
-
-  return description;
-};
-
 export function PromotionModal({
   isOpen,
   onClose,
@@ -68,6 +42,16 @@ export function PromotionModal({
   const { data: vouchers = [], isLoading: isLoadingVouchers } = useGetVoucher({
     customerID: user?.id,
   });
+
+  const formattedVouchers = useMemo(
+    () =>
+      vouchers.map(voucher => ({
+        ...voucher,
+        description: formatVoucherDescription(voucher),
+        timeLeft: formatTimeLeft(new Date(voucher.expired)),
+      })),
+    [vouchers],
+  );
 
   const handleApply = () => {
     if (selectedVoucher) {
@@ -111,7 +95,7 @@ export function PromotionModal({
                 onChange={e => setManualCode(e.target.value)}
               />
               <Button
-                className="absolute right-0 top-0 h-full rounded-l-none bg-[#DCDFEA] text-[#7D89B0] disabled:opacity-50 disabled:cursor-not-allowed"
+                className="absolute right-0 top-0 h-full rounded-l-none bg-voucher-input-bg text-voucher-input-text disabled:opacity-50 disabled:cursor-not-allowed"
                 disabled={!manualCode.trim()}
                 onClick={handleApply}>
                 Xác nhận
@@ -123,7 +107,7 @@ export function PromotionModal({
             ) : vouchers.length > 0 ? (
               <div className="mt-4">
                 <div className="space-y-0">
-                  {vouchers.map((voucher, index) => (
+                  {formattedVouchers.map((voucher, index) => (
                     <React.Fragment key={voucher.sign}>
                       <div className="w-full rounded-lg py-3 px-3">
                         <div className="flex items-center space-x-3">
@@ -138,13 +122,11 @@ export function PromotionModal({
                               </span>
                             </div>
                             <div className="font-normal text-sm">
-                              {formatDescription(voucher)}
+                              {voucher.description}
                             </div>
                             <div className="text-sm text-gray-500 mt-1 flex items-center gap-1">
                               <Clock className="w-4 h-4" />
-                              <span>
-                                {formatTimeLeft(new Date(voucher.expired))}
-                              </span>
+                              <span>{voucher.timeLeft}</span>
                             </div>
                           </div>
                           <Checkbox

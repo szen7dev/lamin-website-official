@@ -26,9 +26,7 @@ interface CartItemsProps {
   selectedItems: string[];
   onSelectAll: (checked: boolean) => void;
   onSelectItem: (id: string, checked: boolean) => void;
-  onUpdateQuantity: (id: string, quantity: number) => void;
   onRemoveItem: (id: string) => void;
-  onUpdateUnit: (id: string, unit: string) => void;
   readOnly?: boolean;
 }
 
@@ -37,24 +35,22 @@ export function CartItems({
   selectedItems,
   onSelectAll,
   onSelectItem,
-  onUpdateQuantity,
   onRemoveItem,
-  onUpdateUnit,
   readOnly = false,
 }: CartItemsProps) {
   const [itemToDelete, setItemToDelete] = useState<string | null>(null);
-  const { removeItem } = useCart();
+  const { updateQuantity, removeItem, updateUnit } = useCart();
 
   const handleIncreaseQuantity = (id: string, currentQuantity: number) => {
     const newQuantity = Math.max(1, currentQuantity + 1);
 
-    onUpdateQuantity(id, newQuantity);
+    updateQuantity(id, newQuantity);
   };
 
   const handleDecreaseQuantity = (id: string, currentQuantity: number) => {
     const newQuantity = Math.max(1, currentQuantity - 1);
 
-    onUpdateQuantity(id, newQuantity);
+    updateQuantity(id, newQuantity);
   };
 
   const handleQuantityChange = (id: string, value: string) => {
@@ -62,7 +58,7 @@ export function CartItems({
     const newQuantity =
       !isNaN(parsedValue) && parsedValue > 0 ? parsedValue : 1;
 
-    onUpdateQuantity(id, newQuantity);
+    updateQuantity(id, newQuantity);
   };
 
   const handleDeleteClick = (id: string) => {
@@ -99,7 +95,7 @@ export function CartItems({
             const value = e.target.value;
 
             if (!value || parseInt(value, 10) < 1) {
-              onUpdateQuantity(item.id, 1);
+              updateQuantity(item.id, 1);
             }
           }}
           onChange={e => {
@@ -126,7 +122,7 @@ export function CartItems({
     return (
       <Select
         value={item.unit}
-        onValueChange={value => onUpdateUnit(item.id, value)}>
+        onValueChange={value => updateUnit(item.id, value)}>
         <SelectTrigger className="h-8 max-w-28 rounded-2xl border-gray-300 bg-white">
           <SelectValue>{item.unit || 'Đơn vị'}</SelectValue>
         </SelectTrigger>
