@@ -389,20 +389,36 @@ export default function MegaMenu() {
 
             return (
               <li key={item._id} className="py-2">
-                <button
-                  className="flex items-center justify-between text-grayscale-90 cursor-pointer py-2 w-full text-left"
-                  onClick={() => toggleLevel1Item(item._id)}>
-                  <div className="flex items-center">
-                    <span className="text-[15px] font-medium">{item.name}</span>
-                  </div>
-                  {hasLevel2Items && (
-                    <ChevronDown
-                      className={`h-5 w-5 transition-transform duration-300 ${
-                        isExpanded ? 'rotate-180' : ''
-                      }`}
-                    />
+                <div className="flex items-center justify-between text-grayscale-90 w-full text-left">
+                  {hasLevel2Items ? (
+                    <button 
+                      className="flex items-center flex-grow cursor-pointer py-2"
+                      onClick={() => {
+                        toggleLevel1Item(item._id)}}
+                    >
+                      <span className="text-[15px] font-medium">{item.name}</span>
+                    </button>
+                  ) : (
+                    <Link 
+                      href={`/${item.slug}`}
+                      className="flex items-center flex-grow py-2 decoration-transparent no-underline text-inherit"
+                    >
+                      <span className="text-[15px] font-medium">{item.name}</span>
+                    </Link>
                   )}
-                </button>
+                  {hasLevel2Items && (
+                    <button
+                      onClick={() => toggleLevel1Item(item._id)}
+                      className="p-2"
+                    >
+                      <ChevronDown
+                        className={`h-5 w-5 transition-transform duration-300 ${
+                          isExpanded ? 'rotate-180' : ''
+                        }`}
+                      />
+                    </button>
+                  )}
+                </div>
 
                 {/* Level 2 items - animated dropdown */}
                 {hasLevel2Items && (
