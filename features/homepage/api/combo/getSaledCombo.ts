@@ -29,13 +29,13 @@ export const getSaledCombo = async (
 
   try {
     // Fetch combo data from API
-    const combos = await apiClient.getNormalizedResponse<Combo[]>(
+    const response = await apiClient.get<Combo[]>(
       '/api/crm/combo',
       queryParams,
     );
 
     // The apiClient.get method now handles response normalization internally
-    return combos || [];
+    return response.data || [];
   } catch (error) {
     console.error('Error fetching saled combos:', error);
 

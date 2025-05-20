@@ -21,12 +21,12 @@ export const getMediasHomepage = async (
 
     // The apiClient.get method now handles response normalization internally
     // It will automatically extract listRecords from any level of nesting
-    const banners = await apiClient.getNormalizedResponse<Banner[]>(
+    const response = await apiClient.get<Banner[]>(
       '/api/medias/banner',
       queryParams,
     );
 
-    return banners || [];
+    return response.data || [];
   } catch (error) {
     console.error('Error fetching homepage banners:', error);
 

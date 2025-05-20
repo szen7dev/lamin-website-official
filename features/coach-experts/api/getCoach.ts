@@ -1,5 +1,6 @@
 import { Coach, GetCoachParams } from '../../homepage/types/coachTypes';
 
+import { Pagination } from '@/types';
 import { apiClient, DEFAULT_OPTION_SELLER } from '@/services/api/apiClient';
 
 /**
@@ -9,7 +10,7 @@ import { apiClient, DEFAULT_OPTION_SELLER } from '@/services/api/apiClient';
  */
 export const getCoach = async (
   params: GetCoachParams = {},
-): Promise<{ coaches: Coach[]; response: any }> => {
+): Promise<{ coaches: Coach[]; pagination: Pagination }> => {
   // Set default parameters if not provided
   const queryParams: Record<string, any> = {
     optionSeller: params.optionSeller ?? DEFAULT_OPTION_SELLER,
@@ -25,11 +26,11 @@ export const getCoach = async (
   };
 
   // Fetch coaches data from API
-  const { data: coaches, response } = await apiClient.get<Coach[]>(
+  const { data: coaches, pagination } = await apiClient.get<Coach[]>(
     '/api/item/contacts',
     queryParams,
   );
 
   // Return the response data or empty array if no data
-  return { coaches, response };
+  return { coaches, pagination };
 };

@@ -15,7 +15,7 @@ export function ClientArticleTagList({ slug }: ClientArticleTagListProps) {
   const [lastestID, setLastestID] = useState<string>('');
   const [allArticles, setAllArticles] = useState<Article[]>([]);
   const [hasMore, setHasMore] = useState<boolean>(true);
-  const { articlesTags, response, isLoading, error } = useGetArticleTagList({
+  const { articlesTags, pagination, isLoading, error } = useGetArticleTagList({
     limit: 5,
     menuSlug: slug,
     lastestID,
@@ -33,7 +33,7 @@ export function ClientArticleTagList({ slug }: ClientArticleTagListProps) {
       }
 
       // Check if there are more articles to load
-      if (response?.data?.nextCursor) {
+      if (pagination?.nextCursor) {
         setHasMore(true);
       } else {
         setHasMore(false);
@@ -41,12 +41,12 @@ export function ClientArticleTagList({ slug }: ClientArticleTagListProps) {
     } else if (articlesTags && articlesTags.length === 0) {
       setHasMore(false);
     }
-  }, [articlesTags, response, lastestID]);
+  }, [articlesTags, pagination, lastestID]);
 
   // Function to handle loading more articles
   const handleLoadMore = () => {
-    if (response?.data?.nextCursor) {
-      setLastestID(response.data.nextCursor);
+    if (pagination?.nextCursor) {
+      setLastestID(pagination.nextCursor);
     } else {
       // Set lastestID to the _id of the last item in articlesTags
       if (articlesTags.length > 0) {

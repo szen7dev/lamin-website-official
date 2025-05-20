@@ -22,12 +22,12 @@ export const getQuestionList = async (
       ...(params.cursor ? { cursor: params.cursor } : {}),
     };
 
-    const response = await apiClient.getNormalizedResponse<Question[]>(
+    const response = await apiClient.get<Question[]>(
       '/api/medias/question',
       queryParams,
     );
 
-    return response;
+    return response.data;
   } catch (error) {
     console.error('Error fetching question list:', error);
     throw error;

@@ -16,10 +16,7 @@ export const getHealthNews = async (
     }),
   };
 
-  const news = await apiClient.getNormalizedResponse<Article[]>(
-    '/api/medias',
-    queryParams,
-  );
+  const response = await apiClient.get<Article[]>('/api/medias', queryParams);
 
-  return news || [];
+  return response.data || [];
 };

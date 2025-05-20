@@ -18,7 +18,7 @@ export function useGetArticleTagList(params: ArticleListParams = {}) {
 
   return {
     articlesTags: result?.data || [],
-    response: result?.response,
+    pagination: result?.pagination,
     isLoading,
     error,
   };

@@ -4,7 +4,7 @@ import { apiClient, DEFAULT_OPTION_SELLER } from '@/services/api/apiClient';
 
 export const getArticleTagList = async (
   params: ArticleListParams = {},
-): Promise<{ data: Article[]; response: any }> => {
+): Promise<{ data: Article[]; pagination: any }> => {
   try {
     const queryParams = {
       select:
@@ -23,14 +23,15 @@ export const getArticleTagList = async (
       ...(params.option !== undefined && { option: params.option }),
     };
 
-    const { data: articles, response: articlesResponse } = await apiClient.get<
-      Article[]
-    >('/api/medias', queryParams);
+    const { data: articles, pagination } = await apiClient.get<Article[]>(
+      '/api/medias',
+      queryParams,
+    );
 
-    return { data: articles || [], response: articlesResponse };
+    return { data: articles || [], pagination };
   } catch (error) {
     console.error('Error fetching article list:', error);
 
-    return { data: [], response: null };
+    return { data: [], pagination: null };
   }
 };

@@ -21,12 +21,12 @@ export const getHeightHistory = async (
       ...(params.phone ? { phone: params.phone } : {}),
     };
 
-    const response = await apiClient.getNormalizedResponse<HeightHistory[]>(
+    const response = await apiClient.get<HeightHistory[]>(
       '/api/crm/grow_track',
       queryParams,
     );
 
-    return response;
+    return response.data;
   } catch (error) {
     console.error('Error fetching question list:', error);
     throw error;

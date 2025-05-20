@@ -15,12 +15,9 @@ export const getArticleList = async (
         : JSON.stringify({ path: 'thumbnail', select: 'path' }),
     };
 
-    const articles = await apiClient.getNormalizedResponse<Article[]>(
-      '/api/medias',
-      queryParams,
-    );
+    const articles = await apiClient.get<Article[]>('/api/medias', queryParams);
 
-    return articles || [];
+    return articles.data || [];
   } catch (error) {
     console.error('Error fetching article list:', error);
 

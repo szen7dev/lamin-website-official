@@ -25,13 +25,13 @@ export const getBestSellingCombo = async (
 
   try {
     // Fetch combo data from API
-    const combos = await apiClient.getNormalizedResponse<ComboProduct[]>(
+    const response = await apiClient.get<ComboProduct[]>(
       '/api/crm/combo/best-seller',
       queryParams,
     );
 
     // The apiClient.get method now handles response normalization internally
-    return combos || [];
+    return response.data || [];
   } catch (error) {
     console.error('Error fetching best selling combos:', error);
 

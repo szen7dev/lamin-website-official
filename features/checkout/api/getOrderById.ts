@@ -10,12 +10,12 @@ export const getOrderById = async (orderId: string): Promise<Order> => {
       orderID: orderId,
     };
 
-    const response = await apiClient.getNormalizedResponse<Order>(
+    const response = await apiClient.get<Order>(
       `/api/store/orders`,
       queryParams,
     );
 
-    return response as Order;
+    return response.data;
   } catch (error) {
     console.error('Error fetching goods info:', error);
     throw error;

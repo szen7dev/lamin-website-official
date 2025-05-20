@@ -11,11 +11,12 @@ export const getArticleProperty = async (
       ...(params.menuSlug && { menuSlug: params.menuSlug }),
     };
 
-    const articlesProperty = await apiClient.getNormalizedResponse<
-      ArticleProperty[]
-    >('/api/medias/get-list-by-property', queryParams);
+    const response = await apiClient.get<ArticleProperty[]>(
+      '/api/medias/get-list-by-property',
+      queryParams,
+    );
 
-    return articlesProperty;
+    return response.data;
   } catch (error) {
     console.error('Error fetching article list:', error);
 

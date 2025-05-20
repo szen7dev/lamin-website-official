@@ -6,6 +6,7 @@ import axios, {
 
 import { sanitizeUrl } from '@/utils/helpers';
 import { normalizeResponse } from '@/utils';
+import { Pagination } from '@/types';
 
 const environment = process.env.NEXT_PUBLIC_ENVIRONMENT || 'dev';
 const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
@@ -87,12 +88,12 @@ class ApiClient {
     return requireAuth && token ? { Authorization: `Bearer ${token}` } : {};
   }
 
-  private async request<T = any, R = any>(
+  private async request<T = any>(
     method: string,
     url: string,
     dataOrParams?: any,
     requireAuth = true,
-  ): Promise<{ status: number; data: T; response: R }> {
+  ): Promise<{ status: number; data: T; pagination: Pagination }> {
     const config: AxiosRequestConfig = {
       method: method as any,
       url,
@@ -105,70 +106,34 @@ class ApiClient {
     if (['get', 'delete'].includes(method)) config.params = dataOrParams;
     else config.data = dataOrParams;
 
-    const response = await this.instance.request<R>(config);
+    const response = await this.instance.request(config);
+    const pagination = response.data
+      ? (response.data as Pagination)
+      : {
+          limit: 0,
+          nextCursor: '',
+          totalRecord: 0,
+          totalPage: 0,
+        };
 
     return {
       status: response.status,
       data: normalizeResponse<T>(response.data),
-      response: response.data,
+      pagination,
     };
   }
 
-  private async requestNormalized<T = any>(
-    method: string,
-    url: string,
-    dataOrParams?: any,
-    requireAuth = true,
-  ): Promise<T> {
-    const { data } = await this.request<T>(
-      method,
-      url,
-      dataOrParams,
-      requireAuth,
-    );
+  public get = <T = any>(url: string, params?: any, requireAuth = true) =>
+    this.request<T>('get', url, params, requireAuth);
 
-    return data;
-  }
+  public post = <T = any>(url: string, data?: any, requireAuth = true) =>
+    this.request<T>('post', url, data, requireAuth);
 
-  public get = <T = any, R = any>(
-    url: string,
-    params?: any,
-    requireAuth = true,
-  ) => this.request<T, R>('get', url, params, requireAuth);
-  public getNormalizedResponse = <T = any>(
-    url: string,
-    params?: any,
-    requireAuth = true,
-  ) => this.requestNormalized<T>('get', url, params, requireAuth);
+  public put = <T = any>(url: string, data?: any, requireAuth = true) =>
+    this.request<T>('put', url, data, requireAuth);
 
-  public post = <T = any, R = any>(
-    url: string,
-    data?: any,
-    requireAuth = true,
-  ) => this.request<T, R>('post', url, data, requireAuth);
-  public postNormalizedResponse = <T = any>(
-    url: string,
-    data?: any,
-    requireAuth = true,
-  ) => this.requestNormalized<T>('post', url, data, requireAuth);
-
-  public put = <T = any, R = any>(
-    url: string,
-    data?: any,
-    requireAuth = true,
-  ) => this.request<T, R>('put', url, data, requireAuth);
-  public putNormalizedResponse = <T = any>(
-    url: string,
-    data?: any,
-    requireAuth = true,
-  ) => this.requestNormalized<T>('put', url, data, requireAuth);
-
-  public delete = <T = any, R = any>(url: string, requireAuth = true) =>
-    this.request<T, R>('delete', url, undefined, requireAuth);
-  public deleteNormalizedResponse = <T = any>(
-    url: string,
-    requireAuth = true,
-  ) => this.requestNormalized<T>('delete', url, undefined, requireAuth);
+  public delete = <T = any>(url: string, requireAuth = true) =>
+    this.request<T>('delete', url, undefined, requireAuth);
 
   private buildMediaUrl(path: string, subPath = ''): string {
     if (!path) return '';

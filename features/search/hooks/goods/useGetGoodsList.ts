@@ -24,7 +24,7 @@ export const useGetGoodsList = (params: GoodsListParams = {}) => {
 
   return {
     goodsList: result?.data || [],
-    response: result?.response,
+    pagination: result?.pagination,
     isLoading,
     error,
     refetch,

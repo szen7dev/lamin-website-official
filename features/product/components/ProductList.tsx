@@ -34,7 +34,7 @@ function ProductList({
   const [hasMore, setHasMore] = useState<boolean>(true);
   const [isLoadingMore, setIsLoadingMore] = useState<boolean>(false);
 
-  const { goodsList, response, error, isLoading } = useGetGoodsList({
+  const { goodsList, pagination, error, isLoading } = useGetGoodsList({
     menuSlug: params?.slug,
     keyword: searchParams?.q as string,
     lastestID,
@@ -101,7 +101,7 @@ function ProductList({
         setAllProducts(prev => [...prev, ...getSortedProducts()]);
       }
 
-      if (response?.data?.nextCursor) {
+      if (pagination?.nextCursor) {
         setHasMore(true);
       } else if (goodsList.length < 10) {
         setHasMore(false);
@@ -112,14 +112,14 @@ function ProductList({
       setHasMore(false);
       setIsLoadingMore(false);
     }
-  }, [goodsList, response, lastestID]);
+  }, [goodsList, pagination, lastestID]);
 
   const handleLoadMore = () => {
     if (isLoadingMore) return;
 
     setIsLoadingMore(true);
-    if (response?.data?.nextCursor) {
-      setLastestID(response.data.nextCursor);
+    if (pagination?.nextCursor) {
+      setLastestID(pagination.nextCursor);
     } else if (goodsList.length > 0) {
       setLastestID(goodsList[goodsList.length - 1]._id);
     }

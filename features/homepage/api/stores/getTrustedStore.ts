@@ -9,7 +9,10 @@ import { apiClient, DEFAULT_OPTION_SELLER } from '@/services/api/apiClient';
  */
 export const getTrustedStore = async (
   params: GetTrustedStoreParams = {},
-): Promise<{ trustedStore: TrustedStore[] | TrustedStore; response: any }> => {
+): Promise<{
+  trustedStore: TrustedStore[] | TrustedStore;
+  pagination: any;
+}> => {
   try {
     // Set default parameters if not provided
     const queryParams = {
@@ -32,12 +35,12 @@ export const getTrustedStore = async (
     };
 
     // Fetch trusted store data from API
-    const { data: trustedStore, response: response } = await apiClient.get<
+    const { data: trustedStore, pagination } = await apiClient.get<
       TrustedStore[] | TrustedStore
     >('/api/item/fundas', queryParams, false); // Set requireAuth to false
 
     // Return the response data
-    return { trustedStore, response };
+    return { trustedStore, pagination };
   } catch (error) {
     console.error('Error fetching trusted store data:', error);
     // Re-throw the error after logging it for debugging

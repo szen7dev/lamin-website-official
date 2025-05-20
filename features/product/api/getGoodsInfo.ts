@@ -14,12 +14,12 @@ export const getGoodsInfo = async (goodsId: string): Promise<Product> => {
       goodsID: goodsId,
     };
 
-    const response = await apiClient.getNormalizedResponse<Product>(
+    const response = await apiClient.get<Product>(
       `/api/item/goods`,
       queryParams,
     );
 
-    return response as Product;
+    return response.data;
   } catch (error) {
     console.error('Error fetching goods info:', error);
     throw error;

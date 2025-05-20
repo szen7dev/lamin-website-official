@@ -20,19 +20,19 @@ export const getArticleDetail = async (
         : JSON.stringify({ path: 'thumbnail', select: 'path' }),
     };
 
-    const response = await apiClient.getNormalizedResponse<Article[] | Article>(
+    const response = await apiClient.get<Article[] | Article>(
       '/api/medias',
       queryParams,
     );
 
     // Handle different response formats
-    if (Array.isArray(response)) {
-      return response.length > 0 ? response[0] : null;
+    if (Array.isArray(response.data)) {
+      return response.data.length > 0 ? response.data[0] : null;
     }
 
     // If response is a single object
     if (response && typeof response === 'object') {
-      return response as Article;
+      return response.data as Article;
     }
 
     return null;

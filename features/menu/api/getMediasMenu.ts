@@ -21,12 +21,12 @@ export const getMediasMenu = async (
       ...params,
     };
 
-    const response = await apiClient.getNormalizedResponse<MediaItem[]>(
+    const response = await apiClient.get<MediaItem[]>(
       '/api/medias/menu',
       queryParams,
     );
 
-    return response;
+    return response.data;
   } catch (error) {
     if (error instanceof Error) {
       console.error(`Error fetching media menu: ${error.message}`, error);

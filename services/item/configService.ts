@@ -40,12 +40,9 @@ export async function getContactInfo(): Promise<Config> {
       type: 3,
     };
 
-    const config = await apiClient.getNormalizedResponse<Config>(
-      '/api/item/configs',
-      params,
-    );
+    const response = await apiClient.get<Config>('/api/item/configs', params);
 
-    return config;
+    return response.data;
   } catch (error: any) {
     console.error('Error fetching contact info:', error);
     // Thêm thông tin chi tiết vào error

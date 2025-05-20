@@ -19,16 +19,16 @@ export const getVouchers = async (
       customerID: params.customerID,
     };
 
-    const vouchers = await apiClient.getNormalizedResponse<Voucher[]>(
+    const response = await apiClient.get<Voucher[]>(
       '/api/store/vouchers',
       queryParams,
     );
 
-    if (!vouchers) {
+    if (!response.data) {
       throw new Error('Failed to fetch vouchers');
     }
 
-    return vouchers || [];
+    return response.data || [];
   } catch (error) {
     if (error instanceof Error) {
       throw new Error(`Error fetching vouchers: ${error.message}`);

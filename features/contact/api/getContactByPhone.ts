@@ -18,16 +18,16 @@ export const getContactByPhone = async (
       phone: params.phone,
     };
 
-    const contact = await apiClient.getNormalizedResponse<Contact>(
+    const response = await apiClient.get<Contact>(
       '/api/item/contacts/get-id-by-phone',
       queryParams,
     );
 
-    if (!contact) {
+    if (!response.data) {
       throw new Error('Failed to fetch contact');
     }
 
-    return contact;
+    return response.data;
   } catch (error) {
     if (error instanceof Error) {
       throw new Error(`Error fetching contact: ${error.message}`);

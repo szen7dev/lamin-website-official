@@ -33,7 +33,7 @@ export default function StoreList() {
 
   const itemsPerPage = 8;
 
-  const { trustedStore, isLoading, response } = useGetTrustedStore({
+  const { trustedStore, isLoading, pagination } = useGetTrustedStore({
     populates: {
       path: 'thumbnail area3 area2 area1',
       select: 'path name',
@@ -46,10 +46,10 @@ export default function StoreList() {
   });
 
   useEffect(() => {
-    const cursor = response?.data?.nextCursor || response?.nextCursor || '';
+    const cursor = pagination?.nextCursor || '';
 
     setNextCursor(cursor);
-  }, [response]);
+  }, [pagination]);
 
   useEffect(() => {
     return () => {

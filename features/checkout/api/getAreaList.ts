@@ -32,12 +32,12 @@ export const getAreaList = async (
     };
 
     // Make the API request
-    const response = await apiClient.getNormalizedResponse<Area[]>(
+    const response = await apiClient.get<Area[]>(
       '/api/item/areas',
       queryParams,
     );
 
-    return response;
+    return response.data;
   } catch (error) {
     console.error('Error fetching area list:', error);
 

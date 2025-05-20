@@ -3,7 +3,7 @@ import apiClient, { DEFAULT_OPTION_SELLER } from '@/services/api/apiClient';
 
 export const getGoodsList = async (
   params: GoodsListParams = {},
-): Promise<{ data: Goods[]; response: any }> => {
+): Promise<{ data: Goods[]; pagination: any }> => {
   try {
     const populatesObject = {
       path: 'parent project category userUpdate convert images thumbnail',
@@ -26,14 +26,15 @@ export const getGoodsList = async (
       ...params,
     };
 
-    const { data: goods, response: goodsResponse } = await apiClient.get<
-      Goods[]
-    >('/api/item/goods', queryParams);
+    const { data: goods, pagination } = await apiClient.get<Goods[]>(
+      '/api/item/goods',
+      queryParams,
+    );
 
-    return { data: goods || [], response: goodsResponse };
+    return { data: goods || [], pagination };
   } catch (error) {
     console.error('Error fetching goods list:', error);
 
-    return { data: [], response: null };
+    return { data: [], pagination: null };
   }
 };
