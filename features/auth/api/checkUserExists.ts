@@ -18,7 +18,7 @@ export const checkUserExists = async (
   params: CheckUserExistsParams,
 ): Promise<CheckUserExistsResponse> => {
   try {
-    const response = await apiClient.postNormalizedResponse<{
+    const response = await apiClient.post<{
       message: string;
     }>(
       '/api/auth/users/check-user-exists',
@@ -27,10 +27,10 @@ export const checkUserExists = async (
     );
 
     // Determine if user exists based on the message
-    const exists = response.message !== 'Tài khoản chưa tồn tại';
+    const exists = response.data.message !== 'Tài khoản chưa tồn tại';
 
     return {
-      message: response.message,
+      message: response.data.message,
       exists,
     };
   } catch (error) {

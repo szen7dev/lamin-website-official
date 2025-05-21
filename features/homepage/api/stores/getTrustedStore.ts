@@ -37,7 +37,7 @@ export const getTrustedStore = async (
     // Fetch trusted store data from API
     const { data: trustedStore, pagination } = await apiClient.get<
       TrustedStore[] | TrustedStore
-    >('/api/item/fundas', queryParams, false); // Set requireAuth to false
+    >('/api/item/fundas', queryParams);
 
     // Return the response data
     return { trustedStore, pagination };
