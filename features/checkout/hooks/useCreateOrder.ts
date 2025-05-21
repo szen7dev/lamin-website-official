@@ -1,30 +1,20 @@
 'use client';
 
 import { useMutation } from '@tanstack/react-query';
-
-import { createOrder, type CreateOrderData } from '../api/createOrder';
+import { createOrder } from '../api/createOrder';
+import { CreateOrderData, CreateOrderResponse } from '@/features/order/types/orderTypes';
 
 /**
  * Hook for creating an order
  * @returns Mutation for creating an order
  */
 export const useCreateOrder = () => {
-  const { mutate, isPending, isError, error, isSuccess, data } = useMutation({
-    mutationFn: (orderData: CreateOrderData) => createOrder(orderData),
-    onSuccess: data => {
-      console.log('Order created successfully:', data);
-    },
-    onError: error => {
-      console.error('Failed to create order:', error);
-    },
+  const mutation = useMutation<CreateOrderResponse, Error, CreateOrderData>({
+    mutationFn: createOrder,
   });
 
   return {
-    createOrder: mutate,
-    isCreating: isPending,
-    isError,
-    error,
-    isSuccess,
-    orderData: data,
+    createOrder: mutation.mutate,
+    ...mutation,
   };
 };

@@ -9,17 +9,10 @@ import {
  * @param data - Order data to be submitted
  * @returns The created order data from the API response
  */
-export const createOrder = async (data: CreateOrderData) => {
-  try {
-    const response: CreateOrderResponse =
-      await apiClient.postNormalizedResponse<CreateOrderResponse>(
-        '/api/store/orders/insert-full',
-        data,
-      );
-
-    return response;
-  } catch (error) {
-    console.error('Error creating order:', error);
-    throw error;
-  }
+export const createOrder = async (data: CreateOrderData): Promise<CreateOrderResponse> => {
+  const { data: order } = await apiClient.post<CreateOrderResponse>(
+    '/api/store/orders/insert-full',
+    data
+  );
+  return order;
 };
