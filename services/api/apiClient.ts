@@ -93,7 +93,12 @@ class ApiClient {
     url: string,
     dataOrParams?: any,
     requireAuth = true,
-  ): Promise<{ status: number; data: T; pagination: Pagination }> {
+  ): Promise<{
+    status: number;
+    data: T;
+    pagination: Pagination;
+    information?: any;
+  }> {
     const config: AxiosRequestConfig = {
       method: method as any,
       url,
@@ -116,10 +121,13 @@ class ApiClient {
           totalPage: 0,
         };
 
+    const { data: _, ...rest } = response.data || {};
+
     return {
       status: response.status,
       data: normalizeResponse<T>(response.data),
       pagination,
+      information: rest,
     };
   }
 

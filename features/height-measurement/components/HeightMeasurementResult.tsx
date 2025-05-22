@@ -77,11 +77,8 @@ export default function HeightMeasurementResult({
   const isMobile = useMediaQuery('(max-width: 768px)');
 
   // Lấy dữ liệu từ API qua React Query
-  const {
-    data: apiResponse,
-    isLoading,
-    error,
-  } = useGetHeightMeasurementInfo(resultId);
+  const { response, growTrack, isLoading, error } =
+    useGetHeightMeasurementInfo(resultId);
 
   const [processedData, setProcessedData] = useState<
     typeof fallbackData | null
@@ -89,22 +86,18 @@ export default function HeightMeasurementResult({
 
   // Xử lý dữ liệu từ API
   useEffect(() => {
-    if (!apiResponse) return;
+    if (!response || !growTrack) return;
 
     try {
-      // Thông tin cá nhân từ API
-      const userData = apiResponse.data || {};
-      const growTrackData = apiResponse.growTrack || {};
-
       // Tạo dữ liệu chiều cao theo tuổi từ ageHeightNow hoặc hdfs
       let heightData = [];
 
       if (
-        growTrackData.ageHeightNow &&
-        Array.isArray(growTrackData.ageHeightNow)
+        growTrack.growTrack.ageHeightNow &&
+        Array.isArray(growTrack.growTrack.ageHeightNow)
       ) {
         // Sử dụng dữ liệu ageHeightNow nếu có
-        heightData = growTrackData.ageHeightNow.map(item => ({
+        heightData = growTrack.growTrack.ageHeightNow.map(item => ({
           age: Number(item.age),
           height: Number(item.height),
         }));
@@ -127,9 +120,9 @@ export default function HeightMeasurementResult({
             // For prediction data, we'll use the predicted adult height for ages 18-20
             const height =
               age >= 18
-                ? apiResponse.predictedAdultHeight
+                ? response.predictedAdultHeight
                 : lastHeight +
-                  ((apiResponse.predictedAdultHeight - lastHeight) /
+                  ((response.predictedAdultHeight - lastHeight) /
                     (18 - maxAgeInData)) *
                     (age - maxAgeInData);
 
@@ -151,43 +144,43 @@ export default function HeightMeasurementResult({
         }
       }
 
-      const predictedHeight = apiResponse.whoHS;
+      const predictedHeight = growTrack.whoHS;
 
       // Tạo kết quả
       setProcessedData({
         heightData,
-        name: userData.name || 'Chưa có tên',
-        gender: userData.gender || 1,
-        birthDate: userData.birthday || new Date().toISOString(),
-        height: userData.height || 0,
+        name: response.name || 'Chưa có tên',
+        gender: response.gender || 1,
+        birthDate: response.birthday || new Date().toISOString(),
+        height: response.height || 0,
         predictedHeight,
         growthRate: 36, // Giá trị mặc định
-        analysisDate: userData.createAt || new Date().toISOString(),
+        analysisDate: response.createAt || new Date().toISOString(),
         coach: 'Chuyên gia Lamin',
         recommendations: [
           'Ngủ trước 10h tối',
           'Chơi các môn thể thao kéo dãn như Bơi, Xà, Nhảy Dây',
           'Bổ sung Protein, Canxi, D3, K2',
         ],
-        noticeH: apiResponse.noticeH || 'Đạt chuẩn',
-        hdfs: apiResponse.hdfs || 0,
-        whoHS: apiResponse.whoHS || 0,
-        noticeW: apiResponse.noticeW || 'Đạt chuẩn',
-        wdfs: apiResponse.wdfs || 0,
-        whoWS: apiResponse.whoWS || 0,
-        weight: userData.weight || 0,
-        predictedAdultHeight: apiResponse.predictedAdultHeight || 0,
-        P: apiResponse.P || 0,
+        noticeH: growTrack.noticeH || 'Đạt chuẩn',
+        hdfs: growTrack.hdfs || 0,
+        whoHS: growTrack.whoHS || 0,
+        noticeW: growTrack.noticeW || 'Đạt chuẩn',
+        wdfs: growTrack.wdfs || 0,
+        whoWS: growTrack.whoWS || 0,
+        weight: response.weight || 0,
+        predictedAdultHeight: growTrack.predictedAdultHeight || 0,
+        P: growTrack.P || 0,
       });
     } catch (error) {
       console.error('❌ Lỗi khi xử lý dữ liệu:', error);
     }
-  }, [apiResponse]);
+  }, [response, growTrack]);
 
   // Tạo biểu đồ
   useEffect(() => {
-    if (!apiResponse) return;
-    const growTrackData = apiResponse.growTrack || {};
+    if (!response || !growTrack) return;
+    const growTrackData = growTrack.growTrack || {};
 
     if (!chartRef.current || !processedData || !processedData.heightData) {
       return;
@@ -405,7 +398,7 @@ export default function HeightMeasurementResult({
         chartInstance.current.destroy();
       }
     };
-  }, [processedData, isMobile, apiResponse]);
+  }, [processedData, isMobile, response, growTrack]);
 
   if (isLoading) {
     return (

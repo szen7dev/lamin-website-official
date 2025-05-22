@@ -16,7 +16,7 @@ export const useGetCoach = (params: GetCoachParams = {}) => {
     isLoading,
     error,
   } = useSuspenseQuery({
-    queryKey: ['coaches', params],
+    queryKey: ['GET_COACHES', params],
     queryFn: () => getCoach(params),
   });
 

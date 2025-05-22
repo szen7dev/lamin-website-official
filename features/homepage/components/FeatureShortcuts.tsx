@@ -11,12 +11,10 @@ import { apiClient } from '@/services/api/apiClient';
 export default function FeatureShortcuts() {
   const isDesktop = useMediaQuery('(min-width: 768px)');
 
-  // Fetch feature shortcuts from API using the existing hook
   const { banners: features = [], isLoading } = useGetMediasHomepage({
     type: 4,
   });
 
-  // Determine grid columns based on number of features
   const getGridCols = () => {
     const count = features.length;
 

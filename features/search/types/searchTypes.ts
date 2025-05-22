@@ -7,12 +7,3 @@ export interface SearchResult {
   unit: string;
   slug: string;
 }
-
-export interface SearchQuery {
-  query: string;
-  limit?: number;
-}
-
-export interface SearchService {
-  searchProducts(params: SearchQuery): Promise<SearchResult[]>;
-}

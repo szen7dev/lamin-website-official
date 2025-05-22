@@ -50,37 +50,37 @@ export interface HeightMeasurementResultData {
 
 // API Response Types
 export interface GrowTrackApiResponse {
-  error: boolean;
-  data: {
-    _id: string;
-    type: number;
-    status: number;
-    fatherHeight: number;
-    motherHeight: number;
-    gender: number;
-    height: number;
-    percentile: number;
-    predictedAdultHeight: number;
-    desiredHeight: number;
-    weight: number;
-    images: any[];
-    state: number;
-    company: string;
-    userCreate: string;
-    phone: string;
-    birthday: string;
-    date: Date;
-    note: string;
-    email: string;
-    routine: string;
-    parentName: string;
-    namecv: string;
-    modifyAt: string;
-    createAt: string;
-    __v: number;
-    name?: string;
-    userUpdate?: string;
-  };
+  _id: string;
+  type: number;
+  status: number;
+  fatherHeight: number;
+  motherHeight: number;
+  gender: number;
+  height: number;
+  percentile: number;
+  predictedAdultHeight: number;
+  desiredHeight: number;
+  weight: number;
+  images: any[];
+  state: number;
+  company: string;
+  userCreate: string;
+  phone: string;
+  birthday: string;
+  date: Date;
+  note: string;
+  email: string;
+  routine: string;
+  parentName: string;
+  namecv: string;
+  modifyAt: string;
+  createAt: string;
+  __v: number;
+  name?: string;
+  userUpdate?: string;
+}
+
+export interface GrowTrackInformation {
   growTrack: {
     ageHeightNow: Array<{ age: number; height: number }>;
     ageHeightP3: Array<{ age: number; height: number }>;

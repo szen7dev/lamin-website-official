@@ -29,7 +29,7 @@ export default function SimpleBanner() {
         placeholder="blur"
         quality={80}
         sizes="(max-width: 640px) 95vw, (max-width: 768px) 90vw, (max-width: 1536px) 90vw, 1200px"
-        src={apiClient.getFileUrl(banner?.thumbnail?.path)}
+        src={apiClient.getFileUrl(banner?.thumbnail?.path || '')}
         width={1200}
       />
     </div>

@@ -27,12 +27,12 @@ export const updateLocation = async (
 
   try {
     // Make API call to get coach details
-    const coach = await apiClient.putNormalizedResponse<Coach>(
+    const response = await apiClient.put<Coach>(
       '/api/item/contacts',
       queryParams,
     );
 
-    return coach;
+    return response.data;
   } catch (error) {
     console.error('Error update contact coach:', error);
     throw error;
