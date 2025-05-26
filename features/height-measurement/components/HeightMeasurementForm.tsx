@@ -86,8 +86,7 @@ export default function HeightMeasurementForm() {
         formData.note = 'Đo chiều cao từ website';
       }
 
-      // createHeightMeasurement(formData);
-      console.log(formData);
+      createHeightMeasurement(formData);
     } catch (err) {
       console.error('🖥️ Form Component: Error processing form data:', err);
       setError('root', {
