@@ -132,8 +132,6 @@ function ProductList({
     [goodsList, sortBy],
   );
 
-  console.log('goodsList', goodsList);
-
   return (
     <div className="min-h-3 bg-background pb-8 sm:pb-12 pt-4 sm:pt-6">
       <div className="container mx-auto sm:px-4">
