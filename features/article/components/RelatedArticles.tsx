@@ -89,7 +89,6 @@ export default function RelatedArticles({
       </div>
     );
   }
-console.log("articleList", articleList);
 
   // If articles are available
   return (

@@ -23,8 +23,6 @@ export function CoachDetail({
   document,
   education,
 }: CoachDetailProps) {
-  console.log('document', document);
-  console.log('education', education);
   // Handle loading state
   if (isLoading) {
     return (

@@ -15,7 +15,6 @@ export interface UserUpdateParams {
  */
 export const updateUser = async (params: UserUpdateParams): Promise<any> => {
   try {
-    console.log('bat dau goi api');
     // Create query parameters string
     const queryParams = new URLSearchParams();
 
