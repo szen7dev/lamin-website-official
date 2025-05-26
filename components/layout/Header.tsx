@@ -448,18 +448,20 @@ export function Header() {
             </button>
           </div>
           <div className="container bg-gradient-primary py-3">
-            <p className="text-grayscale-5 text-base font-normal mb-3">
-              Đăng nhập để hưởng những đặc quyền dành riêng cho thành viên
-            </p>
             {isAuthenticated ? (
               <UserProfile />
             ) : (
-              <Button
-                className="rounded-full bg-white px-3 md:px-6 text-primary hover:bg-white/90 text-xs md:text-sm"
-                variant="secondary"
-                onClick={() => setLoginModalOpen(true)}>
-                <span className="font-medium text-sm">Đăng Nhập</span>
-              </Button>
+              <>
+                <p className="text-grayscale-5 text-base font-normal mb-3">
+                  Đăng nhập để hưởng những đặc quyền dành riêng cho thành viên
+                </p>
+                <Button
+                  className="rounded-full bg-white px-3 md:px-6 text-primary hover:bg-white/90 text-xs md:text-sm"
+                  variant="secondary"
+                  onClick={() => setLoginModalOpen(true)}>
+                  <span className="font-medium text-sm">Đăng Nhập</span>
+                </Button>
+              </>
             )}
           </div>
           <div className="container mx-auto px-4">
