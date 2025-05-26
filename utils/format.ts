@@ -27,6 +27,10 @@ export const formatPrice = (price: number | undefined) => {
   }).format(price);
 };
 
+export const formatNumber = (number: number) => {
+  return new Intl.NumberFormat('vi-VN').format(number);
+};
+
 export const formattedDeliveryDate = (
   deliveryStartETA: string,
   deliveryEndETA: string,
