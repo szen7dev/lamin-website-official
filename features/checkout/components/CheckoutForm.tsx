@@ -3,17 +3,10 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
-import {
-  forwardRef,
-  useEffect,
-  useImperativeHandle,
-  useMemo,
-  useState,
-} from 'react';
+import { forwardRef, useImperativeHandle, useState } from 'react';
 import { MapPin, User } from 'lucide-react';
 
-import { useGetAreaList } from '../hooks/useGetAreaList';
-import { Area, AREA_LEVELS, AreaChild } from '../types/areaTypes';
+import { useAreaSelector } from '../hooks/useAreaSelector';
 
 import { PaymentMethodSelector } from './PaymentMethodSelector';
 
@@ -84,18 +77,6 @@ export const CheckoutForm = forwardRef<CheckoutFormRef, CheckoutFormProps>(
     // Payment method index (1-based as requested)
     const [paymentMethodIndex, setPaymentMethodIndex] = useState<number>(2); // Default to QR (index 2)
 
-    // Area selection state
-    const [selectedProvince, setSelectedProvince] = useState<Area | null>(null);
-    const [selectedDistrict, setSelectedDistrict] = useState<AreaChild | null>(
-      null,
-    );
-    const [selectedWard, setSelectedWard] = useState<AreaChild | null>(null);
-
-    // Get districts and wards based on selected province
-    const { areas, isLoading: isLoadingAreas } = useGetAreaList(
-      selectedProvince ? { keyword: selectedProvince.name } : {},
-    );
-
     const form = useForm<CheckoutFormValues>({
       resolver: zodResolver(formSchema),
       defaultValues: {
@@ -114,54 +95,13 @@ export const CheckoutForm = forwardRef<CheckoutFormRef, CheckoutFormProps>(
       },
     });
 
-    // Expose the submit method via ref
     useImperativeHandle(ref, () => ({
       submit: () => {
         form.handleSubmit(handleFormSubmit)();
       },
     }));
 
-    // Handler for payment method selection
-    const handlePaymentMethodSelected = (index: number) => {
-      setPaymentMethodIndex(index);
-    };
-
-    // Reset district and ward when province changes
-    useEffect(() => {
-      if (selectedProvince) {
-        setSelectedDistrict(null);
-        setSelectedWard(null);
-        form.setValue('district', '');
-        form.setValue('ward', '');
-      }
-    }, [selectedProvince, form]);
-
-    // Reset ward when district changes
-    useEffect(() => {
-      if (selectedDistrict) {
-        setSelectedWard(null);
-        form.setValue('ward', '');
-      }
-    }, [selectedDistrict, form]);
-
-    // Get the province data from API response
-    const provinceData = useMemo(() => {
-      return areas.find(area => area.level === AREA_LEVELS.PROVINCE);
-    }, [areas]);
-
-    // Get districts based on selected province
-    const districts = useMemo(() => {
-      if (!provinceData || !selectedProvince) return [];
-
-      return provinceData.childs || [];
-    }, [provinceData, selectedProvince]);
-
-    // Get wards based on selected district
-    const wards = useMemo(() => {
-      if (!selectedDistrict) return [];
-
-      return selectedDistrict.childs || [];
-    }, [selectedDistrict]);
+    const areaSelector = useAreaSelector(form, provinces);
 
     // Custom submission handler to include paymentMethodIndex
     const handleFormSubmit = (values: CheckoutFormValues) => {
@@ -169,6 +109,11 @@ export const CheckoutForm = forwardRef<CheckoutFormRef, CheckoutFormProps>(
         ...values,
         paymentMethodIndex,
       });
+    };
+
+    // Handler for payment method selection
+    const handlePaymentMethodSelected = (index: number) => {
+      setPaymentMethodIndex(index);
     };
 
     return (
@@ -325,25 +270,8 @@ export const CheckoutForm = forwardRef<CheckoutFormRef, CheckoutFormProps>(
                         disabled={isSubmitting}
                         onValueChange={value => {
                           field.onChange(value);
-                          // Convert province mock data to Area type
-                          const selectedProv = provinces.find(
-                            p => p._id === value,
-                          );
-
-                          if (selectedProv) {
-                            const areaProvince: Area = {
-                              _id: selectedProv._id,
-                              name: selectedProv.name,
-                              level: selectedProv.level,
-                              parent: null,
-                              childs: [],
-                              sign: selectedProv._id,
-                            };
-
-                            setSelectedProvince(areaProvince);
-                          } else {
-                            setSelectedProvince(null);
-                          }
+                          form.setValue('district', '');
+                          form.setValue('ward', '');
                         }}>
                         <FormControl>
                           <SelectTrigger className="h-12 rounded-lg border-gray-300">
@@ -370,13 +298,10 @@ export const CheckoutForm = forwardRef<CheckoutFormRef, CheckoutFormProps>(
                     <FormItem>
                       <Select
                         defaultValue={field.value}
-                        disabled={!selectedProvince || isSubmitting}
+                        disabled={!areaSelector.provinceValue || isSubmitting}
                         onValueChange={value => {
                           field.onChange(value);
-                          const district =
-                            districts.find(d => d._id === value) || null;
-
-                          setSelectedDistrict(district);
+                          form.setValue('ward', '');
                         }}>
                         <FormControl>
                           <SelectTrigger className="h-12 rounded-lg border-gray-300">
@@ -384,16 +309,16 @@ export const CheckoutForm = forwardRef<CheckoutFormRef, CheckoutFormProps>(
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          {!selectedProvince ? (
+                          {!areaSelector.provinceValue ? (
                             <SelectItem disabled value="select-province">
                               Vui lòng chọn tỉnh/thành phố trước
                             </SelectItem>
-                          ) : isLoadingAreas ? (
+                          ) : areaSelector.isLoadingAreas ? (
                             <SelectItem disabled value="loading">
                               Đang tải...
                             </SelectItem>
-                          ) : districts.length > 0 ? (
-                            districts.map(district => (
+                          ) : areaSelector.districts.length > 0 ? (
+                            areaSelector.districts.map((district: any) => (
                               <SelectItem
                                 key={district._id}
                                 value={district._id}>
@@ -421,12 +346,11 @@ export const CheckoutForm = forwardRef<CheckoutFormRef, CheckoutFormProps>(
                     <FormItem>
                       <Select
                         defaultValue={field.value}
-                        disabled={!selectedDistrict || isSubmitting}
+                        disabled={
+                          !areaSelector.selectedDistrict || isSubmitting
+                        }
                         onValueChange={value => {
                           field.onChange(value);
-                          const ward = wards.find(w => w._id === value) || null;
-
-                          setSelectedWard(ward);
                         }}>
                         <FormControl>
                           <SelectTrigger className="h-12 rounded-lg border-gray-300">
@@ -434,16 +358,16 @@ export const CheckoutForm = forwardRef<CheckoutFormRef, CheckoutFormProps>(
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          {!selectedDistrict ? (
+                          {!areaSelector.selectedDistrict ? (
                             <SelectItem disabled value="select-district">
                               Vui lòng chọn quận/huyện trước
                             </SelectItem>
-                          ) : isLoadingAreas ? (
+                          ) : areaSelector.isLoadingAreas ? (
                             <SelectItem disabled value="loading">
                               Đang tải...
                             </SelectItem>
-                          ) : wards.length > 0 ? (
-                            wards.map(ward => (
+                          ) : areaSelector.wards.length > 0 ? (
+                            areaSelector.wards.map((ward: any) => (
                               <SelectItem key={ward._id} value={ward._id}>
                                 {ward.name}
                               </SelectItem>

@@ -1,4 +1,3 @@
-// Export hooks from subdirectories
 export * from './hooks/banner/useGetMediasHomepage';
 export * from './hooks/combo/useGetBestSellingCombo';
 export * from './hooks/combo/useGetSaledCombo';

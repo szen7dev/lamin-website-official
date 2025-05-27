@@ -79,13 +79,13 @@ export const getBestSellers = async (
     };
 
     // Make API request
-    const response = await apiClient.getNormalizedResponse<BestSellerResponse>(
+    const response = await apiClient.get<BestSellerResponse>(
       '/api/crm/combo/best-seller',
       queryParams,
     );
 
     // Extract best seller items from the response
-    return extractBestSellerItems(response);
+    return extractBestSellerItems(response.data);
   } catch (error) {
     // Provide detailed error information
     if (error instanceof Error) {

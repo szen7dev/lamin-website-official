@@ -29,12 +29,12 @@ export const getUserOrders = async (params: {
       ...(params.keyword && { keyword: params.keyword }),
     };
 
-    const response = await apiClient.getNormalizedResponse<Order[]>(
+    const response = await apiClient.get<Order[]>(
       '/api/store/orders',
       queryParams,
     );
 
-    return response;
+    return response.data;
   } catch (error) {
     console.error('Error fetching orders:', error);
     throw error;

@@ -1,9 +1,9 @@
 import { apiClient } from '@/services/api/apiClient';
 
 export interface LoginParams {
-  // Can be either email or phone
+  // phone number
   email: string;
-  // Can be either password or OTP
+  // OTP
   password: string;
 }
 
@@ -54,22 +54,21 @@ export interface LoginResponse {
  */
 export const login = async (params: LoginParams): Promise<LoginResponse> => {
   try {
-    const response = await apiClient.postNormalizedResponse<LoginResponse>(
+    const response = await apiClient.post<LoginResponse>(
       '/api/auth/users/login',
       {
         email: params.email, // This can be either email or phone number
         password: params.password, // This can be either password or OTP
       },
-      false, // Don't require auth for this endpoint
     );
 
     // If API returns standardized response
-    if (response && typeof response === 'object') {
+    if (response.data && typeof response.data === 'object') {
       return {
-        success: !response.error,
-        message: response.message,
-        token: response.token,
-        user: response.user,
+        success: !response.data.error,
+        message: response.data.message,
+        token: response.data.token,
+        user: response.data.user,
       };
     }
 

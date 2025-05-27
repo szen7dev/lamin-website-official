@@ -28,11 +28,12 @@ export const getCoachDocument = async (
 
   try {
     // Make API call to get coach details
-    const coachDocument = await apiClient.getNormalizedResponse<
-      CoachDocument[]
-    >('/api/human/contact_documents', queryParams);
+    const response = await apiClient.get<CoachDocument[]>(
+      '/api/human/contact_documents',
+      queryParams,
+    );
 
-    return coachDocument;
+    return response.data;
   } catch (error) {
     console.error('Error fetching coach details:', error);
     throw error;

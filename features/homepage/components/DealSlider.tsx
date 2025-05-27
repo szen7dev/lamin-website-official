@@ -1,15 +1,11 @@
 'use client';
 
 import Image from 'next/image';
-import { Swiper as SwiperComponent } from 'swiper/react';
-import { SwiperSlide } from 'swiper/react';
-import { Navigation, Grid } from 'swiper/modules';
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/grid';
+import { Swiper as SwiperComponent, SwiperSlide } from 'swiper/react';
+import { Grid, Navigation } from 'swiper/modules';
 import { ChevronRight, Loader2 } from 'lucide-react';
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { isAfter } from 'date-fns';
 
 import { useGetSaledCombo } from '../hooks/combo/useGetSaledCombo';
@@ -19,7 +15,7 @@ import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { apiClient } from '@/services/api/apiClient';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
-import { useCart } from '@/hooks';
+import { useCart } from '@/features/cart/contexts/CartContext';
 
 // Progress Bar Component
 function ProgressBar({

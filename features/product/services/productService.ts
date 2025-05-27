@@ -17,13 +17,12 @@ export class ProductRealService implements ProductService {
         ...params,
       };
 
-      const response =
-        await apiClient.getNormalizedResponse<ProductListResponse>(
-          '/api/item/goods',
-          apiParams,
-        );
+      const response = await apiClient.get<ProductListResponse>(
+        '/api/item/goods',
+        apiParams,
+      );
 
-      return response;
+      return response.data;
     } catch (error) {
       console.error('Error fetching products:', error);
       throw error;
@@ -33,12 +32,11 @@ export class ProductRealService implements ProductService {
   async getProductBySlug(slug: string): Promise<Product> {
     try {
       // Theo tài liệu API, truyền slug như một tham số
-      const response = await apiClient.getNormalizedResponse<Product>(
-        `/api/item/goods`,
-        { slug },
-      );
+      const response = await apiClient.get<Product>(`/api/item/goods`, {
+        slug,
+      });
 
-      return response;
+      return response.data;
     } catch (error) {
       console.error(`Error fetching product by slug ${slug}:`, error);
       throw error;

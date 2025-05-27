@@ -2,20 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
-.dark {
-  --background: #121212;
-  --foreground: #ffffff;
-}
-
 @layer base {
   :root {
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
-  }
-
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 0 0% 100%;
   }
   * {
     @apply border-border;
@@ -24,7 +14,6 @@
     font-family: var(--font-sans);
   }
   body {
-    @apply bg-background text-foreground;
     font-family: var(--font-sans);
   }
   h1,
@@ -33,7 +22,6 @@
   h4,
   h5,
   h6 {
-    @apply font-semibold text-grayscale-100;
     font-family: var(--font-heading);
   }
   a {

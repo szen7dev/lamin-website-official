@@ -11,37 +11,35 @@ import apiClient from '@/services/api/apiClient';
 export const getAreaList = async (
   params: GetAreaListParams = {},
 ): Promise<Area[]> => {
-  try {
-    const populatesObject = {
+  const populatesObject = {
+    path: 'parent childs',
+    select: 'name sign parent level childs',
+    populate: {
       path: 'parent childs',
       select: 'name sign parent level childs',
       populate: {
         path: 'parent childs',
         select: 'name sign parent level childs',
-        populate: {
-          path: 'parent childs',
-          select: 'name sign parent level childs',
-        },
       },
-    };
+    },
+  };
 
-    const queryParams = {
-      keyword: params.keyword,
-      populates: JSON.stringify(populatesObject),
-      ...params,
-    };
+  const queryParams = {
+    keyword: params.keyword,
+    populates: JSON.stringify(populatesObject),
+    ...params,
+  };
 
-    // Make the API request
-    const response = await apiClient.getNormalizedResponse<Area[]>(
+  try {
+    const { data: areas } = await apiClient.get<Area[]>(
       '/api/item/areas',
       queryParams,
     );
 
-    return response;
+    return areas;
   } catch (error) {
     console.error('Error fetching area list:', error);
 
-    // Return error response
     return [];
   }
 };

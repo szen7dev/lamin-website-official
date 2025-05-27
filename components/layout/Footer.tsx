@@ -29,9 +29,25 @@ export function Footer() {
     return (
       <Link
         key={item?.slug}
-        className="text-grayscale-40 hover:text-primary decoration-transparent text-sm hidden sm:block mb-4"
+        className="text-grayscale-70 hover:text-primary decoration-transparent text-sm hidden sm:block mb-4"
         href={`/${item?.slug}`}>
         {item?.name}
+      </Link>
+    );
+  };
+
+  const renderMobileFooterLink = (
+    item: { slug: string; name: string } | undefined,
+    section: string,
+  ) => {
+    if (!item) return null;
+
+    return (
+      <Link
+        key={item.slug}
+        className={`text-grayscale-70 hover:text-primary decoration-transparent text-sm block sm:hidden mb-4 ${openSections[section] ? 'block' : 'hidden'}`}
+        href={`/${item.slug}`}>
+        {item.name}
       </Link>
     );
   };
@@ -54,6 +70,8 @@ export function Footer() {
                 <h4 className="font-medium text-sm mb-4">VỀ CHÚNG TÔI</h4>
               </div>
               <button
+                aria-expanded={openSections['about'] ? 'true' : 'false'}
+                aria-label="Toggle About Us section"
                 className="w-5 h-5 sm:hidden"
                 onClick={() => toggleSection('about')}>
                 <ChevronDown
@@ -63,6 +81,7 @@ export function Footer() {
             </div>
 
             {aboutUs?.map(item => renderFooterLink(item))}
+            {aboutUs?.map(item => renderMobileFooterLink(item, 'about'))}
 
             {/* {openSections['about'] && (
               <Link
@@ -87,6 +106,8 @@ export function Footer() {
                 <h4 className="font-medium text-sm mb-4">TÌM HIỂU THÊM</h4>
               </div>
               <button
+                aria-expanded={openSections['learnMore'] ? 'true' : 'false'}
+                aria-label="Toggle Learn More section"
                 className="w-5 h-5 sm:hidden"
                 onClick={() => toggleSection('learnMore')}>
                 <ChevronDown
@@ -96,6 +117,7 @@ export function Footer() {
             </div>
 
             {learnMore?.map(item => renderFooterLink(item))}
+            {learnMore?.map(item => renderMobileFooterLink(item, 'learnMore'))}
 
             {/* {openSections['learnMore'] && (
               <ul className="space-y-2 text-sm">
@@ -126,6 +148,8 @@ export function Footer() {
                 <h4 className="font-medium text-sm mb-4">DANH MỤC</h4>
               </div>
               <button
+                aria-expanded={openSections['category'] ? 'true' : 'false'}
+                aria-label="Toggle Categories section"
                 className="w-5 h-5 sm:hidden"
                 onClick={() => toggleSection('category')}>
                 <ChevronDown
@@ -135,6 +159,7 @@ export function Footer() {
             </div>
 
             {category?.map(item => renderFooterLink(item))}
+            {category?.map(item => renderMobileFooterLink(item, 'category'))}
 
             {/* {openSections['category'] && (
               <ul className="space-y-2 text-sm">
@@ -168,13 +193,13 @@ export function Footer() {
 
               <ul className="space-y-2 text-sm">
                 <li className="flex justify-between sm:block">
-                  <p className="text-grayscale-40">Tư vấn mua hàng</p>
+                  <p className="text-grayscale-70">Tư vấn mua hàng</p>
                   <p className="font-normal text-primary">
                     {contactInfo?.hotline1}
                   </p>
                 </li>
                 <li className="flex justify-between sm:block">
-                  <p className="text-grayscale-40">
+                  <p className="text-grayscale-70">
                     Trung tâm chăm sóc, dịch vụ
                   </p>
                   <p className="font-normal text-primary">
@@ -182,7 +207,7 @@ export function Footer() {
                   </p>
                 </li>
                 <li className="flex justify-between sm:block">
-                  <p className="text-grayscale-40">Góp ý khiếu nại</p>
+                  <p className="text-grayscale-70">Góp ý khiếu nại</p>
                   <p className="font-normal text-primary">
                     {contactInfo?.hotline3}
                   </p>

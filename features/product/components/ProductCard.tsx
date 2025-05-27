@@ -8,9 +8,9 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
 import { ComboProduct } from '@/features/homepage/types/comboTypes';
 import { apiClient } from '@/services/api/apiClient';
-import { useCart } from '@/hooks';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
+import { useCart } from '@/features/cart/contexts/CartContext';
 
 export interface ProductUnit {
   label: string;
@@ -197,8 +197,12 @@ export default function ProductCard({
             <Image
               fill
               alt={product?.name || ''}
+              blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2YxZjFmMSIvPjwvc3ZnPg=="
               className="object-contain transition-transform duration-300 group-hover:scale-105"
-              sizes={`(min-width: 1024px) 50vw, 100vw`}
+              loading="lazy"
+              placeholder="blur"
+              quality={75}
+              sizes="(max-width: 640px) 160px, (max-width: 768px) 180px, (max-width: 1024px) 200px, 240px"
               src={imageUrl}
             />
           ) : (

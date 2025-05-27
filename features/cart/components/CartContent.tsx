@@ -1,49 +1,41 @@
-'use client';
-
-import { useEffect, useState } from 'react';
-import Link from 'next/link';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ChevronLeft } from 'lucide-react';
-
-import { useCart } from '../hooks/useCart';
 
 import { CartItems } from './CartItems';
 import { CartSummary } from './CartSummary';
-import { EmptyCart } from './EmptyCart';
 
+import { useCart } from '@/features/cart/contexts/CartContext';
 import { useToast } from '@/components/ui/use-toast';
 
 export function CartContent() {
-  const { items, updateQuantity, removeItem, updateUnit } = useCart();
+  const { items, removeItem } = useCart();
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const router = useRouter();
   const { toast } = useToast();
 
   useEffect(() => {
-    if (items.length > 0) {
-      setSelectedItems(items.map(item => item.id));
-    } else {
-      setSelectedItems([]);
-    }
+    setSelectedItems(items.length > 0 ? items.map(item => item.id) : []);
   }, [items]);
 
-  const handleSelectAll = (checked: boolean) => {
-    if (checked) {
-      setSelectedItems(items.map(item => item.id));
-    } else {
-      setSelectedItems([]);
-    }
-  };
+  const selectedCartItems = useMemo(
+    () => items.filter(item => selectedItems.includes(item.id)),
+    [items, selectedItems],
+  );
 
-  const handleSelectItem = (id: string, checked: boolean) => {
-    if (checked) {
-      setSelectedItems(prev => [...prev, id]);
-    } else {
-      setSelectedItems(prev => prev.filter(itemId => itemId !== id));
-    }
-  };
+  const handleSelectAll = useCallback(
+    (checked: boolean) => {
+      setSelectedItems(checked ? items.map(item => item.id) : []);
+    },
+    [items],
+  );
 
-  const handleCheckout = () => {
+  const handleSelectItem = useCallback((id: string, checked: boolean) => {
+    setSelectedItems(prev =>
+      checked ? [...prev, id] : prev.filter(itemId => itemId !== id),
+    );
+  }, []);
+
+  const handleCheckout = useCallback(() => {
     if (selectedItems.length === 0) {
       toast({
         title: 'Chưa chọn sản phẩm',
@@ -53,44 +45,27 @@ export function CartContent() {
 
       return;
     }
-
     router.push('/checkout');
-  };
+  }, [selectedItems, toast, router]);
 
   return (
-    <>
-      {!items || items.length === 0 ? (
-        <EmptyCart />
-      ) : (
-        <div className="container mx-auto px-4 py-6">
-          <Link
-            className="inline-flex items-center text-blue-600 mb-6 hover:underline decoration-transparent"
-            href="/">
-            <ChevronLeft className="w-4 h-4 mr-1" />
-            Tiếp tục mua sắm
-          </Link>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-2">
-              <CartItems
-                items={items}
-                selectedItems={selectedItems}
-                onRemoveItem={removeItem}
-                onSelectAll={handleSelectAll}
-                onSelectItem={handleSelectItem}
-                onUpdateQuantity={updateQuantity}
-                onUpdateUnit={updateUnit}
-              />
-            </div>
-            <div>
-              <CartSummary
-                items={items.filter(item => selectedItems.includes(item.id))}
-                selectedItems={selectedItems}
-                onCheckout={handleCheckout}
-              />
-            </div>
-          </div>
-        </div>
-      )}
-    </>
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="lg:col-span-2">
+        <CartItems
+          items={items}
+          selectedItems={selectedItems}
+          onRemoveItem={removeItem}
+          onSelectAll={handleSelectAll}
+          onSelectItem={handleSelectItem}
+        />
+      </div>
+      <div>
+        <CartSummary
+          items={selectedCartItems}
+          selectedItems={selectedItems}
+          onCheckout={handleCheckout}
+        />
+      </div>
+    </div>
   );
 }

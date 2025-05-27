@@ -11,7 +11,7 @@ import { Order } from '@/features/order/types/orderTypes';
  * @returns Object containing order info, loading state, and error
  */
 export const useGetOrderById = (orderId: string) => {
-  const { data, isLoading, error, refetch } = useQuery({
+  const query = useQuery({
     queryKey: ['GET_ORDER', orderId],
     queryFn: () => getOrderById(orderId),
     staleTime: 1000 * 60 * 5, // 5 minutes
@@ -19,10 +19,7 @@ export const useGetOrderById = (orderId: string) => {
   });
 
   return {
-    order: data as Order,
-    isLoading,
-    error,
-    refetch,
-    hasData: !!data,
+    order: query.data as Order,
+    ...query,
   };
 };

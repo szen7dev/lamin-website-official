@@ -3,7 +3,6 @@
 import type React from 'react';
 
 import { useState } from 'react';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { AlertCircle } from 'lucide-react';
 
@@ -127,7 +126,7 @@ export default function LoginPage() {
         });
 
         // Use AuthContext to login with OTP
-        const response = await auth.loginWithOTP(phoneNumber, otp);
+        const response = await auth.login(phoneNumber, otp);
 
         if (response.success) {
           // Login successful, redirect to home or dashboard page

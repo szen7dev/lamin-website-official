@@ -1,16 +1,12 @@
-import { News, GetNewsParams } from '../../types/newsTypes';
-
+import {
+  Article,
+  ArticleListParams,
+} from '@/features/article/types/articleTypes';
 import { apiClient, DEFAULT_OPTION_SELLER } from '@/services/api/apiClient';
 
-/**
- * Fetches health news data from the API
- * @param params Query parameters for the API request
- * @returns Array of news articles
- */
 export const getHealthNews = async (
-  params: GetNewsParams = {},
-): Promise<News[]> => {
-  // Set default parameters if not provided
+  params: ArticleListParams = {},
+): Promise<Article[]> => {
   const queryParams = {
     optionSeller: params.optionSeller ?? DEFAULT_OPTION_SELLER,
     limit: params.limit ?? 5,
@@ -20,12 +16,7 @@ export const getHealthNews = async (
     }),
   };
 
-  // Fetch news data from API
-  const news = await apiClient.getNormalizedResponse<News[]>(
-    '/api/medias',
-    queryParams,
-  );
+  const response = await apiClient.get<Article[]>('/api/medias', queryParams);
 
-  // Return the response data or empty array if no data
-  return news || [];
+  return response.data || [];
 };
