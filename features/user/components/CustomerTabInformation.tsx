@@ -4,20 +4,11 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Search } from 'lucide-react';
+import { ArrowLeft, Search } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Label } from '@/components/ui/label';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
+import AddContactModal from '@/components/modal/AddContactModal';
 
 interface Customer {
   id: string;
@@ -27,6 +18,7 @@ interface Customer {
   gender: 'Nam' | 'Nữ';
   email: string;
   relation?: string;
+  children?: Customer[];
 }
 
 interface CustomerTabInformationProps {
@@ -58,6 +50,10 @@ type HeightFormValues = z.infer<typeof heightFormSchema>;
 export function CustomerTabInformation({
   tabInfo,
 }: CustomerTabInformationProps) {
+  const [openModal, setOpenModal] = useState(false);
+  const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(
+    null,
+  );
   const [customers, setCustomers] = useState<Customer[]>([
     {
       id: '1',
@@ -76,6 +72,32 @@ export function CustomerTabInformation({
       gender: 'Nữ',
       email: 'nguyen@gmail.com',
       relation: 'Mẹ',
+      children: [
+        {
+          id: '1',
+          name: 'Nguyễn Văn C',
+          birthDate: '20/10/2018',
+          phone: '0123456789',
+          gender: 'Nam',
+          email: 'nguyen@gmail.com',
+        },
+        {
+          id: '2',
+          name: 'Nguyễn Văn C2',
+          birthDate: '20/10/2018',
+          phone: '0123456789',
+          gender: 'Nam',
+          email: 'nguyen@gmail.com',
+        },
+        {
+          id: '3',
+          name: 'Nguyễn Văn C3',
+          birthDate: '20/10/2018',
+          phone: '0123456789',
+          gender: 'Nam',
+          email: 'nguyen@gmail.com',
+        },
+      ],
     },
     {
       id: '3',
@@ -166,48 +188,169 @@ export function CustomerTabInformation({
 
       {tabInfo.type === 'customer' ? (
         <>
-          <div className="bg-white rounded-lg p-6 border border-gray-200">
-            <div className="flex items-center justify-between gap-5 mb-6">
-              <div className="relative w-full">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Search className="h-5 w-5 text-gray-400" />
-                </div>
+          {!selectedCustomer ? (
+            <div className="bg-white rounded-lg p-6 border border-gray-200">
+              <div className="flex items-center justify-between gap-5 mb-6">
+                <div className="relative w-full">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <Search className="h-5 w-5 text-gray-400" />
+                  </div>
 
-                <Input
-                  className="pl-10 py-3 border border-gray-300 rounded-md"
-                  placeholder="Họ và tên, Số điện thoại..."
-                />
+                  <Input
+                    className="pl-10 py-3 border border-gray-300 rounded-md"
+                    placeholder="Họ và tên, Số điện thoại..."
+                  />
+                </div>
+                <Button className=" bg-primary hover:bg-primary/80 text-white rounded-r-md">
+                  Tìm kiếm
+                </Button>
               </div>
-              <Button className=" bg-blue-600 hover:bg-blue-700 text-white rounded-r-md">
-                Tạo mới
-              </Button>
-            </div>
 
-            <div className="space-y-6">
-              {customers.map(customer => (
-                <div
-                  key={customer.id}
-                  className="border-b border-gray-200 pb-6">
-                  <div className="flex items-center gap-2 mb-2">
-                    <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center">
-                      <span className="text-gray-600">👤</span>
+              <div className="space-y-6">
+                {customers.map(customer => (
+                  <div
+                    key={customer.id}
+                    className="border-b border-gray-200 pb-6 cursor-pointer hover:bg-gray-50 transition-colors rounded-md p-2"
+                    onClick={() => setSelectedCustomer(customer)}>
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center">
+                        <span className="text-gray-600">👤</span>
+                      </div>
+                      <span className="font-medium text-gray-900">
+                        {customer.name}
+                      </span>
                     </div>
-                    <span className="font-medium text-gray-900">
-                      {customer.name}
-                    </span>
+                    <div className="flex flex-wrap gap-2 text-sm text-gray-600 ml-10">
+                      <div>Ngày sinh: {customer.birthDate} |</div>
+                      <div>Số điện thoại: {customer.phone} |</div>
+                      <div>Giới tính: {customer.gender} |</div>
+                      <div>Email: {customer.email}</div>
+                    </div>
                   </div>
-                  <div className="flex flex-wrap gap-2 text-sm text-gray-600 ml-10">
-                    <div>Ngày sinh: {customer.birthDate} |</div>
-                    <div>Số điện thoại: {customer.phone} |</div>
-                    <div>Giới tính: {customer.gender} |</div>
-                    <div>Email: {customer.email}</div>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <div className="bg-white rounded-lg p-6 border border-gray-200">
+              <div className="mb-6">
+                <Button
+                  className="flex items-center gap-2 text-primary hover:text-primary/80 hover:bg-blue-50 pl-2 pr-4 py-2 rounded-md"
+                  variant="ghost"
+                  onClick={() => setSelectedCustomer(null)}>
+                  <ArrowLeft className="h-4 w-4" />
+                  <span>Quay lại</span>
+                </Button>
+              </div>
+
+              <div className="space-y-8">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-primary font-bold">
+                    {selectedCustomer.name.charAt(0)}
+                  </div>
+                  <h2 className="text-xl font-semibold text-blue-900">
+                    {selectedCustomer.name}
+                  </h2>
+                </div>
+
+                <div className="border rounded-xl p-6 space-y-6">
+                  <h3 className="text-lg font-medium text-blue-900 border-b pb-2">
+                    Thông tin cá nhân
+                  </h3>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <h4 className="text-sm text-gray-500 mb-1">Họ và tên</h4>
+                      <p className="text-gray-900">{selectedCustomer.name}</p>
+                    </div>
+
+                    <div>
+                      <h4 className="text-sm text-gray-500 mb-1">Ngày sinh</h4>
+                      <p className="text-gray-900">
+                        {selectedCustomer.birthDate}
+                      </p>
+                    </div>
+
+                    <div>
+                      <h4 className="text-sm text-gray-500 mb-1">
+                        Số điện thoại
+                      </h4>
+                      <p className="text-gray-900">{selectedCustomer.phone}</p>
+                    </div>
+
+                    <div>
+                      <h4 className="text-sm text-gray-500 mb-1">Email</h4>
+                      <p className="text-gray-900">{selectedCustomer.email}</p>
+                    </div>
+
+                    <div>
+                      <h4 className="text-sm text-gray-500 mb-1">Giới tính</h4>
+                      <p className="text-gray-900">{selectedCustomer.gender}</p>
+                    </div>
+
+                    {selectedCustomer.relation && (
+                      <div>
+                        <h4 className="text-sm text-gray-500 mb-1">Quan hệ</h4>
+                        <p className="text-gray-900">
+                          {selectedCustomer.relation}
+                        </p>
+                      </div>
+                    )}
                   </div>
                 </div>
-              ))}
-            </div>
-          </div>
 
-          <div className="bg-white rounded-lg p-6 border border-gray-200">
+                {selectedCustomer.children &&
+                  selectedCustomer.children.length > 0 && (
+                    <div className="border rounded-xl p-6 space-y-6">
+                      <h3 className="text-lg font-medium text-blue-900 border-b pb-2">
+                        Danh sách con
+                      </h3>
+
+                      <div className="space-y-4">
+                        {selectedCustomer.children.map(child => (
+                          <div
+                            key={child.id}
+                            className="flex items-center justify-between p-3 border rounded-md hover:bg-gray-50">
+                            <div className="flex items-center gap-3">
+                              <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center">
+                                <span className="text-gray-600">👤</span>
+                              </div>
+                              <div>
+                                <p className="font-medium text-gray-900">
+                                  {child.name}
+                                </p>
+                                <p className="text-sm text-gray-500">
+                                  Ngày sinh: {child.birthDate}
+                                </p>
+                              </div>
+                            </div>
+                            <Button
+                              className="text-primary hover:text-primary/80 hover:bg-blue-50"
+                              variant="ghost"
+                              onClick={e => {
+                                e.stopPropagation();
+                                setSelectedCustomer(child);
+                              }}>
+                              Xem chi tiết
+                            </Button>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                <div className="flex justify-end space-x-3">
+                  <Button className="bg-white text-primary border border-primary hover:bg-blue-50">
+                    Chỉnh sửa
+                  </Button>
+                  <Button className="bg-primary text-white hover:bg-primary/80">
+                    Lưu thông tin
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* <div className="bg-white rounded-lg p-6 border border-gray-200">
             <h2 className="text-xl font-semibold text-blue-900 mb-6">
               Thông tin cá nhân
             </h2>
@@ -331,11 +474,11 @@ export function CustomerTabInformation({
                 </div>
               </form>
             </Form>
-          </div>
+          </div> */}
         </>
       ) : (
         <>
-          <div className="bg-white rounded-lg p-6 border border-gray-200">
+          {/* <div className="bg-white rounded-lg p-6 border border-gray-200">
             <div className="relative mb-6">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <Search className="h-5 w-5 text-gray-400" />
@@ -456,9 +599,18 @@ export function CustomerTabInformation({
                 </div>
               </form>
             </Form>
-          </div>
+          </div> */}
         </>
       )}
+      <div className="flex justify-end">
+        <Button
+          className="bg-[#E6F8FF] hover:bg-[#E6F8FF]/80 text-primary px-6 py-2 rounded-lg border border-primary hover:border-primary/80"
+          onClick={() => setOpenModal(true)}>
+          Tạo liên hệ mới
+        </Button>
+      </div>
+
+      <AddContactModal isOpen={openModal} onClose={() => setOpenModal(false)} />
     </div>
   );
 }

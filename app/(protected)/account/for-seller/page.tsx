@@ -16,7 +16,7 @@ const ForSellerPage = () => {
   return (
     <div className="flex flex-col gap-4">
       <CustomerTabInformation tabInfo={customerTabInfo} />
-      <CustomerTabInformation tabInfo={heightTabInfo} />
+      {/* <CustomerTabInformation tabInfo={heightTabInfo} /> */}
     </div>
   );
 };
