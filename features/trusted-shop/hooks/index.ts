@@ -1,1 +1,0 @@
-export { useTrustedShopDetail } from './useTrustedShopDetail';

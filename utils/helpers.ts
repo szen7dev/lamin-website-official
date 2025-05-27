@@ -21,3 +21,13 @@ export function truncateText(text: string, maxLength: number) {
 
 export const sleep = (ms: number) =>
   new Promise(resolve => setTimeout(resolve, ms));
+
+export function sanitizeUrl(url: string): string {
+  if (!url) return '';
+
+  if (!/^https?:\/\//i.test(url) && !url.startsWith('/')) {
+    url = '/' + url;
+  }
+
+  return url;
+}

@@ -25,7 +25,7 @@ export default function CoachesList() {
   const [prevCursorStack, setPrevCursorStack] = useState<string[]>([]);
   const debounceSearch = useRef<NodeJS.Timeout | null>(null);
 
-  const { coaches, response, isLoading } = useGetCoach({
+  const { coaches, pagination, isLoading } = useGetCoach({
     select: 'image name field position',
     limit: 9,
     keyword: submittedSearchTerm,
@@ -35,10 +35,10 @@ export default function CoachesList() {
 
   // Effect to update nextCursor when response changes
   useEffect(() => {
-    const cursor = response?.data?.nextCursor || response?.nextCursor || '';
+    const cursor = pagination?.nextCursor || '';
 
     setNextCursor(cursor);
-  }, [response]);
+  }, [pagination]);
 
   useEffect(() => {
     return () => {

@@ -1,66 +1,28 @@
-import axios, { type AxiosInstance } from 'axios';
+import axios, {
+  type AxiosInstance,
+  type AxiosRequestConfig,
+  type InternalAxiosRequestConfig,
+} from 'axios';
 
-// Sử dụng giá trị mặc định an toàn hoặc để trống
+import { sanitizeUrl } from '@/utils/helpers';
+import { normalizeResponse } from '@/utils';
+import { Pagination } from '@/types';
+
+const environment = process.env.NEXT_PUBLIC_ENVIRONMENT || 'dev';
 const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
 const DEFAULT_TIMEOUT = Number.parseInt(
   process.env.NEXT_PUBLIC_API_TIMEOUT || '30000',
-); // 30 giây là giá trị kỹ thuật thông thường
+);
 const CLOUDFRONT_URL = process.env.NEXT_PUBLIC_CLOUDFRONT_URL || '';
-
-// Helper function to safely parse URLs
-function sanitizeUrl(url: string): string {
-  if (!url) return '';
-
-  // Check if URL already has a protocol
-  if (!/^https?:\/\//i.test(url) && !url.startsWith('/')) {
-    // Add a default protocol if missing
-    url = '/' + url;
-  }
-
-  return url;
-}
-
-// Token mặc định cho các request không cần xác thực
 const DEFAULT_TOKEN = process.env.NEXT_PUBLIC_DEFAULT_TOKEN || '';
 
-// Kiểm tra và cảnh báo khi thiếu biến môi trường quan trọng
-if (!process.env.NEXT_PUBLIC_API_URL) {
+if (!API_URL) console.warn('Missing NEXT_PUBLIC_API_URL. API calls may fail.');
+if (!CLOUDFRONT_URL)
   console.warn(
-    'Missing NEXT_PUBLIC_API_URL environment variable. API calls may fail.',
+    'Missing NEXT_PUBLIC_CLOUDFRONT_URL. Media files may not load correctly.',
   );
-}
 
-if (!process.env.NEXT_PUBLIC_CLOUDFRONT_URL) {
-  console.warn(
-    'Missing NEXT_PUBLIC_CLOUDFRONT_URL environment variable. Media files may not load correctly.',
-  );
-}
-
-// Tham số chung
 export const DEFAULT_OPTION_SELLER = 1;
-
-// Cải thiện xử lý lỗi trong apiClient.ts
-
-// Thêm các hằng số cho mã lỗi HTTP phổ biến
-const HTTP_STATUS = {
-  OK: 200,
-  BAD_REQUEST: 400,
-  UNAUTHORIZED: 401,
-  FORBIDDEN: 403,
-  NOT_FOUND: 404,
-  INTERNAL_SERVER_ERROR: 500,
-  SERVICE_UNAVAILABLE: 503,
-};
-
-// Thêm các loại lỗi
-const ERROR_TYPES = {
-  NETWORK: 'NETWORK_ERROR',
-  TIMEOUT: 'TIMEOUT_ERROR',
-  SERVER: 'SERVER_ERROR',
-  AUTH: 'AUTH_ERROR',
-  VALIDATION: 'VALIDATION_ERROR',
-  UNKNOWN: 'UNKNOWN_ERROR',
-};
 
 class ApiClient {
   private instance: AxiosInstance;
@@ -70,638 +32,139 @@ class ApiClient {
     this.instance = axios.create({
       baseURL: API_URL,
       timeout: DEFAULT_TIMEOUT,
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Content-Type': 'application/json' },
     });
 
-    // Request interceptor
     this.instance.interceptors.request.use(
-      config => {
-        console.log('🚀 API Request:', {
-          method: config.method?.toUpperCase(),
-          url: config.url,
-          baseURL: config.baseURL,
-          params: config.params,
-          data: config.data,
-          headers: config.headers,
-        });
-
-        // Thêm token xác thực nếu có
-        if (this.token) {
-          config.headers.Authorization = `Bearer ${this.token}`;
-        }
-
-        return config;
-      },
-      error => {
-        console.error('❌ API Request Error:', error);
-
-        return Promise.reject(error);
-      },
+      this.requestInterceptor.bind(this),
+      this.handleError,
     );
-
-    // Response interceptor
     this.instance.interceptors.response.use(
-      response => {
-        console.log('✅ API Response:', {
-          status: response.status,
-          url: response.config.url,
-          data: response.data,
-        });
-
-        return response; // Ngoài response.data, 1 số api trả thêm các dữ liệu khác cần truy vấn, api call cần trả về response.data
-      },
-      error => {
-        // Xử lý lỗi chung
-        console.error('❌ API Response Error:', {
-          url: error.config?.url,
-          status: error.response?.status,
-          data: error.response?.data,
-          message: error.message,
-        });
-
-        return Promise.reject(error);
-      },
+      this.responseInterceptor,
+      this.handleError,
     );
   }
 
-  // Kiểm tra URL hợp lệ trước khi sử dụng
-  private validateUrl(url: string | undefined): string {
-    if (!url || url.trim() === '') {
-      console.error('Invalid URL: URL is empty or undefined');
-      throw new Error('API URL is not configured properly');
+  private requestInterceptor(config: InternalAxiosRequestConfig) {
+    if (environment === 'dev') {
+      console.log('🚀 API Request:', config);
+    }
+    if (this.token) {
+      config.headers.set('Authorization', `Bearer ${this.token}`);
     }
 
-    return url;
+    return config;
   }
 
-  // Thiết lập token sau khi đăng nhập
+  private responseInterceptor(response: any) {
+    if (environment === 'dev') {
+      console.log('✅ API Response:', response);
+    }
+
+    return response;
+  }
+
+  private handleError(error: any) {
+    console.error('❌ API Error:', error);
+
+    return Promise.reject(error);
+  }
+
   public setToken(token: string): void {
     this.token = token;
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('auth_token', token);
-    }
   }
 
-  // Lấy token (hữu ích để duy trì trạng thái xác thực)
   public getToken(): string | null {
-    if (!this.token && typeof window !== 'undefined') {
-      this.token = localStorage.getItem('auth_token');
-    }
-
     return this.token;
   }
 
-  // Xóa token khi đăng xuất
   public clearToken(): void {
     this.token = null;
-    if (typeof window !== 'undefined') {
-      localStorage.removeItem('auth_token');
-    }
   }
 
-  // Phân loại lỗi HTTP
-  private categorizeError(error: any): {
-    type: string;
-    message: string;
-    status?: number;
-    data?: any;
-  } {
-    if (!error.response) {
-      // Lỗi mạng hoặc timeout
-      return {
-        type: error.message?.includes('timeout')
-          ? ERROR_TYPES.TIMEOUT
-          : ERROR_TYPES.NETWORK,
-        message:
-          'Không thể kết nối đến máy chủ. Vui lòng kiểm tra kết nối mạng của bạn.',
-      };
-    }
+  private getAuthHeaders(requireAuth: boolean): Record<string, string> {
+    const token = this.token || DEFAULT_TOKEN;
 
-    const status = error.response.status;
-    const data = error.response.data;
-
-    switch (status) {
-      case HTTP_STATUS.UNAUTHORIZED:
-        return {
-          type: ERROR_TYPES.AUTH,
-          message: 'Phiên đăng nhập đã hết hạn hoặc không hợp lệ.',
-          status,
-          data,
-        };
-      case HTTP_STATUS.FORBIDDEN:
-        return {
-          type: ERROR_TYPES.AUTH,
-          message: 'Bạn không có quyền truy cập vào tài nguyên này.',
-          status,
-          data,
-        };
-      case HTTP_STATUS.NOT_FOUND:
-        return {
-          type: ERROR_TYPES.SERVER,
-          message: 'Không tìm thấy tài nguyên yêu cầu.',
-          status,
-          data,
-        };
-      case HTTP_STATUS.BAD_REQUEST:
-        return {
-          type: ERROR_TYPES.VALIDATION,
-          message: data?.message || 'Dữ liệu gửi lên không hợp lệ.',
-          status,
-          data,
-        };
-      case HTTP_STATUS.INTERNAL_SERVER_ERROR:
-      case HTTP_STATUS.SERVICE_UNAVAILABLE:
-        return {
-          type: ERROR_TYPES.SERVER,
-          message: 'Máy chủ đang gặp sự cố. Vui lòng thử lại sau.',
-          status,
-          data,
-        };
-      default:
-        return {
-          type: ERROR_TYPES.UNKNOWN,
-          message: 'Đã xảy ra lỗi không xác định.',
-          status,
-          data,
-        };
-    }
+    return requireAuth && token ? { Authorization: `Bearer ${token}` } : {};
   }
 
-  // Xử lý lỗi chung cho tất cả các request
-  private handleRequestError(error: any, url: string): never {
-    const errorInfo = this.categorizeError(error);
-
-    console.error(`API Error (${errorInfo.type}):`, {
+  private async request<T = any>(
+    method: string,
+    url: string,
+    dataOrParams?: any,
+    requireAuth = true,
+  ): Promise<{
+    status: number;
+    data: T;
+    pagination: Pagination;
+    information?: any;
+  }> {
+    const config: AxiosRequestConfig = {
+      method: method as any,
       url,
-      status: errorInfo.status,
-      message: errorInfo.message,
-      data: errorInfo.data,
-    });
-
-    // Xử lý lỗi xác thực - tự động đăng xuất nếu token hết hạn
-    if (errorInfo.type === ERROR_TYPES.AUTH && typeof window !== 'undefined') {
-      // Xóa token và chuyển hướng đến trang đăng nhập nếu cần
-      this.clearToken();
-
-      // Không chuyển hướng tự động để tránh ảnh hưởng đến UX
-      // window.location.href = '/auth/login'
-    }
-
-    throw {
-      ...errorInfo,
-      originalError: error,
+      headers: {
+        'Content-Type': 'application/json',
+        ...this.getAuthHeaders(requireAuth),
+      },
     };
-  }
 
-  // Lấy token mặc định cho các request không cần xác thực
-  public getDefaultToken(): string {
-    return DEFAULT_TOKEN;
-  }
+    if (['get', 'delete'].includes(method)) config.params = dataOrParams;
+    else config.data = dataOrParams;
 
-  // Normalize API response to handle different response structures
-  private normalizeResponse<T = any>(response: any): T {
-    if (!response) return response;
-
-    // If response is already an array, return it directly
-    if (Array.isArray(response)) {
-      return response as unknown as T;
-    }
-
-    // Check if this is a standard response object with error, data, and status
-    if (typeof response === 'object') {
-      // Case 1: Standard API response with data field
-      if (response.data !== undefined) {
-        // If data is what we want directly
-        if (!response.error || response.status === 200) {
-          // Check if data contains listRecords
-          if (response.data.listRecords !== undefined) {
-            return response.data.listRecords as unknown as T;
-          }
-
-          // Check if data.data contains listRecords (nested case)
-          if (
-            response.data.data &&
-            response.data.data.listRecords !== undefined
-          ) {
-            return response.data.data.listRecords as unknown as T;
-          }
-
-          // Return data directly if no listRecords found
-          return response.data as unknown as T;
-        }
-        // Error case
-        throw {
-          type: ERROR_TYPES.SERVER,
-          message: response.message || 'Server error',
-          status: response.status,
-          data: response.data,
+    const response = await this.instance.request(config);
+    const pagination = response.data
+      ? (response.data as Pagination)
+      : {
+          limit: 0,
+          nextCursor: '',
+          totalRecord: 0,
+          totalPage: 0,
         };
-      }
 
-      // Case 2: Direct object with listRecords
-      if (response.listRecords !== undefined) {
-        return response.listRecords as unknown as T;
-      }
-    }
+    const { data: _, ...rest } = response.data || {};
 
-    // Default: return the original response if none of the patterns match
-    return response as unknown as T;
-  }
-
-  // Get normalized data only (original behavior)
-  public async getNormalizedResponse<T = any>(
-    url: string,
-    params?: Record<string, any>,
-    requireAuth = true,
-  ): Promise<T> {
-    const headers: Record<string, string> = {
-      'Content-Type': 'application/json',
+    return {
+      status: response.status,
+      data: normalizeResponse<T>(response.data),
+      pagination,
+      information: rest,
     };
-
-    // Thêm token nếu cần
-    if (requireAuth === true) {
-      const token = this.getToken();
-
-      if (token) {
-        headers.Authorization = `Bearer ${token}`;
-      } else {
-        // Use default token when authentication is required but user token is not available
-        headers.Authorization = `Bearer ${DEFAULT_TOKEN}`;
-      }
-    } else if (DEFAULT_TOKEN) {
-      // When requireAuth is false, still use default token if available
-      headers.Authorization = `Bearer ${DEFAULT_TOKEN}`;
-    }
-
-    try {
-      const response = await this.instance.get(url, { params, headers });
-
-      return this.normalizeResponse<T>(response.data);
-    } catch (error) {
-      return this.handleRequestError(error, url);
-    }
   }
 
-  // Phương thức GET - returns full response with normalized data
-  public async get<T = any, R = any>(
-    url: string,
-    params?: Record<string, any>,
-    requireAuth = true,
-  ): Promise<{ data: T; response: R }> {
-    const headers: Record<string, string> = {
-      'Content-Type': 'application/json',
-    };
+  public get = <T = any>(url: string, params?: any, requireAuth = true) =>
+    this.request<T>('get', url, params, requireAuth);
 
-    // Thêm token nếu cần
-    if (requireAuth === true) {
-      const token = this.getToken();
+  public post = <T = any>(url: string, data?: any, requireAuth = true) =>
+    this.request<T>('post', url, data, requireAuth);
 
-      if (token) {
-        headers.Authorization = `Bearer ${token}`;
-      } else {
-        // Use default token when authentication is required but user token is not available
-        headers.Authorization = `Bearer ${DEFAULT_TOKEN}`;
-      }
-    } else if (DEFAULT_TOKEN) {
-      // When requireAuth is false, still use default token if available
-      headers.Authorization = `Bearer ${DEFAULT_TOKEN}`;
-    }
+  public put = <T = any>(url: string, data?: any, requireAuth = true) =>
+    this.request<T>('put', url, data, requireAuth);
 
-    try {
-      const response = await this.instance.get(url, { params, headers });
-      const normalizedData = this.normalizeResponse<T>(response.data);
+  public delete = <T = any>(url: string, requireAuth = true) =>
+    this.request<T>('delete', url, undefined, requireAuth);
 
-      return {
-        data: normalizedData,
-        response: response.data as R,
-      };
-    } catch (error) {
-      return this.handleRequestError(error, url);
-    }
+  private buildMediaUrl(path: string, subPath = ''): string {
+    if (!path) return '';
+    const sanitizedPath = sanitizeUrl(path);
+
+    if (!CLOUDFRONT_URL) return sanitizedPath;
+    const base = CLOUDFRONT_URL.replace(/\/$/, '') + subPath;
+
+    return `${base}${sanitizedPath.startsWith('/') ? '' : '/'}${sanitizedPath}`;
   }
 
-  // Phương thức POST
-  public async post<T = any, R = any>(
-    url: string,
-    data?: any,
-    requireAuth = true,
-  ): Promise<{ data: T; response: R }> {
-    const headers: Record<string, string> = {
-      'Content-Type': 'application/json',
-    };
-
-    // Thêm token nếu cần
-    if (requireAuth === true) {
-      const token = this.getToken();
-
-      if (token) {
-        headers.Authorization = `Bearer ${token}`;
-      } else {
-        // Use default token when authentication is required but user token is not available
-        headers.Authorization = `Bearer ${DEFAULT_TOKEN}`;
-      }
-    } else if (DEFAULT_TOKEN) {
-      // When requireAuth is false, still use default token if available
-      headers.Authorization = `Bearer ${DEFAULT_TOKEN}`;
-    }
-
-    try {
-      const response = await this.instance.post(url, data, { headers });
-      const normalizedData = this.normalizeResponse<T>(response.data);
-
-      return {
-        data: normalizedData,
-        response: response.data as R,
-      };
-    } catch (error) {
-      return this.handleRequestError(error, url);
-    }
-  }
-
-  // Get normalized data only for POST (original behavior)
-  public async postNormalizedResponse<T = any>(
-    url: string,
-    data?: any,
-    requireAuth = true,
-  ): Promise<T> {
-    const headers: Record<string, string> = {
-      'Content-Type': 'application/json',
-    };
-
-    // Thêm token nếu cần
-    if (requireAuth === true) {
-      const token = this.getToken();
-
-      if (token) {
-        headers.Authorization = `Bearer ${token}`;
-      } else {
-        // Use default token when authentication is required but user token is not available
-        headers.Authorization = `Bearer ${DEFAULT_TOKEN}`;
-      }
-    } else if (DEFAULT_TOKEN) {
-      // When requireAuth is false, still use default token if available
-      headers.Authorization = `Bearer ${DEFAULT_TOKEN}`;
-    }
-
-    try {
-      const response = await this.instance.post(url, data, { headers });
-
-      return this.normalizeResponse<T>(response.data);
-    } catch (error) {
-      return this.handleRequestError(error, url);
-    }
-  }
-
-  // Phương thức PUT
-  public async put<T = any, R = any>(
-    url: string,
-    data?: any,
-    requireAuth = true,
-  ): Promise<{ data: T; response: R }> {
-    const headers: Record<string, string> = {
-      'Content-Type': 'application/json',
-    };
-
-    // Thêm token nếu cần
-    if (requireAuth === true) {
-      const token = this.getToken();
-
-      if (token) {
-        headers.Authorization = `Bearer ${token}`;
-      } else {
-        // Use default token when authentication is required but user token is not available
-        headers.Authorization = `Bearer ${DEFAULT_TOKEN}`;
-      }
-    } else if (DEFAULT_TOKEN) {
-      // When requireAuth is false, still use default token if available
-      headers.Authorization = `Bearer ${DEFAULT_TOKEN}`;
-    }
-
-    try {
-      const response = await this.instance.put(url, data, { headers });
-      const normalizedData = this.normalizeResponse<T>(response.data);
-
-      return {
-        data: normalizedData,
-        response: response.data as R,
-      };
-    } catch (error) {
-      return this.handleRequestError(error, url);
-    }
-  }
-
-  // Get normalized data only for PUT (original behavior)
-  public async putNormalizedResponse<T = any>(
-    url: string,
-    data?: any,
-    requireAuth = true,
-  ): Promise<T> {
-    const headers: Record<string, string> = {
-      'Content-Type': 'application/json',
-    };
-
-    // Thêm token nếu cần
-    if (requireAuth === true) {
-      const token = this.getToken();
-
-      if (token) {
-        headers.Authorization = `Bearer ${token}`;
-      } else {
-        // Use default token when authentication is required but user token is not available
-        headers.Authorization = `Bearer ${DEFAULT_TOKEN}`;
-      }
-    } else if (DEFAULT_TOKEN) {
-      // When requireAuth is false, still use default token if available
-      headers.Authorization = `Bearer ${DEFAULT_TOKEN}`;
-    }
-
-    try {
-      const response = await this.instance.put(url, data, { headers });
-
-      return this.normalizeResponse<T>(response.data);
-    } catch (error) {
-      return this.handleRequestError(error, url);
-    }
-  }
-
-  // Thêm phương thức DELETE
-  public async delete<T = any, R = any>(
-    url: string,
-    requireAuth = true,
-  ): Promise<{ data: T; response: R }> {
-    const headers: Record<string, string> = {
-      'Content-Type': 'application/json',
-    };
-
-    // Thêm token nếu cần
-    if (requireAuth === true) {
-      const token = this.getToken();
-
-      if (token) {
-        headers.Authorization = `Bearer ${token}`;
-      } else {
-        // Use default token when authentication is required but user token is not available
-        headers.Authorization = `Bearer ${DEFAULT_TOKEN}`;
-      }
-    } else if (DEFAULT_TOKEN) {
-      // When requireAuth is false, still use default token if available
-      headers.Authorization = `Bearer ${DEFAULT_TOKEN}`;
-    }
-
-    try {
-      const response = await this.instance.delete(url, { headers });
-      const normalizedData = this.normalizeResponse<T>(response.data);
-
-      return {
-        data: normalizedData,
-        response: response.data as R,
-      };
-    } catch (error) {
-      return this.handleRequestError(error, url);
-    }
-  }
-
-  // Get normalized data only for DELETE (original behavior)
-  public async deleteNormalizedResponse<T = any>(
-    url: string,
-    requireAuth = true,
-  ): Promise<T> {
-    const headers: Record<string, string> = {
-      'Content-Type': 'application/json',
-    };
-
-    // Thêm token nếu cần
-    if (requireAuth === true) {
-      const token = this.getToken();
-
-      if (token) {
-        headers.Authorization = `Bearer ${token}`;
-      } else {
-        // Use default token when authentication is required but user token is not available
-        headers.Authorization = `Bearer ${DEFAULT_TOKEN}`;
-      }
-    } else if (DEFAULT_TOKEN) {
-      // When requireAuth is false, still use default token if available
-      headers.Authorization = `Bearer ${DEFAULT_TOKEN}`;
-    }
-
-    try {
-      const response = await this.instance.delete(url, { headers });
-
-      return this.normalizeResponse<T>(response.data);
-    } catch (error) {
-      return this.handleRequestError(error, url);
-    }
-  }
-
-  // Helper cho URL file - Kiểm tra URL hợp lệ trước khi sử dụng
   public getFileUrl(path: string): string {
-    if (!path) return '';
-
-    // Sanitize the path to ensure it's a valid URL
-    const sanitizedPath = sanitizeUrl(path);
-
-    if (!CLOUDFRONT_URL) {
-      console.warn(
-        'CLOUDFRONT_URL is not configured. Media files may not load correctly.',
-      );
-
-      return sanitizedPath;
-    }
-
-    try {
-      // Make sure we don't double up on slashes
-      const baseUrl = CLOUDFRONT_URL.endsWith('/')
-        ? CLOUDFRONT_URL.slice(0, -1)
-        : CLOUDFRONT_URL;
-      const pathSegment = sanitizedPath.startsWith('/')
-        ? sanitizedPath
-        : `/${sanitizedPath}`;
-
-      return `${baseUrl}${pathSegment}`;
-    } catch (error) {
-      console.error('Error creating file URL:', error);
-
-      return sanitizedPath;
-    }
+    return this.buildMediaUrl(path);
   }
 
-  /**
-   * Get URL for contact images (customers, doctors, etc.)
-   * @param path Image path
-   * @returns Full URL to the contact image
-   */
   public getContactImageUrl(path: string): string {
-    if (!path) return '';
-
-    // Sanitize the path to ensure it's a valid URL
-    const sanitizedPath = sanitizeUrl(path);
-
-    if (!CLOUDFRONT_URL) {
-      console.warn(
-        'CLOUDFRONT_URL is not configured. Contact images may not load correctly.',
-      );
-
-      return sanitizedPath;
-    }
-
-    try {
-      // Make sure we don't double up on slashes
-      const baseUrl = CLOUDFRONT_URL.endsWith('/')
-        ? `${CLOUDFRONT_URL.slice(0, -1)}/files/db/contacts`
-        : `${CLOUDFRONT_URL}/files/db/contacts`;
-      const pathSegment = sanitizedPath.startsWith('/')
-        ? sanitizedPath
-        : `/${sanitizedPath}`;
-
-      return `${baseUrl}${pathSegment}`;
-    } catch (error) {
-      console.error('Error creating contact image URL:', error);
-
-      return sanitizedPath;
-    }
+    return this.buildMediaUrl(path, '/files/db/contacts');
   }
 
-  /**
-   * Get URL for user images
-   * @param path Image path
-   * @returns Full URL to the user image
-   */
   public getUserImageUrl(path: string): string {
-    if (!path) return '';
-
-    // Sanitize the path to ensure it's a valid URL
-    const sanitizedPath = sanitizeUrl(path);
-
-    if (!CLOUDFRONT_URL) {
-      console.warn(
-        'CLOUDFRONT_URL is not configured. User images may not load correctly.',
-      );
-
-      return sanitizedPath;
-    }
-
-    try {
-      // Make sure we don't double up on slashes
-      const baseUrl = CLOUDFRONT_URL.endsWith('/')
-        ? `${CLOUDFRONT_URL.slice(0, -1)}/files/db/users`
-        : `${CLOUDFRONT_URL}/files/db/users`;
-      const pathSegment = sanitizedPath.startsWith('/')
-        ? sanitizedPath
-        : `/${sanitizedPath}`;
-
-      return `${baseUrl}${pathSegment}`;
-    } catch (error) {
-      console.error('Error creating user image URL:', error);
-
-      return sanitizedPath;
-    }
+    return this.buildMediaUrl(path, '/files/db/users');
   }
 }
 
-// Tạo và export một instance singleton
 export const apiClient = new ApiClient();
-
 export default apiClient;

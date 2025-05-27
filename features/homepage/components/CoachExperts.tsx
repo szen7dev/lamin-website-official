@@ -38,7 +38,7 @@ export default function CoachExperts() {
 
       <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {isLoading ? (
-          <li className="rounded-xl bg-white p-4">
+          <li className="rounded-xl bg-white p-4 border border-white/20 shadow-sm">
             <p className="text-grayscale-40">Đang tải...</p>
           </li>
         ) : coaches.length > 0 ? (
@@ -56,7 +56,7 @@ export default function CoachExperts() {
             return (
               <li
                 key={coach._id}
-                className="rounded-xl bg-white p-4 transition-all duration-300 hover:shadow-lg">
+                className="rounded-xl bg-white p-4 transition-all duration-300 border border-white/20 shadow-sm hover:shadow-lg">
                 <Link
                   className="decoration-transparent block transition-transform duration-300 hover:scale-[1.02]"
                   href={`/doi-ngu-chuyen-mon/${coach._id}`}>
@@ -69,7 +69,7 @@ export default function CoachExperts() {
                       width={80}
                     />
                     <div className="min-w-0 flex-1">
-                      <span className="text-sm text-grayscale-40">
+                      <span className="text-sm text-grayscale-70">
                         {coach.field &&
                         typeof coach.field === 'object' &&
                         coach.field.name
@@ -89,7 +89,7 @@ export default function CoachExperts() {
             );
           })
         ) : (
-          <li className="rounded-xl bg-white p-4">
+          <li className="rounded-xl bg-white p-4 border border-white/20 shadow-sm">
             <p className="text-grayscale-40">Không có dữ liệu coach</p>
           </li>
         )}

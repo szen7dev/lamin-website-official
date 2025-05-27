@@ -17,9 +17,9 @@ import { useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import SearchBar from '@/features/search/components/SearchBar';
 import MegaMenu from '@/features/menu/components/MegaMenu';
-import { CartDropdown } from '@/features/cart/components/CartDropdown';
+import { CartDropdown } from '@/features/cart/components/cart-dropdown/CartDropdown';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
-import { useCart } from '@/features/cart/hooks/useCart';
+import { useCart } from '@/features/cart/contexts/CartContext';
 import { LoginModal } from '@/components/modal/LoginModal';
 import { useContactInfo } from '@/hooks/useContactInfo';
 import { CartIcon, UserIcon } from '@/components/icons';
@@ -236,6 +236,7 @@ export function Header() {
                     <div
                       className={`relative ${totalItems > 0 ? 'group' : ''}`}>
                       <Link
+                        aria-label="Giỏ hàng"
                         className="hover:no-underline h-10 w-10 flex items-center justify-center gap-2 rounded-full bg-primary px-3 md:px-6 py-2 text-white hover:bg-primary/70 text-xs md:text-sm relative"
                         href="/cart">
                         <CartIcon
@@ -355,24 +356,25 @@ export function Header() {
           </div>
 
           {/* QR Code Section - Hidden on mobile */}
-          <div className="hidden md:flex w-[143px] flex-shrink-0 flex-col items-center justify-center rounded-xl bg-[#F37021] self-center h-fit ml-auto">
+          <div className="hidden md:flex w-[143px] flex-shrink-0 flex-col items-center justify-center rounded-xl bg-[#B33F00] self-center h-fit ml-auto border border-white/30 shadow-md">
             <div className="text-center text-white p-1">
-              <div className="text-xs font-medium leading-tight py-1">
+              <div className="text-sm font-bold leading-tight py-1 tracking-tight">
                 Quan tâm Zalo OA Trung tâm CSKH Lamin
               </div>
             </div>
             <div className="bg-white p-1 rounded-b-xl w-full flex items-center justify-center relative overflow-hidden">
               <Image
-                alt="QR Code"
-                className="object-contain"
+                priority
+                alt="QR Code Zalo OA"
+                blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOTAiIGhlaWdodD0iOTAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjkwIiBoZWlnaHQ9IjkwIiBmaWxsPSIjZjFmMWYxIi8+PC9zdmc+"
+                className="object-contain w-[90px] h-[90px]"
                 height={90}
-                loading="lazy"
-                priority={false}
+                placeholder="blur"
                 sizes="90px"
                 src="/images/qrCode.jpg"
                 width={90}
                 onError={e => {
-                  const target = e.target as HTMLImageElement;
+                  const target = e.currentTarget;
 
                   target.onerror = null;
                   target.src = '/images/fallback-qr.png';
@@ -446,18 +448,20 @@ export function Header() {
             </button>
           </div>
           <div className="container bg-gradient-primary py-3">
-            <p className="text-grayscale-5 text-base font-normal mb-3">
-              Đăng nhập để hưởng những đặc quyền dành riêng cho thành viên
-            </p>
             {isAuthenticated ? (
               <UserProfile />
             ) : (
-              <Button
-                className="rounded-full bg-white px-3 md:px-6 text-primary hover:bg-white/90 text-xs md:text-sm"
-                variant="secondary"
-                onClick={() => setLoginModalOpen(true)}>
-                <span className="font-medium text-sm">Đăng Nhập</span>
-              </Button>
+              <>
+                <p className="text-grayscale-5 text-base font-normal mb-3">
+                  Đăng nhập để hưởng những đặc quyền dành riêng cho thành viên
+                </p>
+                <Button
+                  className="rounded-full bg-white px-3 md:px-6 text-primary hover:bg-white/90 text-xs md:text-sm"
+                  variant="secondary"
+                  onClick={() => setLoginModalOpen(true)}>
+                  <span className="font-medium text-sm">Đăng Nhập</span>
+                </Button>
+              </>
             )}
           </div>
           <div className="container mx-auto px-4">

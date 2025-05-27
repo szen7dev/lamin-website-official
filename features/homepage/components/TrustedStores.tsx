@@ -94,7 +94,7 @@ export default function TrustedStores() {
             Cửa hàng uy tín
           </h2>
           <p className="text-sm sm:text-base text-white/80">
-           Theo danh sách được công bố tại Website lamin.com.vn
+            Theo danh sách được công bố tại Website lamin.com.vn
           </p>
         </div>
         <Link className="decoration-transparent" href="/stores">
@@ -169,7 +169,7 @@ export default function TrustedStores() {
                         <span className="font-medium text-xs sm:text-sm text-grayscale-90">
                           {store?.rating || 0}
                         </span>
-                        <span className="font-normal text-xs sm:text-sm text-grayscale-40">
+                        <span className="font-normal text-xs sm:text-sm text-grayscale-70">
                           ({store?.numberOfRating || 0} đánh giá)
                         </span>
                       </div>

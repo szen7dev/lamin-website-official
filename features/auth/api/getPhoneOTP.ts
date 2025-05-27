@@ -15,16 +15,15 @@ export const getPhoneOTP = async (
   params: GetPhoneOTPParams,
 ): Promise<string> => {
   try {
-    const response = await apiClient.postNormalizedResponse<string>(
+    const response = await apiClient.post<string>(
       '/api/auth/users/get-phone-otp',
       {
         phone: params.phone,
         optionSeller: params.optionSeller || 1,
       },
-      false, // Don't require auth for this endpoint
     );
 
-    return response;
+    return response.data;
   } catch (error) {
     console.error('Error sending OTP to phone:', error);
 

@@ -452,7 +452,8 @@ export default function MegaMenu() {
                                     }>
                                     <div className="flex justify-start items-center">
                                       <Image
-                                        alt={level2Item.name}
+                                        alt=""
+                                        aria-hidden="true"
                                         height={32}
                                         src={
                                           level2Item.thumbnail &&

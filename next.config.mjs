@@ -16,7 +16,14 @@ const nextConfig = {
   },
   productionBrowserSourceMaps: true,
   images: {
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    formats: ['image/avif', 'image/webp'],
     remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'dntdurzwr12tp.cloudfront.net',
+      },
       {
         protocol: 'https',
         hostname: 'images.glints.com',
@@ -97,11 +104,15 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'imgur.com',
       },
-      // Thêm một pattern chung cho tất cả các hostname
       {
         protocol: 'https',
-        hostname: '**',
+        hostname: 'cdn.nhathuoclongchau.com.vn',
       },
+      // Thêm một pattern chung cho tất cả các hostname
+      // {
+      //   protocol: 'https',
+      //   hostname: '**',
+      // },
     ],
   },
 };

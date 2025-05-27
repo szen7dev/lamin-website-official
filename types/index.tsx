@@ -16,3 +16,10 @@ export interface Thumbnail {
   path: string;
   name: string;
 }
+
+export interface Pagination {
+  limit: number;
+  nextCursor: string;
+  totalRecord: number;
+  totalPage: number;
+}

@@ -31,12 +31,9 @@ export const postHeightMeasurement = async (
       weight: Number(params.weight),
     };
 
-    const response = await apiClient.postNormalizedResponse(
-      '/api/crm/grow_track',
-      queryParams,
-    );
+    const response = await apiClient.post('/api/crm/grow_track', queryParams);
 
-    return response;
+    return response.data;
   } catch (error) {
     console.error('API: Error submitting height measurement:', error);
     throw new Error(

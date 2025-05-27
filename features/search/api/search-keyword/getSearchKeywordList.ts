@@ -16,14 +16,12 @@ export const getSearchKeywordList = async (
   try {
     const params: GetSearchKeywordParams = { optionSeller };
 
-    // The apiClient.get method now handles response normalization internally
-    // It will automatically extract listRecords from any level of nesting
-    const keywords = await apiClient.getNormalizedResponse<SearchKeyword[]>(
+    const keywords = await apiClient.get<SearchKeyword[]>(
       '/api/crm/search_keyword',
       params,
     );
 
-    return keywords || [];
+    return keywords.data || [];
   } catch (error) {
     console.error('Error fetching search keywords:', error);
 

@@ -21,12 +21,12 @@ export const updateSearchKeyword = async (
       optionSeller,
     };
 
-    const response = await apiClient.putNormalizedResponse<SearchKeyword>(
+    const response = await apiClient.put<SearchKeyword>(
       '/api/crm/search_keyword',
       params,
     );
 
-    return response;
+    return response.data;
   } catch (error) {
     console.error('Error updating search keyword:', error);
 

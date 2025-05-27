@@ -14,42 +14,25 @@ export default function SimpleBanner() {
     limit: 1,
   });
 
-  // Fallback image nếu API chưa trả về dữ liệu hoặc có lỗi
-  const fallbackImageUrl =
-    'https://cdn.nhathuoclongchau.com.vn/unsafe/828x0/filters:quality(90)/https://cms-prod.s3-sgn09.fptcloud.com/1610x492_Banner_WEB_f660825f26.png';
-
   const banner = banners && banners.length > 0 ? banners[0] : null;
-
-  // Xác định URL hình ảnh từ API hoặc sử dụng fallback
-  const imageUrl =
-    (banner?.thumbnail?.path &&
-      apiClient.getFileUrl(banner?.thumbnail?.path)) ||
-    fallbackImageUrl;
   const bannerLink = banner?.slug ? banner.slug : '#';
 
   const BannerComponent = () => (
-    <>
-      {banner?.thumbnail?.path && (
-        <>
-          {/* Responsive Banner - Combined for better LCP */}
-          <div className="w-full">
-            <Image
-              priority
-              alt={banner?.name || 'Hero Banner'}
-              blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwMCIgaGVpZ2h0PSI0MDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmVyc2lvbj0iMS4xIi8+"
-              className="w-full object-cover md:h-auto h-[172px]"
-              height={400}
-              loading="eager"
-              placeholder="blur"
-              quality={80}
-              sizes="(max-width: 640px) 95vw, (max-width: 768px) 90vw, (max-width: 1536px) 90vw, 1200px"
-              src={imageUrl}
-              width={1200}
-            />
-          </div>
-        </>
-      )}
-    </>
+    <div className="w-full">
+      <Image
+        priority
+        alt={banner?.name || 'Hero Banner'}
+        blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwMCIgaGVpZ2h0PSI0MDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmVyc2lvbj0iMS4xIi8+"
+        className="w-full object-cover md:h-auto h-[172px]"
+        height={400}
+        loading="eager"
+        placeholder="blur"
+        quality={80}
+        sizes="(max-width: 640px) 95vw, (max-width: 768px) 90vw, (max-width: 1536px) 90vw, 1200px"
+        src={apiClient.getFileUrl(banner?.thumbnail?.path || '')}
+        width={1200}
+      />
+    </div>
   );
 
   return (

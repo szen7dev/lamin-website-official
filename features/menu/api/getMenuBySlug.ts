@@ -20,13 +20,10 @@ export const getMenuBySlug = async (
     };
 
     // Make API request
-    const response = await apiClient.getNormalizedResponse<any>(
-      '/api/medias/menu',
-      queryParams,
-    );
+    const response = await apiClient.get<any>('/api/medias/menu', queryParams);
 
     // Extract media items from the response
-    return response;
+    return response.data;
   } catch (error) {
     // Provide detailed error information
     if (error instanceof Error) {

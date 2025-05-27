@@ -12,7 +12,7 @@ import { GetTrustedStoreParams } from '../../types/storeTypes';
  */
 export const useGetTrustedStore = (params: GetTrustedStoreParams = {}) => {
   const {
-    data: { trustedStore, response },
+    data: { trustedStore, pagination },
     isLoading,
     error,
   } = useSuspenseQuery({
@@ -38,6 +38,6 @@ export const useGetTrustedStore = (params: GetTrustedStoreParams = {}) => {
     singleStore: isSingleStore ? storeData[0] : null,
     isLoading,
     error,
-    response, // Return the full response for metadata access
+    pagination,
   };
 };

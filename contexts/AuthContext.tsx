@@ -6,7 +6,7 @@ import type { LoginResponse } from '@/features/auth/api/login';
 
 import { createContext, useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { setCookie, getCookie, deleteCookie } from 'cookies-next';
+import { deleteCookie, getCookie, setCookie } from 'cookies-next';
 
 import { login as loginApi } from '@/features/auth/api/login';
 import { apiClient } from '@/services/api/apiClient';
@@ -16,9 +16,8 @@ type AuthContextType = {
   user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  login: (email: string, password: string) => Promise<LoginResponse>;
   updateUser: (params: UserUpdateParams) => Promise<any>;
-  loginWithOTP: (phone: string, otp: string) => Promise<LoginResponse>;
+  login: (phone: string, otp: string) => Promise<LoginResponse>;
   logout: () => Promise<void>;
 };
 
@@ -118,45 +117,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     // Store additional user properties as needed
   }, []);
 
-  // Login with email/password
-  const login = async (
-    email: string,
-    password: string,
-  ): Promise<LoginResponse> => {
-    setIsLoading(true);
-    try {
-      const response = await loginApi({ email, password });
-
-      if (response.success && response.token) {
-        // Store token in cookie
-        setCookie('auth-token', response.token, { maxAge: 60 * 60 * 24 * 7 }); // 7 days
-        apiClient.setToken(response.token);
-
-        // Store user data
-        if (response.user && response.user.contacts) {
-          // Make sure to map _id to id and create a new object
-          const userData = {
-            ...response.user,
-            id: response.user.contacts[0]._id || '',
-          };
-
-          // Store in state and localStorage
-          setUser(userData as User);
-          storeUserData(userData as User);
-        }
-      }
-
-      return response;
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   // Login with phone and OTP
-  const loginWithOTP = async (
-    phone: string,
-    otp: string,
-  ): Promise<LoginResponse> => {
+  const login = async (phone: string, otp: string): Promise<LoginResponse> => {
     setIsLoading(true);
     try {
       // Use the login function with phone as email and OTP as password
@@ -255,7 +217,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         isLoading,
         updateUser: handleUserUpdate,
         login,
-        loginWithOTP,
         logout,
       }}>
       {children}

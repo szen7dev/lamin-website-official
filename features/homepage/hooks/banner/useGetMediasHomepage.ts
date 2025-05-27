@@ -1,6 +1,6 @@
 'use client';
 
-import type { BannerQueryParams } from '@/services/media/bannerService';
+import type { BannerQueryParams } from '@/features/homepage/types/bannerTypes';
 
 import { useQuery } from '@tanstack/react-query';
 

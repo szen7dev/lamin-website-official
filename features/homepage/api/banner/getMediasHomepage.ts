@@ -1,12 +1,10 @@
-import type { Banner, BannerQueryParams } from '@/services/media/bannerService';
+import type {
+  Banner,
+  BannerQueryParams,
+} from '@/features/homepage/types/bannerTypes';
 
 import { apiClient, DEFAULT_OPTION_SELLER } from '@/services/api/apiClient';
 
-/**
- * Get banners for homepage
- * @param params Query parameters for fetching banners
- * @returns List of banners used for the homepage
- */
 export const getMediasHomepage = async (
   params: BannerQueryParams = {},
 ): Promise<Banner[]> => {
@@ -19,14 +17,12 @@ export const getMediasHomepage = async (
       ...params,
     };
 
-    // The apiClient.get method now handles response normalization internally
-    // It will automatically extract listRecords from any level of nesting
-    const banners = await apiClient.getNormalizedResponse<Banner[]>(
+    const response = await apiClient.get<Banner[]>(
       '/api/medias/banner',
       queryParams,
     );
 
-    return banners || [];
+    return response.data || [];
   } catch (error) {
     console.error('Error fetching homepage banners:', error);
 

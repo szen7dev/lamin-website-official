@@ -14,10 +14,6 @@ import { useGetMediasHomepage } from '../hooks/banner/useGetMediasHomepage';
 import { apiClient } from '@/services/api/apiClient';
 import { Skeleton } from '@/components/ui/skeleton';
 
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
-
 export default function GridBanner() {
   const { banners: leftSlides } = useGetMediasHomepage({
     type: 2,

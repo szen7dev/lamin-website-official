@@ -5,11 +5,6 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import { getArticleList } from '../api/getArticleList';
 import { ArticleListParams } from '../types/articleTypes';
 
-/**
- * Custom hook to fetch article list data
- * @param params Query parameters for the API request
- * @returns Article list data and loading state
- */
 export function useGetArticleList(params: ArticleListParams = {}) {
   const {
     data: articles,
@@ -18,7 +13,7 @@ export function useGetArticleList(params: ArticleListParams = {}) {
   } = useSuspenseQuery({
     queryKey: ['GET_ARTICLE_LIST', params],
     queryFn: () => getArticleList(params),
-    staleTime: 1000 * 60 * 5, // 5 minutes
+    staleTime: 1000 * 60 * 5,
   });
 
   return {

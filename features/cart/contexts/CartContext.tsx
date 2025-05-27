@@ -3,26 +3,33 @@
 import type { CartItem } from '../types/cartTypes';
 import type React from 'react';
 
-import { createContext, useContext, useState, useCallback } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 // Keys for React Query
-const CART_QUERY_KEY = 'cart';
+const CART_QUERY_KEY = 'CART';
 
-// Helper functions for localStorage
+// Helper functions for localStorage (SSR safe)
 const getCartFromStorage = (): { items: CartItem[]; expiry: number } | null => {
+  if (typeof window === 'undefined') return null;
   try {
     const savedCartData = localStorage.getItem('cart');
 
     if (!savedCartData) return null;
-
     const cartData = JSON.parse(savedCartData);
 
     // Check if the cart data is still valid (not expired)
     if (cartData.expiry && new Date().getTime() < cartData.expiry) {
       return cartData;
     }
-
     // Clear expired cart data
     localStorage.removeItem('cart');
 
@@ -35,6 +42,7 @@ const getCartFromStorage = (): { items: CartItem[]; expiry: number } | null => {
 };
 
 const saveCartToStorage = (items: CartItem[]): void => {
+  if (typeof window === 'undefined') return;
   try {
     const cartData = {
       items,
@@ -67,10 +75,9 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const queryClient = useQueryClient();
-  const [isLoading, setIsLoading] = useState(false);
   const [isCartDropdownVisible, setCartDropdownVisible] = useState(false);
   const [cartAnimationFlag, setCartAnimationFlag] = useState(false);
-  let debounceTimeout: NodeJS.Timeout | null = null;
+  const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
 
   // Use React Query to fetch and cache cart data
   const { data: cartData } = useQuery({
@@ -108,132 +115,135 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     },
   });
 
-  const totalItems = items.reduce((total, item) => total + item.quantity, 0);
-  const totalPrice = items.reduce(
-    (total, item) => total + item.price * item.quantity,
-    0,
+  const totalItems = useMemo(
+    () => items.reduce((total, item) => total + item.quantity, 0),
+    [items],
+  );
+  const totalPrice = useMemo(
+    () => items.reduce((total, item) => total + item.price * item.quantity, 0),
+    [items],
   );
 
   const addItem = useCallback(
     (item: CartItem) => {
-      setIsLoading(true);
-      try {
-        const validItem = {
-          ...item,
-          quantity: Math.max(1, Math.floor(item.quantity) || 1),
+      const validItem = {
+        ...item,
+        quantity: Math.max(1, Math.floor(item.quantity) || 1),
+      };
+      const existingItemIndex = items.findIndex(i => i.id === validItem.id);
+      let newItems: CartItem[];
+
+      if (existingItemIndex >= 0) {
+        newItems = [...items];
+        newItems[existingItemIndex] = {
+          ...newItems[existingItemIndex],
+          quantity: newItems[existingItemIndex].quantity + validItem.quantity,
         };
-
-        const existingItemIndex = items.findIndex(i => i.id === validItem.id);
-        let newItems: CartItem[];
-
-        if (existingItemIndex >= 0) {
-          newItems = [...items];
-          newItems[existingItemIndex] = {
-            ...newItems[existingItemIndex],
-            quantity: newItems[existingItemIndex].quantity + validItem.quantity,
-          };
-        } else {
-          newItems = [...items, validItem];
-        }
-
-        updateCartMutation.mutate(newItems);
-      } finally {
-        setIsLoading(false);
+      } else {
+        newItems = [...items, validItem];
       }
+      updateCartMutation.mutate(newItems);
     },
     [items, updateCartMutation],
   );
 
   const removeItem = useCallback(
     (id: string) => {
-      setIsLoading(true);
-      try {
-        const newItems = items.filter(item => item.id !== id);
+      const newItems = items.filter(item => item.id !== id);
 
-        updateCartMutation.mutate(newItems);
-      } finally {
-        setIsLoading(false);
-      }
+      updateCartMutation.mutate(newItems);
     },
     [items, updateCartMutation],
   );
 
   const updateQuantity = useCallback(
     (id: string, quantity: number) => {
-      setIsLoading(true);
-      try {
-        const validQuantity = Math.max(1, Math.floor(quantity) || 1);
-        const newItems = items.map(item =>
-          item.id === id ? { ...item, quantity: validQuantity } : item,
-        );
+      const validQuantity = Math.max(1, Math.floor(quantity) || 1);
+      const newItems = items.map(item =>
+        item.id === id ? { ...item, quantity: validQuantity } : item,
+      );
 
-        updateCartMutation.mutate(newItems);
-      } finally {
-        setIsLoading(false);
-      }
+      updateCartMutation.mutate(newItems);
     },
     [items, updateCartMutation],
   );
 
   const updateUnit = useCallback(
     (id: string, unit: string) => {
-      setIsLoading(true);
-      try {
-        const newItems = items.map(item =>
-          item.id === id ? { ...item, unit } : item,
-        );
+      const newItems = items.map(item =>
+        item.id === id ? { ...item, unit } : item,
+      );
 
-        updateCartMutation.mutate(newItems);
-      } finally {
-        setIsLoading(false);
-      }
+      updateCartMutation.mutate(newItems);
     },
     [items, updateCartMutation],
   );
 
   const clearCart = useCallback(() => {
-    setIsLoading(true);
-    try {
-      updateCartMutation.mutate([]);
-    } finally {
-      setIsLoading(false);
-    }
+    updateCartMutation.mutate([]);
   }, [updateCartMutation]);
 
-  const showCartDropdown = () => {
-    if (debounceTimeout) {
-      clearTimeout(debounceTimeout); // Clear any existing timeout
+  const showCartDropdown = useCallback(() => {
+    if (debounceTimeout.current) {
+      clearTimeout(debounceTimeout.current); // Clear any existing timeout
     }
     setCartDropdownVisible(true);
     setCartAnimationFlag(true);
-  };
+  }, []);
 
-  const hideCartDropdown = (delay: number = 300) => {
+  const hideCartDropdown = useCallback((delay: number = 300) => {
     setCartAnimationFlag(false);
-    debounceTimeout = setTimeout(() => {
+    if (debounceTimeout.current) {
+      clearTimeout(debounceTimeout.current);
+    }
+    debounceTimeout.current = setTimeout(() => {
       setCartDropdownVisible(false);
     }, delay);
-  };
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (debounceTimeout.current) {
+        clearTimeout(debounceTimeout.current);
+      }
+    };
+  }, []);
+
+  const contextValue = useMemo(
+    () => ({
+      items,
+      totalItems,
+      totalPrice,
+      isLoading: updateCartMutation.isPending,
+      addItem,
+      removeItem,
+      updateQuantity,
+      updateUnit,
+      clearCart,
+      isCartDropdownVisible,
+      showCartDropdown,
+      hideCartDropdown,
+      cartAnimationFlag,
+    }),
+    [
+      items,
+      totalItems,
+      totalPrice,
+      updateCartMutation.isPending,
+      addItem,
+      removeItem,
+      updateQuantity,
+      updateUnit,
+      clearCart,
+      isCartDropdownVisible,
+      showCartDropdown,
+      hideCartDropdown,
+      cartAnimationFlag,
+    ],
+  );
 
   return (
-    <CartContext.Provider
-      value={{
-        items,
-        totalItems,
-        totalPrice,
-        isLoading,
-        addItem,
-        removeItem,
-        updateQuantity,
-        updateUnit,
-        clearCart,
-        isCartDropdownVisible,
-        showCartDropdown,
-        hideCartDropdown,
-        cartAnimationFlag,
-      }}>
-      {children}
-    </CartContext.Provider>
+    <CartContext.Provider value={contextValue}>{children}</CartContext.Provider>
   );
 }
 

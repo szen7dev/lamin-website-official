@@ -2,7 +2,6 @@
 module.exports = {
   darkMode: ['class'],
   content: [
-    './pages/**/*.{ts,tsx}',
     './components/**/*.{ts,tsx}',
     './app/**/*.{ts,tsx}',
     './features/**/*.{ts,tsx}',
@@ -49,6 +48,9 @@ module.exports = {
           'linear-gradient(0deg, #FFFFFF, #FFFFFF), linear-gradient(0deg, rgba(0, 0, 0, 0.04), rgba(0, 0, 0, 0.04))',
         'light-24':
           'linear-gradient(0deg, #FFFFFF, #FFFFFF), linear-gradient(0deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0))',
+        'gradient-checkout':
+          'linear-gradient(277.59deg, #1250DC 0%, #306DE4 100%)',
+        'cart-promo-bg': '#EAEFFA',
       },
       colors: {
         primary: {
@@ -202,6 +204,10 @@ module.exports = {
         border: '#EAECF0',
         input: '#EAECF0',
         ring: '#3582EE',
+        'reward-points': '#F79009',
+        savings: '#F79009',
+        'voucher-input-bg': '#DCDFEA',
+        'voucher-input-text': '#7D89B0',
       },
 
       borderRadius: {

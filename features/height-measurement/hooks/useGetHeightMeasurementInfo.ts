@@ -1,6 +1,9 @@
 'use client';
 
-import type { GrowTrackApiResponse } from '@/features/height-measurement/types/heightMeasurementTypes';
+import type {
+  GrowTrackApiResponse,
+  GrowTrackInformation,
+} from '@/features/height-measurement/types/heightMeasurementTypes';
 
 import { useQuery } from '@tanstack/react-query';
 
@@ -13,7 +16,10 @@ import { getHeightMeasurementInfo } from '../api/getHeightMeasurementInfo';
  */
 export function useGetHeightMeasurementInfo(trackId?: string) {
   const { data, isLoading, error, refetch } = useQuery<
-    GrowTrackApiResponse,
+    {
+      response: GrowTrackApiResponse;
+      growTrack: GrowTrackInformation;
+    },
     Error
   >({
     queryKey: ['heightMeasurement', trackId],
@@ -22,7 +28,12 @@ export function useGetHeightMeasurementInfo(trackId?: string) {
         throw new Error('Track ID không được cung cấp');
       }
 
-      return getHeightMeasurementInfo(trackId);
+      const { response, growTrack } = await getHeightMeasurementInfo(trackId);
+
+      return {
+        response,
+        growTrack,
+      };
     },
     enabled: !!trackId,
     retry: 1,
@@ -30,7 +41,8 @@ export function useGetHeightMeasurementInfo(trackId?: string) {
   });
 
   return {
-    data,
+    response: data?.response,
+    growTrack: data?.growTrack,
     isLoading,
     error,
     refetch,
