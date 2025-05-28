@@ -25,7 +25,7 @@ const DEFAULT_MODELS = {
   premium: 'gpt-4',
   standard: 'gpt-4o-mini',
   basic: 'gpt-3.5-turbo',
-  retrieval: 'gpt-3.5-turbo-1106',
+  retrieval: 'gpt-4o',
   vision: 'gpt-4o-mini',
 };
 
@@ -117,6 +117,29 @@ const FILE_SEARCH_KEYWORDS = [
   'support',
   'giới thiệu',
   'introduction',
+  'tìm hiểu',
+  'tra cứu',
+  'hướng dẫn sử dụng',
+  'cách dùng',
+  'làm sao',
+  'làm thế nào',
+  'sử dụng như thế nào',
+  'catalog',
+  'danh sách',
+  'file pdf',
+  'tệp tin',
+  'mẫu đơn',
+  'biểu mẫu',
+  'tài liệu kỹ thuật',
+  'về chúng tôi',
+  'giới thiệu công ty',
+  'câu hỏi thường gặp',
+  'faq',
+  'thành phần',
+  'công dụng',
+  'chỉ định',
+  'đối tượng sử dụng',
+  'tác dụng phụ',
 ];
 
 function shouldUseFileSearch(message: string): boolean {
