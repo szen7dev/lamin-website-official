@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { usePathname } from 'next/navigation';
 
 import SimpleBanner from '@/features/homepage/components/SimpleBanner';
 import { TripleBulletButton } from '@/components/triple-button-group';
@@ -11,6 +12,40 @@ import {
   RedArrowDown,
 } from '@/components/icons';
 import { formatNumber } from '@/utils';
+
+const ClientTripleBulletButton = () => {
+  const pathname = usePathname();
+
+  let activeIndex = 0;
+
+  if (pathname.includes('/vng-event/donate-list')) {
+    activeIndex = 1;
+  } else if (pathname.includes('/vng-event/donate-history')) {
+    activeIndex = 2;
+  } else if (pathname.includes('/vng-event/event')) {
+    activeIndex = 0;
+  }
+
+  return (
+    <TripleBulletButton
+      activeIndex={activeIndex}
+      items={[
+        {
+          label: 'Sự Kiện',
+          href: '/vng-event/event',
+        },
+        {
+          label: 'Danh Sách Quyên Góp',
+          href: '/vng-event/donate-list',
+        },
+        {
+          label: 'Lịch Sử Từ Thiện',
+          href: '/vng-event/donate-history',
+        },
+      ]}
+    />
+  );
+};
 
 const VNGEventPage = ({ children }: { children: React.ReactNode }) => {
   const mockData = [
@@ -44,22 +79,7 @@ const VNGEventPage = ({ children }: { children: React.ReactNode }) => {
       </section>
       <div className="container py-6">
         <div className="mx-auto w-max max-w-3xl px-4">
-          <TripleBulletButton
-            items={[
-              {
-                label: 'Sự Kiện',
-                href: '/vng-event/event',
-              },
-              {
-                label: 'Danh Sách Quyên Góp',
-                href: '/vng-event/donate-list',
-              },
-              {
-                label: 'Lịch Sử Từ Thiện',
-                href: '/vng-event/donate-history',
-              },
-            ]}
-          />
+          <ClientTripleBulletButton />
         </div>
         <div className="flex gap-4 py-5 justify-between items-center">
           {mockData.map(item => (

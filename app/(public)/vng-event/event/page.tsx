@@ -1,49 +1,61 @@
 'use client';
-import React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { format as formatDateFns } from 'date-fns';
+import { ChevronsDown, Loader2 } from 'lucide-react';
 
+import { formatNumber, formatDate as formatVNDate } from '@/utils';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { EditIcon } from '@/components/icons';
-import {
-  AddEventModal,
-  EventFormValues,
-} from '@/components/modal/AddEventModal';
+import { AddEventModal } from '@/components/modal/AddEventModal';
+import { useGetEventList } from '@/features/vng-event/hooks/useGetEventList';
+import { Event } from '@/features/vng-event/types/event';
 
 const EventPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const handleSubmit = (data: EventFormValues) => {
-    console.log('Form data:', data);
+  const [lastestID, setLastestID] = useState<string>('');
+  const [allEvents, setAllEvents] = useState<Event[]>([]);
+  const [hasMore, setHasMore] = useState<boolean>(true);
+  const [isLoadingMore, setIsLoadingMore] = useState<boolean>(false);
+
+  const { eventList: elData, pagination } = useGetEventList({
+    limit: 5,
+    lastestID,
+  });
+
+  console.log('eventList', elData);
+
+  useEffect(() => {
+    if (elData && elData.length > 0) {
+      if (lastestID === '') {
+        setAllEvents(elData);
+      } else {
+        setAllEvents(prev => [...prev, ...elData]);
+      }
+
+      if (pagination?.nextCursor) {
+        setHasMore(true);
+      } else if (elData.length < 3) {
+        setHasMore(false);
+      }
+
+      setIsLoadingMore(false);
+    } else if (elData && elData.length === 0) {
+      setHasMore(false);
+      setIsLoadingMore(false);
+    }
+  }, [elData, lastestID]);
+
+  const handleLoadMore = () => {
+    if (isLoadingMore) return;
+
+    setIsLoadingMore(true);
+    if (pagination?.nextCursor) {
+      setLastestID(pagination.nextCursor);
+    } else if (elData.length > 0) {
+      setLastestID(elData[elData.length - 1]._id);
+    }
   };
-  const eventList = [
-    {
-      id: 1,
-      name: 'HÀNH TRÌNH YÊU THƯƠNG: CÙNG NHAU GIEO MẦM TRI THỨC CHO TRẺ EM VÙNG CAO TÂY BẮC',
-      address:
-        'Địa điểm: Trường Tiểu học Bán trú Nậm Mười – bản Tà Chử, xã Nậm Mười, huyện Văn Chấn, tỉnh Yên Bái',
-      date: 'Thời gian: 08:00 – 17:00, Thứ Bảy, ngày 20 tháng 7 năm 2025',
-      income: 'Thu: 20.000.000',
-      expense: 'Chi: 15.000.000',
-    },
-    {
-      id: 2,
-      name: 'HÀNH TRÌNH YÊU THƯƠNG: CÙNG NHAU GIEO MẦM TRI THỨC CHO TRẺ EM VÙNG CAO TÂY BẮC',
-      address:
-        'Địa điểm: Trường Tiểu học Bán trú Nậm Mười – bản Tà Chử, xã Nậm Mười, huyện Văn Chấn, tỉnh Yên Bái',
-      date: 'Thời gian: 08:00 – 17:00, Thứ Bảy, ngày 20 tháng 7 năm 2025',
-      income: 'Thu: 20.000.000',
-      expense: 'Chi: 15.000.000',
-    },
-    {
-      id: 3,
-      name: 'HÀNH TRÌNH YÊU THƯƠNG: CÙNG NHAU GIEO MẦM TRI THỨC CHO TRẺ EM VÙNG CAO TÂY BẮC',
-      address:
-        'Địa điểm: Trường Tiểu học Bán trú Nậm Mười – bản Tà Chử, xã Nậm Mười, huyện Văn Chấn, tỉnh Yên Bái',
-      date: 'Thời gian: 08:00 – 17:00, Thứ Bảy, ngày 20 tháng 7 năm 2025',
-      income: 'Thu: 20.000.000',
-      expense: 'Chi: 15.000.000',
-    },
-  ];
 
   return (
     <section className="container py-6 bg-white rounded-2xl px-0">
@@ -59,25 +71,28 @@ const EventPage = () => {
       </div>
       <Separator className="my-4" />
 
-      {eventList.map((event, index) => (
-        <div key={event.id}>
+      {allEvents?.map((event, index) => (
+        <div key={event._id}>
           <div className="px-4">
             <div className="grid grid-cols-[auto_1fr_auto] gap-4">
               <div className="rounded-full bg-[#E6F8FF] border-[#00BBF2] border-[1px] text-[#00BBF2] text-xs font-medium px-2 py-1 h-max">
-                20/07/2025
+                {formatDateFns(event.date, 'dd/MM/yyyy')}
               </div>
 
               <div>
                 <div className="flex items-start gap-2">
                   <div className="w-2 h-2 rounded-full bg-primary mt-2" />
-                  <h3 className="text-base font-bold">{event.name}</h3>
+                  <h3 className="text-base font-bold uppercase">
+                    {event.name}
+                  </h3>
                 </div>
 
                 <div className="mt-3 text-sm text-grayscale-50 space-y-2 ml-4">
-                  <p>{event.address}</p>
+                  <p>Địa điểm: {event.address}</p>
                   <p>
-                    {event.date} <span> | </span> {event.income} |{' '}
-                    {event.expense}
+                    Thời gian: {formatVNDate(event.date)} <span> | </span> Thu:{' '}
+                    {formatNumber(event.income)} | Chi:{' '}
+                    {formatNumber(event.expense)}
                   </p>
                 </div>
               </div>
@@ -88,45 +103,36 @@ const EventPage = () => {
 
               <div className="col-start-2 col-end-4 row-start-2 row-end-2">
                 <div
-                  className="w-full px-6 py-7 rounded-2xl bg-[#eaeffb] text-gray-700"
+                  className="w-full px-6 py-7 rounded-2xl bg-[#F1F3F5] text-gray-700"
                   style={{ boxShadow: '6px 6px 0px 0px #DDE3E9' }}>
                   <h4 className="font-medium mb-2">Ghi chú sự kiện:</h4>
-                  <ul className="text-sm space-y-2">
-                    <li>
-                      - Mục tiêu: Góp phần cải thiện điều kiện học tập và sinh
-                      hoạt cho học sinh dân tộc thiểu số tại vùng cao.
-                    </li>
-                    <li>
-                      - Các hoạt động chính: Trao tặng cặp sách, sách vở, áo ấm,
-                      dép và nhu yếu phẩm. Giao lưu văn nghệ, tổ chức trò chơi
-                      cho thiếu nhi. Khám sức khỏe miễn phí và tư vấn dinh dưỡng
-                      cho các em nhỏ
-                    </li>
-                    <li>
-                      - Liên hệ tham gia hoặc tài trợ: [0123456789 /
-                      Lamin@gmail.com / Fanpage Nhóm Thiện Nguyện Trẻ]
-                    </li>
-                  </ul>
+                  <p className="text-sm space-y-2">{event.note}</p>
                 </div>
-              </div>
-
-              <div className="col-start-2 col-end-4 row-start-3 row-end-3 flex justify-end">
-                <Button className="mr-2" size="sm" variant="outline">
-                  Chỉnh sửa
-                </Button>
-                <Button className="text-white" size="sm">
-                  Tham gia
-                </Button>
               </div>
             </div>
           </div>
-          {index < eventList.length - 1 && <Separator className="my-8" />}
+          {index < allEvents.length - 1 && <Separator className="my-8" />}
         </div>
       ))}
+      {isLoadingMore && (
+        <div className="flex justify-center my-4">
+          <Loader2 className="h-6 w-6 animate-spin text-primary" />
+        </div>
+      )}
+
+      {allEvents?.length > 0 && hasMore && !isLoadingMore && (
+        <div className="text-center mt-4 mb-4">
+          <button
+            className="flex items-center justify-center mx-auto gap-2 text-black font-medium text-sm hover:text-primary"
+            onClick={handleLoadMore}>
+            <ChevronsDown height={20} width={20} />
+            <span>Xem thêm</span>
+          </button>
+        </div>
+      )}
       <AddEventModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        onSubmit={handleSubmit}
       />
     </section>
   );

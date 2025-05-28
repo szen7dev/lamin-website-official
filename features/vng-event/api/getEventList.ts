@@ -1,27 +1,26 @@
-import { Event } from '@/features/vng-event/types/event';
-import apiClient from '@/services/api/apiClient';
+import { Event, EventListParams } from '@/features/vng-event/types/event';
+import apiClient, { DEFAULT_OPTION_SELLER } from '@/services/api/apiClient';
+import { Pagination } from '@/types';
 
-export const getGoodsInfo = async (goodsId: string): Promise<Event[]> => {
+export const getEventList = async (
+  params: EventListParams,
+): Promise<{ data: Event[]; pagination: Pagination }> => {
   try {
-    const populatesObject = {
-      path: 'images userUpdate category company',
-      select: 'path size image note fullname name slug',
-      populate: { path: 'position', select: 'name' },
-    };
-
     const queryParams = {
-      populates: JSON.stringify(populatesObject),
-      goodsID: goodsId,
+      optionSeller: params.optionSeller || DEFAULT_OPTION_SELLER,
+      ...params,
     };
 
-    const response = await apiClient.getNormalizedResponse<Event[]>(
-      `/api/item/goods`,
+    const { data, pagination } = await apiClient.get<Event[]>(
+      `/api/crm/vng_event`,
       queryParams,
     );
 
-    return response as Event[];
+    console.log('data', data);
+
+    return { data, pagination };
   } catch (error) {
-    console.error('Error fetching goods info:', error);
+    console.error('Error fetching event list:', error);
     throw error;
   }
 };
