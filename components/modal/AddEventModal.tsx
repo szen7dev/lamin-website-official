@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
+import { useCreateEvent } from '@/features/vng-event/hooks/useCreateEvent';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -25,7 +26,6 @@ import { Textarea } from '@/components/ui/textarea';
 interface AddEventModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit?: (data: EventFormValues) => void;
 }
 
 export interface EventFormValues {
@@ -35,12 +35,9 @@ export interface EventFormValues {
   note: string;
 }
 
-export function AddEventModal({
-  isOpen,
-  onClose,
-  onSubmit,
-}: AddEventModalProps) {
+export function AddEventModal({ isOpen, onClose }: AddEventModalProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { createEventAsync, isLoading } = useCreateEvent();
 
   const form = useForm<EventFormValues>({
     defaultValues: {
@@ -54,9 +51,15 @@ export function AddEventModal({
   const handleSubmit = async (data: EventFormValues) => {
     try {
       setIsSubmitting(true);
-      if (onSubmit) {
-        await onSubmit(data);
-      }
+
+      await createEventAsync({
+        optionSeller: 1,
+        name: data.name,
+        date: data.date,
+        address: data.address,
+        note: data.note,
+      });
+
       form.reset();
       onClose();
     } catch (error) {
@@ -145,14 +148,14 @@ export function AddEventModal({
 
             <DialogFooter className="pt-4">
               <Button
-                disabled={isSubmitting}
+                disabled={isSubmitting || isLoading}
                 type="button"
                 variant="outline"
                 onClick={onClose}>
                 Hủy
               </Button>
-              <Button disabled={isSubmitting} type="submit">
-                {isSubmitting ? 'Đang lưu...' : 'Lưu'}
+              <Button disabled={isSubmitting || isLoading} type="submit">
+                {isSubmitting || isLoading ? 'Đang lưu...' : 'Lưu'}
               </Button>
             </DialogFooter>
           </form>

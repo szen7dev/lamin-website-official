@@ -17,3 +17,20 @@ export interface Event {
   __v: number;
   userUpdate: string;
 }
+
+export interface EventListParams {
+  limit?: number;
+  keyword?: string;
+  lastestID?: string;
+  optionSeller?: number;
+  contactID?: string;
+}
+
+export interface EventUpsertParams {
+  optionSeller: number;
+  date?: string;
+  name?: string;
+  address?: string;
+  note?: string;
+  fundID?: string;
+}

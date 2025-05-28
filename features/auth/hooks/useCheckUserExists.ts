@@ -2,7 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 
 import { checkUserExists } from '../api/checkUserExists';
 
-import { useToast } from '@/components/ui/use-toast';
+import { useToast } from '@/hooks/use-toast';
 
 interface UseCheckUserExistsParams {
   onUserExists?: () => void;

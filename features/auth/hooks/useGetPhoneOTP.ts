@@ -2,7 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 
 import { getPhoneOTP } from '../api/getPhoneOTP';
 
-import { useToast } from '@/components/ui/use-toast';
+import { useToast } from '@/hooks/use-toast';
 
 interface UseGetPhoneOTPParams {
   onSuccess?: (otp: string) => void;

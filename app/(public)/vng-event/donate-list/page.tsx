@@ -1,9 +1,20 @@
 'use client';
 import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { formatDate } from 'date-fns';
 
+import { useCreateFund } from '@/features/vng-event/hooks/useCreateFund';
+import { useGetEventList } from '@/features/vng-event/hooks/useGetEventList';
 import { Input } from '@/components/ui/input';
 import { SearchIcon } from '@/components/icons';
 import { Button } from '@/components/ui/button';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import {
   Table,
   TableBody,
@@ -21,27 +32,50 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@/components/ui/pagination';
+import { FundUpsertParams } from '@/features/vng-event/types/fund';
+import { useGetFundList } from '@/features/vng-event/hooks/useGetFundList';
+import { formatNumber } from '@/utils';
 
 const DonateListPage = () => {
-  const donationData = Array(20)
-    .fill(0)
-    .map((_, index) => ({
-      id: index + 1,
-      date: '20/07/2025',
-      name: 'Nguyễn Văn A',
-      address: 'TP.HCM',
-      amount: '2.000.000',
-      event: 'Hành trình yêu thương',
-      note: 'Ủng hộ áo ấm',
-    }));
+  const { register, handleSubmit, reset, setValue } = useForm<FundUpsertParams>(
+    {
+      defaultValues: {
+        date: '',
+        name: '',
+        address: '',
+        amount: 0,
+        eventID: '',
+        note: '',
+      },
+    },
+  );
+
+  const { createFund, isLoading } = useCreateFund();
+
+  const { eventList } = useGetEventList();
+  const { fundList } = useGetFundList({ type: 1 });
+
+  const onSubmit = (data: FundUpsertParams) => {
+    createFund({
+      optionSeller: 1,
+      type: 1,
+      date: data.date,
+      name: data.name,
+      address: data.address,
+      amount: Number(data.amount),
+      eventID: data.eventID,
+      note: data.note,
+    });
+    reset();
+  };
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
 
-  const totalPages = Math.ceil(donationData.length / itemsPerPage);
+  const totalPages = Math.ceil((fundList?.length || 0) / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const currentItems = donationData.slice(startIndex, endIndex);
+  const currentItems = fundList?.slice(startIndex, endIndex);
 
   const getPageNumbers = () => {
     const pageNumbers = [];
@@ -130,44 +164,85 @@ const DonateListPage = () => {
           <TableBody>
             <TableRow className="hover:bg-gray-50">
               <TableCell className="py-2 px-4">
-                <Input className="w-full text-sm" placeholder="Nhập ngày" />
+                <Input
+                  className="w-full text-sm min-h-9 sm:min-h-0"
+                  placeholder="Nhập ngày"
+                  type="date"
+                  {...register('date', { required: true })}
+                />
               </TableCell>
               <TableCell className="py-2 px-4">
-                <Input className="w-full text-sm" placeholder="Nhập tên" />
+                <Input
+                  className="w-full text-sm min-h-9 sm:min-h-0"
+                  placeholder="Nhập tên"
+                  {...register('name', { required: true })}
+                />
               </TableCell>
               <TableCell className="py-2 px-4">
-                <Input className="w-full text-sm" placeholder="Nhập địa chỉ" />
+                <Input
+                  className="w-full text-sm min-h-9 sm:min-h-0"
+                  placeholder="Nhập địa chỉ"
+                  {...register('address', { required: true })}
+                />
               </TableCell>
               <TableCell className="py-2 px-4">
-                <Input className="w-full text-sm" placeholder="Nhập số tiền" />
+                <Input
+                  className="w-full text-sm min-h-9 sm:min-h-0"
+                  placeholder="Nhập số tiền"
+                  {...register('amount', { required: true })}
+                />
               </TableCell>
               <TableCell className="py-2 px-4">
-                <Input className="w-full text-sm" placeholder="Nhập sự kiện" />
+                <Select onValueChange={value => setValue('eventID', value)}>
+                  <SelectTrigger className="w-full text-sm min-h-9 sm:min-h-0">
+                    <SelectValue placeholder="Chọn sự kiện" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {eventList?.map(event => (
+                      <SelectItem key={event._id} value={event._id}>
+                        {event.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </TableCell>
               <TableCell className="py-2 px-4">
-                <Input className="w-full text-sm" placeholder="Viết ghi chú" />
+                <Input
+                  className="w-full text-sm min-h-9 sm:min-h-0"
+                  placeholder="Viết ghi chú"
+                  {...register('note')}
+                />
               </TableCell>
               <TableCell className="py-2 px-4 text-center">
-                <Button className="bg-primary text-white text-sm px-4 py-1 rounded-md">
-                  Thêm
+                <Button
+                  className="bg-primary text-white text-sm px-4 py-1 rounded-md"
+                  disabled={isLoading}
+                  onClick={handleSubmit(onSubmit)}>
+                  {isLoading ? 'Đang thêm...' : 'Thêm'}
                 </Button>
               </TableCell>
             </TableRow>
 
-            {currentItems.map(item => (
-              <TableRow key={item.id} className="hover:bg-gray-50">
-                <TableCell className="py-3 px-4 text-sm">{item.date}</TableCell>
+            {currentItems?.map(item => (
+              <TableRow key={item._id} className="hover:bg-gray-50">
+                <TableCell className="py-3 px-4 text-sm">
+                  {item.date
+                    ? formatDate(new Date(item.date), 'dd/MM/yyyy')
+                    : '-'}
+                </TableCell>
                 <TableCell className="py-3 px-4 text-sm">{item.name}</TableCell>
                 <TableCell className="py-3 px-4 text-sm">
                   {item.address}
                 </TableCell>
                 <TableCell className="py-3 px-4 text-sm">
-                  {item.amount}
+                  {item.amount ? formatNumber(item.amount) : '0'}
                 </TableCell>
                 <TableCell className="py-3 px-4 text-sm">
-                  {item.event}
+                  {item?.event?.name || '-'}
                 </TableCell>
-                <TableCell className="py-3 px-4 text-sm">{item.note}</TableCell>
+                <TableCell className="py-3 px-4 text-sm">
+                  {item.note || '-'}
+                </TableCell>
                 <TableCell className="py-3 px-4 text-sm text-center">
                   <Button className="text-primary p-0 h-auto" variant="link">
                     Xem chi tiết
