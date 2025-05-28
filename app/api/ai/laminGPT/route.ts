@@ -4,7 +4,7 @@ import { chatWithOpenAI } from '@/utils/ai/openai-service';
 
 export async function POST(request: Request) {
   try {
-    const { messages } = await request.json();
+    const { messages, userId } = await request.json();
 
     if (!messages || !Array.isArray(messages)) {
       return NextResponse.json(
@@ -12,7 +12,10 @@ export async function POST(request: Request) {
         { status: 400 },
       );
     }
-    const response = await chatWithOpenAI(messages);
+
+    const userIdentifier = userId || 'anonymous';
+
+    const response = await chatWithOpenAI(messages, userIdentifier);
 
     return NextResponse.json(response);
   } catch (error) {

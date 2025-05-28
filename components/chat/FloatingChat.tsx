@@ -123,7 +123,9 @@ export function FloatingChat() {
               <div className="flex flex-col gap-2">
                 {messages.length === 0 && (
                   <div className="bg-blue-100 p-2 rounded-lg rounded-tl-none max-w-[80%] self-start">
-                    <p className="text-sm">Chào bạn, Lamin có thể giúp gì được cho bạn ạ?</p>
+                    <p className="text-sm">
+                      Chào bạn, Lamin có thể giúp gì được cho bạn ạ?
+                    </p>
                   </div>
                 )}
                 {messages.map((msg, idx) => (
