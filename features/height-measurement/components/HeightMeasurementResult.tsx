@@ -105,9 +105,6 @@ export default function HeightMeasurementResult({
         // Sort data by age to ensure proper display
         heightData.sort((a, b) => a.age - b.age);
 
-        // Log the data to help with debugging
-        console.log('Height data from API:', heightData);
-
         // Extend data to age 20 if it doesn't already go that far
         const maxAgeInData = Math.max(...heightData.map(item => item.age));
 

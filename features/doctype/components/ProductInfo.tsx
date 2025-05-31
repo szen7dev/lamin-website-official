@@ -1,3 +1,4 @@
+import { formatDate } from 'date-fns';
 import React from 'react';
 
 interface ProductInfoProps {
@@ -29,7 +30,9 @@ const ProductInfo: React.FC<ProductInfoProps> = ({
         </div>
         <div>
           <p className="text-gray-500 text-sm">Thời hạn sử dụng</p>
-          <p className="font-medium">{expiryDate}</p>
+          <p className="font-medium">
+            {expiryDate ? formatDate(expiryDate, 'dd/MM/yyyy') : '-'}
+          </p>
         </div>
         <div>
           <p className="text-gray-500 text-sm">Được sản xuất bởi</p>

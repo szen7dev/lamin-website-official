@@ -60,7 +60,6 @@ export default function ProductGallery({ images }: ProductGalleryProps) {
 
   const handleImageClick = () => {
     setModalOpen(true);
-    console.log('Image clicked');
   };
 
   if (!processedImages.length) {

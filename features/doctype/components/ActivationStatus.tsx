@@ -1,3 +1,4 @@
+import { formatDate } from 'date-fns';
 import React from 'react';
 
 interface ProductInfoProps {
@@ -23,7 +24,9 @@ const ActivationStatus: React.FC<ProductInfoProps> = ({
         </div>
         <div>
           <p className="text-gray-500 text-sm">Ngày kích hoạt</p>
-          <p className="font-medium">{activationDate}</p>
+          <p className="font-medium">
+            {activationDate ? formatDate(activationDate, 'dd/MM/yyyy') : '-'}
+          </p>
         </div>
         <div>
           <p className="text-gray-500 text-sm">Người kích hoạt</p>

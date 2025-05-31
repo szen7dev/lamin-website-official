@@ -13,8 +13,6 @@ export const getDoctype = async (params: DoctypeParams): Promise<Doctype[]> => {
       queryParams,
     );
 
-    console.log('response', response);
-
     return response.data;
   } catch (error) {
     console.error('Error fetching doctype:', error);

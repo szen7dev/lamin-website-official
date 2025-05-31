@@ -25,7 +25,6 @@ export const useUpdateContact = () => {
   } = useMutation<Coach, Error, UpdateContactParams>({
     mutationFn: updateLocation,
     onSuccess: data => {
-      console.log('Contact updated successfully:', data);
       queryClient.invalidateQueries({
         queryKey: ['GET_COACH_DETAIL', data._id] as const,
       });

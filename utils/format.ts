@@ -48,8 +48,6 @@ export const formattedDeliveryDate = (
     formattedDeliveryDate = `${deliveryStartTime.getHours()}:00 - ${deliveryEndTime.getHours()}:00, ${deliveryEndTime.getDate()}/${deliveryEndTime.getMonth()}/${deliveryEndTime.getFullYear()}`;
   }
 
-  console.log('formattedDeliveryDate', formattedDeliveryDate);
-
   return formattedDeliveryDate;
 };
 

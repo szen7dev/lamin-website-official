@@ -103,7 +103,6 @@ export default function LocationContent() {
             const data = response || {};
 
             setIsSubmitting(false);
-            console.log('Contact ol:', data);
             toast({
               title: 'Cập nhật thông tin liên hệ thành công',
               description:
