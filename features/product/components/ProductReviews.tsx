@@ -54,16 +54,11 @@ export default function ProductReviews({
   });
 
   const handleReviewSubmit = (rating: number, content: string) => {
-    // Here you would implement the API call to submit the review
     console.log('Submitting review:', {
       productId,
       rating,
       content,
     });
-
-    // You could add the actual API call here
-    // For example:
-    // submitProductReview(productId, rating, content);
   };
 
   if (isLoading) {
