@@ -53,10 +53,11 @@ const ActivationForm = ({
       <div className="flex flex-col items-start gap-2">
         <div className="flex items-center justify-center bg-[#0051a5] rounded-full px-4 py-2 w-32 h-16">
           <Image
+            priority
             alt="Lamin Logo"
             className="object-contain"
             height={60}
-            src="/images/lamin_Logo.webp"
+            src="/images/Lamin_Logo.webp"
             width={120}
           />
         </div>

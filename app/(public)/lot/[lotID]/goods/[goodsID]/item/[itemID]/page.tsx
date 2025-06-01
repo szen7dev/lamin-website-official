@@ -80,26 +80,41 @@ const ItemPage = () => {
 
   return (
     <div className="container px-4 py-8">
-      {productLot.status === 1 && (
+      {!productLot && (
         <ActivationForm
           form={form}
           isActivating={isActivating}
           onSubmit={onSubmit}
         />
       )}
-      <ProductInfo
-        expiryDate={productLot.lot?.expired}
-        lotNumber={productLot.lot?.sign}
-        manufacturer={productLot.lot?.name}
-        note={productLot.lot?.note}
-        productName={productLot.goods?.name}
-      />
-      <ActivationStatus
-        activationBy={productLot.customerName}
-        activationDate={productLot.activationDate}
-        activationPhone={productLot.customerPhone}
-        status={productLot.status === 2 ? 'Đã kích hoạt' : 'Chưa kích hoạt'}
-      />
+      {productLot && (
+        <ProductInfo
+          expiryDate={productLot.lot?.expired}
+          lotNumber={productLot.lot?.sign}
+          manufacturer={productLot.lot?.name}
+          note={productLot.lot?.note}
+          productName={productLot.goods?.name}
+        />
+      )}
+
+      {productLot && productLot.status === 2 ? (
+        <ActivationStatus
+          activationBy={productLot.customerName}
+          activationDate={productLot.activationDate}
+          activationPhone={productLot.customerPhone}
+          status={productLot.status === 2 ? 'Đã kích hoạt' : 'Chưa kích hoạt'}
+        />
+      ) : (
+        <div className="flex flex-col items-start justify-between bg-white rounded-md p-6 w-full max-w-3xl mx-auto mt-4">
+          <h3 className="text-xl font-semibold mb-4">Tình trạng kích hoạt</h3>
+          <div className="space-y-4">
+            <div>
+              <p className="text-gray-500 text-sm">Trạng thái</p>
+              <p className="font-medium">Chưa kích hoạt</p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
