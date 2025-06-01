@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { formatDate } from 'date-fns';
 import { useForm } from 'react-hook-form';
+import Link from 'next/link';
 
 import { Input } from '@/components/ui/input';
 import { SearchIcon } from '@/components/icons';
@@ -216,9 +217,11 @@ const DonateHistoryPage = () => {
                   {item.note || '-'}
                 </TableCell>
                 <TableCell className="py-3 px-4 text-sm text-center">
-                  <Button className="text-primary p-0 h-auto" variant="link">
-                    Xem chi tiết
-                  </Button>
+                  <Link href={`/vng-event/donate-history/${item._id}`}>
+                    <Button className="text-primary p-0 h-auto" variant="link">
+                      Xem chi tiết
+                    </Button>
+                  </Link>
                 </TableCell>
               </TableRow>
             ))}

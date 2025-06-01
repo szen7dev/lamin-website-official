@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { formatDate } from 'date-fns';
+import Link from 'next/link';
 
 import { useCreateFund } from '@/features/vng-event/hooks/useCreateFund';
 import { useGetEventList } from '@/features/vng-event/hooks/useGetEventList';
@@ -244,9 +245,11 @@ const DonateListPage = () => {
                   {item.note || '-'}
                 </TableCell>
                 <TableCell className="py-3 px-4 text-sm text-center">
-                  <Button className="text-primary p-0 h-auto" variant="link">
-                    Xem chi tiết
-                  </Button>
+                  <Link href={`/vng-event/donate-list/${item._id}`}>
+                    <Button className="text-primary p-0 h-auto" variant="link">
+                      Xem chi tiết
+                    </Button>
+                  </Link>
                 </TableCell>
               </TableRow>
             ))}
