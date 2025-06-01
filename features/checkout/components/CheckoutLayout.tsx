@@ -21,7 +21,7 @@ import { CartItems } from '@/features/cart/components/CartItems';
 import { CartSummary } from '@/features/cart/components/CartSummary';
 import { useCart } from '@/features/cart/contexts/CartContext';
 import { useAuth } from '@/hooks';
-import { useToast } from '@/components/ui/use-toast';
+import { useToast } from '@/hooks/use-toast';
 import { useGetContactByPhone } from '@/features/contact/hooks/useGetContactByPhone';
 import { CreateOrderData } from '@/features/order/types/orderTypes';
 

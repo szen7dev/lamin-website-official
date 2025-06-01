@@ -112,8 +112,13 @@ class ApiClient {
     else config.data = dataOrParams;
 
     const response = await this.instance.request(config);
-    const pagination = response.data
-      ? (response.data as Pagination)
+    const pagination = response.data.data
+      ? {
+          limit: response.data.data.limit,
+          nextCursor: response.data.data.nextCursor,
+          totalRecord: response.data.data.totalRecord,
+          totalPage: response.data.data.totalPage,
+        }
       : {
           limit: 0,
           nextCursor: '',

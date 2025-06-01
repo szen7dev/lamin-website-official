@@ -5,7 +5,7 @@ import { CartItems } from './CartItems';
 import { CartSummary } from './CartSummary';
 
 import { useCart } from '@/features/cart/contexts/CartContext';
-import { useToast } from '@/components/ui/use-toast';
+import { useToast } from '@/hooks/use-toast';
 
 export function CartContent() {
   const { items, removeItem } = useCart();
