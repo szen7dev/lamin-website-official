@@ -2,7 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 
 import { login, type LoginParams, type LoginResponse } from '../api/login';
 
-import { useToast } from '@/components/ui/use-toast';
+import { useToast } from '@/hooks/use-toast';
 
 interface UseLoginParams {
   onSuccess?: (data: LoginResponse) => void;

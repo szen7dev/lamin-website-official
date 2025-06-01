@@ -12,7 +12,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { TermsModal } from '@/components/auth/TermsModal';
 import { OTPVerification } from '@/components/auth/OTPVerification';
-import { useToast } from '@/components/ui/use-toast';
+import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/hooks/useAuth';
 
 enum LoginStep {
