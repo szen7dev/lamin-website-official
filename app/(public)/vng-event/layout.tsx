@@ -12,6 +12,7 @@ import {
   RedArrowDown,
 } from '@/components/icons';
 import { formatNumber } from '@/utils';
+import { useGetIncomeExpense } from '@/features/vng-event/hooks/useGetIncomeExpense';
 
 const ClientTripleBulletButton = () => {
   const pathname = usePathname();
@@ -48,25 +49,28 @@ const ClientTripleBulletButton = () => {
 };
 
 const VNGEventPage = ({ children }: { children: React.ReactNode }) => {
+  const { incomeExpense } = useGetIncomeExpense();
+
   const mockData = [
     {
       id: 1,
       name: 'Tổng thu',
-      total: 100000000,
+      total: incomeExpense?.data[0].income || 0,
       icon: <GreenArrowUpIcon />,
       color: '#27AE60',
     },
     {
       id: 2,
       name: 'Tổng chi',
-      total: 40000000,
+      total: incomeExpense?.data[0].expense || 0,
       icon: <RedArrowDown />,
       color: '#EB5757',
     },
     {
       id: 3,
       name: 'Còn lại',
-      total: 60000000,
+      total:
+        incomeExpense?.data[0].income - incomeExpense?.data[0].expense || 0,
       icon: <BlueChartIcon />,
       color: '#2F80ED',
     },

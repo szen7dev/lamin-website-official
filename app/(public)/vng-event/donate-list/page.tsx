@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { useCreateFund } from '@/features/vng-event/hooks/useCreateFund';
 import { useGetEventList } from '@/features/vng-event/hooks/useGetEventList';
 import { Input } from '@/components/ui/input';
-import { SearchIcon } from '@/components/icons';
+import { PageHeader } from '@/features/vng-event/components/PageHeader';
 import { Button } from '@/components/ui/button';
 import {
   Select,
@@ -38,6 +38,7 @@ import { useGetFundList } from '@/features/vng-event/hooks/useGetFundList';
 import { formatNumber } from '@/utils';
 
 const DonateListPage = () => {
+  const [searchTerm, setSearchTerm] = useState('');
   const { register, handleSubmit, reset, setValue } = useForm<FundUpsertParams>(
     {
       defaultValues: {
@@ -54,7 +55,7 @@ const DonateListPage = () => {
   const { createFund, isLoading } = useCreateFund();
 
   const { eventList } = useGetEventList();
-  const { fundList } = useGetFundList({ type: 1 });
+  const { fundList } = useGetFundList({ type: 1, keyword: searchTerm });
 
   const onSubmit = (data: FundUpsertParams) => {
     createFund({
@@ -120,20 +121,11 @@ const DonateListPage = () => {
 
   return (
     <section className="container py-6 bg-white rounded-2xl px-0">
-      <div className="flex justify-between items-center gap-2 px-4">
-        <div className="text-heading-sm font-semibold text-primary">
-          Danh Sách Quyên Góp
-        </div>
-        <div className="text-white relative">
-          <Input
-            className="rounded-full pr-12 border-grayscale-20 min-w-[500px] h-12"
-            placeholder="Tìm kiếm Họ và Tên, ngày, địa chỉ..."
-          />
-          <div className="absolute right-2 top-1/2 transform -translate-y-1/2 text-white p-2 bg-primary rounded-full cursor-pointer">
-            <SearchIcon size={20} />
-          </div>
-        </div>
-      </div>
+      <PageHeader
+        placeholder="Tìm kiếm Họ và Tên, ngày, địa chỉ..."
+        title="Danh Sách Quyên Góp"
+        onSearch={value => setSearchTerm(value)}
+      />
 
       <div className="overflow-x-auto my-10">
         <Table>

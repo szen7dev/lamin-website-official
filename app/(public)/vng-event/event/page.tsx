@@ -18,6 +18,7 @@ const EventPage = () => {
   const [allEvents, setAllEvents] = useState<Event[]>([]);
   const [hasMore, setHasMore] = useState<boolean>(true);
   const [isLoadingMore, setIsLoadingMore] = useState<boolean>(false);
+  const [eventToEdit, setEventToEdit] = useState<Event | undefined>(undefined);
 
   const { eventList: elData, pagination } = useGetEventList({
     limit: 5,
@@ -63,7 +64,13 @@ const EventPage = () => {
           Danh Sách Sự Kiện
         </div>
         <div className="text-white">
-          <Button className="rounded-lg" onClick={() => setIsModalOpen(true)}>
+          <Button
+            className="rounded-lg"
+            onClick={() => {
+              setEventToEdit(undefined);
+              setIsModalOpen(true);
+            }}
+          >
             Tạo sự kiện
           </Button>
         </div>
@@ -102,7 +109,26 @@ const EventPage = () => {
                   </div>
                 </div>
 
-                <div className="flex items-center border border-grayscale-20 rounded-lg p-2 cursor-pointer hover:bg-grayscale-10 transition-colors h-max">
+                <div
+                  className="flex items-center border border-grayscale-20 rounded-lg p-2 cursor-pointer hover:bg-grayscale-10 transition-colors h-max"
+                  role="button"
+                  aria-label="Edit event"
+                  tabIndex={0}
+                  onClick={e => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setEventToEdit(event);
+                    setIsModalOpen(true);
+                  }}
+                  onKeyDown={e => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      setEventToEdit(event);
+                      setIsModalOpen(true);
+                    }
+                  }}
+                >
                   <EditIcon />
                 </div>
 
@@ -125,6 +151,15 @@ const EventPage = () => {
           <Loader2 className="h-6 w-6 animate-spin text-primary" />
         </div>
       )}
+
+      <AddEventModal
+        eventToEdit={eventToEdit}
+        isOpen={isModalOpen}
+        onClose={() => {
+          setIsModalOpen(false);
+          setEventToEdit(undefined);
+        }}
+      />
 
       {allEvents?.length > 0 && hasMore && !isLoadingMore && (
         <div className="text-center mt-4 mb-4">
