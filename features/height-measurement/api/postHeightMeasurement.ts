@@ -12,23 +12,23 @@ export const postHeightMeasurement = async (
     const queryParams = {
       contactID: params.contactID || '',
       optionSeller: params.optionSeller || DEFAULT_OPTION_SELLER,
-      parentName: params.parentName,
-      fatherHeight: Number(params.fatherHeight),
-      motherHeight: Number(params.motherHeight),
-      email: params.email,
-      desiredHeight: Number(params.desiredHeight),
-      routine: params.routine,
-      date: params.date,
-      name: params.name,
-      phone: params.phone,
+      parentName: params.parentName || '',
+      fatherHeight: Number(params.fatherHeight) || 0,
+      motherHeight: Number(params.motherHeight) || 0,
+      email: params.email || '',
+      desiredHeight: Number(params.desiredHeight) || 0,
+      routine: params.routine || '',
+      date: params.date || '',
+      name: params.name || '',
+      phone: params.phone || '',
       birthday:
         params.birthDate instanceof Date
           ? params.birthDate.toISOString()
           : params.birthDate,
       note: params.note || '',
       gender: params.gender,
-      height: Number(params.height),
-      weight: Number(params.weight),
+      height: Number(params.height) || 0,
+      weight: Number(params.weight) || 0,
     };
 
     const response = await apiClient.post('/api/crm/grow_track', queryParams);
