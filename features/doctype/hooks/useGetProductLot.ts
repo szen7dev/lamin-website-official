@@ -14,6 +14,7 @@ export const useGetProductLot = (params: ProductLotParams) => {
     queryFn: () => getProductLot(params),
     staleTime: 1000 * 60 * 5,
     enabled: !!params.sign,
+    retry: false,
   });
 
   return {

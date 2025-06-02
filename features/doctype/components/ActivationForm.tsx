@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Image from 'next/image';
+import { Check, ChevronsUpDown } from 'lucide-react';
 
 import { useGetDoctype } from '../hooks/useGetDoctype';
 
@@ -13,7 +14,21 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { cn } from '@/lib/utils';
 import { useGetAddress } from '@/features/address/hooks/useGetAddress';
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from '@/components/ui/command';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
 
 interface ActivationFormProps {
   form: any;
@@ -33,20 +48,29 @@ const ActivationForm = ({
     type: 19,
   });
 
-  const { addressList: cities } = useGetAddress({
-    type: 1,
+  const { addressList: cities, pagination: citiesPagination } = useGetAddress({
+    level: 1,
   });
   const [selectedCity, setSelectedCity] = React.useState<string>('');
   const [selectedDistrict, setSelectedDistrict] = React.useState<string>('');
-  const { addressList: districts, isLoading: isDistrictsLoading } =
-    useGetAddress({
-      type: 2,
-      parentID: selectedCity,
-    });
-  const { addressList: wards, isLoading: isWardsLoading } = useGetAddress({
-    type: 3,
+  const {
+    addressList: districts,
+    pagination: districtsPagination,
+    isLoading: isDistrictsLoading,
+  } = useGetAddress({
+    level: 2,
+    parentID: selectedCity,
+  });
+  const {
+    addressList: wards,
+    pagination: wardsPagination,
+    isLoading: isWardsLoading,
+  } = useGetAddress({
+    level: 3,
     parentID: selectedDistrict,
   });
+
+  console.log('citiesPagination', citiesPagination);
 
   return (
     <div>
@@ -287,50 +311,78 @@ const ActivationForm = ({
                   control={form.control}
                   name="city"
                   render={({ field }) => (
-                    <FormItem>
+                    <FormItem className="flex flex-col">
                       <label
                         className="block text-base font-medium mb-2"
                         htmlFor="city">
                         Tỉnh/Thành phố (*)
                       </label>
-                      <div className="relative">
-                        <FormControl>
-                          <select
-                            className="w-full appearance-none border border-gray-300 rounded-md py-2.5 px-3 pr-8 focus:outline-none focus:ring-2 focus:ring-[#0051a5]"
-                            id="city"
-                            value={field.value}
-                            onChange={e => {
-                              const cityId = e.target.value;
+                      <div className="relative min-h-[42px] sm:min-h-0">
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <FormControl>
+                              <button
+                                className={cn(
+                                  'w-full flex items-center justify-between border border-gray-300 rounded-md py-2.5 px-3 text-left focus:outline-none focus:ring-2 focus:ring-[#0051a5]',
+                                  !field.value && 'text-gray-500',
+                                )}
+                                id="city"
+                                type="button">
+                                {field.value
+                                  ? cities.find(
+                                      city => city._id === field.value,
+                                    )?.name || 'Chọn Tỉnh/Thành phố'
+                                  : 'Chọn Tỉnh/Thành phố'}
+                                <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                              </button>
+                            </FormControl>
+                          </PopoverTrigger>
+                          <PopoverContent align="start" className="w-full p-0">
+                            <Command>
+                              <CommandInput
+                                className="h-9"
+                                placeholder="Tìm tỉnh/thành phố..."
+                              />
+                              <CommandList>
+                                <CommandEmpty>
+                                  Không tìm thấy tỉnh/thành phố
+                                </CommandEmpty>
+                                <CommandGroup>
+                                  {cities.map(city => (
+                                    <CommandItem
+                                      key={city._id}
+                                      value={city.name}
+                                      onSelect={() => {
+                                        const cityId = city._id;
 
-                              setSelectedCity(cityId);
-                              setSelectedDistrict('');
-                              form.setValue('district', '');
-                              form.setValue('ward', '');
+                                        setSelectedCity(cityId);
+                                        setSelectedDistrict('');
+                                        form.setValue('district', '');
+                                        form.setValue('ward', '');
+                                        field.onChange(cityId);
+                                      }}>
+                                      <Check
+                                        className={cn(
+                                          'mr-2 h-4 w-4',
+                                          field.value === city._id
+                                            ? 'opacity-100'
+                                            : 'opacity-0',
+                                        )}
+                                      />
+                                      {city.name}
+                                    </CommandItem>
+                                  ))}
+                                </CommandGroup>
+                              </CommandList>
+                            </Command>
+                          </PopoverContent>
+                        </Popover>
 
-                              field.onChange(e);
-                            }}>
-                            <option value="">Chọn Tỉnh/Thành phố</option>
-                            {cities.map(city => (
-                              <option key={city._id} value={city._id}>
-                                {city.name}
-                              </option>
-                            ))}
-                          </select>
-                        </FormControl>
-                        <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                          <svg
-                            className="h-5 w-5 text-gray-400"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24">
-                            <path
-                              d="M19 9l-7 7-7-7"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                            />
-                          </svg>
-                        </div>
+                        <input
+                          name={field.name}
+                          type="hidden"
+                          value={field.value || ''}
+                        />
                       </div>
                       <FormMessage />
                     </FormItem>
@@ -341,48 +393,81 @@ const ActivationForm = ({
                   control={form.control}
                   name="district"
                   render={({ field }) => (
-                    <FormItem>
+                    <FormItem className="flex flex-col">
                       <label
                         className="block text-base font-medium mb-2"
                         htmlFor="district">
                         Quận/Huyện (*)
                       </label>
-                      <div className="relative">
-                        <FormControl>
-                          <select
-                            className="w-full appearance-none border border-gray-300 rounded-md py-2.5 px-3 pr-8 focus:outline-none focus:ring-2 focus:ring-[#0051a5]"
-                            disabled={!selectedCity || districts.length === 0}
-                            id="district"
-                            value={field.value}
-                            onChange={e => {
-                              const districtId = e.target.value;
+                      <div className="relative min-h-[42px] sm:min-h-0">
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <FormControl>
+                              <button
+                                className={cn(
+                                  'w-full flex items-center justify-between border border-gray-300 rounded-md py-2.5 px-3 text-left focus:outline-none focus:ring-2 focus:ring-[#0051a5]',
+                                  !field.value && 'text-gray-500',
+                                  (!selectedCity || districts.length === 0) &&
+                                    'opacity-50 cursor-not-allowed',
+                                )}
+                                disabled={
+                                  !selectedCity || districts.length === 0
+                                }
+                                id="district"
+                                type="button">
+                                {field.value
+                                  ? districts.find(
+                                      district => district._id === field.value,
+                                    )?.name || 'Chọn Quận/Huyện'
+                                  : 'Chọn Quận/Huyện'}
+                                <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                              </button>
+                            </FormControl>
+                          </PopoverTrigger>
+                          <PopoverContent align="start" className="w-full p-0">
+                            <Command>
+                              <CommandInput
+                                className="h-9"
+                                placeholder="Tìm quận/huyện..."
+                              />
+                              <CommandList>
+                                <CommandEmpty>
+                                  Không tìm thấy quận/huyện
+                                </CommandEmpty>
+                                <CommandGroup>
+                                  {districts.map(district => (
+                                    <CommandItem
+                                      key={district._id}
+                                      value={district.name}
+                                      onSelect={() => {
+                                        const districtId = district._id;
 
-                              setSelectedDistrict(districtId);
-                              form.setValue('ward', '');
-                              field.onChange(e);
-                            }}>
-                            <option value="">Chọn Quận/Huyện</option>
-                            {districts.map(district => (
-                              <option key={district._id} value={district._id}>
-                                {district.name}
-                              </option>
-                            ))}
-                          </select>
-                        </FormControl>
-                        <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                          <svg
-                            className="h-5 w-5 text-gray-400"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24">
-                            <path
-                              d="M19 9l-7 7-7-7"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                            />
-                          </svg>
-                        </div>
+                                        setSelectedDistrict(districtId);
+                                        form.setValue('ward', '');
+                                        field.onChange(districtId);
+                                      }}>
+                                      <Check
+                                        className={cn(
+                                          'mr-2 h-4 w-4',
+                                          field.value === district._id
+                                            ? 'opacity-100'
+                                            : 'opacity-0',
+                                        )}
+                                      />
+                                      {district.name}
+                                    </CommandItem>
+                                  ))}
+                                </CommandGroup>
+                              </CommandList>
+                            </Command>
+                          </PopoverContent>
+                        </Popover>
+
+                        <input
+                          name={field.name}
+                          type="hidden"
+                          value={field.value || ''}
+                        />
                       </div>
                       {isDistrictsLoading && (
                         <p className="text-sm text-gray-500 mt-1">
@@ -405,42 +490,78 @@ const ActivationForm = ({
                   control={form.control}
                   name="ward"
                   render={({ field }) => (
-                    <FormItem>
+                    <FormItem className="flex flex-col">
                       <label
                         className="block text-base font-medium mb-2"
                         htmlFor="ward">
                         Phường/Xã (*)
                       </label>
-                      <div className="relative">
-                        <FormControl>
-                          <select
-                            className="w-full appearance-none border border-gray-300 rounded-md py-2.5 px-3 pr-8 focus:outline-none focus:ring-2 focus:ring-[#0051a5]"
-                            disabled={!selectedDistrict || wards.length === 0}
-                            id="ward"
-                            value={field.value}
-                            onChange={field.onChange}>
-                            <option value="">Chọn Phường/Xã</option>
-                            {wards.map(ward => (
-                              <option key={ward._id} value={ward._id}>
-                                {ward.name}
-                              </option>
-                            ))}
-                          </select>
-                        </FormControl>
-                        <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                          <svg
-                            className="h-5 w-5 text-gray-400"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24">
-                            <path
-                              d="M19 9l-7 7-7-7"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                            />
-                          </svg>
-                        </div>
+                      <div className="relative min-h-[42px] sm:min-h-0">
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <FormControl>
+                              <button
+                                className={cn(
+                                  'w-full flex items-center justify-between border border-gray-300 rounded-md py-2.5 px-3 text-left focus:outline-none focus:ring-2 focus:ring-[#0051a5]',
+                                  !field.value && 'text-gray-500',
+                                  (!selectedDistrict || wards.length === 0) &&
+                                    'opacity-50 cursor-not-allowed',
+                                )}
+                                disabled={
+                                  !selectedDistrict || wards.length === 0
+                                }
+                                id="ward"
+                                type="button">
+                                {field.value
+                                  ? wards.find(ward => ward._id === field.value)
+                                      ?.name || 'Chọn Phường/Xã'
+                                  : 'Chọn Phường/Xã'}
+                                <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                              </button>
+                            </FormControl>
+                          </PopoverTrigger>
+                          <PopoverContent align="start" className="w-full p-0">
+                            <Command>
+                              <CommandInput
+                                className="h-9"
+                                placeholder="Tìm phường/xã..."
+                              />
+                              <CommandList>
+                                <CommandEmpty>
+                                  Không tìm thấy phường/xã
+                                </CommandEmpty>
+                                <CommandGroup>
+                                  {wards.map(ward => (
+                                    <CommandItem
+                                      key={ward._id}
+                                      value={ward.name}
+                                      onSelect={() => {
+                                        const wardId = ward._id;
+
+                                        field.onChange(wardId);
+                                      }}>
+                                      <Check
+                                        className={cn(
+                                          'mr-2 h-4 w-4',
+                                          field.value === ward._id
+                                            ? 'opacity-100'
+                                            : 'opacity-0',
+                                        )}
+                                      />
+                                      {ward.name}
+                                    </CommandItem>
+                                  ))}
+                                </CommandGroup>
+                              </CommandList>
+                            </Command>
+                          </PopoverContent>
+                        </Popover>
+
+                        <input
+                          name={field.name}
+                          type="hidden"
+                          value={field.value || ''}
+                        />
                       </div>
                       {isWardsLoading && (
                         <p className="text-sm text-gray-500 mt-1">

@@ -1,22 +1,25 @@
 import { Address, AddressParams } from '@/features/address/types/address';
 import apiClient from '@/services/api/apiClient';
 
-export const getAddress = async (params: AddressParams): Promise<Address[]> => {
+export const getAddress = async (
+  params: AddressParams,
+): Promise<{ data: Address[]; pagination: any }> => {
   try {
     const queryParams = {
-      type: params.type || 1,
+      level: params.level || 1,
       parentID: params.parentID || '',
+      lastestID: params.lastestID || '',
     };
 
-    const response = await apiClient.get<Address[]>(
+    const { data: response, pagination } = await apiClient.get<Address[]>(
       `/api/item/areas`,
       queryParams,
     );
 
-    return response.data;
+    return { data: response || [], pagination };
   } catch (error) {
     console.error('Error fetching address:', error);
 
-    return [];
+    return { data: [], pagination: null };
   }
 };
