@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import Link from 'next/link';
 
 import { Input } from '@/components/ui/input';
-import { SearchIcon } from '@/components/icons';
+import { PageHeader } from '@/features/vng-event/components/PageHeader';
 import { Button } from '@/components/ui/button';
 import { useGetFundList } from '@/features/vng-event/hooks/useGetFundList';
 import { formatNumber } from '@/utils';
@@ -64,7 +64,8 @@ const DonateHistoryPage = () => {
     reset();
   };
   const { eventList } = useGetEventList();
-  const { fundList } = useGetFundList({ type: 2 });
+  const [searchTerm, setSearchTerm] = useState('');
+  const { fundList } = useGetFundList({ type: 2, keyword: searchTerm });
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
@@ -116,20 +117,11 @@ const DonateHistoryPage = () => {
 
   return (
     <section className="container py-6 bg-white rounded-2xl px-0">
-      <div className="flex justify-between items-center gap-2 px-4">
-        <div className="text-heading-sm font-semibold text-primary">
-          Lịch Sử Từ Thiện
-        </div>
-        <div className="text-white relative">
-          <Input
-            className="rounded-full pr-12 border-grayscale-20 min-w-[500px] h-12"
-            placeholder="Tìm kiếm ngày, sự kiện..."
-          />
-          <div className="absolute right-2 top-1/2 transform -translate-y-1/2 text-white p-2 bg-primary rounded-full cursor-pointer">
-            <SearchIcon size={20} />
-          </div>
-        </div>
-      </div>
+      <PageHeader
+        placeholder="Tìm kiếm ngày, sự kiện..."
+        title="Lịch Sử Từ Thiện"
+        onSearch={value => setSearchTerm(value)}
+      />
 
       <div className="overflow-x-auto my-10">
         <Table>

@@ -1,16 +1,20 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { useCreateEvent } from '@/features/vng-event/hooks/useCreateEvent';
+import { useUpdateEvent } from '@/features/vng-event/hooks/useUpdateEvent';
+import { useGetEventList } from '@/features/vng-event/hooks/useGetEventList';
+import { Event } from '@/features/vng-event/types/event';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogFooter,
 } from '@/components/ui/dialog';
 import {
   Form,
@@ -26,6 +30,7 @@ import { Textarea } from '@/components/ui/textarea';
 interface AddEventModalProps {
   isOpen: boolean;
   onClose: () => void;
+  eventToEdit?: Event;
 }
 
 export interface EventFormValues {
@@ -35,30 +40,64 @@ export interface EventFormValues {
   note: string;
 }
 
-export function AddEventModal({ isOpen, onClose }: AddEventModalProps) {
+export function AddEventModal({
+  isOpen,
+  onClose,
+  eventToEdit,
+}: AddEventModalProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { createEventAsync, isLoading } = useCreateEvent();
+  const isEditMode = !!eventToEdit;
 
-  const form = useForm<EventFormValues>({
-    defaultValues: {
+  const { eventDetail, isLoading: isLoadingEvent } = useGetEventList(
+    isEditMode ? { eventID: eventToEdit._id } : undefined,
+  );
+  const { createEventAsync, isLoading: isCreating } = useCreateEvent();
+  const { updateEventAsync, isLoading: isUpdating } = useUpdateEvent();
+
+  const isLoading = isCreating || isUpdating || (isEditMode && isLoadingEvent);
+
+  const defaultValues: EventFormValues = useMemo(() => {
+    if (isEditMode && eventDetail) {
+      const formattedDate = eventDetail.date?.split('T')[0] || '';
+
+      return {
+        name: eventDetail.name || '',
+        date: formattedDate,
+        address: eventDetail.address || '',
+        note: eventDetail.note || '',
+      };
+    }
+
+    return {
       name: '',
       date: '',
       address: '',
       note: '',
-    },
+    };
+  }, [isEditMode, eventDetail]);
+
+  const form = useForm<EventFormValues>({
+    defaultValues,
   });
 
-  const handleSubmit = async (data: EventFormValues) => {
-    try {
-      setIsSubmitting(true);
+  useEffect(() => {
+    form.reset(defaultValues);
+  }, [defaultValues, form]);
 
-      await createEventAsync({
-        optionSeller: 1,
-        name: data.name,
-        date: data.date,
-        address: data.address,
-        note: data.note,
-      });
+  const handleSubmit = async (data: EventFormValues) => {
+    setIsSubmitting(true);
+
+    const payload = {
+      optionSeller: 1,
+      ...data,
+    };
+
+    try {
+      if (isEditMode && eventToEdit) {
+        await updateEventAsync({ eventId: eventToEdit._id, data: payload });
+      } else {
+        await createEventAsync(payload);
+      }
 
       form.reset();
       onClose();
@@ -69,13 +108,20 @@ export function AddEventModal({ isOpen, onClose }: AddEventModalProps) {
     }
   };
 
+  console.log('isEditMode', isEditMode);
+
   return (
     <Dialog open={isOpen} onOpenChange={open => !open && onClose()}>
       <DialogContent className="max-w-2xl min-h-[300px] sm:min-h-0">
         <DialogHeader>
           <DialogTitle className="text-xl font-bold">
-            Thông tin sự kiện
+            {isEditMode ? 'Cập nhật sự kiện' : 'Thêm sự kiện mới'}
           </DialogTitle>
+          <DialogDescription className="sr-only">
+            {isEditMode
+              ? 'Chỉnh sửa thông tin sự kiện'
+              : 'Nhập thông tin cho sự kiện mới'}
+          </DialogDescription>
         </DialogHeader>
 
         <Form {...form}>
