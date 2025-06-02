@@ -17,6 +17,7 @@ const vietnameseTextMap: Record<string, string> = {
   // Main sections
   'trang-chu': 'Trang chủ',
   'do-cao': 'Đo cao',
+  'do-cao-cdc': 'Đo cao CDC',
   'kiem-tra-thoi-quen': 'Kiểm tra thói quen',
   'doi-ngu-chuyen-mon': 'Đội ngũ chuyên môn',
   'chuyen-trang-suc-khoe': 'Chuyên trang sức khỏe',

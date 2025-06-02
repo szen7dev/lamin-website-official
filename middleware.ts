@@ -5,6 +5,7 @@ import { NextResponse } from 'next/server';
 // URL redirects mapping (from -> to)
 const redirects = new Map([
   ['/height-measurement', '/do-cao'],
+  ['/height-measurement-cdc', '/do-cao-cdc'],
   ['/height-measurement/results', '/do-cao/ket-qua'],
   ['/nutrition-check', '/kiem-tra-thoi-quen'],
   ['/coach-experts', '/doi-ngu-chuyen-mon'],
@@ -20,11 +21,15 @@ const redirects = new Map([
   ['/account/location', '/tai-khoan/dia-chi'],
   ['/account/height-measure-history', '/tai-khoan/lich-su-do-cao'],
   ['/vng-event', '/quy-vietnam-grow'],
+  ['/vng-event/event', '/quy-vietnam-grow/su-kien'],
+  ['/vng-event/donate-list', '/quy-vietnam-grow/danh-sach-tu-thien'],
+  ['/vng-event/donate-history', '/quy-vietnam-grow/lich-su-tu-thien'],
 ]);
 
 // URL rewrites mapping (visible URL -> content URL)
 const rewrites = new Map([
   ['/do-cao', '/height-measurement'],
+  ['/do-cao-cdc', '/height-measurement-cdc'],
   ['/do-cao/ket-qua', '/height-measurement/results'],
   ['/kiem-tra-thoi-quen', '/nutrition-check'],
   ['/doi-ngu-chuyen-mon', '/coach-experts'],
@@ -40,6 +45,9 @@ const rewrites = new Map([
   ['/tai-khoan/dia-chi', '/account/location'],
   ['/tai-khoan/lich-su-do-cao', '/account/height-measure-history'],
   ['/quy-vietnam-grow', '/vng-event'],
+  ['/quy-vietnam-grow/su-kien', '/vng-event/event'],
+  ['/quy-vietnam-grow/danh-sach-tu-thien', '/vng-event/donate-list'],
+  ['/quy-vietnam-grow/lich-su-tu-thien', '/vng-event/donate-history'],
 ]);
 
 export async function middleware(request: NextRequest) {
