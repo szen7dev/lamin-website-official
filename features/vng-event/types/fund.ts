@@ -37,4 +37,5 @@ export interface FundListParams {
   populates?: Populate;
   type?: 1 | 2;
   eventID?: string;
+  fundID?: string;
 }
