@@ -1,6 +1,7 @@
 export interface AddressParams {
-  type?: number;
+  level?: number;
   parentID?: string;
+  lastestID?: string;
 }
 
 export interface Address {

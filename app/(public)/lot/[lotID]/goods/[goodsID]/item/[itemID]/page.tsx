@@ -32,7 +32,7 @@ type FormValues = z.infer<typeof formSchema>;
 const ItemPage = () => {
   const params = useParams();
 
-  const { productLot } = useGetProductLot({
+  const { productLot, isError } = useGetProductLot({
     sign: params.itemID as string,
     populates: {
       path: 'funda customer voucher product lot goods',
@@ -80,14 +80,14 @@ const ItemPage = () => {
 
   return (
     <div className="container px-4 py-8">
-      {!productLot && (
+      {(isError || productLot.status === 1) && (
         <ActivationForm
           form={form}
           isActivating={isActivating}
           onSubmit={onSubmit}
         />
       )}
-      {productLot && (
+      {!isError && (
         <ProductInfo
           expiryDate={productLot.lot?.expired}
           lotNumber={productLot.lot?.sign}
@@ -97,12 +97,12 @@ const ItemPage = () => {
         />
       )}
 
-      {productLot && productLot.status === 2 ? (
+      {!isError ? (
         <ActivationStatus
           activationBy={productLot.customerName}
           activationDate={productLot.activationDate}
           activationPhone={productLot.customerPhone}
-          status={productLot.status === 2 ? 'Đã kích hoạt' : 'Chưa kích hoạt'}
+          status={productLot.status}
         />
       ) : (
         <div className="flex flex-col items-start justify-between bg-white rounded-md p-6 w-full max-w-3xl mx-auto mt-4">
