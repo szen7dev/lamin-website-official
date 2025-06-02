@@ -23,6 +23,6 @@ export const getProductLot = async (
   } catch (error) {
     console.error('Error fetching product lot:', error);
 
-    return {} as ProductLot;
+    throw error;
   }
 };

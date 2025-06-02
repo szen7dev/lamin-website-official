@@ -2,7 +2,7 @@ import { formatDate } from 'date-fns';
 import React from 'react';
 
 interface ProductInfoProps {
-  status: string;
+  status: number;
   activationDate: string;
   activationBy: string;
   activationPhone: string;
@@ -20,7 +20,9 @@ const ActivationStatus: React.FC<ProductInfoProps> = ({
       <div className="space-y-4">
         <div>
           <p className="text-gray-500 text-sm">Trạng thái</p>
-          <p className="font-medium">{status}</p>
+          <p className="font-medium">
+            {status === 2 ? 'Đã kích hoạt' : 'Kích hoạt lỗi'}
+          </p>
         </div>
         <div>
           <p className="text-gray-500 text-sm">Ngày kích hoạt</p>
