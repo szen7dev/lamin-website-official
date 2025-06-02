@@ -2,7 +2,6 @@
 
 import { format } from 'date-fns';
 import { useMemo, useState } from 'react';
-import Image from 'next/image';
 import dynamic from 'next/dynamic';
 
 import { Fund } from '../types/fund';
@@ -16,7 +15,6 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { formatNumber } from '@/utils';
-import { Button } from '@/components/ui/button';
 
 // Dynamically import the modal to avoid SSR issues
 const ImageGalleryModal = dynamic(
@@ -34,9 +32,7 @@ const DetailTable: React.FC<DetailTableProps> = ({ donation }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  // Example images for demonstration (since real data might not be available)
   const processedImages = useMemo(() => {
-    // Demo images from public directory - in a real scenario, we would use donation.images
     const demoImages = [
       '/images/qrCode.jpg',
       '/images/logo.jpg',
@@ -55,7 +51,6 @@ const DetailTable: React.FC<DetailTableProps> = ({ donation }) => {
     }));
   }, [donation._id, donation.name]);
 
-  // Constants for gallery display
   const MAX_GALLERY_IMAGES = 4;
   const hasMoreImages = processedImages.length > MAX_GALLERY_IMAGES;
   const displayImages = processedImages.slice(0, MAX_GALLERY_IMAGES);
@@ -119,7 +114,7 @@ const DetailTable: React.FC<DetailTableProps> = ({ donation }) => {
         </Table>
       </div>
 
-      {processedImages.length > 0 && (
+      {/* {processedImages.length > 0 && (
         <div className="mt-6">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
             {displayImages.map((image, index) => (
@@ -161,7 +156,6 @@ const DetailTable: React.FC<DetailTableProps> = ({ donation }) => {
         </div>
       )}
 
-      {/* Image Gallery Modal */}
       {modalOpen && (
         <ImageGalleryModal
           images={processedImages}
@@ -169,7 +163,7 @@ const DetailTable: React.FC<DetailTableProps> = ({ donation }) => {
           isOpen={modalOpen}
           onClose={() => setModalOpen(false)}
         />
-      )}
+      )} */}
     </>
   );
 };

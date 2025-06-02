@@ -24,6 +24,7 @@ export interface EventListParams {
   lastestID?: string;
   optionSeller?: number;
   contactID?: string;
+  eventID?: string;
 }
 
 export interface EventUpsertParams {

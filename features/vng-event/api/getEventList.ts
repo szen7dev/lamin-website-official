@@ -4,19 +4,17 @@ import { Pagination } from '@/types';
 
 export const getEventList = async (
   params: EventListParams,
-): Promise<{ data: Event[]; pagination: Pagination }> => {
+): Promise<{ data: Event[] | Event; pagination: Pagination }> => {
   try {
     const queryParams = {
       optionSeller: params.optionSeller || DEFAULT_OPTION_SELLER,
       ...params,
     };
 
-    const { data, pagination } = await apiClient.get<Event[]>(
+    const { data, pagination } = await apiClient.get<Event[] | Event>(
       `/api/crm/vng_event`,
       queryParams,
     );
-
-    console.log('data', data);
 
     return { data, pagination };
   } catch (error) {

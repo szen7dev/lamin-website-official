@@ -84,13 +84,13 @@ export default function DonationHistoryDetailPage() {
             Chi Tiết Quyên Góp
           </div>
           <div className="flex gap-3">
-            <Button
+            {/* <Button
               className="flex items-center gap-2 bg-primary text-white hover:bg-primary/90"
               disabled={!fundDetail?.images || fundDetail.images.length === 0}
               size="sm"
               onClick={handleDownloadImages}>
               Tải ảnh sự kiện
-            </Button>
+            </Button> */}
             <Button
               className="flex items-center gap-2"
               size="sm"

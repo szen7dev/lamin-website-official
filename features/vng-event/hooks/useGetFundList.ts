@@ -7,7 +7,13 @@ import { Fund, FundListParams } from '@/features/vng-event/types/fund';
 
 export const useGetFundList = (params: FundListParams) => {
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ['GET_FUND_LIST', params.type, params.eventID, params.fundID],
+    queryKey: [
+      'GET_FUND_LIST',
+      params.type,
+      params.eventID,
+      params.fundID,
+      params.keyword,
+    ],
     queryFn: () => getFundList(params),
     staleTime: 1000 * 60 * 5,
   });

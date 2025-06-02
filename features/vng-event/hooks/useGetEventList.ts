@@ -7,13 +7,14 @@ import { Event, EventListParams } from '@/features/vng-event/types/event';
 
 export const useGetEventList = (params?: EventListParams) => {
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ['GET_EVENT_LIST', params?.lastestID],
+    queryKey: ['GET_EVENT_LIST', params?.lastestID, params?.eventID],
     queryFn: () => getEventList(params || {}),
     staleTime: 1000 * 60 * 5,
   });
 
   return {
     eventList: data?.data as Event[],
+    eventDetail: data?.data as Event,
     pagination: data?.pagination,
     isLoading,
     error,
