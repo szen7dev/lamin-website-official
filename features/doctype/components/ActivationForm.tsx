@@ -48,29 +48,20 @@ const ActivationForm = ({
     type: 19,
   });
 
-  const { addressList: cities, pagination: citiesPagination } = useGetAddress({
+  const { addressList: cities } = useGetAddress({
     level: 1,
   });
   const [selectedCity, setSelectedCity] = React.useState<string>('');
   const [selectedDistrict, setSelectedDistrict] = React.useState<string>('');
-  const {
-    addressList: districts,
-    pagination: districtsPagination,
-    isLoading: isDistrictsLoading,
-  } = useGetAddress({
-    level: 2,
-    parentID: selectedCity,
-  });
-  const {
-    addressList: wards,
-    pagination: wardsPagination,
-    isLoading: isWardsLoading,
-  } = useGetAddress({
+  const { addressList: districts, isLoading: isDistrictsLoading } =
+    useGetAddress({
+      level: 2,
+      parentID: selectedCity,
+    });
+  const { addressList: wards, isLoading: isWardsLoading } = useGetAddress({
     level: 3,
     parentID: selectedDistrict,
   });
-
-  console.log('citiesPagination', citiesPagination);
 
   return (
     <div>

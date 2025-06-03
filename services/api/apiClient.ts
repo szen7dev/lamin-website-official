@@ -65,9 +65,18 @@ class ApiClient {
   }
 
   private handleError(error: any) {
-    console.error('❌ API Error:', error);
+    const formattedError: any = {
+      message: error.message,
+      status: error.response?.status || 500,
+    };
 
-    return Promise.reject(error);
+    if (error.response?.data) {
+      formattedError.response = {
+        data: error.response.data,
+      };
+    }
+
+    return Promise.reject(formattedError);
   }
 
   public setToken(token: string): void {
