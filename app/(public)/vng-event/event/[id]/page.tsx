@@ -33,7 +33,6 @@ const EventDetailPage = () => {
     eventID: (params.id as string) || undefined,
   });
 
-  console.log(fundList);
   const itemsPerPage = 5;
   const totalPages = Math.ceil((fundList?.length || 0) / itemsPerPage);
 

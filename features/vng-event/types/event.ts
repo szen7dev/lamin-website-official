@@ -34,4 +34,5 @@ export interface EventUpsertParams {
   address?: string;
   note?: string;
   fundID?: string;
+  eventID?: string;
 }
