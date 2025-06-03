@@ -13,7 +13,6 @@ export const postActivateProduct = async (
 
     return response.data;
   } catch (error) {
-    console.error('Error activate product:', error);
     throw error;
   }
 };

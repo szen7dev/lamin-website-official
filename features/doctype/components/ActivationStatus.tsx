@@ -24,20 +24,26 @@ const ActivationStatus: React.FC<ProductInfoProps> = ({
             {status === 2 ? 'Đã kích hoạt' : 'Kích hoạt lỗi'}
           </p>
         </div>
-        <div>
-          <p className="text-gray-500 text-sm">Ngày kích hoạt</p>
-          <p className="font-medium">
-            {activationDate ? formatDate(activationDate, 'dd/MM/yyyy') : '-'}
-          </p>
-        </div>
-        <div>
-          <p className="text-gray-500 text-sm">Người kích hoạt</p>
-          <p className="font-medium">{activationBy}</p>
-        </div>
-        <div>
-          <p className="text-gray-500 text-sm">Điện thoại kích hoạt</p>
-          <p className="font-medium">{activationPhone}</p>
-        </div>
+        {status === 2 && (
+          <>
+            <div>
+              <p className="text-gray-500 text-sm">Ngày kích hoạt</p>
+              <p className="font-medium">
+                {activationDate
+                  ? formatDate(activationDate, 'dd/MM/yyyy')
+                  : '-'}
+              </p>
+            </div>
+            <div>
+              <p className="text-gray-500 text-sm">Người kích hoạt</p>
+              <p className="font-medium">{activationBy}</p>
+            </div>
+            <div>
+              <p className="text-gray-500 text-sm">Điện thoại kích hoạt</p>
+              <p className="font-medium">{activationPhone}</p>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
