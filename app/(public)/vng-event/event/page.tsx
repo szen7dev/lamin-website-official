@@ -69,8 +69,7 @@ const EventPage = () => {
             onClick={() => {
               setEventToEdit(undefined);
               setIsModalOpen(true);
-            }}
-          >
+            }}>
             Tạo sự kiện
           </Button>
         </div>
@@ -110,9 +109,9 @@ const EventPage = () => {
                 </div>
 
                 <div
+                  aria-label="Edit event"
                   className="flex items-center border border-grayscale-20 rounded-lg p-2 cursor-pointer hover:bg-grayscale-10 transition-colors h-max"
                   role="button"
-                  aria-label="Edit event"
                   tabIndex={0}
                   onClick={e => {
                     e.preventDefault();
@@ -127,8 +126,7 @@ const EventPage = () => {
                       setEventToEdit(event);
                       setIsModalOpen(true);
                     }
-                  }}
-                >
+                  }}>
                   <EditIcon />
                 </div>
 
@@ -152,15 +150,6 @@ const EventPage = () => {
         </div>
       )}
 
-      <AddEventModal
-        eventToEdit={eventToEdit}
-        isOpen={isModalOpen}
-        onClose={() => {
-          setIsModalOpen(false);
-          setEventToEdit(undefined);
-        }}
-      />
-
       {allEvents?.length > 0 && hasMore && !isLoadingMore && (
         <div className="text-center mt-4 mb-4">
           <button
@@ -172,8 +161,12 @@ const EventPage = () => {
         </div>
       )}
       <AddEventModal
+        eventToEdit={eventToEdit}
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        onClose={() => {
+          setIsModalOpen(false);
+          setEventToEdit(undefined);
+        }}
       />
     </section>
   );

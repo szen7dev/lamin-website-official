@@ -35,8 +35,6 @@ export function useHeightMeasurementMutation(
 
         const result = await postHeightMeasurement(dataToSubmit);
 
-        console.log('result', result);
-
         return result;
       } catch (error) {
         console.error('🔄 Hook: Error in mutationFn:', error);

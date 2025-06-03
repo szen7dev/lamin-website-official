@@ -5,7 +5,6 @@ import { useForm } from 'react-hook-form';
 
 import { useCreateEvent } from '@/features/vng-event/hooks/useCreateEvent';
 import { useUpdateEvent } from '@/features/vng-event/hooks/useUpdateEvent';
-import { useGetEventList } from '@/features/vng-event/hooks/useGetEventList';
 import { Event } from '@/features/vng-event/types/event';
 import { Button } from '@/components/ui/button';
 import {
@@ -48,23 +47,22 @@ export function AddEventModal({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const isEditMode = !!eventToEdit;
 
-  const { eventDetail, isLoading: isLoadingEvent } = useGetEventList(
-    isEditMode ? { eventID: eventToEdit._id } : undefined,
-  );
   const { createEventAsync, isLoading: isCreating } = useCreateEvent();
   const { updateEventAsync, isLoading: isUpdating } = useUpdateEvent();
 
-  const isLoading = isCreating || isUpdating || (isEditMode && isLoadingEvent);
+  const isLoading = isCreating || isUpdating;
 
   const defaultValues: EventFormValues = useMemo(() => {
-    if (isEditMode && eventDetail) {
-      const formattedDate = eventDetail.date?.split('T')[0] || '';
+    if (isEditMode && eventToEdit) {
+      const formattedDate = eventToEdit.date
+        ? eventToEdit.date.split('T')[0]
+        : '';
 
       return {
-        name: eventDetail.name || '',
+        name: eventToEdit.name || '',
         date: formattedDate,
-        address: eventDetail.address || '',
-        note: eventDetail.note || '',
+        address: eventToEdit.address || '',
+        note: eventToEdit.note || '',
       };
     }
 
@@ -74,7 +72,7 @@ export function AddEventModal({
       address: '',
       note: '',
     };
-  }, [isEditMode, eventDetail]);
+  }, [isEditMode, eventToEdit]);
 
   const form = useForm<EventFormValues>({
     defaultValues,
@@ -94,7 +92,7 @@ export function AddEventModal({
 
     try {
       if (isEditMode && eventToEdit) {
-        await updateEventAsync({ eventId: eventToEdit._id, data: payload });
+        await updateEventAsync({ ...payload, eventID: eventToEdit._id });
       } else {
         await createEventAsync(payload);
       }
@@ -107,8 +105,6 @@ export function AddEventModal({
       setIsSubmitting(false);
     }
   };
-
-  console.log('isEditMode', isEditMode);
 
   return (
     <Dialog open={isOpen} onOpenChange={open => !open && onClose()}>
