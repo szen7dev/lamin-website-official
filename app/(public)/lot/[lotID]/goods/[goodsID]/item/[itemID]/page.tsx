@@ -71,16 +71,16 @@ const ItemPage = () => {
       customerName: data.fullname,
       customerPhone: data.phone,
       reasonID: data.purchaseReason,
-      lotID: productLot.lot?._id,
-      goodsID: productLot.goods?._id,
-      sign: productLot?.sign,
+      lotID: params.lotID as string,
+      goodsID: params.goodsID as string,
+      sign: params.itemID as string,
       status: 2,
     });
   };
 
   return (
     <div className="container px-4 py-8">
-      {(isError || productLot.status === 1) && (
+      {isError && (
         <ActivationForm
           form={form}
           isActivating={isActivating}

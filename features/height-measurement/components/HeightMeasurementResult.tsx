@@ -300,7 +300,7 @@ export default function HeightMeasurementResult({
               display: true,
               text: 'Tuổi',
               font: {
-                size: isMobile ? 10 : 12,
+                size: isMobile ? 8 : 12,
               },
             },
             grid: {
@@ -325,7 +325,7 @@ export default function HeightMeasurementResult({
               display: true,
               text: 'Chiều cao (cm)',
               font: {
-                size: isMobile ? 10 : 12,
+                size: isMobile ? 8 : 12,
               },
             },
             min: 80,
@@ -501,9 +501,9 @@ export default function HeightMeasurementResult({
       </h2>
 
       {/* Column 1: Age and Height Table */}
-      <aside className="w-full md:w-[200px] shrink-0 order-2 md:order-1">
+      <aside className="w-full md:w-[200px] shrink-0 order-1">
         <div className="border-r border-grayscale-20  rounded-tl-2xl h-full">
-          <header className="grid grid-cols-2 bg-primary text-center text-xs sm:text-sm font-medium text-white rounded-tl-2xl">
+          <header className="grid grid-cols-2 bg-primary text-center text-xs sm:text-sm font-medium text-white rounded-t-2xl sm:rounded-tr-none sm:rounded-tl-2xl">
             <div className="px-2 sm:px-4 py-2">Tuổi</div>
             <div className="px-2 sm:px-4 py-2">Chiều cao (cm)</div>
           </header>
@@ -531,7 +531,7 @@ export default function HeightMeasurementResult({
       </aside>
 
       {/* Column 2: Growth Chart and Info */}
-      <section className="flex-1 space-y-3 sm:space-y-4 order-1 md:order-2 w-3/4">
+      <section className="flex-1 space-y-3 sm:space-y-4 order-1 md:order-2">
         {/* Row 1: Growth Rate */}
         <div
           aria-label="Đường tăng trưởng"
@@ -573,7 +573,7 @@ export default function HeightMeasurementResult({
           </div>
 
           {/* Chart */}
-          <figure className="h-[300px] sm:h-[400px] p-2 sm:p-4">
+          <figure className="h-[300px] sm:h-[400px] sm:p-4">
             <canvas ref={chartRef} aria-label="Biểu đồ dự đoán chiều cao" />
           </figure>
         </div>

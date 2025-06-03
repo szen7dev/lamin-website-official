@@ -25,17 +25,23 @@ export const usePostActivateProduct = (
         variant: 'success',
       });
       queryClient.invalidateQueries({
-        queryKey: ['GET_PRODUCT_LOT', data.sign],
+        queryKey: ['GET_PRODUCT_LOT'],
       });
       if (options.onSuccess) {
         options.onSuccess(data);
       }
     },
-    onError: error => {
-      console.error('Error activating product:', error.message);
+    onError: (error: unknown) => {
+      const formattedError = error as any;
+
+      console.error('Error activating product:', formattedError.message);
+      const errorMessage =
+        formattedError?.response?.data?.data?.message ||
+        'Kích hoạt sản phẩm thất bại';
+
       toast({
         title: 'Thất bại',
-        description: 'Kích hoạt sản phẩm thất bại',
+        description: errorMessage,
         variant: 'destructive',
       });
       if (options.onError) {
