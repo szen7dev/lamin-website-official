@@ -2,16 +2,16 @@ import { Event, EventUpsertParams } from '@/features/vng-event/types/event';
 import apiClient from '@/services/api/apiClient';
 
 export const updateEvent = async (
-  eventId: string,
   params: EventUpsertParams,
 ): Promise<Event> => {
   try {
     const queryParams = {
+      eventID: params.eventID,
       ...params,
     };
 
     const response = await apiClient.put<Event>(
-      `/api/crm/vng_event/${eventId}`,
+      `/api/crm/vng_event`,
       queryParams,
     );
 
