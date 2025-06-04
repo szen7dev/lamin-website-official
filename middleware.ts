@@ -24,6 +24,7 @@ const redirects = new Map([
   ['/vng-event/event', '/quy-vietnam-grow/su-kien'],
   ['/vng-event/donate-list', '/quy-vietnam-grow/danh-sach-tu-thien'],
   ['/vng-event/donate-history', '/quy-vietnam-grow/lich-su-tu-thien'],
+  ['/account/for-seller', '/tai-khoan/cho-nha-ban-hang'],
 ]);
 
 // URL rewrites mapping (visible URL -> content URL)
@@ -48,6 +49,7 @@ const rewrites = new Map([
   ['/quy-vietnam-grow/su-kien', '/vng-event/event'],
   ['/quy-vietnam-grow/danh-sach-tu-thien', '/vng-event/donate-list'],
   ['/quy-vietnam-grow/lich-su-tu-thien', '/vng-event/donate-history'],
+  ['/tai-khoan/cho-nha-ban-hang', '/account/for-seller'],
 ]);
 
 export async function middleware(request: NextRequest) {

@@ -217,7 +217,9 @@ export function CartSummary({
               src="/images/PointCoinImg.webp"
               width={16}
             />
-            <span className="text-reward-points">{summary.rewardPoints} điểm</span>
+            <span className="text-reward-points">
+              {summary.rewardPoints} điểm
+            </span>
           </div>
         </div>
         <div className="text-sm flex justify-between">
@@ -245,8 +247,7 @@ export function CartSummary({
           className="w-full text-white rounded-full bg-gradient-checkout"
           disabled={selectedItems.length === 0}
           size="lg"
-          onClick={handleCheckout}
-        >
+          onClick={handleCheckout}>
           Mua hàng
         </Button>
 

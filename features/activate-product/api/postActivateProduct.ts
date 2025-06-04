@@ -5,7 +5,10 @@ export const postActivateProduct = async (
   params: ActivateProductParams,
 ): Promise<any> => {
   try {
-    const response = await apiClient.post(`/api/store/items`, params);
+    const queryParams = {
+      ...params,
+    };
+    const response = await apiClient.post(`/api/store/items`, queryParams);
 
     if (!response.data) {
       throw new Error('No data returned from API');
