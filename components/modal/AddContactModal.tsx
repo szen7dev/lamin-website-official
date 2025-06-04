@@ -23,6 +23,7 @@ import { Input } from '@/components/ui/input';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 
 interface AddContactModalProps {
+  addChildren?: boolean;
   isOpen: boolean;
   onClose: () => void;
 }
@@ -42,7 +43,11 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>;
 
-const AddContactModal = ({ isOpen, onClose }: AddContactModalProps) => {
+const AddContactModal = ({
+  isOpen,
+  onClose,
+  addChildren,
+}: AddContactModalProps) => {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -64,7 +69,7 @@ const AddContactModal = ({ isOpen, onClose }: AddContactModalProps) => {
       <DialogContent className="sm:max-w-xl rounded-2xl">
         <DialogHeader className="border-b pb-3">
           <DialogTitle className="text-xl font-semibold flex items-center justify-center">
-            Thêm liên hệ mới
+            {addChildren ? 'Thêm mới con cái' : 'Thêm liên hệ mới'}
           </DialogTitle>
         </DialogHeader>
 
