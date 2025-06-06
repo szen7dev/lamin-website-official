@@ -11,6 +11,7 @@ import ActivationStatus from '@/features/doctype/components/ActivationStatus';
 import { useGetProductLot } from '@/features/doctype/hooks/useGetProductLot';
 import { usePostActivateProduct } from '@/features/activate-product/hooks/usePostActivateProduct';
 import ActivationForm from '@/features/doctype/components/ActivationForm';
+import { DEFAULT_OPTION_SELLER } from '@/services/api/apiClient';
 
 const formSchema = z.object({
   purchaseChannel: z
@@ -63,6 +64,7 @@ const ItemPage = () => {
 
   const onSubmit = (data: FormValues) => {
     activateProduct({
+      optionSeller: DEFAULT_OPTION_SELLER,
       amount: data.price || '0',
       area1: data.city || '',
       area2: data.district || '',

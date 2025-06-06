@@ -11,4 +11,5 @@ export interface ActivateProductParams {
   goodsID: string;
   sign: string;
   status: number;
+  optionSeller: number;
 }

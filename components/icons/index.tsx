@@ -1078,6 +1078,29 @@ export const PackageIcon: React.FC<IconSvgProps> = ({
   </svg>
 );
 
+export const HouseSmileIcon: React.FC<IconSvgProps> = ({
+  size,
+  width = '19',
+  height = '19',
+  ...props
+}) => (
+  <svg
+    fill="none"
+    height={size || height}
+    viewBox="0 0 19 19"
+    width={size || width}
+    xmlns="http://www.w3.org/2000/svg"
+    {...props}>
+    <path
+      d="M13.0012 12C10.7912 13.333 7.20922 13.333 5.00122 12M16.0013 5.71001L10.6683 1.56201C10.2002 1.19792 9.62421 1.00024 9.03125 1.00024C8.43829 1.00024 7.86226 1.19792 7.39425 1.56201L2.06025 5.71001C1.73969 5.9593 1.48034 6.27854 1.30201 6.64336C1.12367 7.00818 1.03106 7.40894 1.03125 7.81501V15.015C1.03125 15.5454 1.24196 16.0542 1.61704 16.4292C1.99211 16.8043 2.50082 17.015 3.03125 17.015H15.0313C15.5617 17.015 16.0704 16.8043 16.4455 16.4292C16.8205 16.0542 17.0312 15.5454 17.0312 15.015V7.81501C17.0312 6.99201 16.6513 6.21501 16.0013 5.71001Z"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="2"
+    />
+  </svg>
+);
+
 export const ChevronNoArrowIcon: React.FC<IconSvgProps> = ({
   width = '8',
   height = '12',

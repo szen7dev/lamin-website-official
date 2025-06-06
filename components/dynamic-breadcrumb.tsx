@@ -31,6 +31,7 @@ const vietnameseTextMap: Record<string, string> = {
   'chu-de': 'Chủ đề',
   'danh-muc': 'Danh mục',
   'tim-kiem': 'Tìm kiếm',
+  'cho-nha-ban-hang': 'Cho nhà bán hàng',
 
   // Sub-sections
   'ket-qua': 'Kết quả',

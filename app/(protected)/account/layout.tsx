@@ -10,6 +10,7 @@ import { DynamicBreadcrumb } from '@/components/dynamic-breadcrumb';
 import {
   BarChartIcon,
   ChevronNoArrowIcon,
+  HouseSmileIcon,
   MapPinIcon,
   PackageIcon,
   UserProfileIcon,
@@ -105,6 +106,11 @@ function ProfileTabs() {
       icon: <UserProfileIcon />,
       name: 'Thông tin cá nhân',
       href: '/tai-khoan/thong-tin-ca-nhan',
+    },
+    {
+      icon: <HouseSmileIcon />,
+      name: 'Cho nhà bán hàng',
+      href: '/tai-khoan/cho-nha-ban-hang',
     },
     {
       icon: <PackageIcon />,

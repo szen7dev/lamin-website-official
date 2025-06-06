@@ -50,7 +50,7 @@ const formSchema = z.object({
   paymentMethod: z.enum(['1', '2', '3', '4', '5', '6'], {
     required_error: 'Vui lòng chọn phương thức thanh toán',
   }),
-  needInvoice: z.boolean().default(false),
+  needInvoice: z.boolean().optional(),
 });
 
 export type CheckoutFormValues = z.infer<typeof formSchema>;
