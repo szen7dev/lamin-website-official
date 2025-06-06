@@ -27,29 +27,29 @@ export default function HeightMeasurementCDCForm() {
     formState: { errors },
   } = useForm<HeightMeasurementFormData>({
     defaultValues: {
-      date: new Date().toISOString().split('T')[0],
+      // date: new Date().toISOString().split('T')[0],
       name: '',
       birthDate: '' as unknown as Date,
       weight: '',
       height: '',
-      phone: '',
+      // phone: '',
       gender: 1,
       note: 'Đo chiều cao từ website',
     },
   });
 
   const onSubmit = (formData: HeightMeasurementFormData) => {
-    if (!/^[0-9]{10,11}$/.test(formData.phone)) {
-      setError('phone', {
-        type: 'manual',
-        message: 'Số điện thoại không hợp lệ',
-      });
+    // if (!/^[0-9]{10,11}$/.test(formData.phone)) {
+    //   setError('phone', {
+    //     type: 'manual',
+    //     message: 'Số điện thoại không hợp lệ',
+    //   });
 
-      return;
-    }
+    //   return;
+    // }
 
     try {
-      formData.date = new Date();
+      // formData.date = new Date();
 
       if (typeof formData.birthDate === 'string') {
         formData.birthDate = new Date(formData.birthDate);
@@ -93,9 +93,9 @@ export default function HeightMeasurementCDCForm() {
         </div>
       )}
 
-      <h2 className="text-base font-semibold mt-6">Thông tin chi tiết</h2>
+      <h2 className="text-base font-semibold mt-2">Nhập thông tin chi tiết để đo cao</h2>
 
-      <div className="space-y-1 sm:space-y-2">
+      {/* <div className="space-y-1 sm:space-y-2">
         <label
           className="flex items-center text-xs sm:text-sm text-grayscale-90"
           htmlFor="phone">
@@ -125,7 +125,7 @@ export default function HeightMeasurementCDCForm() {
             {errors.phone.message}
           </p>
         )}
-      </div>
+      </div> */}
 
       <div className="space-y-1 sm:space-y-2">
         <label
@@ -151,9 +151,54 @@ export default function HeightMeasurementCDCForm() {
           </p>
         )}
       </div>
+      
+      <fieldset className="flex flex-row">
+          <legend className="invisible flex items-center text-xs sm:text-sm text-grayscale-90 h-5">
+            <span aria-hidden="true" className="text-error mr-1">
+              *
+            </span>
+            Giới tính
+          </legend>
+          <div
+            aria-required="true"
+            className="flex gap-4 sm:gap-6"
+            role="radiogroup">
+            <legend className="flex items-center text-xs sm:text-sm text-grayscale-90">
+              <span aria-hidden="true" className="text-error mr-1">
+                *
+              </span>
+              Giới tính
+            </legend>
+            <label className="flex items-center gap-2">
+              <input
+                className="h-4 w-4"
+                disabled={isPending}
+                type="radio"
+                value={1}
+                {...register('gender', { required: 'Vui lòng chọn giới tính' })}
+              />
+              <span className="text-xs sm:text-sm text-grayscale-90">Nam</span>
+            </label>
+            <label className="flex items-center gap-2">
+              <input
+                className="h-4 w-4"
+                disabled={isPending}
+                type="radio"
+                value={2}
+                {...register('gender')}
+              />
+              <span className="text-xs sm:text-sm text-grayscale-90">Nữ</span>
+            </label>
+          </div>
+          {errors.gender && (
+            <p className="text-xs sm:text-sm text-error" id="gender-error">
+              {errors.gender.message}
+            </p>
+          )}
+        </fieldset>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-        <div className="space-y-1 sm:space-y-2">
+        {/* <div className="space-y-1 sm:space-y-2">
           <label
             className="flex items-center text-xs sm:text-sm text-grayscale-90"
             htmlFor="date">
@@ -175,7 +220,7 @@ export default function HeightMeasurementCDCForm() {
               {errors.date.message}
             </p>
           )}
-        </div>
+        </div> */}
 
         <div className="space-y-1 sm:space-y-2">
           <label
@@ -254,51 +299,6 @@ export default function HeightMeasurementCDCForm() {
             </p>
           )}
         </div>
-
-        <fieldset className="flex flex-row space-y-1 sm:space-y-2">
-          <legend className="invisible flex items-center text-xs sm:text-sm text-grayscale-90 h-5">
-            <span aria-hidden="true" className="text-error mr-1">
-              *
-            </span>
-            Giới tính
-          </legend>
-          <div
-            aria-required="true"
-            className="flex gap-4 sm:gap-6"
-            role="radiogroup">
-            <legend className="flex items-center text-xs sm:text-sm text-grayscale-90">
-              <span aria-hidden="true" className="text-error mr-1">
-                *
-              </span>
-              Giới tính
-            </legend>
-            <label className="flex items-center gap-2">
-              <input
-                className="h-4 w-4"
-                disabled={isPending}
-                type="radio"
-                value={1}
-                {...register('gender', { required: 'Vui lòng chọn giới tính' })}
-              />
-              <span className="text-xs sm:text-sm text-grayscale-90">Nam</span>
-            </label>
-            <label className="flex items-center gap-2">
-              <input
-                className="h-4 w-4"
-                disabled={isPending}
-                type="radio"
-                value={2}
-                {...register('gender')}
-              />
-              <span className="text-xs sm:text-sm text-grayscale-90">Nữ</span>
-            </label>
-          </div>
-          {errors.gender && (
-            <p className="text-xs sm:text-sm text-error" id="gender-error">
-              {errors.gender.message}
-            </p>
-          )}
-        </fieldset>
       </div>
 
       <div className="flex flex-col sm:flex-row sm:justify-end gap-2 sm:gap-3 pt-2 sm:pt-4">
