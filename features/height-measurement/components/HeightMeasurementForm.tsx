@@ -311,6 +311,52 @@ export default function HeightMeasurementForm() {
         )}
       </div>
 
+      {/* Gender */}
+      <fieldset className="flex flex-row">
+        <legend className="invisible flex items-center text-xs sm:text-sm text-grayscale-90 h-5">
+          <span aria-hidden="true" className="text-error mr-1">
+            *
+          </span>
+          Giới tính
+        </legend>
+        <div
+          aria-required="true"
+          className="flex gap-4 sm:gap-6"
+          role="radiogroup">
+          <legend className="flex items-center text-xs sm:text-sm text-grayscale-90">
+            <span aria-hidden="true" className="text-error mr-1">
+              *
+            </span>
+            Giới tính
+          </legend>
+          <label className="flex items-center gap-2">
+            <input
+              className="h-4 w-4"
+              disabled={isPending}
+              type="radio"
+              value={1}
+              {...register('gender', { required: 'Vui lòng chọn giới tính' })}
+            />
+            <span className="text-xs sm:text-sm text-grayscale-90">Nam</span>
+          </label>
+          <label className="flex items-center gap-2">
+            <input
+              className="h-4 w-4"
+              disabled={isPending}
+              type="radio"
+              value={2}
+              {...register('gender')}
+            />
+            <span className="text-xs sm:text-sm text-grayscale-90">Nữ</span>
+          </label>
+        </div>
+        {errors.gender && (
+          <p className="text-xs sm:text-sm text-error" id="gender-error">
+            {errors.gender.message}
+          </p>
+        )}
+      </fieldset>
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
         {/* Evaluation Date */}
         <div className="space-y-1 sm:space-y-2">
@@ -450,52 +496,6 @@ export default function HeightMeasurementForm() {
             </p>
           )}
         </div>
-
-        {/* Gender */}
-        <fieldset className="flex flex-row space-y-1 sm:space-y-2">
-          <legend className="invisible flex items-center text-xs sm:text-sm text-grayscale-90 h-5">
-            <span aria-hidden="true" className="text-error mr-1">
-              *
-            </span>
-            Giới tính
-          </legend>
-          <div
-            aria-required="true"
-            className="flex gap-4 sm:gap-6"
-            role="radiogroup">
-            <legend className="flex items-center text-xs sm:text-sm text-grayscale-90">
-              <span aria-hidden="true" className="text-error mr-1">
-                *
-              </span>
-              Giới tính
-            </legend>
-            <label className="flex items-center gap-2">
-              <input
-                className="h-4 w-4"
-                disabled={isPending}
-                type="radio"
-                value={1}
-                {...register('gender', { required: 'Vui lòng chọn giới tính' })}
-              />
-              <span className="text-xs sm:text-sm text-grayscale-90">Nam</span>
-            </label>
-            <label className="flex items-center gap-2">
-              <input
-                className="h-4 w-4"
-                disabled={isPending}
-                type="radio"
-                value={2}
-                {...register('gender')}
-              />
-              <span className="text-xs sm:text-sm text-grayscale-90">Nữ</span>
-            </label>
-          </div>
-          {errors.gender && (
-            <p className="text-xs sm:text-sm text-error" id="gender-error">
-              {errors.gender.message}
-            </p>
-          )}
-        </fieldset>
       </div>
 
       {/* Phone */}
