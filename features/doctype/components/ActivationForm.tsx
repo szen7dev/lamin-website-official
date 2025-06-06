@@ -110,7 +110,7 @@ const ActivationForm = ({
               </svg>
             </div>
             <p className="text-gray-700 text-base">
-              1 điểm tích tích lũy (đủ 5 điểm tặng quà)
+              1 điểm tích tích lũy (đủ 5 điểm tặng 01 hộp LaminGrow cho đơn tiếp theo)
             </p>
           </div>
           <div className="flex items-start gap-3 mb-4">
@@ -133,7 +133,7 @@ const ActivationForm = ({
               1 Sổ tay LaminGrow-Nhật ký cao lớn
             </p>
           </div>
-          <div className="flex items-start gap-3">
+          {/* <div className="flex items-start gap-3">
             <div className="flex-shrink-0 w-7 h-7 bg-[#0051a5] rounded-full flex items-center justify-center mt-0.5">
               <svg
                 className="h-5 w-5 text-white"
@@ -152,7 +152,7 @@ const ActivationForm = ({
             <p className="text-gray-700 text-base">
               Ưu đãi đặc biệt cho các đơn hàng tiếp theo
             </p>
-          </div>
+          </div> */}
         </div>
         <div className="bg-white p-6 w-full">
           <Form {...form}>
