@@ -88,7 +88,7 @@ const ActivationForm = ({
           <div>
             <p className="text-3xl text-white">KÍCH HOẠT ĐIỆN TỬ</p>
             <p className="text-xl text-[#DCDFEA]">
-              Kênh chăm sóc khách hàng chính thức của Lamin giúp Lamin chăm sóc khách hàng được chu đáo, tận tâm
+              Kênh chăm sóc khách hàng chính thức của Lamin giúp Lamin chăm sóc khách hàng được tốt hơn
             </p>
           </div>
         </div>
