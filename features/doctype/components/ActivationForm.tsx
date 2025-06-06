@@ -86,9 +86,9 @@ const ActivationForm = ({
         <div className="flex items-center justify-between gap-4 bg-gradient-primary p-8 w-full">
           <Image alt="" height={200} src="/images/qrCode.webp" width={200} />
           <div>
-            <p className="text-3xl text-white">KÍCH HOẠT SẢN PHẨM CỦA BẠN </p>
+            <p className="text-3xl text-white">KÍCH HOẠT ĐIỆN TỬ</p>
             <p className="text-xl text-[#DCDFEA]">
-              Kênh chăm sóc khách hàng chính thức Lamin
+              Kênh chăm sóc khách hàng chính thức của Lamin giúp Lamin chăm sóc khách hàng được chu đáo, tận tâm
             </p>
           </div>
         </div>
