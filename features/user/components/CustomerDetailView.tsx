@@ -6,14 +6,13 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { ArrowLeft, CalendarIcon } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { format as formatDate } from 'date-fns';
 import Link from 'next/link';
 
 import { useUpdateContact } from '../hooks/useUpdateContact';
 
 import { Button } from '@/components/ui/button';
-import { Calendar } from '@/components/ui/calendar';
 import {
   Form,
   FormControl,
@@ -23,12 +22,6 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
-import { cn } from '@/lib/utils';
 import AddContactModal from '@/components/modal/AddContactModal';
 
 const customerFormSchema = z.object({
@@ -158,44 +151,18 @@ export function CustomerDetailView({
                     <FormLabel className="text-sm text-gray-500 mb-1">
                       Ngày sinh
                     </FormLabel>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <FormControl>
-                          <Button
-                            className={cn(
-                              'w-full pl-3 text-left font-normal',
-                              !field.value && 'text-muted-foreground',
-                            )}
-                            variant={'outline'}>
-                            {field.value ? (
-                              formatDate(new Date(field.value), 'dd/MM/yyyy')
-                            ) : (
-                              <span>Chọn ngày sinh</span>
-                            )}
-                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                          </Button>
-                        </FormControl>
-                      </PopoverTrigger>
-                      <PopoverContent align="start" className="w-auto p-0">
-                        <Calendar
-                          initialFocus
-                          disabled={date => {
-                            return (
-                              date > new Date() || date < new Date('1900-01-01')
-                            );
-                          }}
-                          mode="single"
-                          selected={
-                            field.value ? new Date(field.value) : undefined
-                          }
-                          onSelect={(date: Date | undefined) =>
-                            field.onChange(
-                              date ? formatDate(date, 'yyyy-MM-dd') : '',
-                            )
-                          }
+                    <FormControl>
+                      <div className="relative">
+                        <Input
+                          className="w-full pr-10"
+                          max={new Date().toISOString().split('T')[0]}
+                          min="1900-01-01"
+                          type="date"
+                          value={field.value || ''}
+                          onChange={e => field.onChange(e.target.value)}
                         />
-                      </PopoverContent>
-                    </Popover>
+                      </div>
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -307,7 +274,7 @@ export function CustomerDetailView({
               <h3 className="text-lg font-semibold">Danh sách con</h3>
             </div>
             <div className="border rounded-xl p-6 space-y-3">
-              <div className="space-y-4">
+              <div className="flex flex-col gap-4">
                 {childContacts.map(child => (
                   <Link
                     key={child._id}
@@ -327,8 +294,8 @@ export function CustomerDetailView({
                                   'dd/MM/yyyy',
                                 )
                               : 'N/A'}{' '}
-                            | Số điện thoại: {child.phone} | Giới tính:{' '}
-                            {child.gender} | Email: {child.email}
+                            | Số điện thoại: {child.phone || 'N/A'} | Giới tính:{' '}
+                            {child.gender} | Email: {child.email || 'N/A'}
                           </p>
                         </div>
                       </div>
