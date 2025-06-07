@@ -28,11 +28,28 @@ export interface UpdateProfileRequest {
 }
 
 export interface CreateContactParams {
+  name: string;
+  birthday: string;
+  gender: string;
+  phone: string;
+  email: string;
   parent?: string;
+  optionSeller?: number;
+}
+
+export interface UpdateContactParams {
+  contactID: string;
+  name: string;
+  birthday: string;
+  gender: string;
+  phone: string;
+  email: string;
 }
 
 export interface GetContactParams {
-  userCreateID: string;
+  userCreateID?: string;
+  parentID?: string;
+  contactID?: string;
 }
 
 export interface Contact {
@@ -119,6 +136,16 @@ export interface Contact {
   createAt: string;
   joinedDate: string;
   __v: number;
+}
+
+export interface DisplayContact {
+  _id: string;
+  name: string;
+  birthday: string;
+  phone: string;
+  gender: 'Nam' | 'Nữ' | 'Khác';
+  email: string;
+  childs: DisplayContact[];
 }
 
 export interface UserService {

@@ -43,6 +43,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
           // Get user data from localStorage
           const userId = localStorage.getItem('user_id') || '';
+          const userRealId = localStorage.getItem('user_real_id') || '';
           const userName = localStorage.getItem('user_name') || '';
           const userPhone = localStorage.getItem('user_phone') || '';
           const userEmail = localStorage.getItem('user_email') || '';
@@ -56,6 +57,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           // Try to reconstruct user object from localStorage
           setUser({
             id: userId,
+            _id: userRealId,
             name: userName,
             phone: userPhone,
             email: userEmail,
@@ -83,6 +85,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const clearUserData = () => {
     deleteCookie('auth-token');
     localStorage.removeItem('user_id');
+    localStorage.removeItem('user_real_id');
     localStorage.removeItem('user_name');
     localStorage.removeItem('user_phone');
     localStorage.removeItem('user_email');
@@ -97,6 +100,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // Store user data in localStorage
   const storeUserData = useCallback((userData: User) => {
     if (userData.id) localStorage.setItem('user_id', userData.id);
+    if (userData._id) localStorage.setItem('user_real_id', userData._id);
     if (userData.name) localStorage.setItem('user_name', userData.name);
     if (userData.phone) localStorage.setItem('user_phone', userData.phone);
     if (userData.email)
@@ -135,6 +139,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           const userData = {
             ...response.user,
             id: response.user.contacts[0]._id || '',
+            _id: response.user._id || '',
           };
 
           // Store in state and localStorage
