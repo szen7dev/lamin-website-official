@@ -29,6 +29,9 @@ export default function ProfileLayout({
   const isHeightMeasurementHistory = pathname.includes(
     '/tai-khoan/lich-su-do-cao',
   );
+  const isChildDetailPage = pathname.match(
+    /\/tai-khoan\/cho-nha-ban-hang\/[^\/]+\/[^\/]+$/,
+  );
   const isDynamicHeightMeasurementHistory = pathname.match(
     /\/tai-khoan\/lich-su-do-cao\/[^\/]+$/,
   );
@@ -60,7 +63,7 @@ export default function ProfileLayout({
       </div>
 
       <div className="flex flex-col md:flex-row gap-6">
-        {!isHeightMeasurementHistory && (
+        {!isHeightMeasurementHistory && !isChildDetailPage && (
           <div className="w-full md:w-64 shrink-0">
             <div className="flex flex-col gap-6">
               <AvatarSection />
