@@ -6,15 +6,19 @@ export async function getContact({
   params,
 }: {
   params: GetContactParams;
-}): Promise<Contact[]> {
+}): Promise<Contact | Contact[]> {
   try {
     const queryParams = {
-      userCreateID: params.userCreateID,
+      userCreateID: params.userCreateID || '',
+      parentID: params.parentID || '',
+      contactID: params.contactID || '',
     };
-    const response = await apiClient.get<Contact[]>(
+    const response = await apiClient.get<Contact | Contact[]>(
       '/api/item/contacts',
       queryParams,
     );
+
+    console.log('queryParams', queryParams);
 
     return response.data;
   } catch (error) {

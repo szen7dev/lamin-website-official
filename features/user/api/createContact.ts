@@ -6,6 +6,7 @@ export async function createContact(params: CreateContactParams): Promise<any> {
   try {
     const queryParams = {
       parent: params.parent || '',
+      ...params,
     };
     const response = await apiClient.post('/api/item/contacts', queryParams);
 

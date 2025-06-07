@@ -8,15 +8,9 @@ const ForSellerPage = () => {
     type: 'customer' as const,
   };
 
-  const heightTabInfo = {
-    name: 'Đo cao khách hàng',
-    type: 'height' as const,
-  };
-
   return (
     <div className="flex flex-col gap-4">
       <CustomerTabInformation tabInfo={customerTabInfo} />
-      {/* <CustomerTabInformation tabInfo={heightTabInfo} /> */}
     </div>
   );
 };
