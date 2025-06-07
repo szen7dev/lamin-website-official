@@ -150,13 +150,13 @@ export function OTPVerification({
         {/* Logo */}
         <div className="flex justify-center mb-10">
           <div className="flex flex-col items-center">
-            <Image
+            {/* <Image
               alt="Lamin logo"
               className="h-14 w-auto mb-2"
               height={80}
               src="/images/Lamin_Logo_Colored.png"
               width={80}
-            />
+            /> */}
             <div className="text-center">
               Hệ thống Lamin
               {/* <div className="text-sm font-medium text-primary">CỬA HÀNG</div>

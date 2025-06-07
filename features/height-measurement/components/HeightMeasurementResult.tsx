@@ -580,6 +580,11 @@ export default function HeightMeasurementResult({
 
         {/* Row 3: Analysis Text */}
         <div className="space-y-1 sm:space-y-2 text-sm sm:text-sm p-3 border-t border-grayscale-20">
+           <p>
+            • Tên bé: {processedData.name} ({processedData.gender === 1 ? 'Nam' : 'Nữ'}), sinh ngày{' '}
+            {new Date(processedData.birthDate).toLocaleDateString('vi-VN')} -{' '}
+            {age.years} tuổi, {age.months} tháng, {age.days} ngày
+          </p>
           <p>
             • Chiều cao: {processedData.height}cm. {processedData.noticeH}. Bé{' '}
             {processedData.hdfs > 0 ? 'cao' : 'thấp'} hơn so với chiều cao trung
@@ -591,12 +596,6 @@ export default function HeightMeasurementResult({
             {processedData.wdfs > 0 ? 'nặng' : 'nhẹ'} hơn so với cân nặng trung
             bình là {Math.abs(processedData.wdfs)}kg. Chuẩn WHO:{' '}
             {processedData.whoWS}kg
-          </p>
-          <p>
-            • Bé {processedData.gender === 1 ? 'Nam' : 'Nữ'},{' '}
-            {processedData.name}, sinh ngày{' '}
-            {new Date(processedData.birthDate).toLocaleDateString('vi-VN')} -{' '}
-            {age.years} tuổi, {age.months} tháng, {age.days} ngày
           </p>
           <p className="flex flex-wrap items-center gap-1">
             •{' '}
@@ -611,16 +610,15 @@ export default function HeightMeasurementResult({
             </span>
           </p>
           <p className="font-medium">
-            • Giải pháp tăng chiều cao (Khi con bạn trưởng thành. Chiều cao
-            trung bình của bé trai là: 177cm và bé Bé Gái là: 163,5cm)
+            • Chiều cao chuẩn của bé trai là: 177cm và bé Bé Gái là: 163,5cm
           </p>
           <p className="text-grayscale-90">
             • Con có thể không đạt được chiều cao dự đoán nếu bị ảnh hưởng bởi
             những thói quen sinh hoạt xấu
           </p>
           <p className="text-grayscale-90">
-            • Con có thể tăng thêm 7 - 15cm so với dự đoán khi trưởng thành nếu
-            bố mẹ giúp con áp dụng giải pháp tăng chiều cao của Lamin
+            • Con có thể tăng thêm 7-15cm so với dự đoán khi trưởng thành nếu
+            bố mẹ giúp con áp dụng giải pháp tăng chiều cao LaminGrow
           </p>
           <ul
             aria-label="Khuyến nghị"
