@@ -6,14 +6,11 @@ import type {
 } from '@/features/user/types/userTypes';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { format } from 'date-fns';
-import { CalendarIcon } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 
 import { useCreateContact } from '@/features/user/hooks/useCreateContact';
 import { Button } from '@/components/ui/button';
-import { Calendar } from '@/components/ui/calendar';
 import {
   Dialog,
   DialogContent,
@@ -29,13 +26,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { cn } from '@/lib/utils';
 
 interface AddContactModalProps {
   addChildren?: boolean;
@@ -44,18 +35,27 @@ interface AddContactModalProps {
   selectedCustomer?: DisplayContact | null;
 }
 
-const formSchema = z.object({
-  name: z.string().min(1, { message: 'Vui lòng nhập họ và tên' }),
-  birthday: z.string().min(1, { message: 'Vui lòng nhập ngày sinh' }),
-  gender: z.enum(['Nam', 'Nữ', 'Khác'], {
-    required_error: 'Vui lòng chọn giới tính',
-  }),
-  phone: z.string().min(1, { message: 'Vui lòng nhập số điện thoại' }),
-  email: z
-    .string()
-    .min(1, { message: 'Vui lòng nhập email' })
-    .email({ message: 'Email không hợp lệ' }),
-});
+// Create a function to generate schema based on whether we're adding children
+const createFormSchema = (isAddingChildren: boolean) => {
+  return z.object({
+    name: z.string().min(1, { message: 'Vui lòng nhập họ và tên' }),
+    birthday: z.string().min(1, { message: 'Vui lòng nhập ngày sinh' }),
+    gender: z.enum(['Nam', 'Nữ', 'Khác'], {
+      required_error: 'Vui lòng chọn giới tính',
+    }),
+    phone: isAddingChildren
+      ? z.string().optional()
+      : z.string().min(1, { message: 'Vui lòng nhập số điện thoại' }),
+    email: isAddingChildren
+      ? z.string().optional()
+      : z
+          .string()
+          .min(1, { message: 'Vui lòng nhập email' })
+          .email({ message: 'Email không hợp lệ' }),
+  });
+};
+
+const formSchema = createFormSchema(false);
 
 type FormValues = z.infer<typeof formSchema>;
 
@@ -68,7 +68,7 @@ const AddContactModal = ({
   const { mutate: createContactMutate, isPending: isCreatingContact } =
     useCreateContact();
   const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(createFormSchema(!!addChildren)),
     defaultValues: {
       name: '',
       birthday: '',
@@ -93,12 +93,13 @@ const AddContactModal = ({
         break;
     }
 
+    // Create the params object with required fields
     const params: CreateContactParams = {
       name: data.name,
       birthday: data.birthday,
       gender: genderValue,
-      phone: data.phone,
-      email: data.email,
+      phone: addChildren ? data.phone || '' : data.phone,
+      email: addChildren ? data.email || '' : data.email,
       parent: selectedCustomer?._id,
       optionSeller: selectedCustomer ? 1 : 0,
     };
@@ -144,42 +145,17 @@ const AddContactModal = ({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Ngày sinh</FormLabel>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <FormControl>
-                        <Button
-                          className={cn(
-                            'w-full pl-3 text-left font-normal',
-                            !field.value && 'text-muted-foreground',
-                          )}
-                          variant={'outline'}>
-                          {field.value ? (
-                            format(new Date(field.value), 'dd/MM/yyyy')
-                          ) : (
-                            <span>Chọn ngày sinh</span>
-                          )}
-                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                        </Button>
-                      </FormControl>
-                    </PopoverTrigger>
-                    <PopoverContent align="start" className="w-auto p-0">
-                      <Calendar
-                        initialFocus
-                        disabled={(date: Date) =>
-                          date > new Date() || date < new Date('1900-01-01')
-                        }
-                        mode="single"
-                        selected={
-                          field.value ? new Date(field.value) : undefined
-                        }
-                        onSelect={(date: Date | undefined) =>
-                          field.onChange(
-                            date ? date.toISOString().split('T')[0] : undefined,
-                          )
-                        }
+                  <FormControl>
+                    <div className="relative">
+                      <Input
+                        className="w-full pr-10"
+                        max={new Date().toISOString().split('T')[0]}
+                        min="1900-01-01"
+                        type="date"
+                        {...field}
                       />
-                    </PopoverContent>
-                  </Popover>
+                    </div>
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}

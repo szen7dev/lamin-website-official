@@ -31,8 +31,8 @@ export interface CreateContactParams {
   name: string;
   birthday: string;
   gender: string;
-  phone: string;
-  email: string;
+  phone?: string;
+  email?: string;
   parent?: string;
   optionSeller?: number;
 }
