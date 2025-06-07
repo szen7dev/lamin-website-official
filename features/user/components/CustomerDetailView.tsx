@@ -8,6 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { ArrowLeft, CalendarIcon } from 'lucide-react';
 import { format as formatDate } from 'date-fns';
+import Link from 'next/link';
 
 import { useUpdateContact } from '../hooks/useUpdateContact';
 
@@ -279,14 +280,16 @@ export function CustomerDetailView({
             </div>
 
             <div className="flex justify-end space-x-3 mt-6">
-              <Button
-                type="button"
-                onClick={() => {
-                  setAddChildren(true);
-                  setOpenModal(true);
-                }}>
-                Thêm mới con
-              </Button>
+              {childContacts.length === 0 && (
+                <Button
+                  type="button"
+                  onClick={() => {
+                    setAddChildren(true);
+                    setOpenModal(true);
+                  }}>
+                  Thêm mới con
+                </Button>
+              )}
               <Button
                 className="bg-[#E6F8FF] hover:bg-[#E6F8FF]/80 text-primary px-6 py-2 rounded-lg border border-primary hover:border-primary/80"
                 disabled={isUpdatingContact}
@@ -306,22 +309,31 @@ export function CustomerDetailView({
             <div className="border rounded-xl p-6 space-y-3">
               <div className="space-y-4">
                 {childContacts.map(child => (
-                  <div
+                  <Link
                     key={child._id}
-                    className="flex items-center justify-between p-3 border rounded-md hover:bg-gray-50">
-                    <div className="flex items-center gap-3">
-                      <div>
-                        <p className="font-medium text-gray-900">
-                          {child.name}
-                        </p>
-                        <p className="text-sm text-gray-500">
-                          Ngày sinh: {child.birthday} | Số điện thoại:{' '}
-                          {child.phone} | Giới tính: {child.gender} | Email:{' '}
-                          {child.email}
-                        </p>
+                    className="decoration-transparent cursor-pointer"
+                    href={`/account/for-seller/${customer?._id}/${child._id}`}>
+                    <div className="flex items-center justify-between p-3 border rounded-md hover:bg-gray-50">
+                      <div className="flex items-center gap-3">
+                        <div>
+                          <p className="font-medium text-gray-900">
+                            {child.name}
+                          </p>
+                          <p className="text-sm text-gray-500">
+                            Ngày sinh:{' '}
+                            {child.birthday
+                              ? formatDate(
+                                  new Date(child.birthday),
+                                  'dd/MM/yyyy',
+                                )
+                              : 'N/A'}{' '}
+                            | Số điện thoại: {child.phone} | Giới tính:{' '}
+                            {child.gender} | Email: {child.email}
+                          </p>
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  </Link>
                 ))}
                 <div className="flex justify-end mt-6">
                   <Button

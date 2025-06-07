@@ -171,6 +171,28 @@ export async function middleware(request: NextRequest) {
     return NextResponse.rewrite(new URL(newPath, request.url));
   }
 
+  // Check for dynamic category path
+  if (
+    pathname.startsWith('/account/for-seller/') &&
+    pathname !== '/account/for-seller'
+  ) {
+    const slug = pathname.replace('/account/for-seller/', '');
+    const newPath = `/tai-khoan/cho-nha-ban-hang/${slug}`;
+
+    return NextResponse.redirect(new URL(newPath, request.url));
+  }
+
+  // Check for dynamic danh-muc path
+  if (
+    pathname.startsWith('/tai-khoan/cho-nha-ban-hang/') &&
+    pathname !== '/tai-khoan/cho-nha-ban-hang'
+  ) {
+    const slug = pathname.replace('/tai-khoan/cho-nha-ban-hang/', '');
+    const newPath = `/account/for-seller/${slug}`;
+
+    return NextResponse.rewrite(new URL(newPath, request.url));
+  }
+
   // Check for dynamic search path
   if (pathname.startsWith('/search')) {
     const newPath = `/tim-kiem${search}`;

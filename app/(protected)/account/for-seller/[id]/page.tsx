@@ -7,6 +7,7 @@ import { CustomerDetailView } from '@/features/user/components/CustomerDetailVie
 import { useGetContact } from '@/features/user/hooks/useGetContact';
 import { DisplayContact } from '@/features/user/types/userTypes';
 import { useAuth } from '@/hooks';
+import { useGetContactDetail } from '@/features/user/hooks/useGetContactDetail';
 
 export default function CustomerDetailPage() {
   const router = useRouter();
@@ -24,10 +25,11 @@ export default function CustomerDetailPage() {
     {
       userCreateID: user?._id || '',
       parentID: customerId,
+      optionSeller: 1,
     },
   );
 
-  const { contactDetail: singleContact } = useGetContact({
+  const { contactDetail: singleContact } = useGetContactDetail({
     contactID: customerId,
   });
 
@@ -50,7 +52,7 @@ export default function CustomerDetailPage() {
 
       setCustomer(transformedContact);
     }
-  }, [customerId]);
+  }, [customerId, singleContact]);
 
   useEffect(() => {
     if (childrenList) {

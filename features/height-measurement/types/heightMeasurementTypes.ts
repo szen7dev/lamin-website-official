@@ -1,21 +1,21 @@
 // Types cho tính năng đo cao
 export interface HeightMeasurementFormData {
-  name: string;
-  birthDate: Date;
-  weight: string | number;
-  height: string | number;
-  phone: string;
-  gender: number;
+  name?: string;
+  birthDate?: Date;
+  weight?: string | number;
+  height?: string | number;
+  phone?: string;
+  gender?: number;
   note?: string;
   optionSeller?: number;
   contactID?: string;
-  parentName: string;
-  email: string;
-  fatherHeight: string | number;
-  motherHeight: string | number;
-  date: Date | string;
-  desiredHeight: string | number;
-  routine: string;
+  parentName?: string;
+  email?: string;
+  fatherHeight?: string | number;
+  motherHeight?: string | number;
+  date?: Date | string;
+  desiredHeight?: string | number;
+  routine?: string;
 }
 
 export interface HeightMeasurementResultData {
@@ -137,8 +137,9 @@ export interface GrowTrackListApiResponse {
 }
 
 export interface HeightHistoryParams {
-  limit: number;
-  phone: string;
+  limit?: number;
+  phone?: string;
+  contactID?: string;
 }
 
 export interface HeightHistory {

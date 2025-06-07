@@ -12,13 +12,12 @@ export async function getContact({
       userCreateID: params.userCreateID || '',
       parentID: params.parentID || '',
       contactID: params.contactID || '',
+      ...params,
     };
     const response = await apiClient.get<Contact | Contact[]>(
       '/api/item/contacts',
       queryParams,
     );
-
-    console.log('queryParams', queryParams);
 
     return response.data;
   } catch (error) {

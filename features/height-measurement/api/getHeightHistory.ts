@@ -19,6 +19,7 @@ export const getHeightHistory = async (
         'date name parentName gender birthday height weight desiredHeight phone note percentile',
       ...(params.limit ? { limit: params.limit } : {}),
       ...(params.phone ? { phone: params.phone } : {}),
+      ...(params.contactID ? { contactID: params.contactID } : {}),
     };
 
     const response = await apiClient.get<HeightHistory[]>(
