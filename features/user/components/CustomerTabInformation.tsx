@@ -26,13 +26,16 @@ export function CustomerTabInformation({
   const [displayedContacts, setDisplayedContacts] = useState<DisplayContact[]>(
     [],
   );
+  const [searchQuery, setSearchQuery] = useState('');
 
   const { user } = useAuth();
-  const { contactList } = useGetContact({
+  const { contactList, refetch } = useGetContact({
     userCreateID: user?._id || '',
+    keyword: searchQuery,
   });
 
   useEffect(() => {
+    refetch();
     if (contactList) {
       const transformedContacts: DisplayContact[] = contactList.map(
         (contact: any) => ({
@@ -67,9 +70,13 @@ export function CustomerTabInformation({
                   <Input
                     className="pl-10 py-3 border border-gray-300 rounded-md"
                     placeholder="Họ và tên, Số điện thoại..."
+                    value={searchQuery}
+                    onChange={e => setSearchQuery(e.target.value)}
                   />
                 </div>
-                <Button className=" bg-primary hover:bg-primary/80 text-white rounded-r-md">
+                <Button
+                  className=" bg-primary hover:bg-primary/80 text-white rounded-r-md"
+                  onClick={() => refetch()}>
                   Tìm kiếm
                 </Button>
               </div>

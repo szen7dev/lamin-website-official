@@ -50,6 +50,8 @@ export interface GetContactParams {
   userCreateID?: string;
   parentID?: string;
   contactID?: string;
+  optionSeller?: number;
+  keyword?: string;
 }
 
 export interface Contact {
