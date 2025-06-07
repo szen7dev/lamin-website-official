@@ -8,9 +8,8 @@ import { Contact } from '@/features/user/types/userTypes';
 
 export function useGetContact(params: GetContactParams) {
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ['GET_USER_CONTACT', params.userCreateID],
+    queryKey: ['GET_USER_CONTACT'],
     queryFn: () => getContact({ params }),
-    enabled: !!params.userCreateID,
     retry: 1,
     staleTime: 1000 * 60 * 5,
   });
