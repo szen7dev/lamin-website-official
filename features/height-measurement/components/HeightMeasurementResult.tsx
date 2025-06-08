@@ -610,7 +610,7 @@ export default function HeightMeasurementResult({
             </span>
           </p>
           <p className="font-medium">
-            • Chiều cao chuẩn của bé trai là: 177cm và bé Bé Gái là: 163,5cm
+            • Chiều cao chuẩn của bé trai là: 177cm và bé bé gái là: 163,5cm
           </p>
           <p className="text-grayscale-90">
             • Con có thể không đạt được chiều cao dự đoán nếu bị ảnh hưởng bởi
