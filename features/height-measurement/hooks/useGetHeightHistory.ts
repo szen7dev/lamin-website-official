@@ -10,9 +10,8 @@ import {
 
 export function useGetHeightHistory(params: HeightHistoryParams) {
   return useQuery<HeightHistory[]>({
-    queryKey: ['GET_HEIGHT_HISTORY'],
+    queryKey: ['GET_HEIGHT_HISTORY', params],
     queryFn: () => getHeightHistory(params),
-    enabled: !!params.phone || !!params.contactID,
     staleTime: 5 * 60 * 1000,
     refetchOnWindowFocus: false,
   });

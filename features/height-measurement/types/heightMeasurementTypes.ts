@@ -140,6 +140,7 @@ export interface HeightHistoryParams {
   limit?: number;
   phone?: string;
   contactID?: string;
+  keyword?: string;
 }
 
 export interface HeightHistory {
