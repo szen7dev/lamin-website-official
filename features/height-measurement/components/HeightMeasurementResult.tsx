@@ -273,7 +273,7 @@ export default function HeightMeasurementResult({
         plugins: {
           title: {
             display: true,
-            text: 'Biểu đồ dự đoán chiều cao CDC',
+            text: 'Biểu đồ dự đoán chiều cao CDC thực hiện tại lamin.com.vn',
             align: 'center',
             font: {
               size: isMobile ? 14 : 24,
