@@ -1,10 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import Link from 'next/link';
-import { AlertCircle } from 'lucide-react';
+import { AlertCircle, Loader2 } from 'lucide-react';
 import { Chart } from 'chart.js/auto';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
+import fileDownload from 'js-file-download';
 
 Chart.register(ChartDataLabels);
 
@@ -24,20 +25,36 @@ import {
   SearchIcon,
 } from '@/components/icons';
 import { useAuth } from '@/hooks';
-import { useGetHeightHistory } from '@/features/height-measurement/hooks';
+import {
+  useGetHeightHistory,
+  useGetExcelMeasurement,
+} from '@/features/height-measurement/hooks';
 import { formatDate } from '@/utils';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Input } from '@/components/ui/input';
 import CreateHeightMeasurementCustomerModal from '@/components/modal/CreateHeightMeasurementCustomerModal';
+import { usePostImportHabitTrack } from '@/features/height-measurement/hooks/usePostImportHabbitTrack';
+import { useToast } from '@/hooks/use-toast';
 
 export default function HeightMeasureHistoryPage() {
   const { user } = useAuth();
+  const { toast } = useToast();
+  const fileImportRef = useRef<HTMLInputElement>(null);
   const [visibleItems, setVisibleItems] = useState(5);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [keyword, setKeyword] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
+  const [importErrors, setImportErrors] = useState<string[]>([]);
+  const [showImportErrors, setShowImportErrors] = useState(false);
 
+  // MUTATE
+  const { mutate: getExcelMeasurement, isPending: isPendingDowloadExcel } =
+    useGetExcelMeasurement();
+  const { mutate: postImportHabitTrack, isPending: isPendingImport } =
+    usePostImportHabitTrack();
+
+  // QUERY
   const {
     data: historyList = [],
     isLoading,
@@ -52,6 +69,74 @@ export default function HeightMeasureHistoryPage() {
     setVisibleItems(prevCount => prevCount + 5);
   };
 
+  const handleImportClick = () => {
+    if (fileImportRef.current) {
+      fileImportRef.current.click();
+    }
+  };
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+
+    if (!file) return;
+
+    setImportErrors([]);
+    setShowImportErrors(false);
+
+    const allowTypes = [
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      'application/vnd.ms-excel',
+    ];
+
+    if (!allowTypes.includes(file.type)) {
+      toast({
+        title: 'Lỗi định dạng file',
+        variant: 'destructive',
+        description: 'Vui lòng chọn file Excel (.xls hoặc .xlsx)',
+      });
+      event.target.value = '';
+
+      return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      const base64String = reader.result as string;
+
+      postImportHabitTrack(
+        {
+          dataImport: base64String,
+        },
+        {
+          onSuccess: () => {
+            toast({
+              title: 'Import file thành công',
+              description: 'Đã import thành công dữ liệu từ file Excel.',
+              variant: 'success',
+            });
+          },
+          onError: error => {
+            console.error('Error importing file:', error);
+            toast({
+              title: 'Import file thất bại',
+              description: error.message,
+              variant: 'destructive',
+            });
+            event.target.value = '';
+          },
+        },
+      );
+    };
+    reader.onerror = () => {
+      toast({
+        title: 'Không thể đọc file',
+        variant: 'destructive',
+      });
+      event.target.value = '';
+    };
+    reader.readAsDataURL(file);
+  };
   const formattedHistory =
     historyList?.map(item => ({
       id: item._id,
@@ -141,11 +226,38 @@ export default function HeightMeasureHistoryPage() {
               <SearchIcon className="w-5 h-5 text-[#94A3B8] hover:text-primary" />
             </button>
           </div>
-          <Button variant="outline">
-            <DownloadIcon className="h-4 w-4" />
+          <Button
+            disabled={isPendingDowloadExcel}
+            variant="outline"
+            onClick={() =>
+              getExcelMeasurement(undefined, {
+                onSuccess: data => {
+                  fileDownload(data, 'cdc_grow_track_sample.xlsx');
+                },
+              })
+            }>
+            {isPendingDowloadExcel ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <DownloadIcon className="h-4 w-4" />
+            )}
             Tải về
           </Button>
-          <Button variant="outline">Import excel</Button>
+          <Button variant="outline">
+            {isPendingImport && (
+              <Loader2 className="h-4 w-4 animate-spin mr-1" />
+            )}
+            Import excel
+          </Button>
+
+          <input
+            ref={fileImportRef}
+            accept=".xlsx, .xls"
+            className="hidden"
+            type="file"
+            onChange={handleFileChange}
+          />
+
           <Button onClick={() => setIsModalOpen(true)}>Tạo đo cao</Button>
         </div>
       </div>

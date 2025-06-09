@@ -2128,7 +2128,7 @@ electron-to-chromium@^1.5.73:
     cmdk "1.0.4"
     cookies-next "^5.1.0"
     date-fns "4.1.0"
-    elela "file:../../Library/Caches/Yarn/v6/npm-elela-0.1.0-b3a9215d-1885-45ae-a49c-9f394c316119-1749445499019/node_modules/elela"
+    elela "file:C:/Users/Admin/AppData/Local/Yarn/Cache/v6/npm-elela-0.1.0-8aba6f59-6f8f-4482-ad9c-270189a791f5-1749459146764/node_modules/elela"
     embla-carousel-react "8.5.1"
     framer-motion "^12.7.2"
     input-otp "1.4.1"
@@ -2148,6 +2148,7 @@ electron-to-chromium@^1.5.73:
     tailwind-merge "^2.5.5"
     tailwindcss-animate "^1.0.7"
     vaul "^0.9.6"
+    xlsx "^0.18.5"
     zod latest
 
 embla-carousel-react@8.5.1:
@@ -3245,6 +3246,11 @@ jiti@^1.21.6:
   version "1.21.7"
   resolved "https://registry.yarnpkg.com/jiti/-/jiti-1.21.7.tgz#9dd81043424a3d28458b193d965f0d18a2300ba9"
   integrity sha512-/imKNG4EbWNrVjoNC/1H5/9GFy+tqjGBHCaSsN+P2RnPqjsLmv6UD3Ej+Kj8nBWaRAwyk7kK5ZUc+OEatnTR3A==
+
+js-file-download@0.4.12:
+  version "0.4.12"
+  resolved "https://registry.yarnpkg.com/js-file-download/-/js-file-download-0.4.12.tgz#10c70ef362559a5b23cdbdc3bd6f399c3d91d821"
+  integrity sha512-rML+NkoD08p5Dllpjo0ffy4jRHeY6Zsapvr/W86N7E0yuzAO6qa5X9+xog6zQNlH102J7IXljNY2FtS6Lj3ucg==
 
 "js-tokens@^3.0.0 || ^4.0.0":
   version "4.0.0"

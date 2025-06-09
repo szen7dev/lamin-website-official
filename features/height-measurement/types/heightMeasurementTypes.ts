@@ -172,3 +172,7 @@ export interface HeightHistory {
   createAt: string;
   __v: number;
 }
+
+export interface HabitTrackFormData {
+  dataImport: string;
+}
