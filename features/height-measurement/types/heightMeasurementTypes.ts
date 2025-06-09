@@ -140,6 +140,7 @@ export interface HeightHistoryParams {
   limit?: number;
   phone?: string;
   contactID?: string;
+  keyword?: string;
 }
 
 export interface HeightHistory {
@@ -170,4 +171,8 @@ export interface HeightHistory {
   modifyAt: string;
   createAt: string;
   __v: number;
+}
+
+export interface HabitTrackFormData {
+  dataImport: string;
 }

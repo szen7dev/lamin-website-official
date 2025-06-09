@@ -25,6 +25,7 @@ const redirects = new Map([
   ['/vng-event/donate-list', '/quy-vietnam-grow/danh-sach-tu-thien'],
   ['/vng-event/donate-history', '/quy-vietnam-grow/lich-su-tu-thien'],
   ['/account/for-seller', '/tai-khoan/cho-nha-ban-hang'],
+  ['/account/customer-height', '/tai-khoan/do-cao-khach-hang'],
 ]);
 
 // URL rewrites mapping (visible URL -> content URL)
@@ -50,6 +51,7 @@ const rewrites = new Map([
   ['/quy-vietnam-grow/danh-sach-tu-thien', '/vng-event/donate-list'],
   ['/quy-vietnam-grow/lich-su-tu-thien', '/vng-event/donate-history'],
   ['/tai-khoan/cho-nha-ban-hang', '/account/for-seller'],
+  ['/tai-khoan/do-cao-khach-hang', '/account/customer-height'],
 ]);
 
 export async function middleware(request: NextRequest) {
@@ -227,6 +229,12 @@ export async function middleware(request: NextRequest) {
     const newPath = `/account/height-measure-history/${id}${search}`;
 
     return NextResponse.rewrite(new URL(newPath, request.url));
+  }
+
+  if (pathname === '/tai-khoan') {
+    return NextResponse.redirect(
+      new URL('/tai-khoan/thong-tin-ca-nhan', request.url),
+    );
   }
 
   // Handle static redirects
