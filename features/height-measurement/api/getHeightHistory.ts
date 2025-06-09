@@ -20,6 +20,7 @@ export const getHeightHistory = async (
       ...(params.limit ? { limit: params.limit } : {}),
       ...(params.phone ? { phone: params.phone } : {}),
       ...(params.contactID ? { contactID: params.contactID } : {}),
+      ...(params.keyword ? { keyword: params.keyword } : {}),
     };
 
     const response = await apiClient.get<HeightHistory[]>(

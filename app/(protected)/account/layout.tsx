@@ -13,6 +13,7 @@ import {
   HouseSmileIcon,
   MapPinIcon,
   PackageIcon,
+  PersonGroupIcon,
   UserProfileIcon,
 } from '@/components/icons';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -35,6 +36,7 @@ export default function ProfileLayout({
   const isDynamicHeightMeasurementHistory = pathname.match(
     /\/tai-khoan\/lich-su-do-cao\/[^\/]+$/,
   );
+  const isCustomerHeightPage = pathname === '/tai-khoan/do-cao-khach-hang';
 
   return (
     <div className="container mx-auto py-8">
@@ -63,14 +65,16 @@ export default function ProfileLayout({
       </div>
 
       <div className="flex flex-col md:flex-row gap-6">
-        {!isHeightMeasurementHistory && !isChildDetailPage && (
-          <div className="w-full md:w-64 shrink-0">
-            <div className="flex flex-col gap-6">
-              <AvatarSection />
-              <ProfileTabs />
+        {!isHeightMeasurementHistory &&
+          !isChildDetailPage &&
+          !isCustomerHeightPage && (
+            <div className="w-full md:w-64 shrink-0">
+              <div className="flex flex-col gap-6">
+                <AvatarSection />
+                <ProfileTabs />
+              </div>
             </div>
-          </div>
-        )}
+          )}
 
         <div className={`flex-1 ${isHeightMeasurementHistory ? 'w-full' : ''}`}>
           {children}
@@ -114,6 +118,11 @@ function ProfileTabs() {
       icon: <HouseSmileIcon />,
       name: 'Cho nhà bán hàng',
       href: '/tai-khoan/cho-nha-ban-hang',
+    },
+    {
+      icon: <PersonGroupIcon />,
+      name: 'Đo cao khách hàng',
+      href: '/tai-khoan/do-cao-khach-hang',
     },
     {
       icon: <PackageIcon />,
