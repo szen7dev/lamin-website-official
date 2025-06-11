@@ -31,3 +31,19 @@ export function sanitizeUrl(url: string): string {
 
   return url;
 }
+
+export function getMineTypeExcel(fileName: string): string {
+  const extension = fileName.split('.').pop()?.toLowerCase();
+
+  if (extension === 'xlsx') {
+    return 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+  } else if (extension === 'xls') {
+    return 'application/vnd.ms-excel';
+  } else if (extension === 'csv') {
+    return 'text/csv';
+  } else if (extension === 'xlsm') {
+    return 'application/vnd.ms-excel.sheet.macroEnabled.12';
+  } else {
+    return 'application/octet-stream'; // Default for unknown types
+  }
+}
