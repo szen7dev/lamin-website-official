@@ -91,8 +91,8 @@ export default function HeightMeasureHistoryPage() {
       'application/vnd.ms-excel', // .xls
 
       // Excel with macros
-      'application/vnd.ms-excel.sheet.macroEnabled.12', // .xlsm - tiêu chuẩn
-      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.macroenabled.12', // .xlsm - variant
+      'application/vnd.ms-excel.sheet.macroEnabled.12', // .xlsm
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.macroenabled.12', // .xlsm
       'application/vnd.ms-excel.sheet.binary.macroEnabled.12', // .xlsb
 
       // Generic types sometimes used
@@ -198,33 +198,28 @@ export default function HeightMeasureHistoryPage() {
           return;
         }
 
-        postImportHabitTrack(
-          {
-            dataImport: jsonString,
+        postImportHabitTrack(jsonString, {
+          onSuccess: () => {
+            toast({
+              title: 'Import thành công',
+              description: 'Dữ liệu đã được nhập thành công.',
+              variant: 'success',
+            });
+            event.target.value = '';
           },
-          {
-            onSuccess: () => {
-              toast({
-                title: 'Import thành công',
-                description: 'Dữ liệu đã được nhập thành công.',
-                variant: 'success',
-              });
-              event.target.value = '';
-            },
-            onError: error => {
-              console.error('Import error:', error);
-              toast({
-                title: 'Lỗi khi import dữ liệu',
-                variant: 'destructive',
-                description:
-                  error instanceof Error
-                    ? error.message
-                    : 'Đã xảy ra lỗi không xác định.',
-              });
-              event.target.value = '';
-            },
+          onError: error => {
+            console.error('Import error:', error);
+            toast({
+              title: 'Lỗi khi import dữ liệu',
+              variant: 'destructive',
+              description:
+                error instanceof Error
+                  ? error.message
+                  : 'Đã xảy ra lỗi không xác định.',
+            });
+            event.target.value = '';
           },
-        );
+        });
       } catch (error) {
         console.error('Error processing Excel file:', error);
         toast({

@@ -93,8 +93,8 @@ export const validateExcelData = (data: any[]): string[] => {
     if (row.EMPTY_5 !== undefined && row.EMPTY_5 !== null) {
       const genderValue = Number(row.EMPTY_5);
 
-      if (isNaN(genderValue) || ![0, 1, 2].includes(genderValue)) {
-        errors.push(`Dòng ${rowIndex}: Convert Gender phải là 0, 1 hoặc 2.`);
+      if (isNaN(genderValue) || ![1, 2, 3].includes(genderValue)) {
+        errors.push(`Dòng ${rowIndex}: Convert Gender phải là 1, 2 hoặc 3.`);
       }
     }
 
