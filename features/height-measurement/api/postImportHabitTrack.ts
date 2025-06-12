@@ -1,12 +1,15 @@
-import { HabitTrackFormData } from '../types/heightMeasurementTypes';
-
 import apiClient from '@/services/api/apiClient';
 
-export const postImportHabitTrack = async (formData: HabitTrackFormData) => {
+export const postImportHabitTrack = async (dataImport: string) => {
+  console.log('postImportHabitTrack', dataImport);
+
   try {
     const response = await apiClient.post(
-      '/api/crm/habit_track/import-from-excel',
-      formData,
+      '/api/crm/grow_track/import-from-excel',
+      {
+        dataImport,
+        optionSeller: 1,
+      },
     );
 
     return response.data;

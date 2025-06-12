@@ -20,6 +20,7 @@ export const getPhoneOTP = async (
       {
         phone: params.phone,
         optionSeller: params.optionSeller || 1,
+        option: 1, // Default option value
       },
     );
 
