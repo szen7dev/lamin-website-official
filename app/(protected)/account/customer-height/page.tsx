@@ -6,6 +6,7 @@ import { AlertCircle, Loader2 } from 'lucide-react';
 import { Chart } from 'chart.js/auto';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import fileDownload from 'js-file-download';
+import * as XLSX from 'xlsx';
 
 Chart.register(ChartDataLabels);
 
@@ -29,13 +30,14 @@ import {
   useGetHeightHistory,
   useGetExcelMeasurement,
 } from '@/features/height-measurement/hooks';
-import { formatDate } from '@/utils';
+import { formatDate, getMineTypeExcel } from '@/utils';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Input } from '@/components/ui/input';
 import CreateHeightMeasurementCustomerModal from '@/components/modal/CreateHeightMeasurementCustomerModal';
 import { usePostImportHabitTrack } from '@/features/height-measurement/hooks/usePostImportHabbitTrack';
 import { useToast } from '@/hooks/use-toast';
+import { validateExcelData } from '@/features/height-measurement/validates/validateExcel';
 
 export default function HeightMeasureHistoryPage() {
   const { user } = useAuth();
@@ -84,15 +86,24 @@ export default function HeightMeasureHistoryPage() {
     setShowImportErrors(false);
 
     const allowTypes = [
-      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-      'application/vnd.ms-excel',
+      // Standard Excel formats
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // .xlsx
+      'application/vnd.ms-excel', // .xls
+
+      // Excel with macros
+      'application/vnd.ms-excel.sheet.macroEnabled.12', // .xlsm - tiêu chuẩn
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.macroenabled.12', // .xlsm - variant
+      'application/vnd.ms-excel.sheet.binary.macroEnabled.12', // .xlsb
+
+      // Generic types sometimes used
+      'application/octet-stream', // Generic binary type sometimes used for Excel files
     ];
 
     if (!allowTypes.includes(file.type)) {
       toast({
         title: 'Lỗi định dạng file',
         variant: 'destructive',
-        description: 'Vui lòng chọn file Excel (.xls hoặc .xlsx)',
+        description: 'Vui lòng chọn file Excel (.xls, .xlsx hoặc .xlsm).',
       });
       event.target.value = '';
 
@@ -101,33 +112,130 @@ export default function HeightMeasureHistoryPage() {
 
     const reader = new FileReader();
 
-    reader.onload = () => {
-      const base64String = reader.result as string;
+    reader.onload = e => {
+      try {
+        const data = e.target?.result;
+        const workbook = XLSX.read(data, { type: 'binary' });
 
-      postImportHabitTrack(
-        {
-          dataImport: base64String,
-        },
-        {
-          onSuccess: () => {
-            toast({
-              title: 'Import file thành công',
-              description: 'Đã import thành công dữ liệu từ file Excel.',
-              variant: 'success',
-            });
+        const sheetName = workbook.SheetNames[0];
+        const worksheet = workbook.Sheets[sheetName];
+
+        if (!worksheet || !worksheet['!ref']) {
+          toast({
+            title: 'Sheet rỗng',
+            description: 'File Excel không chứa dữ liệu.',
+            variant: 'destructive',
+          });
+          event.target.value = '';
+
+          return;
+        }
+
+        const range = XLSX.utils.decode_range(worksheet['!ref']!);
+
+        // Extract row data while preserving raw values
+        const rows: any[][] = [];
+
+        for (let R = range.s.r; R <= range.e.r; ++R) {
+          const row: any[] = [];
+
+          for (let C = range.s.c; C <= range.e.c; ++C) {
+            const cellAddress = XLSX.utils.encode_cell({ r: R, c: C });
+            const cell = worksheet[cellAddress];
+            // Use raw value (v) to preserve dates as numbers
+
+            row.push(cell ? cell.v : null);
+          }
+          rows.push(row);
+        }
+
+        const titleRow = rows[0];
+        const headerRow = rows[1];
+
+        const headerKeys = headerRow.map((_, idx) => {
+          if (idx === 0) return titleRow[0] || 'FORM ĐO CAO';
+
+          return `EMPTY${idx === 1 ? '' : `_${idx - 1}`}`;
+        });
+
+        const finalResult = [];
+
+        const headerObject: any = {};
+
+        headerKeys.forEach((key, idx) => {
+          headerObject[key] = headerRow[idx];
+        });
+        finalResult.push(headerObject);
+
+        const dataRows = rows
+          .slice(2)
+          .filter(row => row.some(cell => cell !== null && cell !== ''));
+
+        dataRows.forEach(row => {
+          const dataObject: any = {};
+
+          headerKeys.forEach((key, idx) => {
+            dataObject[key] = row[idx] !== undefined ? row[idx] : null;
+          });
+          finalResult.push(dataObject);
+        });
+
+        const jsonString = JSON.stringify(finalResult);
+
+        // validate the JSON structure
+        const validationErrors = validateExcelData(finalResult);
+
+        if (validationErrors.length > 0) {
+          setImportErrors(validationErrors);
+          setShowImportErrors(true);
+          toast({
+            title: 'Lỗi dữ liệu',
+            variant: 'destructive',
+            description: 'File Excel không hợp lệ. Vui lòng kiểm tra lại.',
+          });
+          event.target.value = '';
+
+          return;
+        }
+
+        postImportHabitTrack(
+          {
+            dataImport: jsonString,
           },
-          onError: error => {
-            console.error('Error importing file:', error);
-            toast({
-              title: 'Import file thất bại',
-              description: error.message,
-              variant: 'destructive',
-            });
-            event.target.value = '';
+          {
+            onSuccess: () => {
+              toast({
+                title: 'Import thành công',
+                description: 'Dữ liệu đã được nhập thành công.',
+                variant: 'success',
+              });
+              event.target.value = '';
+            },
+            onError: error => {
+              console.error('Import error:', error);
+              toast({
+                title: 'Lỗi khi import dữ liệu',
+                variant: 'destructive',
+                description:
+                  error instanceof Error
+                    ? error.message
+                    : 'Đã xảy ra lỗi không xác định.',
+              });
+              event.target.value = '';
+            },
           },
-        },
-      );
+        );
+      } catch (error) {
+        console.error('Error processing Excel file:', error);
+        toast({
+          title: 'Lỗi xử lý file',
+          description: 'Không thể đọc nội dung file Excel.',
+          variant: 'destructive',
+        });
+        event.target.value = '';
+      }
     };
+
     reader.onerror = () => {
       toast({
         title: 'Không thể đọc file',
@@ -135,8 +243,10 @@ export default function HeightMeasureHistoryPage() {
       });
       event.target.value = '';
     };
-    reader.readAsDataURL(file);
+
+    reader.readAsBinaryString(file);
   };
+
   const formattedHistory =
     historyList?.map(item => ({
       id: item._id,
@@ -231,8 +341,57 @@ export default function HeightMeasureHistoryPage() {
             variant="outline"
             onClick={() =>
               getExcelMeasurement(undefined, {
-                onSuccess: data => {
-                  fileDownload(data, 'cdc_grow_track_sample.xlsx');
+                onSuccess: async data => {
+                  try {
+                    if (typeof data === 'string' && data.startsWith('http')) {
+                      // Trích xuất tên file từ URL
+                      const fileName =
+                        data.split('/').pop() || 'cdc_grow_track_sample.xlsm';
+
+                      console.log('Downloading file:', fileName);
+
+                      // Fetch dữ liệu từ URL
+                      const response = await fetch(data);
+
+                      if (!response.ok) {
+                        throw new Error(
+                          `Download failed: ${response.statusText}`,
+                        );
+                      }
+
+                      // Lấy dữ liệu binary của file
+                      const blob = await response.blob();
+
+                      // Xác định mime type dựa vào phần mở rộng
+                      let mimeType = getMineTypeExcel(fileName);
+
+                      // Gọi fileDownload với binary data và mime type
+                      fileDownload(blob, fileName, mimeType);
+                    } else {
+                      // Xử lý trường hợp dữ liệu không phải URL
+                      fileDownload(
+                        data,
+                        'cdc_grow_track_sample.xlsm',
+                        'application/vnd.ms-excel.sheet.macroEnabled.12',
+                      );
+                    }
+
+                    toast({
+                      title: 'Tải file thành công',
+                      description: 'File mẫu đã được tải xuống.',
+                      variant: 'success',
+                    });
+                  } catch (error) {
+                    console.error('Download error:', error);
+                    toast({
+                      title: 'Lỗi tải file',
+                      description:
+                        error instanceof Error
+                          ? error.message
+                          : 'Không thể tải file mẫu.',
+                      variant: 'destructive',
+                    });
+                  }
                 },
               })
             }>
@@ -243,7 +402,10 @@ export default function HeightMeasureHistoryPage() {
             )}
             Tải về
           </Button>
-          <Button variant="outline">
+          <Button
+            disabled={isPendingImport}
+            variant="outline"
+            onClick={handleImportClick}>
             {isPendingImport && (
               <Loader2 className="h-4 w-4 animate-spin mr-1" />
             )}
@@ -252,7 +414,7 @@ export default function HeightMeasureHistoryPage() {
 
           <input
             ref={fileImportRef}
-            accept=".xlsx, .xls"
+            accept=".xlsx, .xls, .xlsm"
             className="hidden"
             type="file"
             onChange={handleFileChange}
@@ -276,6 +438,80 @@ export default function HeightMeasureHistoryPage() {
               : 'Đã xảy ra lỗi khi tải lịch sử đo cao. Vui lòng thử lại sau.'}
           </AlertDescription>
         </Alert>
+      )}
+
+      {/* Show error when import excel*/}
+      {showImportErrors && importErrors.length > 0 && (
+        <div className="mt-4 mb-6 border border-red-200 rounded-lg overflow-hidden">
+          {/* Header */}
+          <div className="bg-red-50 px-4 py-3 border-b border-red-200 flex items-center">
+            <AlertCircle className="h-5 w-5 text-red-500 mr-2 flex-shrink-0" />
+            <div className="font-medium text-red-800">
+              Phát hiện {importErrors.length} lỗi trong file Excel
+            </div>
+          </div>
+
+          {/* Content */}
+          <div className="p-4 bg-white">
+            <div className="flex items-center mb-3">
+              <div className="flex-1">
+                <p className="text-sm text-gray-700">
+                  Vui lòng kiểm tra và sửa các lỗi sau trong file Excel hoặc sử
+                  dụng file mẫu để đảm bảo đúng định dạng.
+                </p>
+              </div>
+              <Button
+                className="ml-4 text-sm border-primary text-primary hover:bg-primary/5"
+                disabled={isPendingDowloadExcel}
+                size="sm"
+                variant="outline"
+                onClick={() =>
+                  getExcelMeasurement(undefined, {
+                    onSuccess: data => {
+                      fileDownload(data, 'cdc_grow_track_sample.xlsx');
+                    },
+                  })
+                }>
+                {isPendingDowloadExcel ? (
+                  <Loader2 className="h-3.5 w-3.5 mr-1 animate-spin" />
+                ) : (
+                  <DownloadIcon className="h-3.5 w-3.5 mr-1" />
+                )}
+                Tải file mẫu
+              </Button>
+            </div>
+
+            {/* Error list */}
+            <div className="bg-red-50 rounded-md p-3 max-h-60 overflow-y-auto">
+              <ul className="list-disc pl-5 space-y-1.5">
+                {importErrors.map((error, index) => (
+                  <li key={index} className="text-sm text-red-700">
+                    {error}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Action buttons */}
+            <div className="flex justify-end gap-2 mt-4">
+              <Button
+                className="text-gray-600 hover:text-gray-800"
+                size="sm"
+                variant="ghost"
+                onClick={() => setShowImportErrors(false)}>
+                Đóng
+              </Button>
+              <Button
+                size="sm"
+                onClick={() => {
+                  setShowImportErrors(false);
+                  fileImportRef.current?.click();
+                }}>
+                Thử lại với file khác
+              </Button>
+            </div>
+          </div>
+        </div>
       )}
 
       {/* Empty state */}

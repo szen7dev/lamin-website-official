@@ -92,3 +92,5 @@ export function normalizeResponse<T = any>(response: any): T {
 
   return response as unknown as T;
 }
+
+export const formatExcelWithEmptyRules = () => {};
