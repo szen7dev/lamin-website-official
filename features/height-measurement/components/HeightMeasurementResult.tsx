@@ -467,27 +467,41 @@ export default function HeightMeasurementResult({
   }
 
   // Tính tuổi từ ngày sinh
+  // Hàm tính tuổi chính xác từ ngày sinh
   const calculateAge = (birthDate: string) => {
     const today = new Date();
     const birth = new Date(birthDate);
-    let age = today.getFullYear() - birth.getFullYear();
-    const m = today.getMonth() - birth.getMonth();
 
-    if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) {
-      age--;
+    if (isNaN(birth.getTime())) {
+      console.error('Invalid birth date:', birthDate);
+
+      return { years: 0, months: 0, days: 0 };
     }
 
-    // Tính số tháng
+    let years = today.getFullYear() - birth.getFullYear();
+
     let months = today.getMonth() - birth.getMonth();
 
     if (months < 0) {
+      years--;
       months += 12;
     }
 
-    // Tính số ngày
-    const days = today.getDate() - birth.getDate();
+    let days = today.getDate() - birth.getDate();
 
-    return { years: age, months, days: days > 0 ? days : 0 };
+    if (days < 0) {
+      const lastMonth = new Date(today.getFullYear(), today.getMonth(), 0);
+
+      days += lastMonth.getDate();
+      months--;
+
+      if (months < 0) {
+        years--;
+        months += 12;
+      }
+    }
+
+    return { years, months, days };
   };
 
   const age = calculateAge(processedData.birthDate);
@@ -580,8 +594,9 @@ export default function HeightMeasurementResult({
 
         {/* Row 3: Analysis Text */}
         <div className="space-y-1 sm:space-y-2 text-sm sm:text-sm p-3 border-t border-grayscale-20">
-           <p>
-            • Tên bé: {processedData.name} ({processedData.gender === 1 ? 'Nam' : 'Nữ'}), sinh ngày{' '}
+          <p>
+            • Tên bé: {processedData.name} (
+            {processedData.gender === 1 ? 'Nam' : 'Nữ'}), sinh ngày{' '}
             {new Date(processedData.birthDate).toLocaleDateString('vi-VN')} -{' '}
             {age.years} tuổi, {age.months} tháng, {age.days} ngày
           </p>
@@ -617,8 +632,8 @@ export default function HeightMeasurementResult({
             những thói quen sinh hoạt xấu
           </p>
           <p className="text-grayscale-90">
-            • Con có thể tăng thêm 7-15cm so với dự đoán khi trưởng thành nếu
-            bố mẹ giúp con áp dụng giải pháp tăng chiều cao LaminGrow
+            • Con có thể tăng thêm 7-15cm so với dự đoán khi trưởng thành nếu bố
+            mẹ giúp con áp dụng giải pháp tăng chiều cao LaminGrow
           </p>
           <ul
             aria-label="Khuyến nghị"
