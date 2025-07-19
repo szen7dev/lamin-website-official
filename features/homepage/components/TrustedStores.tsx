@@ -124,66 +124,67 @@ export default function TrustedStores() {
       ) : error ? (
         renderError()
       ) : (
-        <section
-          aria-labelledby="trusted-stores-heading"
-          className="sm:rounded-2xl bg-gradient-primary p-3 sm:p-4 md:p-6">
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4 sm:mb-6">
-            <div className="flex flex-col justify-between gap-2 sm:gap-3">
-              <h2
-                className="text-xl sm:text-2xl md:text-[28px] font-semibold text-white"
-                id="trusted-stores-heading">
-                Các cửa hàng uy tín của Lamin
-              </h2>
-              <p className="text-sm sm:text-base text-grayscale-5">
-                Tổng hợp các cửa hàng được người dùng tin dùng và đánh giá cao
-              </p>
-            </div>
-            <Link
-              aria-label="Xem tất cả cửa hàng"
-              className="hidden sm:flex rounded-full bg-white items-center gap-1 px-4 py-2 text-primary text-sm font-normal decoration-transparent hover:bg-white/90"
-              href="/he-thong-cua-hang">
-              Xem tất cả
-              <ChevronRight aria-hidden="true" className="h-4 w-4" />
-            </Link>
-          </div>
+        <section></section>
+        // <section
+        //   aria-labelledby="trusted-stores-heading"
+        //   className="sm:rounded-2xl bg-gradient-primary p-3 sm:p-4 md:p-6">
+        //   <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4 sm:mb-6">
+        //     <div className="flex flex-col justify-between gap-2 sm:gap-3">
+        //       <h2
+        //         className="text-xl sm:text-2xl md:text-[28px] font-semibold text-white"
+        //         id="trusted-stores-heading">
+        //         Các cửa hàng uy tín của Lamin
+        //       </h2>
+        //       <p className="text-sm sm:text-base text-grayscale-5">
+        //         Tổng hợp các cửa hàng được người dùng tin dùng và đánh giá cao
+        //       </p>
+        //     </div>
+        //     <Link
+        //       aria-label="Xem tất cả cửa hàng"
+        //       className="hidden sm:flex rounded-full bg-white items-center gap-1 px-4 py-2 text-primary text-sm font-normal decoration-transparent hover:bg-white/90"
+        //       href="/he-thong-cua-hang">
+        //       Xem tất cả
+        //       <ChevronRight aria-hidden="true" className="h-4 w-4" />
+        //     </Link>
+        //   </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4">
-            {Array.isArray(trustedStore) && trustedStore.length > 0 ? (
-              trustedStore.map(store => (
-                <article
-                  key={store._id}
-                  className="flex items-center gap-3 sm:gap-4 rounded-xl bg-white p-3 sm:p-4">
-                  <div className="flex items-center justify-center rounded-full bg-primary-5 p-3">
-                    <StoreIcon className="h-7 w-7" />
-                  </div>
+        //   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4">
+        //     {Array.isArray(trustedStore) && trustedStore.length > 0 ? (
+        //       trustedStore.map(store => (
+        //         <article
+        //           key={store._id}
+        //           className="flex items-center gap-3 sm:gap-4 rounded-xl bg-white p-3 sm:p-4">
+        //           <div className="flex items-center justify-center rounded-full bg-primary-5 p-3">
+        //             <StoreIcon className="h-7 w-7" />
+        //           </div>
 
-                  <div className="flex-1 min-w-0">
-                    <p className="font-medium text-sm sm:text-base text-grayscale-90 truncate max-w-full">
-                      {store.name}
-                    </p>
-                    <div className="flex items-center gap-1.5">
-                      <div className="flex">
-                        <Star className="h-3 w-3 sm:h-4 sm:w-4 fill-yellow-400 text-yellow-400" />
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <span className="font-medium text-xs sm:text-sm text-grayscale-90">
-                          {store?.rating || 0}
-                        </span>
-                        <span className="font-normal text-xs sm:text-sm text-grayscale-70">
-                          ({store?.numberOfRating || 0} đánh giá)
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </article>
-              ))
-            ) : (
-              <div className="col-span-full flex items-center justify-center h-24 rounded-xl bg-white/10 p-4">
-                <p className="text-grayscale-50">Không có cửa hàng nào</p>
-              </div>
-            )}
-          </div>
-        </section>
+        //           <div className="flex-1 min-w-0">
+        //             <p className="font-medium text-sm sm:text-base text-grayscale-90 truncate max-w-full">
+        //               {store.name}
+        //             </p>
+        //             <div className="flex items-center gap-1.5">
+        //               <div className="flex">
+        //                 <Star className="h-3 w-3 sm:h-4 sm:w-4 fill-yellow-400 text-yellow-400" />
+        //               </div>
+        //               <div className="flex items-center gap-1">
+        //                 <span className="font-medium text-xs sm:text-sm text-grayscale-90">
+        //                   {store?.rating || 0}
+        //                 </span>
+        //                 <span className="font-normal text-xs sm:text-sm text-grayscale-70">
+        //                   ({store?.numberOfRating || 0} đánh giá)
+        //                 </span>
+        //               </div>
+        //             </div>
+        //           </div>
+        //         </article>
+        //       ))
+        //     ) : (
+        //       <div className="col-span-full flex items-center justify-center h-24 rounded-xl bg-white/10 p-4">
+        //         <p className="text-grayscale-50">Không có cửa hàng nào</p>
+        //       </div>
+        //     )}
+        //   </div>
+        // </section>
       )}
 
       {/* Benefits Section */}
