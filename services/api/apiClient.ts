@@ -46,9 +46,6 @@ class ApiClient {
   }
 
   private requestInterceptor(config: InternalAxiosRequestConfig) {
-    if (environment === 'dev') {
-      console.log('🚀 API Request:', config);
-    }
     if (this.token) {
       config.headers.set('Authorization', `Bearer ${this.token}`);
     }
@@ -57,10 +54,6 @@ class ApiClient {
   }
 
   private responseInterceptor(response: any) {
-    if (environment === 'dev') {
-      console.log('✅ API Response:', response);
-    }
-
     return response;
   }
 

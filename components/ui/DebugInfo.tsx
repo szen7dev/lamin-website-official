@@ -19,15 +19,6 @@ export function DebugInfo() {
       typeof window !== 'undefined' ? localStorage.getItem('API_MODE') : null;
 
     setApiMode((storedMode as 'mock' | 'real') || API_MODE);
-
-    // Log thông tin debug
-    if (isDev) {
-      console.log('🔧 Debug Info:', {
-        apiMode: storedMode || API_MODE,
-        nodeEnv: process.env.NODE_ENV,
-        nextPublicApiMode: process.env.NEXT_PUBLIC_API_MODE,
-      });
-    }
   }, []);
 
   const toggleApiMode = () => {

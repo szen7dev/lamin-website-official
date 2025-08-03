@@ -54,11 +54,7 @@ export default function ProductReviews({
   });
 
   const handleReviewSubmit = (rating: number, content: string) => {
-    console.log('Submitting review:', {
-      productId,
-      rating,
-      content,
-    });
+    console.log('Submitting review:');
   };
 
   if (isLoading) {
