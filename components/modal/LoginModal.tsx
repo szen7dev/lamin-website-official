@@ -8,9 +8,15 @@ interface LoginModalProps {
   isOpen: boolean;
   content?: string;
   onClose: () => void;
+  onLoginForSeller?: () => void;
 }
 
-export function LoginModal({ isOpen, content, onClose }: LoginModalProps) {
+export function LoginModal({
+  isOpen,
+  content,
+  onClose,
+  onLoginForSeller,
+}: LoginModalProps) {
   const router = useRouter();
 
   const handleContinue = () => {
@@ -71,11 +77,18 @@ export function LoginModal({ isOpen, content, onClose }: LoginModalProps) {
             onClick={handleContinue}>
             Tiếp tục
           </Button>
+
+          <div className="relative flex items-center my-6">
+            <div className="flex-grow border-t border-gray-300" />
+            <span className="mx-4 text-sm text-gray-500">hoặc</span>
+            <div className="flex-grow border-t border-gray-300" />
+          </div>
+
           <Button
             className="w-full border-gray-300 text-gray-600 hover:bg-gray-50"
             variant="outline"
-            onClick={onClose}>
-            Thoát
+            onClick={onLoginForSeller}>
+            Đăng nhập với tư cách nhà bán hàng
           </Button>
         </div>
       </div>

@@ -12,6 +12,7 @@ import { postHeightMeasurement } from '../api/postHeightMeasurement';
 
 interface HeightMeasurementMutationOptions {
   contactID?: string;
+  onSuccess?: (data: HeightMeasurementResultData) => void;
 }
 
 export function useHeightMeasurementMutation(
@@ -37,23 +38,25 @@ export function useHeightMeasurementMutation(
 
         return result;
       } catch (error) {
-        console.error('🔄 Hook: Error in mutationFn:', error);
+        console.error('Error:', error);
         throw error;
       }
     },
 
     onSuccess: (data: HeightMeasurementResultData) => {
-      if (data && data._id) {
+      if (options?.onSuccess) {
+        options.onSuccess(data);
+      } else if (data && data._id) {
         const resultUrl = `/do-cao/ket-qua/${data._id}`;
 
         router.push(resultUrl);
       } else {
-        console.error('🔄 Hook: Success data is missing _id:', data);
+        console.error('Success data is missing _id:', data);
       }
     },
 
     onError: error => {
-      console.error('❌ Hook: Height measurement submission error:', error);
+      console.error('Height measurement submission error:', error);
     },
   });
 
