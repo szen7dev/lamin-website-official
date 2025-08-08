@@ -9,6 +9,7 @@ import { useAuth } from '@/hooks';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { apiClient } from '@/services';
+import { genderOptions } from '@/utils';
 
 const personalInfoSchema = z.object({
   name: z.string().min(1, 'Họ và tên không được để trống'),
@@ -118,12 +119,6 @@ export default function PersonalInfoPage() {
     }
     setIsEditing(!isEditing);
   };
-
-  const genderOptions = {
-    1: 'Nam',
-    2: 'Nữ',
-    3: 'Khác',
-  } as const;
 
   if (!isEditing) {
     return (

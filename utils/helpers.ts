@@ -47,3 +47,23 @@ export function getMineTypeExcel(fileName: string): string {
     return 'application/octet-stream'; // Default for unknown types
   }
 }
+
+export const getInitials = (name: string) => {
+  return name
+    .split(' ')
+    .map(word => word.charAt(0))
+    .join('')
+    .toUpperCase()
+    .slice(0, 2);
+};
+
+export const getGenderColor = (gender: number) => {
+  switch (gender) {
+    case 1:
+      return 'bg-blue-100 text-blue-800';
+    case 2:
+      return 'bg-pink-100 text-pink-800';
+    default:
+      return 'bg-gray-100 text-gray-800';
+  }
+};

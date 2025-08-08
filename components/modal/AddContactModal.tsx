@@ -8,6 +8,7 @@ import type {
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
+import { useEffect } from 'react';
 
 import { useCreateContact } from '@/features/user/hooks/useCreateContact';
 import { Button } from '@/components/ui/button';
@@ -33,6 +34,7 @@ interface AddContactModalProps {
   isOpen: boolean;
   onClose: () => void;
   selectedCustomer?: DisplayContact | null;
+  metadata?: Record<string, any>;
 }
 
 // Create a function to generate schema based on whether we're adding children
@@ -64,13 +66,14 @@ const AddContactModal = ({
   onClose,
   addChildren,
   selectedCustomer,
+  metadata,
 }: AddContactModalProps) => {
   const { mutate: createContactMutate, isPending: isCreatingContact } =
     useCreateContact();
   const form = useForm<FormValues>({
     resolver: zodResolver(createFormSchema(!!addChildren)),
     defaultValues: {
-      name: '',
+      name: metadata?.initialName || '',
       birthday: '',
       gender: 'Nam',
       phone: '',
@@ -105,12 +108,24 @@ const AddContactModal = ({
     };
 
     createContactMutate(params, {
-      onSuccess: () => {
+      onSuccess: data => {
+        console.log('Contact created successfully:', data);
+
+        if (metadata?.callback) {
+          metadata.callback(data);
+        }
         form.reset();
         onClose();
       },
     });
   };
+
+  useEffect(() => {
+    form.reset({
+      ...form.getValues(),
+      name: metadata?.initialName || '',
+    });
+  }, [metadata?.initialName || '']);
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
