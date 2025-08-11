@@ -546,16 +546,44 @@ export default function HeightMeasurementResult({
             {age.years} tuổi, {age.months} tháng, {age.days} ngày
           </p>
           <p>
-            • Chiều cao: {processedData.height}cm. {processedData.noticeH}. Bé{' '}
+            • Chiều cao:{' '}
+            {processedData.height.toLocaleString('vi-VN', {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}
+            cm. {processedData.noticeH}. Bé{' '}
             {processedData.hdfs > 0 ? 'cao' : 'thấp'} hơn so với chiều cao trung
-            bình là {Math.abs(processedData.hdfs)}cm. Chuẩn WHO:{' '}
-            {processedData.whoHS}cm
+            bình là{' '}
+            {Math.abs(processedData.hdfs).toLocaleString('vi-VN', {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}
+            cm. Chuẩn WHO:{' '}
+            {processedData.whoHS.toLocaleString('vi-VN', {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}
+            cm
           </p>
           <p>
-            • Cân nặng: {processedData.weight}kg. {processedData.noticeW}. Bé{' '}
+            • Cân nặng:{' '}
+            {processedData.weight.toLocaleString('vi-VN', {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}
+            kg. {processedData.noticeW}. Bé{' '}
             {processedData.wdfs > 0 ? 'nặng' : 'nhẹ'} hơn so với cân nặng trung
-            bình là {Math.abs(processedData.wdfs)}kg. Chuẩn WHO:{' '}
-            {processedData.whoWS}kg
+            bình là{' '}
+            {Math.abs(processedData.wdfs).toLocaleString('vi-VN', {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}
+            kg. Chuẩn WHO:{' '}
+            {processedData.whoWS.toLocaleString('vi-VN', {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}
+            kg
           </p>
           <p className="flex flex-wrap items-center gap-1">
             •{' '}
