@@ -15,13 +15,17 @@ export default function HeightMeasurementCDCForm() {
   const { user, isAuthenticated } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const handleOpemModal = () => {
+    setIsModalOpen(true);
+  };
+
   const mutationOptions =
     isAuthenticated && user?.contacts?.[0]?._id
       ? {
           contactID: user.contacts[0]._id,
-          onSuccess: () => setIsModalOpen(true),
+          onSuccess: isAuthenticated ? undefined : handleOpemModal,
         }
-      : { onSuccess: () => setIsModalOpen(true) };
+      : { onSuccess: isAuthenticated ? undefined : handleOpemModal };
 
   const { createHeightMeasurement, isPending, error } =
     useHeightMeasurementMutation(mutationOptions);
