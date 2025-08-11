@@ -6,12 +6,13 @@ import { GetContactParams } from '@/features/user/types/userTypes';
 import { getContact } from '@/features/user/api/getContact';
 import { Contact } from '@/features/user/types/userTypes';
 
-export function useGetContact(params: GetContactParams) {
+export function useGetContact({ enabled = true, ...params }: GetContactParams) {
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ['GET_USER_CONTACT'],
+    queryKey: ['GET_USER_CONTACT', ...Object.values(params)],
     queryFn: () => getContact({ params }),
     retry: 1,
     staleTime: 1000 * 60 * 5,
+    enabled: !!enabled,
   });
 
   return {

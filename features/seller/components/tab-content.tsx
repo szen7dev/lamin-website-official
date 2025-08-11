@@ -1,35 +1,51 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
-import { AlertCircle } from 'lucide-react';
-import Chart from 'chart.js/auto';
+import { memo, useEffect, useRef, useState } from 'react';
+import { AlertCircle, CheckIcon } from 'lucide-react';
+import { Chart } from 'chart.js';
 
-import { useGetHeightMeasurementInfo } from '../hooks/useGetHeightMeasurementInfo';
-
+import { useGetHeightMeasurementInfo } from '@/features/height-measurement';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
-import { CheckIcon } from '@/components/icons';
 import { fallbackData, percentiles } from '@/data/chart';
+import { useTabContext } from '@/contexts/TabContext';
 
-interface HeightMeasurementResultProps {
-  resultId: string;
+interface TabContentProps {
+  data?: any; // Contact data from tab (now optional)
 }
 
-export default function HeightMeasurementResult({
-  resultId,
-}: HeightMeasurementResultProps) {
+const TabContent = ({ data }: TabContentProps) => {
   const chartRef = useRef<HTMLCanvasElement>(null);
   const chartInstance = useRef<Chart | null>(null);
   const isMobile = useMediaQuery('(max-width: 768px)');
-
-  // Lấy dữ liệu từ API qua React Query
-  const { response, growTrack, isLoading, error } =
-    useGetHeightMeasurementInfo(resultId);
-
   const [processedData, setProcessedData] = useState<
     typeof fallbackData | null
   >(null);
 
-  // Xử lý dữ liệu từ API
+  // Get current tab measurement data
+  const { tabs, activeTabId, updateTabMeasurement } = useTabContext();
+  const activeTab = tabs.find(tab => tab.id === activeTabId);
+  const measurementData = activeTab?.measurementData;
+
+  // Determine if we're loading grow track data
+  const isLoadingGrowTrack =
+    measurementData?.response && !measurementData?.growTrack;
+
+  // Only use fallback API if we don't have measurement data at all
+  const {
+    response: fallbackResponse,
+    growTrack: fallbackGrowTrack,
+    isLoading: fallbackLoading,
+    error: fallbackError,
+  } = useGetHeightMeasurementInfo(
+    !measurementData ? data?.resultId : null, // Only call if we have no measurement data
+  );
+
+  // Determine which data source to use
+  const response = measurementData?.response || fallbackResponse;
+  const growTrack = measurementData?.growTrack || fallbackGrowTrack;
+  const isLoading = measurementData ? isLoadingGrowTrack : fallbackLoading;
+  const error = measurementData ? null : fallbackError;
+
   useEffect(() => {
     if (!response || !growTrack) return;
 
@@ -42,16 +58,18 @@ export default function HeightMeasurementResult({
         Array.isArray(growTrack.growTrack.ageHeightNow)
       ) {
         // Sử dụng dữ liệu ageHeightNow nếu có
-        heightData = growTrack.growTrack.ageHeightNow.map(item => ({
-          age: Number(item.age),
-          height: Number(item.height),
+        heightData = growTrack.growTrack.ageHeightNow.map((item: any) => ({
+          age: item.age,
+          height: item.height,
         }));
 
-        // Sort data by age to ensure proper display
-        heightData.sort((a, b) => a.age - b.age);
+        // Sort by age
+        heightData.sort((a: any, b: any) => a.age - b.age);
 
-        // Extend data to age 20 if it doesn't already go that far
-        const maxAgeInData = Math.max(...heightData.map(item => item.age));
+        // Extend data to age 18 if needed
+        const maxAgeInData = Math.max(
+          ...heightData.map((item: any) => item.age),
+        );
 
         if (maxAgeInData < 20) {
           // Get the last height value
@@ -119,6 +137,42 @@ export default function HeightMeasurementResult({
     }
   }, [response, growTrack]);
 
+  const calculateAge = (birthDate: string) => {
+    const today = new Date();
+    const birth = new Date(birthDate);
+
+    if (isNaN(birth.getTime())) {
+      console.error('Invalid birth date:', birthDate);
+
+      return { years: 0, months: 0, days: 0 };
+    }
+
+    let years = today.getFullYear() - birth.getFullYear();
+
+    let months = today.getMonth() - birth.getMonth();
+
+    if (months < 0) {
+      years--;
+      months += 12;
+    }
+
+    let days = today.getDate() - birth.getDate();
+
+    if (days < 0) {
+      const lastMonth = new Date(today.getFullYear(), today.getMonth(), 0);
+
+      days += lastMonth.getDate();
+      months--;
+
+      if (months < 0) {
+        years--;
+        months += 12;
+      }
+    }
+
+    return { years, months, days };
+  };
+
   // Tạo biểu đồ
   useEffect(() => {
     if (!response || !growTrack) return;
@@ -148,11 +202,9 @@ export default function HeightMeasurementResult({
       data: {
         labels: processedData.heightData.map(d => d.age),
         datasets: [
-          // Percentile lines (mỏng hơn, opacity thấp hơn)
           ...percentiles.map(p => ({
             label: p.name,
-            data: processedData.heightData.map((d, idx) => {
-              // Lấy giá trị từ P3, P5, v.v. nếu có
+            data: processedData.heightData.map(d => {
               if (growTrackData) {
                 const pData =
                   growTrackData[
@@ -160,7 +212,6 @@ export default function HeightMeasurementResult({
                   ];
 
                 if (Array.isArray(pData)) {
-                  // Find matching age in percentile data
                   const matchingPoint = pData.find(
                     point => Math.round(point.age) === Math.round(d.age),
                   );
@@ -169,13 +220,10 @@ export default function HeightMeasurementResult({
                     return matchingPoint.height;
                   }
 
-                  // If we're beyond the original data, extrapolate
                   if (d.age > pData[pData.length - 1]?.age) {
-                    // For ages beyond our percentile data, extend the line with a slight increase
                     const lastPoint = pData[pData.length - 1];
 
                     if (lastPoint) {
-                      // Simple linear extrapolation
                       const growthRate = 1 + (p.name === 'P50' ? 0.005 : 0.003); // Slight growth per year
                       const yearsAfterLastPoint = d.age - lastPoint.age;
 
@@ -196,7 +244,6 @@ export default function HeightMeasurementResult({
             tension: 0.4,
             pointRadius: 0,
           })),
-          // Prediction line (đậm và nổi bật hơn)
           {
             label: 'Dự đoán',
             data: processedData.heightData.map(d => d.height),
@@ -321,8 +368,6 @@ export default function HeightMeasurementResult({
                 ctx.font = `bold ${isMobile ? '10px' : '12px'} Inter`;
                 ctx.fillStyle = '#198754';
 
-                // Position the label higher above the point
-                // Increase the offset to ensure it's above all lines
                 const labelOffset = isMobile ? 20 : 27;
 
                 ctx.fillText(`${height}`, x, y - labelOffset);
@@ -341,6 +386,55 @@ export default function HeightMeasurementResult({
       }
     };
   }, [processedData, isMobile, response, growTrack]);
+
+  // Show loading state for grow track data after measurement is created
+  if (isLoadingGrowTrack) {
+    return (
+      <div className="space-y-4 p-6">
+        <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
+          <h3 className="font-semibold text-blue-900 mb-2">
+            Đã tạo phép đo thành công!
+          </h3>
+          <p className="text-blue-700 text-sm">
+            Chiều cao: {response?.height}cm | Cân nặng: {response?.weight}kg
+          </p>
+        </div>
+
+        <div className="flex items-center justify-center py-8">
+          <div className="flex flex-col items-center gap-3">
+            <svg
+              aria-hidden="true"
+              className="animate-spin h-8 w-8 text-primary"
+              fill="none"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg">
+              <circle
+                className="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="4"
+              />
+              <path
+                className="opacity-75"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                fill="currentColor"
+              />
+            </svg>
+            <div className="text-center">
+              <p className="font-medium text-gray-900">
+                Đang phân tích dữ liệu tăng trưởng...
+              </p>
+              <p className="text-sm text-gray-600 mt-1">
+                Vui lòng đợi trong giây lát
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (isLoading) {
     return (
@@ -398,6 +492,18 @@ export default function HeightMeasurementResult({
   }
 
   if (!processedData) {
+    // Show different messages based on whether we have any data at all
+    if (!measurementData && !data) {
+      return (
+        <div className="p-8 text-center text-muted-foreground">
+          <p>Chưa có dữ liệu đo chiều cao nào được chọn.</p>
+          <p className="text-sm mt-2">
+            Vui lòng nhập chiều cao và cân nặng ở bên trái để tạo phép đo.
+          </p>
+        </div>
+      );
+    }
+
     return (
       <div
         aria-live="polite"
@@ -411,44 +517,6 @@ export default function HeightMeasurementResult({
     );
   }
 
-  // Tính tuổi từ ngày sinh
-  // Hàm tính tuổi chính xác từ ngày sinh
-  const calculateAge = (birthDate: string) => {
-    const today = new Date();
-    const birth = new Date(birthDate);
-
-    if (isNaN(birth.getTime())) {
-      console.error('Invalid birth date:', birthDate);
-
-      return { years: 0, months: 0, days: 0 };
-    }
-
-    let years = today.getFullYear() - birth.getFullYear();
-
-    let months = today.getMonth() - birth.getMonth();
-
-    if (months < 0) {
-      years--;
-      months += 12;
-    }
-
-    let days = today.getDate() - birth.getDate();
-
-    if (days < 0) {
-      const lastMonth = new Date(today.getFullYear(), today.getMonth(), 0);
-
-      days += lastMonth.getDate();
-      months--;
-
-      if (months < 0) {
-        years--;
-        months += 12;
-      }
-    }
-
-    return { years, months, days };
-  };
-
   const age = calculateAge(processedData.birthDate);
 
   return (
@@ -459,38 +527,36 @@ export default function HeightMeasurementResult({
         Kết quả phân tích đo cao
       </h2>
 
-      {/* Column 1: Age and Height Table */}
-      <aside className="w-full md:w-[200px] shrink-0 order-1">
-        <div className="border-r border-grayscale-20  rounded-tl-2xl h-full">
-          <header className="grid grid-cols-2 bg-primary text-center text-xs sm:text-sm font-medium text-white rounded-t-2xl sm:rounded-tr-none sm:rounded-tl-2xl">
-            <div className="px-2 sm:px-4 py-2">Tuổi</div>
-            <div className="px-2 sm:px-4 py-2">Chiều cao (cm)</div>
-          </header>
-          <div>
-            {processedData.heightData
-              .filter(item => {
-                // Tính tuổi hiện tại
-                const currentAge = calculateAge(processedData.birthDate).years;
-
-                // Chỉ hiển thị từ tuổi hiện tại trở đi
-                return item.age >= currentAge;
-              })
-              .map((item, index, filteredArray) => (
-                <div
-                  key={item.age}
-                  className={`grid grid-cols-2 text-center text-xs sm:text-sm ${
-                    index === filteredArray.length - 1 ? 'text-[#FF0000]' : ''
-                  }`}>
-                  <div className="px-2 sm:px-4 py-2">{item.age}</div>
-                  <div className="px-2 sm:px-4 py-2">{item.height}</div>
-                </div>
-              ))}
-          </div>
+      {/* Add success notification for completed measurements */}
+      {measurementData?.growTrack && (
+        <div className="p-4 bg-green-50 rounded-lg border border-green-200 m-4 mb-0">
+          <h3 className="font-semibold text-green-900 mb-2">
+            ✅ Phân tích hoàn tất!
+          </h3>
+          <p className="text-green-700 text-sm">
+            Đã tạo phép đo và phân tích dữ liệu tăng trưởng thành công
+          </p>
         </div>
-      </aside>
+      )}
+
+      {/* Add new measurement button */}
+      {measurementData?.growTrack && (
+        <div className="flex justify-center p-4 pt-2">
+          <button
+            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            type="button"
+            onClick={() => {
+              if (activeTabId) {
+                updateTabMeasurement(activeTabId, {});
+              }
+            }}>
+            Tạo phép đo mới
+          </button>
+        </div>
+      )}
 
       {/* Column 2: Growth Chart and Info */}
-      <section className="flex-1 space-y-3 sm:space-y-4 order-1 md:order-2">
+      <section className="flex-1 space-y-3 sm:space-y-4 order-1 md:order-2 p-4">
         {/* Row 1: Growth Rate */}
         <div
           aria-label="Đường tăng trưởng"
@@ -545,69 +611,6 @@ export default function HeightMeasurementResult({
             {new Date(processedData.birthDate).toLocaleDateString('vi-VN')} -{' '}
             {age.years} tuổi, {age.months} tháng, {age.days} ngày
           </p>
-          <p>
-            • Chiều cao:{' '}
-            {processedData.height.toLocaleString('vi-VN', {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-            })}
-            cm. {processedData.noticeH}. Bé{' '}
-            {processedData.hdfs > 0 ? 'cao' : 'thấp'} hơn so với chiều cao trung
-            bình là{' '}
-            {Math.abs(processedData.hdfs).toLocaleString('vi-VN', {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-            })}
-            cm. Chuẩn WHO:{' '}
-            {processedData.whoHS.toLocaleString('vi-VN', {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-            })}
-            cm
-          </p>
-          <p>
-            • Cân nặng:{' '}
-            {processedData.weight.toLocaleString('vi-VN', {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-            })}
-            kg. {processedData.noticeW}. Bé{' '}
-            {processedData.wdfs > 0 ? 'nặng' : 'nhẹ'} hơn so với cân nặng trung
-            bình là{' '}
-            {Math.abs(processedData.wdfs).toLocaleString('vi-VN', {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-            })}
-            kg. Chuẩn WHO:{' '}
-            {processedData.whoWS.toLocaleString('vi-VN', {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-            })}
-            kg
-          </p>
-          <p className="flex flex-wrap items-center gap-1">
-            •{' '}
-            <span className="text-[#FF0000]">
-              Dự đoán chiều cao khi trưởng thành:{' '}
-              {processedData.predictedAdultHeight}cm
-            </span>
-            <span className="text-grayscale-90">
-              | Ngày:{' '}
-              {new Date(processedData.analysisDate).toLocaleDateString('vi-VN')}{' '}
-              - Coach: {processedData.coach}
-            </span>
-          </p>
-          <p className="font-medium">
-            • Chiều cao chuẩn của bé trai là: 177cm và bé bé gái là: 163,5cm
-          </p>
-          <p className="text-grayscale-90">
-            • Con có thể không đạt được chiều cao dự đoán nếu bị ảnh hưởng bởi
-            những thói quen sinh hoạt xấu
-          </p>
-          <p className="text-grayscale-90">
-            • Con có thể tăng thêm 7-15cm so với dự đoán khi trưởng thành nếu bố
-            mẹ giúp con áp dụng giải pháp tăng chiều cao LaminGrow
-          </p>
           <ul
             aria-label="Khuyến nghị"
             className="flex flex-wrap items-center gap-x-2 sm:gap-x-4 gap-y-1 sm:gap-y-2 mt-2">
@@ -626,4 +629,6 @@ export default function HeightMeasurementResult({
       </section>
     </article>
   );
-}
+};
+
+export default memo(TabContent);

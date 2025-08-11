@@ -343,8 +343,6 @@ export default function HeightMeasureHistoryPage() {
                       const fileName =
                         data.split('/').pop() || 'cdc_grow_track_sample.xlsm';
 
-                      console.log('Downloading file:', fileName);
-
                       // Fetch dữ liệu từ URL
                       const response = await fetch(data);
 

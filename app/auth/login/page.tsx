@@ -210,6 +210,12 @@ export default function LoginPage() {
                     type="tel"
                     value={phoneNumber}
                     onChange={e => setPhoneNumber(e.target.value)}
+                    onKeyDown={e => {
+                      if (e.key === 'Enter' && !isLoading) {
+                        e.preventDefault();
+                        handlePhoneSubmit(e as any);
+                      }
+                    }}
                   />
                 </div>
               </div>

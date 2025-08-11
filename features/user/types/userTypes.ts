@@ -52,6 +52,7 @@ export interface GetContactParams {
   contactID?: string;
   optionSeller?: number;
   keyword?: string;
+  enabled?: boolean;
 }
 
 export interface Contact {

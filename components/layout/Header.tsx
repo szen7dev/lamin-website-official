@@ -13,6 +13,7 @@ import {
   X,
 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 import { Button } from '@/components/ui/button';
 import SearchBar from '@/features/search/components/SearchBar';
@@ -40,6 +41,7 @@ export function Header() {
   // const { keywords } = useGetSearchKeywordList();
 
   // Update keyword popularity when user searches
+  const router = useRouter();
   const { updateKeyword } = useUpdateSearchKeyword();
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -191,6 +193,10 @@ export function Header() {
       </div>
     </Button>
   );
+
+  const redirectForSeller = () => {
+    router.push('/auth/login/seller');
+  };
 
   return (
     <header className="w-full bg-gradient-primary">
@@ -510,6 +516,7 @@ export function Header() {
       <LoginModal
         isOpen={loginModalOpen}
         onClose={() => setLoginModalOpen(false)}
+        onLoginForSeller={() => redirectForSeller()}
       />
     </header>
   );

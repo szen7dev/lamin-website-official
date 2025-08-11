@@ -1,21 +1,31 @@
 'use client';
 import type { HeightMeasurementFormData } from '../types/heightMeasurementTypes';
 
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { AlertCircle } from 'lucide-react';
 
 import { useHeightMeasurementMutation } from '../hooks/usePostHeightMeasurement';
 
 import { Button } from '@/components/ui/button';
+import { CDCResultModal } from '@/components/modal/CDCResultModal';
 import { useAuth } from '@/hooks';
 
 export default function HeightMeasurementCDCForm() {
   const { user, isAuthenticated } = useAuth();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleOpemModal = () => {
+    setIsModalOpen(true);
+  };
 
   const mutationOptions =
     isAuthenticated && user?.contacts?.[0]?._id
-      ? { contactID: user.contacts[0]._id }
-      : undefined;
+      ? {
+          contactID: user.contacts[0]._id,
+          onSuccess: isAuthenticated ? undefined : handleOpemModal,
+        }
+      : { onSuccess: isAuthenticated ? undefined : handleOpemModal };
 
   const { createHeightMeasurement, isPending, error } =
     useHeightMeasurementMutation(mutationOptions);
@@ -93,7 +103,9 @@ export default function HeightMeasurementCDCForm() {
         </div>
       )}
 
-      <h2 className="text-base font-semibold mt-2">Nhập thông tin chi tiết để đo cao</h2>
+      <h2 className="text-base font-semibold mt-2">
+        Nhập thông tin chi tiết để đo cao
+      </h2>
 
       {/* <div className="space-y-1 sm:space-y-2">
         <label
@@ -151,51 +163,51 @@ export default function HeightMeasurementCDCForm() {
           </p>
         )}
       </div>
-      
+
       <fieldset className="flex flex-row">
-          <legend className="invisible flex items-center text-xs sm:text-sm text-grayscale-90 h-5">
+        <legend className="invisible flex items-center text-xs sm:text-sm text-grayscale-90 h-5">
+          <span aria-hidden="true" className="text-error mr-1">
+            *
+          </span>
+          Giới tính
+        </legend>
+        <div
+          aria-required="true"
+          className="flex gap-4 sm:gap-6"
+          role="radiogroup">
+          <legend className="flex items-center text-xs sm:text-sm text-grayscale-90">
             <span aria-hidden="true" className="text-error mr-1">
               *
             </span>
             Giới tính
           </legend>
-          <div
-            aria-required="true"
-            className="flex gap-4 sm:gap-6"
-            role="radiogroup">
-            <legend className="flex items-center text-xs sm:text-sm text-grayscale-90">
-              <span aria-hidden="true" className="text-error mr-1">
-                *
-              </span>
-              Giới tính
-            </legend>
-            <label className="flex items-center gap-2">
-              <input
-                className="h-4 w-4"
-                disabled={isPending}
-                type="radio"
-                value={1}
-                {...register('gender', { required: 'Vui lòng chọn giới tính' })}
-              />
-              <span className="text-xs sm:text-sm text-grayscale-90">Nam</span>
-            </label>
-            <label className="flex items-center gap-2">
-              <input
-                className="h-4 w-4"
-                disabled={isPending}
-                type="radio"
-                value={2}
-                {...register('gender')}
-              />
-              <span className="text-xs sm:text-sm text-grayscale-90">Nữ</span>
-            </label>
-          </div>
-          {errors.gender && (
-            <p className="text-xs sm:text-sm text-error" id="gender-error">
-              {errors.gender.message}
-            </p>
-          )}
-        </fieldset>
+          <label className="flex items-center gap-2">
+            <input
+              className="h-4 w-4"
+              disabled={isPending}
+              type="radio"
+              value={1}
+              {...register('gender', { required: 'Vui lòng chọn giới tính' })}
+            />
+            <span className="text-xs sm:text-sm text-grayscale-90">Nam</span>
+          </label>
+          <label className="flex items-center gap-2">
+            <input
+              className="h-4 w-4"
+              disabled={isPending}
+              type="radio"
+              value={2}
+              {...register('gender')}
+            />
+            <span className="text-xs sm:text-sm text-grayscale-90">Nữ</span>
+          </label>
+        </div>
+        {errors.gender && (
+          <p className="text-xs sm:text-sm text-error" id="gender-error">
+            {errors.gender.message}
+          </p>
+        )}
+      </fieldset>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
         {/* <div className="space-y-1 sm:space-y-2">
@@ -343,6 +355,11 @@ export default function HeightMeasurementCDCForm() {
           )}
         </Button>
       </div>
+
+      <CDCResultModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </form>
   );
 }
