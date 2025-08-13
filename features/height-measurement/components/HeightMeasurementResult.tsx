@@ -12,10 +12,12 @@ import { fallbackData, percentiles } from '@/data/chart';
 
 interface HeightMeasurementResultProps {
   resultId: string;
+  onSuccess?: () => void;
 }
 
 export default function HeightMeasurementResult({
   resultId,
+  onSuccess,
 }: HeightMeasurementResultProps) {
   const chartRef = useRef<HTMLCanvasElement>(null);
   const chartInstance = useRef<Chart | null>(null);
@@ -114,6 +116,10 @@ export default function HeightMeasurementResult({
         predictedAdultHeight: growTrack.predictedAdultHeight || 0,
         P: growTrack.P || 0,
       });
+
+      if (onSuccess) {
+        onSuccess();
+      }
     } catch (error) {
       console.error('❌ Lỗi khi xử lý dữ liệu:', error);
     }
@@ -412,7 +418,6 @@ export default function HeightMeasurementResult({
   }
 
   // Tính tuổi từ ngày sinh
-  // Hàm tính tuổi chính xác từ ngày sinh
   const calculateAge = (birthDate: string) => {
     const today = new Date();
     const birth = new Date(birthDate);
@@ -490,7 +495,9 @@ export default function HeightMeasurementResult({
       </aside>
 
       {/* Column 2: Growth Chart and Info */}
-      <section className="flex-1 space-y-3 sm:space-y-4 order-1 md:order-2">
+      <section
+        className="flex-1 space-y-3 sm:space-y-4 order-1 md:order-2"
+        id="print-frame">
         {/* Row 1: Growth Rate */}
         <div
           aria-label="Đường tăng trưởng"
@@ -505,7 +512,23 @@ export default function HeightMeasurementResult({
               aria-valuenow={processedData.P}
               className="h-full rounded-md bg-[#F37021]"
               role="progressbar"
-              style={{ width: `${processedData.P}%` }}
+              style={{
+                width: `${processedData.P}%`,
+                backgroundColor: (() => {
+                  if (processedData.P === 100) return '#A9A9A9';
+                  if (processedData.P >= 90) return '#006400';
+                  if (processedData.P >= 80) return '#228B22';
+                  if (processedData.P >= 70) return '#32CD32';
+                  if (processedData.P >= 60) return '#ADFF2F';
+                  if (processedData.P >= 50) return '#FFD700';
+                  if (processedData.P >= 40) return '#FFA500';
+                  if (processedData.P >= 30) return '#FF4500';
+                  if (processedData.P >= 20) return '#DC143C';
+                  if (processedData.P >= 10) return '#D3D3D3';
+
+                  return '#D3D3D3';
+                })(),
+              }}
             />
           </div>
         </div>
@@ -571,7 +594,7 @@ export default function HeightMeasurementResult({
               minimumFractionDigits: 2,
               maximumFractionDigits: 2,
             })}
-            kg. {processedData.noticeW}. 
+            kg. {processedData.noticeW}.
             {/* Bé{' '}
             {processedData.wdfs > 0 ? 'nặng' : 'nhẹ'} hơn so với cân nặng trung
             bình là{' '}
@@ -590,10 +613,13 @@ export default function HeightMeasurementResult({
             •{' '}
             <span className="text-[#0052a4]">
               Dự đoán chiều cao khi trưởng thành:{' '}
-              {Math.abs(processedData.predictedAdultHeight).toLocaleString('vi-VN', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              })}
+              {Math.abs(processedData.predictedAdultHeight).toLocaleString(
+                'vi-VN',
+                {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                },
+              )}
               cm
             </span>
             <span className="text-grayscale-90">
