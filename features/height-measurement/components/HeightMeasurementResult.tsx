@@ -571,7 +571,8 @@ export default function HeightMeasurementResult({
               minimumFractionDigits: 2,
               maximumFractionDigits: 2,
             })}
-            kg. {processedData.noticeW}. Bé{' '}
+            kg. {processedData.noticeW}. 
+            {/* Bé{' '}
             {processedData.wdfs > 0 ? 'nặng' : 'nhẹ'} hơn so với cân nặng trung
             bình là{' '}
             {Math.abs(processedData.wdfs).toLocaleString('vi-VN', {
@@ -583,13 +584,17 @@ export default function HeightMeasurementResult({
               minimumFractionDigits: 2,
               maximumFractionDigits: 2,
             })}
-            kg
+            kg */}
           </p>
           <p className="flex flex-wrap items-center gap-1">
             •{' '}
-            <span className="text-[#FF0000]">
+            <span className="text-[#0052a4]">
               Dự đoán chiều cao khi trưởng thành:{' '}
-              {processedData.predictedAdultHeight}cm
+              {Math.abs(processedData.predictedAdultHeight).toLocaleString('vi-VN', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}
+              cm
             </span>
             <span className="text-grayscale-90">
               | Ngày:{' '}
