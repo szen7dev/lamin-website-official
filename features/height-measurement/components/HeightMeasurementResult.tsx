@@ -590,7 +590,11 @@ export default function HeightMeasurementResult({
             •{' '}
             <span className="text-[#0052a4]">
               Dự đoán chiều cao khi trưởng thành:{' '}
-              {processedData.predictedAdultHeight}cm
+              {Math.abs(processedData.predictedAdultHeight).toLocaleString('vi-VN', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}
+              cm
             </span>
             <span className="text-grayscale-90">
               | Ngày:{' '}
