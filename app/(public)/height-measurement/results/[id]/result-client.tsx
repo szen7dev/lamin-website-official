@@ -73,7 +73,7 @@ const HeightMeasurementResultClient = ({
           In kết quả
         </Button>
       </div>
-      <div className="rounded-lg bg-white shadow-sm" id="print-result">
+      <div className="rounded-2xl bg-white shadow-sm border" id="print-result">
         <HeightMeasurementResult
           resultId={resultId}
           onSuccess={() => {
