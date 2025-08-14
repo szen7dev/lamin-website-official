@@ -28,10 +28,14 @@ const HeightMeasurementResultClient = ({
       return;
     }
 
+    await new Promise(resolve => setTimeout(resolve, 500));
+
     const canvas = await html2canvas(element, {
-      scale: 2,
+      scale: 1.5,
       useCORS: true,
       backgroundColor: '#fff',
+      scrollX: 0,
+      scrollY: 0,
     });
     const imgData = canvas.toDataURL('image/png');
 
@@ -71,7 +75,7 @@ const HeightMeasurementResultClient = ({
           In kết quả
         </Button>
       </div>
-      <div className="rounded-lg bg-white shadow-sm" id="print-result">
+      <div className="rounded-2xl bg-white shadow-sm border" id="print-result">
         <HeightMeasurementResult
           resultId={resultId}
           onSuccess={() => {

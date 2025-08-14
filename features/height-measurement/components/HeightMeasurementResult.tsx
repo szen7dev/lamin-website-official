@@ -555,13 +555,13 @@ export default function HeightMeasurementResult({
           </div>
 
           {/* Chart */}
-          <figure className="h-[300px] sm:h-[400px] sm:p-4">
+          <figure className="h-[300px] sm:h-[400px] sm:p-4 sm:pb-0">
             <canvas ref={chartRef} aria-label="Biểu đồ dự đoán chiều cao" />
           </figure>
         </div>
 
         {/* Row 3: Analysis Text */}
-        <div className="space-y-1 sm:space-y-2 text-sm sm:text-sm p-3 border-t border-grayscale-20">
+        <div className="space-y-1 sm:space-y-2 !mt-0 text-sm sm:text-sm p-3 border-t border-grayscale-20">
           <p>
             • Tên bé: {processedData.name} (
             {processedData.gender === 1 ? 'Nam' : 'Nữ'}), sinh ngày{' '}
