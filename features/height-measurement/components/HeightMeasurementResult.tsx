@@ -224,7 +224,7 @@ export default function HeightMeasurementResult({
         plugins: {
           title: {
             display: true,
-            text: 'Biểu đồ dự đoán chiều cao CDC thực hiện tại lamin.com.vn',
+            text: 'Biểu đồ dự đoán chiều cao CDC',
             align: 'center',
             font: {
               size: isMobile ? 14 : 24,
@@ -250,6 +250,7 @@ export default function HeightMeasurementResult({
             title: {
               display: true,
               text: 'Tuổi',
+              color: '#000',
               font: {
                 size: isMobile ? 8 : 12,
               },
@@ -258,6 +259,7 @@ export default function HeightMeasurementResult({
               display: false,
             },
             ticks: {
+              color: '#000',
               stepSize: isMobile ? 2 : 1,
               callback: value => value,
               font: {
@@ -265,6 +267,7 @@ export default function HeightMeasurementResult({
               },
             },
             border: {
+              color: '#000',
               width: 1,
             },
             min: currentAge,
@@ -275,6 +278,7 @@ export default function HeightMeasurementResult({
             title: {
               display: true,
               text: 'Chiều cao (cm)',
+              color: '#000',
               font: {
                 size: isMobile ? 8 : 12,
               },
@@ -282,16 +286,19 @@ export default function HeightMeasurementResult({
             min: 80,
             max: 220,
             ticks: {
+              color: '#000',
               stepSize: isMobile ? 40 : 20,
               font: {
                 size: isMobile ? 8 : 12,
               },
             },
             grid: {
-              color: '#E9ECEF',
-              drawTicks: false,
+              display: false,
+              // color: '#E9ECEF',
+              // drawTicks: false,
             },
             border: {
+              color: '#000',
               width: 1,
             },
           },
@@ -338,6 +345,30 @@ export default function HeightMeasurementResult({
             }
           },
         },
+        {
+          id: 'logoWatermark',
+          afterDraw(chart) {
+            const { ctx, chartArea } = chart;
+            const logoImg = new Image();
+
+            logoImg.src = '/images/LogoLamin_Blue.webp';
+
+            if (logoImg.complete) {
+              const logoHeight = isMobile ? 10 : 25;
+              const aspectRatio = logoImg.naturalWidth / logoImg.naturalHeight;
+              const logoWidth = logoHeight * aspectRatio;
+              const padding = isMobile ? 10 : 15;
+
+              const x = chartArea.right - logoWidth - padding;
+              const y = chartArea.bottom - logoHeight - padding;
+
+              ctx.save();
+              ctx.globalAlpha = 1;
+              ctx.drawImage(logoImg, x, y, logoWidth, logoHeight);
+              ctx.restore();
+            }
+          },
+        },
       ],
     });
 
@@ -353,7 +384,7 @@ export default function HeightMeasurementResult({
       <div
         aria-busy="true"
         aria-live="polite"
-        className="flex items-center justify-center py-8 sm:py-12">
+        className="container flex items-center justify-center py-8 sm:py-12">
         <div className="flex flex-col items-center gap-3 sm:gap-4">
           <svg
             aria-hidden="true"
@@ -465,9 +496,9 @@ export default function HeightMeasurementResult({
       </h2>
 
       {/* Column 1: Age and Height Table */}
-      <aside className="w-full md:w-[200px] shrink-0 order-1">
-        <div className="border-r border-grayscale-20  rounded-tl-2xl h-full">
-          <header className="grid grid-cols-2 bg-primary text-center text-xs sm:text-sm font-medium text-white rounded-t-2xl sm:rounded-tr-none sm:rounded-tl-2xl">
+      <aside className="w-full md:w-[270px] shrink-0 order-1">
+        <div className="border border-grayscale-100 rounded-tl-md h-full rounded-bl-md">
+          <header className="grid grid-cols-2 bg-primary text-center text-xs sm:text-sm font-medium text-white rounded-t-md sm:rounded-tr-none sm:rounded-tl-sm">
             <div className="px-2 sm:px-4 py-2">Tuổi</div>
             <div className="px-2 sm:px-4 py-2">Chiều cao (cm)</div>
           </header>
@@ -486,8 +517,8 @@ export default function HeightMeasurementResult({
                   className={`grid grid-cols-2 text-center text-xs sm:text-sm ${
                     index === filteredArray.length - 1 ? 'text-[#FF0000]' : ''
                   }`}>
-                  <div className="px-2 sm:px-4 py-2">{item.age}</div>
-                  <div className="px-2 sm:px-4 py-2">{item.height}</div>
+                  <div className="px-2 sm:px-4 py-1.5">{item.age}</div>
+                  <div className="px-2 sm:px-4 py-1.5">{item.height}</div>
                 </div>
               ))}
           </div>
@@ -501,40 +532,42 @@ export default function HeightMeasurementResult({
         {/* Row 1: Growth Rate */}
         <div
           aria-label="Đường tăng trưởng"
-          className="flex items-center gap-2 sm:gap-4 p-3 border-b border-grayscale-20">
-          <div className="whitespace-nowrap text-sm sm:text-base font-medium">
+          className="flex items-stretch border border-l-0 rounded-tr-md border-black max-h-9">
+          <div className="flex items-center px-3 py-2 whitespace-nowrap text-sm sm:text-base font-medium border-r border-grayscale-100">
             Đường tăng trưởng: {processedData.P}
           </div>
-          <div className="flex-1 h-3 sm:h-4 bg-gray-100 rounded-md overflow-hidden flex items-center">
-            <div
-              aria-valuemax={100}
-              aria-valuemin={0}
-              aria-valuenow={processedData.P}
-              className="h-full rounded-md bg-[#F37021]"
-              role="progressbar"
-              style={{
-                width: `${processedData.P}%`,
-                backgroundColor: (() => {
-                  if (processedData.P === 100) return '#A9A9A9';
-                  if (processedData.P >= 90) return '#006400';
-                  if (processedData.P >= 80) return '#228B22';
-                  if (processedData.P >= 70) return '#32CD32';
-                  if (processedData.P >= 60) return '#ADFF2F';
-                  if (processedData.P >= 50) return '#FFD700';
-                  if (processedData.P >= 40) return '#FFA500';
-                  if (processedData.P >= 30) return '#FF4500';
-                  if (processedData.P >= 20) return '#DC143C';
-                  if (processedData.P >= 10) return '#D3D3D3';
+          <div className="flex-1 px-1 py-1 flex items-center">
+            <div className="w-full h-6 sm:h-7 bg-gray-100 rounded-md overflow-hidden flex items-center">
+              <div
+                aria-valuemax={100}
+                aria-valuemin={0}
+                aria-valuenow={processedData.P}
+                className="h-full rounded-md bg-[#F37021]"
+                role="progressbar"
+                style={{
+                  width: `${processedData.P}%`,
+                  backgroundColor: (() => {
+                    if (processedData.P === 100) return '#A9A9A9';
+                    if (processedData.P >= 90) return '#006400';
+                    if (processedData.P >= 80) return '#228B22';
+                    if (processedData.P >= 70) return '#32CD32';
+                    if (processedData.P >= 60) return '#ADFF2F';
+                    if (processedData.P >= 50) return '#FFD700';
+                    if (processedData.P >= 40) return '#FFA500';
+                    if (processedData.P >= 30) return '#FF4500';
+                    if (processedData.P >= 20) return '#DC143C';
+                    if (processedData.P >= 10) return '#D3D3D3';
 
-                  return '#D3D3D3';
-                })(),
-              }}
-            />
+                    return '#D3D3D3';
+                  })(),
+                }}
+              />
+            </div>
           </div>
         </div>
 
         {/* Row 2: Chart Area */}
-        <div className="grid grid-cols-1 md:grid-cols-[auto_1fr] gap-2 p-3">
+        <div className="grid grid-cols-1 md:grid-cols-[auto_1fr] gap-2 p-3 border-r border-black !mt-0">
           {/* Percentile Legend */}
           <div
             aria-label="Chú thích biểu đồ"
@@ -561,14 +594,14 @@ export default function HeightMeasurementResult({
         </div>
 
         {/* Row 3: Analysis Text */}
-        <div className="space-y-1 sm:space-y-2 !mt-0 text-sm sm:text-sm p-3 border-t border-grayscale-20">
-          <p>
+        <div className="grid space-y-1 !mt-0 text-sm sm:text-sm py-2 border-r border-b border-black rounded-br-md">
+          <p className="border-b border-t border-grayscale-100">
             • Tên bé: {processedData.name} (
             {processedData.gender === 1 ? 'Nam' : 'Nữ'}), sinh ngày{' '}
             {new Date(processedData.birthDate).toLocaleDateString('vi-VN')} -{' '}
             {age.years} tuổi, {age.months} tháng, {age.days} ngày
           </p>
-          <p>
+          <p className="border-b border-grayscale-100">
             • Chiều cao:{' '}
             {processedData.height.toLocaleString('vi-VN', {
               minimumFractionDigits: 2,
@@ -588,7 +621,7 @@ export default function HeightMeasurementResult({
             })}
             cm
           </p>
-          <p>
+          <p className="border-b border-grayscale-100">
             • Cân nặng:{' '}
             {processedData.weight.toLocaleString('vi-VN', {
               minimumFractionDigits: 2,
@@ -609,9 +642,9 @@ export default function HeightMeasurementResult({
             })}
             kg */}
           </p>
-          <p className="flex flex-wrap items-center gap-1">
+          <p className="border-b border-grayscale-100 flex flex-wrap items-center gap-1">
             •{' '}
-            <span className="text-[#0052a4]">
+            <span className="text-[#0052a4] font-bold">
               Dự đoán chiều cao khi trưởng thành:{' '}
               {Math.abs(processedData.predictedAdultHeight).toLocaleString(
                 'vi-VN',
@@ -628,14 +661,14 @@ export default function HeightMeasurementResult({
               - Coach: {processedData.coach}
             </span>
           </p>
-          <p className="font-medium">
+          <p className="border-b border-grayscale-100 font-bold">
             • Chiều cao chuẩn của bé trai là: 177cm và bé bé gái là: 163,5cm
           </p>
-          <p className="text-grayscale-90">
+          <p className="border-b border-grayscale-100 text-grayscale-90">
             • Con có thể không đạt được chiều cao dự đoán nếu bị ảnh hưởng bởi
             những thói quen sinh hoạt xấu
           </p>
-          <p className="text-grayscale-90">
+          <p className="border-b border-grayscale-100 text-grayscale-90">
             • Con có thể tăng thêm 7-15cm so với dự đoán khi trưởng thành nếu bố
             mẹ giúp con áp dụng giải pháp tăng chiều cao LaminGrow
           </p>

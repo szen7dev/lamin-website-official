@@ -40,6 +40,8 @@ const HeightMeasurementResultClient = ({
     const imgData = canvas.toDataURL('image/png');
 
     if (imgData) {
+      console.log('Has Image');
+
       print({
         printable: imgData,
         type: 'image',
@@ -75,7 +77,9 @@ const HeightMeasurementResultClient = ({
           In kết quả
         </Button>
       </div>
-      <div className="rounded-2xl bg-white shadow-sm border" id="print-result">
+      <div
+        className="rounded-md bg-white border-red-800 container p-0"
+        id="print-result">
         <HeightMeasurementResult
           resultId={resultId}
           onSuccess={() => {
