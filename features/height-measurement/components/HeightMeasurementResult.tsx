@@ -224,7 +224,7 @@ export default function HeightMeasurementResult({
         plugins: {
           title: {
             display: true,
-            text: 'Biểu đồ dự đoán chiều cao CDC thực hiện tại lamin.com.vn',
+            text: 'Biểu đồ dự đoán chiều cao CDC',
             align: 'center',
             font: {
               size: isMobile ? 14 : 24,
@@ -288,8 +288,9 @@ export default function HeightMeasurementResult({
               },
             },
             grid: {
-              color: '#E9ECEF',
-              drawTicks: false,
+              display: false,
+              // color: '#E9ECEF',
+              // drawTicks: false,
             },
             border: {
               width: 1,
@@ -486,8 +487,8 @@ export default function HeightMeasurementResult({
                   className={`grid grid-cols-2 text-center text-xs sm:text-sm ${
                     index === filteredArray.length - 1 ? 'text-[#FF0000]' : ''
                   }`}>
-                  <div className="px-2 sm:px-4 py-2">{item.age}</div>
-                  <div className="px-2 sm:px-4 py-2">{item.height}</div>
+                  <div className="px-2 sm:px-4 py-1.5">{item.age}</div>
+                  <div className="px-2 sm:px-4 py-1.5">{item.height}</div>
                 </div>
               ))}
           </div>
@@ -501,35 +502,37 @@ export default function HeightMeasurementResult({
         {/* Row 1: Growth Rate */}
         <div
           aria-label="Đường tăng trưởng"
-          className="flex items-center gap-2 sm:gap-4 p-3 border-b border-grayscale-20">
-          <div className="whitespace-nowrap text-sm sm:text-base font-medium">
+          className="flex items-center gap-2 sm:gap-4 border-b border-grayscale-20">
+          <div className="whitespace-nowrap text-sm p-3 border-r sm:text-base font-medium">
             Đường tăng trưởng: {processedData.P}
           </div>
-          <div className="flex-1 h-3 sm:h-4 bg-gray-100 rounded-md overflow-hidden flex items-center">
-            <div
-              aria-valuemax={100}
-              aria-valuemin={0}
-              aria-valuenow={processedData.P}
-              className="h-full rounded-md bg-[#F37021]"
-              role="progressbar"
-              style={{
-                width: `${processedData.P}%`,
-                backgroundColor: (() => {
-                  if (processedData.P === 100) return '#A9A9A9';
-                  if (processedData.P >= 90) return '#006400';
-                  if (processedData.P >= 80) return '#228B22';
-                  if (processedData.P >= 70) return '#32CD32';
-                  if (processedData.P >= 60) return '#ADFF2F';
-                  if (processedData.P >= 50) return '#FFD700';
-                  if (processedData.P >= 40) return '#FFA500';
-                  if (processedData.P >= 30) return '#FF4500';
-                  if (processedData.P >= 20) return '#DC143C';
-                  if (processedData.P >= 10) return '#D3D3D3';
+          <div className="flex-1 pr-3 h-full">
+            <div className="bg-gray-100 rounded-md overflow-hidden flex items-center">
+              <div
+                aria-valuemax={100}
+                aria-valuemin={0}
+                aria-valuenow={processedData.P}
+                className="h-full rounded-md bg-[#F37021]"
+                role="progressbar"
+                style={{
+                  width: `${processedData.P}%`,
+                  backgroundColor: (() => {
+                    if (processedData.P === 100) return '#A9A9A9';
+                    if (processedData.P >= 90) return '#006400';
+                    if (processedData.P >= 80) return '#228B22';
+                    if (processedData.P >= 70) return '#32CD32';
+                    if (processedData.P >= 60) return '#ADFF2F';
+                    if (processedData.P >= 50) return '#FFD700';
+                    if (processedData.P >= 40) return '#FFA500';
+                    if (processedData.P >= 30) return '#FF4500';
+                    if (processedData.P >= 20) return '#DC143C';
+                    if (processedData.P >= 10) return '#D3D3D3';
 
-                  return '#D3D3D3';
-                })(),
-              }}
-            />
+                    return '#D3D3D3';
+                  })(),
+                }}
+              />
+            </div>
           </div>
         </div>
 

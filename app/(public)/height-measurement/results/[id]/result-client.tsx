@@ -40,6 +40,8 @@ const HeightMeasurementResultClient = ({
     const imgData = canvas.toDataURL('image/png');
 
     if (imgData) {
+      console.log('Has Image');
+
       print({
         printable: imgData,
         type: 'image',
