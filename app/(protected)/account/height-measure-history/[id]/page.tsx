@@ -40,7 +40,7 @@ export default async function HeightMeasurementHistoryPage({
       <p className="mb-4 sm:mb-6 text-sm text-grayscale-60">
         Đánh giá và phân tích chi tiết đo cao của bé {name}
       </p>
-      <div className="rounded-2xl bg-white shadow-sm">
+      <div className="rounded-md bg-white shadow-sm">
         <HeightMeasurementResult resultId={resultId} />
       </div>
     </div>
