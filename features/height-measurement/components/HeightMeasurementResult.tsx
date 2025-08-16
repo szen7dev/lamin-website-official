@@ -594,14 +594,14 @@ export default function HeightMeasurementResult({
         </div>
 
         {/* Row 3: Analysis Text */}
-        <div className="grid space-y-1 !mt-0 text-sm sm:text-sm py-2 border-r border-b border-black rounded-br-md">
+        <div className="grid !mt-0 text-sm sm:text-sm py-2 border-r border-b border-black rounded-br-md">
           <p className="border-b border-t border-grayscale-100">
             • Tên bé: {processedData.name} (
             {processedData.gender === 1 ? 'Nam' : 'Nữ'}), sinh ngày{' '}
             {new Date(processedData.birthDate).toLocaleDateString('vi-VN')} -{' '}
             {age.years} tuổi, {age.months} tháng, {age.days} ngày
           </p>
-          <p className="border-b border-grayscale-100">
+          <p className="border-b border-grayscale-100" id="test-text">
             • Chiều cao:{' '}
             {processedData.height.toLocaleString('vi-VN', {
               minimumFractionDigits: 2,
@@ -655,7 +655,7 @@ export default function HeightMeasurementResult({
               )}
               cm
             </span>
-            <span className="text-grayscale-90">
+            <span className="text-grayscale-90 coach-predict">
               | Ngày:{' '}
               {new Date(processedData.analysisDate).toLocaleDateString('vi-VN')}{' '}
               - Coach: {processedData.coach}
