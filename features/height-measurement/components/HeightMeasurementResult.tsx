@@ -354,7 +354,7 @@ export default function HeightMeasurementResult({
             logoImg.src = '/images/LogoLamin_Blue.webp';
 
             if (logoImg.complete) {
-              const logoHeight = isMobile ? 10 : 25;
+              const logoHeight = isMobile ? 25 : 40;
               const aspectRatio = logoImg.naturalWidth / logoImg.naturalHeight;
               const logoWidth = logoHeight * aspectRatio;
               const padding = isMobile ? 10 : 15;
@@ -496,11 +496,11 @@ export default function HeightMeasurementResult({
       </h2>
 
       {/* Column 1: Age and Height Table */}
-      <aside className="w-full md:w-[270px] shrink-0 order-1">
+      <aside className="w-full md:w-[200px] shrink-0 order-1">
         <div className="border border-grayscale-100 rounded-tl-md h-full rounded-bl-md">
-          <header className="grid grid-cols-2 bg-primary text-center text-xs sm:text-sm font-medium text-white rounded-t-md sm:rounded-tr-none sm:rounded-tl-sm">
-            <div className="px-2 sm:px-4 py-2">Tuổi</div>
-            <div className="px-2 sm:px-4 py-2">Chiều cao (cm)</div>
+          <header className="grid grid-cols-[60px_1fr] bg-primary text-center text-xs sm:text-sm font-medium text-white rounded-t-md sm:rounded-tr-none sm:rounded-tl-sm">
+            <div className="px-1 sm:px-2 py-1">Tuổi</div>
+            <div className="px-1 sm:px-2 py-1">Chiều cao (cm)</div>
           </header>
           <div>
             {processedData.heightData
@@ -514,9 +514,9 @@ export default function HeightMeasurementResult({
               .map((item, index, filteredArray) => (
                 <div
                   key={item.age}
-                  className={`grid grid-cols-2 text-center text-xs sm:text-sm ${
+                  className={`grid grid-cols-[60px_1fr] text-center text-xs sm:text-sm ${
                     index === filteredArray.length - 1 ? 'text-[#FF0000]' : ''
-                  }`}>
+                  } ${index % 2 === 1 ? 'bg-gray-200' : ''}`}>
                   <div className="px-2 sm:px-4 py-1.5">{item.age}</div>
                   <div className="px-2 sm:px-4 py-1.5">{item.height}</div>
                 </div>
@@ -532,12 +532,12 @@ export default function HeightMeasurementResult({
         {/* Row 1: Growth Rate */}
         <div
           aria-label="Đường tăng trưởng"
-          className="flex items-stretch border border-l-0 rounded-tr-md border-black max-h-9">
-          <div className="flex items-center px-3 py-2 whitespace-nowrap text-sm sm:text-base font-medium border-r border-grayscale-100">
+          className="flex items-stretch border border-l-0 rounded-tr-md border-black max-h-8">
+          <div className="flex items-center px-1 py-1 whitespace-nowrap text-sm font-medium border-r border-grayscale-100">
             Đường tăng trưởng: {processedData.P}
           </div>
           <div className="flex-1 px-1 py-1 flex items-center">
-            <div className="w-full h-6 sm:h-7 bg-gray-100 rounded-md overflow-hidden flex items-center">
+            <div className="w-full h-5/6 bg-gray-200 rounded-md overflow-hidden flex items-center">
               <div
                 aria-valuemax={100}
                 aria-valuemin={0}
