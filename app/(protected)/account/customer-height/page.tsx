@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import Link from 'next/link';
 import { AlertCircle, Loader2 } from 'lucide-react';
 import { Chart } from 'chart.js/auto';
@@ -30,7 +30,7 @@ import {
   useGetHeightHistory,
   useGetExcelMeasurement,
 } from '@/features/height-measurement/hooks';
-import { formatDate, getMineTypeExcel } from '@/utils';
+import { debounce, formatDate, getMineTypeExcel } from '@/utils';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Input } from '@/components/ui/input';
@@ -49,6 +49,13 @@ export default function HeightMeasureHistoryPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [importErrors, setImportErrors] = useState<string[]>([]);
   const [showImportErrors, setShowImportErrors] = useState(false);
+
+  const debouncedSearch = useCallback(
+    debounce((val: string) => {
+      setSearchTerm(val);
+    }, 500),
+    [],
+  );
 
   // MUTATE
   const { mutate: getExcelMeasurement, isPending: isPendingDowloadExcel } =
@@ -316,7 +323,10 @@ export default function HeightMeasureHistoryPage() {
               className="rounded-full bg-background pl-4 pr-12 h-[40px] border border-[#E2E8F0] text-sm placeholder:text-[#94A3B8] focus-visible:ring-0 focus-visible:ring-offset-0"
               placeholder="Tìm kiếm mẩu tin..."
               value={keyword}
-              onChange={e => setKeyword(e.target.value)}
+              onChange={e => {
+                setKeyword(e.target.value);
+                debouncedSearch(e.target.value);
+              }}
               onKeyDown={e => {
                 if (e.key === 'Enter') {
                   setSearchTerm(keyword);
