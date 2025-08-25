@@ -26,6 +26,14 @@ const nextConfig = {
       },
       {
         protocol: 'https',
+        hostname: 'trx-main.sgp1.digitaloceanspaces.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'trx-main.sgp1.cdn.digitaloceanspaces.com',
+      },
+      {
+        protocol: 'https',
         hostname: 'images.glints.com',
       },
       {
