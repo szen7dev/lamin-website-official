@@ -258,6 +258,10 @@ export default function HeightMeasureHistoryPage() {
       birthday: formatDate(item.birthday),
       height: `${item.height} cm`,
       weight: `${item.weight} kg`,
+      boneAge: item.boneAge ? formatDate(item.boneAge) : 'N/A',
+      pubertyOnsetDate: item.pubertyOnsetDate
+        ? formatDate(item.pubertyOnsetDate)
+        : 'N/A',
       desiredHeight: `${item.desiredHeight} cm`,
       phone: item.phone,
       note: item.note || 'Đo chiều cao từ website',
@@ -570,6 +574,12 @@ export default function HeightMeasureHistoryPage() {
                     Cân nặng (kg)
                   </TableHead>
                   <TableHead className="text-white font-medium text-center">
+                    Ngày tuổi xương
+                  </TableHead>
+                  <TableHead className="text-white font-medium text-center">
+                    Ngày dậy thì
+                  </TableHead>
+                  <TableHead className="text-white font-medium text-center">
                     Chiều cao mong muốn
                   </TableHead>
                   <TableHead className="text-white font-medium text-center">
@@ -602,6 +612,12 @@ export default function HeightMeasureHistoryPage() {
                     </TableCell>
                     <TableCell className="text-center border-r">
                       {item.weight}
+                    </TableCell>
+                    <TableCell className="text-center border-r">
+                      {item.boneAge}
+                    </TableCell>
+                    <TableCell className="text-center border-r">
+                      {item.pubertyOnsetDate}
                     </TableCell>
                     <TableCell className="text-center border-r">
                       {item.desiredHeight}

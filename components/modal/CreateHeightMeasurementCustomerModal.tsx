@@ -29,9 +29,9 @@ interface CreateHeightMeasurementCustomerModalProps {
   onClose: () => void;
   contactId?: string;
   initialData?: {
-    name?: string;
-    birthDate?: Date;
-    gender?: number;
+    name: string;
+    birthDate: Date;
+    gender: string;
     phone?: string;
     email?: string;
     parentName?: string;
@@ -41,19 +41,26 @@ interface CreateHeightMeasurementCustomerModalProps {
 const formSchema = z.object({
   name: z.string().min(1, { message: 'Vui lòng nhập tên' }),
   birthday: z.string().min(1, { message: 'Vui lòng chọn ngày sinh' }),
-  gender: z.number().min(1, { message: 'Vui lòng chọn giới tính' }),
+  gender: z.string().min(1, { message: 'Vui lòng chọn giới tính' }),
   height: z
     .string()
-    .min(1, { message: 'Vui lòng nhập chiều cao' })
-    .refine(val => !isNaN(Number(val)) && Number(val) > 0, {
-      message: 'Chiều cao phải là số dương',
-    }),
+    .min(1, 'Vui lòng nhập chiều cao')
+    .refine(val => {
+      const num = Number(val.replace(',', '.'));
+
+      return !isNaN(num) && num > 0;
+    }, 'Chiều cao phải là số dương'),
   weight: z
     .string()
-    .optional()
-    .refine(val => !val || (!isNaN(Number(val)) && Number(val) >= 0), {
-      message: 'Cân nặng phải là số dương hoặc bỏ trống',
-    }),
+    .min(1, 'Vui lòng nhập cân nặng')
+    .refine(val => {
+      const num = Number(val.replace(',', '.'));
+
+      return !isNaN(num) && num > 0;
+    }, 'Cân nặng phải là số dương')
+    .optional(),
+  boneAge: z.string().optional(),
+  pubertyOnsetDate: z.string().optional(),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -73,9 +80,11 @@ const CreateHeightMeasurementCustomerModal = ({
     defaultValues: {
       name: '',
       birthday: '',
-      gender: 0,
+      gender: '1',
       height: '',
       weight: '',
+      boneAge: '',
+      pubertyOnsetDate: '',
     },
   });
 
@@ -85,8 +94,12 @@ const CreateHeightMeasurementCustomerModal = ({
       name: data.name,
       birthDate: new Date(data.birthday),
       gender: data.gender,
-      height: data.height,
-      weight: data.weight || '0',
+      height: Number(data.height),
+      weight: Number(data.weight),
+      boneAge: data.boneAge ? new Date(data.boneAge) : '',
+      pubertyOnsetDate: data.pubertyOnsetDate
+        ? new Date(data.pubertyOnsetDate)
+        : '',
     };
 
     createHeightMeasurement(submissionData, {
@@ -178,7 +191,7 @@ const CreateHeightMeasurementCustomerModal = ({
               )}
             />
 
-            <div className="flex justify-between gap-3">
+            <div className="grid grid-cols-2 justify-between gap-3">
               <FormField
                 control={form.control}
                 name="birthday"
@@ -228,32 +241,75 @@ const CreateHeightMeasurementCustomerModal = ({
                   </FormItem>
                 )}
               />
-            </div>
+              <FormField
+                control={form.control}
+                name="weight"
+                render={({ field }) => (
+                  <FormItem className="space-y-1 sm:space-y-2">
+                    <FormLabel className="flex items-center text-xs sm:text-sm text-grayscale-90">
+                      <span aria-hidden="true" className="text-error mr-1">
+                        *
+                      </span>
+                      Cân nặng hiện tại (kg)
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        className={`w-full rounded-lg border ${form.formState.errors.weight ? 'border-error-5' : 'border-grayscale-20'} bg-white px-3 sm:px-4 py-2 sm:py-3 text-sm text-grayscale-90 placeholder:text-grayscale-40 focus:border-primary-5 focus:outline-none focus:ring-1 focus:ring-primary-5 disabled:opacity-70`}
+                        disabled={isPending}
+                        placeholder="Nhập cân nặng"
+                        type="text" // Or number
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-            <FormField
-              control={form.control}
-              name="weight"
-              render={({ field }) => (
-                <FormItem className="space-y-1 sm:space-y-2">
-                  <FormLabel className="flex items-center text-xs sm:text-sm text-grayscale-90">
-                    <span aria-hidden="true" className="text-error mr-1">
-                      *
-                    </span>
-                    Cân nặng hiện tại (kg)
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      className={`w-full rounded-lg border ${form.formState.errors.weight ? 'border-error-5' : 'border-grayscale-20'} bg-white px-3 sm:px-4 py-2 sm:py-3 text-sm text-grayscale-90 placeholder:text-grayscale-40 focus:border-primary-5 focus:outline-none focus:ring-1 focus:ring-primary-5 disabled:opacity-70`}
-                      disabled={isPending}
-                      placeholder="Nhập cân nặng"
-                      type="text" // Or number
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+              <FormField
+                control={form.control}
+                name="boneAge"
+                render={({ field }) => (
+                  <FormItem className="space-y-1 sm:space-y-2">
+                    <FormLabel className="flex items-center text-xs sm:text-sm text-grayscale-90">
+                      Ngày tuổi xương
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        className={`w-full rounded-lg border ${form.formState.errors.boneAge ? 'border-error-5' : 'border-grayscale-20'} bg-white px-3 sm:px-4 py-2 sm:py-3 text-sm text-grayscale-90 focus:border-primary-5 focus:outline-none focus:ring-1 focus:ring-primary-5 disabled:opacity-70`}
+                        disabled={isPending}
+                        placeholder="Nhập ngày tuổi xương"
+                        type="date"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="pubertyOnsetDate"
+                render={({ field }) => (
+                  <FormItem className="space-y-1 sm:space-y-2">
+                    <FormLabel className="flex items-center text-xs sm:text-sm text-grayscale-90">
+                      Ngày dậy thì
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        className={`w-full rounded-lg border ${form.formState.errors.pubertyOnsetDate ? 'border-error-5' : 'border-grayscale-20'} bg-white px-3 sm:px-4 py-2 sm:py-3 text-sm text-grayscale-90 placeholder:text-grayscale-40 focus:border-primary-5 focus:outline-none focus:ring-1 focus:ring-primary-5 disabled:opacity-70`}
+                        disabled={isPending}
+                        placeholder="Nhập ngày dậy thì"
+                        type="date"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
 
             <div className="flex flex-col sm:flex-row sm:justify-end gap-2 sm:gap-3 pt-2 sm:pt-4">
               <Button

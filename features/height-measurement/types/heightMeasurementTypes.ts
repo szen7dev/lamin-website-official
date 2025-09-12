@@ -1,11 +1,11 @@
 // Types cho tính năng đo cao
 export interface HeightMeasurementFormData {
-  name?: string;
-  birthDate?: Date;
-  weight?: string | number;
-  height?: string | number;
+  name: string;
+  birthDate: string | Date;
+  weight: string | number;
+  height: string | number;
   phone?: string;
-  gender?: number;
+  gender: number | string;
   note?: string;
   optionSeller?: number;
   contactID?: string;
@@ -16,6 +16,8 @@ export interface HeightMeasurementFormData {
   date?: Date | string;
   desiredHeight?: string | number;
   routine?: string;
+  boneAge?: string | Date;
+  pubertyOnsetDate?: string | Date;
 }
 
 export interface HeightMeasurementResultData {
@@ -155,6 +157,8 @@ export interface HeightHistory {
   predictedAdultHeight: number;
   desiredHeight: number;
   weight: number;
+  boneAge: string;
+  pubertyOnsetDate: string;
   images: string[];
   state: number;
   company: string;

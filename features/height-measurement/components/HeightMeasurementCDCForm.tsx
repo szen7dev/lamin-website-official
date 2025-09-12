@@ -1,15 +1,78 @@
 'use client';
 import type { HeightMeasurementFormData } from '../types/heightMeasurementTypes';
 
+import { z } from 'zod';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { AlertCircle } from 'lucide-react';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 import { useHeightMeasurementMutation } from '../hooks/usePostHeightMeasurement';
 
 import { Button } from '@/components/ui/button';
 import { CDCResultModal } from '@/components/modal/CDCResultModal';
 import { useAuth } from '@/hooks';
+
+const heightMeasurementSchema = z.object({
+  name: z.string().min(1, 'Vui lòng nhập tên bé'),
+  birthDate: z
+    .union([z.string().min(1, 'Vui lòng nhập ngày sinh'), z.date()])
+    .transform(val => {
+      if (typeof val === 'string' && val !== '') {
+        return new Date(val);
+      }
+
+      return val;
+    }),
+  weight: z
+    .union([
+      z.string().min(1, 'Vui lòng nhập cân nặng'),
+      z.number().min(0, 'Cân nặng phải lớn hơn 0'),
+    ])
+    .transform(val => {
+      if (typeof val === 'string') {
+        return Number(val.replace(',', '.'));
+      }
+
+      return val;
+    }),
+  height: z
+    .union([
+      z.string().min(1, 'Vui lòng nhập chiều cao'),
+      z.number().min(0, 'Chiều cao phải lớn hơn 0'),
+    ])
+    .transform(val => {
+      if (typeof val === 'string') {
+        return Number(val.replace(',', '.'));
+      }
+
+      return val;
+    }),
+  gender: z.union([z.string(), z.number()]).transform(val => Number(val)),
+  boneAge: z
+    .union([z.string(), z.date()])
+    .transform(val => {
+      if (typeof val === 'string' && val !== '') {
+        return new Date(val);
+      }
+
+      return val;
+    })
+    .optional(),
+  pubertyOnsetDate: z
+    .union([z.string(), z.date()])
+    .transform(val => {
+      if (typeof val === 'string' && val !== '') {
+        return new Date(val);
+      }
+
+      return val;
+    })
+    .optional(),
+  note: z.string().optional(),
+});
+
+type FormValues = z.infer<typeof heightMeasurementSchema>;
 
 export default function HeightMeasurementCDCForm() {
   const { user, isAuthenticated } = useAuth();
@@ -35,44 +98,29 @@ export default function HeightMeasurementCDCForm() {
     reset,
     setError,
     formState: { errors },
-  } = useForm<HeightMeasurementFormData>({
+  } = useForm<FormValues>({
+    resolver: zodResolver(heightMeasurementSchema),
     defaultValues: {
       // date: new Date().toISOString().split('T')[0],
       name: '',
-      birthDate: '' as unknown as Date,
+      birthDate: undefined,
       weight: '',
       height: '',
       // phone: '',
-      gender: 1,
+      gender: '1',
+      boneAge: '',
       note: 'Đo chiều cao từ website',
-    },
+      pubertyOnsetDate: '',
+    } as unknown as FormValues,
   });
 
-  const onSubmit = (formData: HeightMeasurementFormData) => {
-    // if (!/^[0-9]{10,11}$/.test(formData.phone)) {
-    //   setError('phone', {
-    //     type: 'manual',
-    //     message: 'Số điện thoại không hợp lệ',
-    //   });
-
-    //   return;
-    // }
-
+  const onSubmit = (formData: FormValues) => {
     try {
-      // formData.date = new Date();
-
-      if (typeof formData.birthDate === 'string') {
-        formData.birthDate = new Date(formData.birthDate);
-      }
-
-      formData.height = Number(String(formData.height).replace(',', '.'));
-      formData.weight = Number(String(formData.weight).replace(',', '.'));
-      formData.gender = Number(formData.gender);
-      if (!formData.note) {
-        formData.note = 'Đo chiều cao từ website';
-      }
-
-      createHeightMeasurement(formData);
+      createHeightMeasurement({
+        ...formData,
+        note: formData.note || 'Đo chiều cao từ website',
+        // date: new Date()
+      } as HeightMeasurementFormData);
     } catch (err) {
       console.error('🖥️ Form Component: Error processing form data:', err);
       setError('root', {
@@ -275,7 +323,7 @@ export default function HeightMeasurementCDCForm() {
             id="height"
             placeholder="Nhập chiều cao"
             type="text"
-            {...register('height', { required: 'Vui lòng nhập chiều cao' })}
+            {...register('height')}
             aria-describedby={errors.height ? 'height-error' : undefined}
             aria-invalid={errors.height ? 'true' : 'false'}
           />
@@ -301,13 +349,63 @@ export default function HeightMeasurementCDCForm() {
             id="weight"
             placeholder="Nhập cân nặng"
             type="text"
-            {...register('weight', { required: 'Vui lòng nhập cân nặng' })}
+            {...register('weight')}
             aria-describedby={errors.weight ? 'weight-error' : undefined}
             aria-invalid={errors.weight ? 'true' : 'false'}
           />
           {errors.weight && (
             <p className="text-xs sm:text-sm text-error" id="weight-error">
               {errors.weight.message}
+            </p>
+          )}
+        </div>
+
+        <div className="space-y-1 sm:space-y-2">
+          <label
+            className="flex items-center text-xs sm:text-sm text-grayscale-90"
+            htmlFor="boneAge">
+            Ngày tuổi xương
+          </label>
+          <input
+            aria-describedby={errors.boneAge ? 'boneAge-error' : undefined}
+            aria-invalid={errors.boneAge ? 'true' : 'false'}
+            className={`w-full rounded-lg border ${errors.boneAge ? 'border-error-5' : 'border-grayscale-20'} bg-white px-3 sm:px-4 py-2 sm:py-3 text-sm text-grayscale-90 focus:border-primary-5 focus:outline-none focus:ring-1 focus:ring-primary-5 disabled:opacity-70`}
+            disabled={isPending}
+            id="boneAge"
+            placeholder="Nhập ngày tuổi xương"
+            type="date"
+            {...register('boneAge')}
+          />
+          {errors.boneAge && (
+            <p className="text-xs sm:text-sm text-error" id="boneAge-error">
+              {errors.boneAge.message}
+            </p>
+          )}
+        </div>
+
+        <div className="space-y-1 sm:space-y-2">
+          <label
+            className="flex items-center text-xs sm:text-sm text-grayscale-90"
+            htmlFor="pubertyOnsetDate">
+            Ngày dậy thì
+          </label>
+          <input
+            aria-describedby={
+              errors.pubertyOnsetDate ? 'pubertyOnsetDate-error' : undefined
+            }
+            aria-invalid={errors.pubertyOnsetDate ? 'true' : 'false'}
+            className={`w-full rounded-lg border ${errors.pubertyOnsetDate ? 'border-error-5' : 'border-grayscale-20'} bg-white px-3 sm:px-4 py-2 sm:py-3 text-sm text-grayscale-90 focus:border-primary-5 focus:outline-none focus:ring-1 focus:ring-primary-5 disabled:opacity-70`}
+            disabled={isPending}
+            id="pubertyOnsetDate"
+            placeholder="Nhập ngày dậy thì"
+            type="date"
+            {...register('pubertyOnsetDate')}
+          />
+          {errors.pubertyOnsetDate && (
+            <p
+              className="text-xs sm:text-sm text-error"
+              id="pubertyOnsetDate-error">
+              {errors.pubertyOnsetDate.message}
             </p>
           )}
         </div>
