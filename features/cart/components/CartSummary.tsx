@@ -135,14 +135,14 @@ export function CartSummary({
 
   return (
     <div className="bg-white rounded-lg shadow p-4 space-y-4">
-      <button
+      {/* <button
         aria-label="Áp dụng ưu đãi"
         className="flex w-full items-center justify-between bg-cart-promo-bg rounded-md text-blue-600 font-medium text-sm cursor-pointer border-none p-3"
         type="button"
         onClick={() => setIsPromoModalOpen(true)}>
         <span>Áp dụng ưu đãi để được giảm giá</span>
         <ChevronRight className="w-4 h-4" />
-      </button>
+      </button> */}
 
       {user?.contacts && (
         <div className="flex items-center justify-between py-2">
@@ -200,10 +200,10 @@ export function CartSummary({
             {formatPrice(summary.voucherDiscount)}
           </span>
         </div>
-        <div>
+        {/* <div>
           <span>Phí vận chuyển </span>
           <span className="text-blue-600">(miễn phí)</span>
-        </div>
+        </div> */}
       </div>
 
       <div className="pt-2 border-t">
@@ -253,11 +253,11 @@ export function CartSummary({
 
         <p className="mt-4 text-xs text-center text-gray-500">
           Bằng việc tiến hành đặt mua hàng, bạn đồng ý với{' '}
-          <a className="underline" href="/terms-of-service">
+          <a className="underline" href="/bai-viet/chinh-sach-giao-hang">
             Điều khoản dịch vụ
           </a>{' '}
           và{' '}
-          <a className="underline" href="/privacy-policy">
+          <a className="underline" href="/bai-viet/chinh-sach-bao-mat">
             Chính sách xử lý dữ liệu cá nhân
           </a>{' '}
           của Lamin

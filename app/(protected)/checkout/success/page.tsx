@@ -59,13 +59,14 @@ export default function CheckoutSuccessPage() {
             Đặt hàng thành công
           </h2>
           <p className="text-grayscale-50 text-base font-normal">
-            {order.funda?.name} đã tiếp nhận đơn hàng
+            {/* {order.funda?.name} đã tiếp nhận đơn hàng */}
+            Chúng tôi đã tiếp nhận đơn hàng và sẽ sớm liên hệ với bạn
           </p>
         </div>
         <div className="rounded-lg">
           <div className="flex flex-col justify-between">
             <div>
-              {order.deliveryStartETA && order.deliveryEndETA && (
+              {/* {order.deliveryStartETA && order.deliveryEndETA && (
                 <div className="text-grayscale-50 text-base font-medium">
                   <span>Thời gian nhận hàng dự kiến:</span>
                   <p className="text-grayscale-90 font-medium text-base  mb-4 ">
@@ -76,7 +77,7 @@ export default function CheckoutSuccessPage() {
                     )}
                   </p>
                 </div>
-              )}
+              )} */}
               <div className="text-grayscale-50 text-base font-medium mb-4">
                 <span>Phương thức thanh toán:</span>
                 <div className="flex gap-2 items-center">
@@ -90,12 +91,12 @@ export default function CheckoutSuccessPage() {
                     {`${getPaymentMethodText(order.paymentMethod)}`}
                   </p>
                 </div>
-                <div className="flex gap-2 items-center">
+                {/* <div className="flex gap-2 items-center">
                   <SuccessIcon height={20} width={20} />
                   <p className="text-[#51B848] font-medium text-base">
                     Đã thanh toán
                   </p>
-                </div>
+                </div> */}
               </div>
             </div>
 

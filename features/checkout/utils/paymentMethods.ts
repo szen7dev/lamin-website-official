@@ -6,12 +6,12 @@ export const PAYMENT_METHODS = [
     label: 'Thanh toán tiền mặt khi nhận hàng',
     icon: '/images/payment/cash.png',
   },
-  {
-    id: '2',
-    value: '2',
-    label: 'Thanh toán bằng chuyển khoản (QR Code)',
-    icon: '/images/payment/qrcode.png',
-  },
+  // {
+  //   id: '2',
+  //   value: '2',
+  //   label: 'Thanh toán bằng chuyển khoản (QR Code)',
+  //   icon: '/images/payment/qrcode.png',
+  // },
 ];
 
 /**

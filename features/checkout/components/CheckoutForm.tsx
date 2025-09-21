@@ -428,7 +428,7 @@ VD: Hãy gọi cho tôi 15 phút trước khi giao hàng"
             </div>
 
             {/* Invoice Toggle */}
-            <div className="flex items-center justify-between bg-gray-50 px-6 py-4 rounded-b-2xl shadow-sm">
+            {/* <div className="flex items-center justify-between bg-gray-50 px-6 py-4 rounded-b-2xl shadow-sm">
               <span className="text-gray-800 font-normal">
                 Yêu cầu xuất hóa đơn điện tử
               </span>
@@ -448,7 +448,7 @@ VD: Hãy gọi cho tôi 15 phút trước khi giao hàng"
                   </FormItem>
                 )}
               />
-            </div>
+            </div> */}
 
             {/* Payment Method Section */}
             <FormField

@@ -168,7 +168,7 @@ export default function OrderInfo() {
                 )}
               </div>
             </div>
-            {order.deliveryStartETA && order.deliveryEndETA && (
+            {/* {order.deliveryStartETA && order.deliveryEndETA && (
               <div className="text-grayscale-50 text-base font-medium">
                 <span>Dự kiến giao hàng:</span>
                 <p className="text-grayscale-90 font-medium text-base  mb-4 ">
@@ -179,9 +179,11 @@ export default function OrderInfo() {
                   )}
                 </p>
               </div>
-            )}
+            )} */}
             <p className="text-sm text-gray-600">
-              {order.funda.name} đã tiếp nhận đơn hàng.
+              {/* {order.funda.name} đã tiếp nhận đơn hàng. */}
+              {/* {order.funda?.name} đã tiếp nhận đơn hàng */}
+              Chúng tôi đã tiếp nhận đơn hàng và sẽ sớm liên hệ với bạn
             </p>
           </div>
           <div className="grid grid-cols-3 gap-4 my-4">
@@ -240,14 +242,14 @@ export default function OrderInfo() {
                 {formatCurrency(order.credit || 0)}
               </span>
             </div>
-            <div className="flex justify-between text-base font-normal text-grayscale-50">
+            {/* <div className="flex justify-between text-base font-normal text-grayscale-50">
               <span>Phí vận chuyển </span>
               <span className="text-base font-medium text-grayscale-90">
                 {order.totalShippingFee > 0
                   ? formatCurrency(order.totalShippingFee)
                   : 'Miễn phí'}
               </span>
-            </div>
+            </div> */}
           </div>
           <div className="border-b-[1px] pb-4 pt-4">
             <div className="flex justify-between text-base font-normal text-grayscale-50 mb-5">

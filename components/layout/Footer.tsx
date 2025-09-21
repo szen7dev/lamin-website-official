@@ -339,7 +339,7 @@ export function Footer() {
                       strokeWidth={5}
                     />
                   </span> */}
-                  <h4 className="font-medium text-sm mb-4">TẢI ỨNG DỤNG</h4>
+                  <h4 className="font-medium text-sm mb-4">ZALO OA CHĂM SÓC KHÁCH HÀNG</h4>
                 </div>
                 <Image
                   priority
