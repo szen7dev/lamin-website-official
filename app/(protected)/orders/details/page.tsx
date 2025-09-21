@@ -205,10 +205,10 @@ export default function OrderInfo() {
                   'N04B-T1, Chung cư Đoàn Ngoại Giao, P. Xuân Tảo, Q. Bắc Từ Liêm, Hà Nội'}
               </p>
             </div>
-            <div className="bg-white p-4 rounded-lg shadow-md">
+            {/* <div className="bg-white p-4 rounded-lg shadow-md">
               <p className="text-gray-700 font-semibold">Điểm bán xử lý đơn</p>
               <p className="text-sm text-gray-600">{order.funda.name}</p>
-            </div>
+            </div> */}
           </div>
         </div>
         <div className="bg-white p-4 rounded-lg shadow-md">
@@ -298,14 +298,14 @@ export default function OrderInfo() {
                 </p>
               </div>
             )}
-            <div className="flex gap-2 items-center">
+            {/* <div className="flex gap-2 items-center">
               <SuccessIcon height={16} width={16} />
               <p className="text-[#51B848] font-medium text-sm">
                 {order.paymentMethod === '1'
                   ? 'Thanh toán khi nhận hàng'
                   : 'Đã thanh toán'}
               </p>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
