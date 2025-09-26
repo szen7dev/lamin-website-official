@@ -37,7 +37,7 @@ export interface LoginResponse {
       _id?: string;
     }>;
     fullname?: string;
-    gender?: number;
+    gender?: 1 | 2 | 3;
     image?: string;
     lang?: string;
     level?: number;
