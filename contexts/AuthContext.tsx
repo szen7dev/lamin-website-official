@@ -18,6 +18,7 @@ type AuthContextType = {
   isLoading: boolean;
   updateUser: (params: UserUpdateParams) => Promise<any>;
   login: (phone: string, otp: string) => Promise<LoginResponse>;
+  setAuthUser: (userData: User, token: string) => void;
   logout: () => Promise<void>;
 };
 
@@ -197,6 +198,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const setAuthUser = (userData: User, token: string) => {
+    setCookie('auth-token', token, { maxAge: 60 * 60 * 24 * 7 });
+    apiClient.setToken(token);
+
+    setUser(userData);
+    storeUserData(userData);
+  };
+
   // Logout function
   const logout = async () => {
     setIsLoading(true);
@@ -208,7 +217,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setUser(null);
 
       // Redirect to login page
-      router.push('/auth/login');
+      router.push('/');
     } finally {
       setIsLoading(false);
     }
@@ -222,6 +231,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         isLoading,
         updateUser: handleUserUpdate,
         login,
+        setAuthUser,
         logout,
       }}>
       {children}

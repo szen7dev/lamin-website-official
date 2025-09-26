@@ -22,6 +22,7 @@ import { CartDropdown } from '@/features/cart/components/cart-dropdown/CartDropd
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { useCart } from '@/features/cart/contexts/CartContext';
 import { LoginModal } from '@/components/modal/LoginModal';
+import { EmailLoginModal } from '@/components/modal/EmailLoginModal';
 import { useContactInfo } from '@/hooks/useContactInfo';
 import { CartIcon, UserIcon } from '@/components/icons';
 // import { useGetSearchKeywordList } from '@/features/search/hooks/keyword/useGetSearchKeywordList';
@@ -47,6 +48,7 @@ export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   // Add a state for controlling the login modal visibility
   const [loginModalOpen, setLoginModalOpen] = useState(false);
+  const [emailLoginModalOpen, setEmailLoginModalOpen] = useState(false);
   const isMobile = useMediaQuery('(max-width: 768px)');
   const { totalItems } = useCart();
   const { user, isAuthenticated, logout } = useAuth();
@@ -334,7 +336,7 @@ export function Header() {
                   <Button
                     className="rounded-full bg-white px-3 md:px-6 text-primary hover:bg-white/90 text-xs md:text-sm"
                     variant="secondary"
-                    onClick={() => setLoginModalOpen(true)}>
+                    onClick={() => setEmailLoginModalOpen(true)}>
                     <UserIcon height={24} width={24} />
                     <span className="font-medium">Đăng Nhập</span>
                   </Button>
@@ -513,10 +515,14 @@ export function Header() {
       </nav>
 
       {/* Login Modal */}
-      <LoginModal
+      {/* <LoginModal
         isOpen={loginModalOpen}
         onClose={() => setLoginModalOpen(false)}
         onLoginForSeller={() => redirectForSeller()}
+      /> */}
+      <EmailLoginModal
+        open={emailLoginModalOpen}
+        onOpenChange={() => setEmailLoginModalOpen(false)}
       />
     </header>
   );
