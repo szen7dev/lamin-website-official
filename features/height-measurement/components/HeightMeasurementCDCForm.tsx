@@ -13,64 +13,100 @@ import { Button } from '@/components/ui/button';
 import { CDCResultModal } from '@/components/modal/CDCResultModal';
 import { useAuth } from '@/hooks';
 
-const heightMeasurementSchema = z.object({
-  name: z.string().min(1, 'Vui lòng nhập tên bé'),
-  birthDate: z
-    .union([z.string().min(1, 'Vui lòng nhập ngày sinh'), z.date()])
-    .transform(val => {
-      if (typeof val === 'string' && val !== '') {
-        return new Date(val);
+const heightMeasurementSchema = z
+  .object({
+    name: z.string().min(1, 'Vui lòng nhập tên bé'),
+    parentName: z.string().min(1, 'Vui lòng nhập tên bố/mẹ'),
+    phone: z
+      .string()
+      .min(1, 'Vui lòng nhập số điện thoại')
+      .transform(val => {
+        if (typeof val === 'string') {
+          return val.replace(/\D/g, '');
+        }
+
+        return val;
+      })
+      .refine(
+        val => {
+          const vietnamPhoneRegex = /^(03|05|07|08|09|02)[0-9]{8}$/;
+
+          return vietnamPhoneRegex.test(val);
+        },
+        {
+          message:
+            'Số điện thoại không hợp lệ. Vui lòng nhập số điện thoại Việt Nam (10 chữ số)',
+        },
+      ),
+    birthDate: z
+      .union([z.string().min(1, 'Vui lòng nhập ngày sinh'), z.date()])
+      .transform(val => {
+        if (typeof val === 'string' && val !== '') {
+          return new Date(val);
+        }
+
+        return val;
+      }),
+    weight: z
+      .union([
+        z.string().min(1, 'Vui lòng nhập cân nặng'),
+        z.number().min(0, 'Cân nặng phải lớn hơn 0'),
+      ])
+      .transform(val => {
+        if (typeof val === 'string') {
+          return Number(val.replace(',', '.'));
+        }
+
+        return val;
+      }),
+    height: z
+      .union([
+        z.string().min(1, 'Vui lòng nhập chiều cao'),
+        z.number().min(0, 'Chiều cao phải lớn hơn 0'),
+      ])
+      .transform(val => {
+        if (typeof val === 'string') {
+          return Number(val.replace(',', '.'));
+        }
+
+        return val;
+      }),
+    gender: z.union([z.string(), z.number()]).transform(val => Number(val)),
+    boneAge: z
+      .union([z.string(), z.date()])
+      .transform(val => {
+        if (typeof val === 'string' && val !== '') {
+          return new Date(val);
+        }
+
+        return val;
+      })
+      .optional(),
+    pubertyOnsetDate: z
+      .union([z.string(), z.date()])
+      .transform(val => {
+        if (typeof val === 'string' && val !== '') {
+          return new Date(val);
+        }
+
+        return val;
+      })
+      .optional(),
+    note: z.string().optional(),
+  })
+  .refine(
+    data => {
+      if (data.pubertyOnsetDate && data.birthDate) {
+        return data.pubertyOnsetDate > data.birthDate;
       }
 
-      return val;
-    }),
-  weight: z
-    .union([
-      z.string().min(1, 'Vui lòng nhập cân nặng'),
-      z.number().min(0, 'Cân nặng phải lớn hơn 0'),
-    ])
-    .transform(val => {
-      if (typeof val === 'string') {
-        return Number(val.replace(',', '.'));
-      }
-
-      return val;
-    }),
-  height: z
-    .union([
-      z.string().min(1, 'Vui lòng nhập chiều cao'),
-      z.number().min(0, 'Chiều cao phải lớn hơn 0'),
-    ])
-    .transform(val => {
-      if (typeof val === 'string') {
-        return Number(val.replace(',', '.'));
-      }
-
-      return val;
-    }),
-  gender: z.union([z.string(), z.number()]).transform(val => Number(val)),
-  boneAge: z
-    .union([z.string(), z.date()])
-    .transform(val => {
-      if (typeof val === 'string' && val !== '') {
-        return new Date(val);
-      }
-
-      return val;
-    })
-    .optional(),
-  pubertyOnsetDate: z
-    .union([z.string(), z.date()])
-    .transform(val => {
-      if (typeof val === 'string' && val !== '') {
-        return new Date(val);
-      }
-
-      return val;
-    })
-    .optional(),
-  note: z.string().optional(),
-});
+      return true;
+    },
+    {
+      message: 'Ngày dậy thì phải sau ngày sinh',
+      path: ['pubertyOnsetDate'],
+    },
+  );
 
 type FormValues = z.infer<typeof heightMeasurementSchema>;
 
@@ -106,11 +142,12 @@ export default function HeightMeasurementCDCForm() {
       birthDate: undefined,
       weight: '',
       height: '',
-      // phone: '',
+      phone: '',
       gender: '1',
       boneAge: '',
       note: 'Đo chiều cao từ website',
       pubertyOnsetDate: '',
+      parentName: '',
     } as unknown as FormValues,
   });
 
@@ -155,7 +192,32 @@ export default function HeightMeasurementCDCForm() {
         Nhập thông tin chi tiết để đo cao
       </h2>
 
-      {/* <div className="space-y-1 sm:space-y-2">
+      <div className="space-y-1 sm:space-y-2">
+        <label
+          className="flex items-center text-xs sm:text-sm text-grayscale-90"
+          htmlFor="name">
+          <span aria-hidden="true" className="text-error mr-1">
+            *
+          </span>
+          Tên bố/mẹ
+        </label>
+        <input
+          className={`w-full rounded-lg border ${errors.parentName ? 'border-error-5' : 'border-grayscale-20'} bg-white px-3 sm:px-4 py-2 sm:py-3 text-sm text-grayscale-90 placeholder:text-grayscale-40 focus:border-primary-5 focus:outline-none focus:ring-1 focus:ring-primary-5 disabled:opacity-70`}
+          disabled={isPending}
+          id="parentName"
+          placeholder="Nhập tên bố/mẹ"
+          {...register('parentName')}
+          aria-describedby={errors.parentName ? 'parentName-error' : undefined}
+          aria-invalid={errors.parentName ? 'true' : 'false'}
+        />
+        {errors.parentName && (
+          <p className="text-xs sm:text-sm text-error" id="parentName-error">
+            {errors.parentName.message}
+          </p>
+        )}
+      </div>
+
+      <div className="space-y-1 sm:space-y-2">
         <label
           className="flex items-center text-xs sm:text-sm text-grayscale-90"
           htmlFor="phone">
@@ -170,13 +232,7 @@ export default function HeightMeasurementCDCForm() {
           id="phone"
           placeholder="Nhập số điện thoại"
           type="tel"
-          {...register('phone', {
-            required: 'Vui lòng nhập số điện thoại',
-            pattern: {
-              value: /^[0-9]{10,11}$/,
-              message: 'Số điện thoại không hợp lệ',
-            },
-          })}
+          {...register('phone')}
           aria-describedby={errors.phone ? 'phone-error' : undefined}
           aria-invalid={errors.phone ? 'true' : 'false'}
         />
@@ -185,7 +241,7 @@ export default function HeightMeasurementCDCForm() {
             {errors.phone.message}
           </p>
         )}
-      </div> */}
+      </div>
 
       <div className="space-y-1 sm:space-y-2">
         <label
@@ -201,7 +257,7 @@ export default function HeightMeasurementCDCForm() {
           disabled={isPending}
           id="name"
           placeholder="Nhập tên"
-          {...register('name', { required: 'Vui lòng nhập tên bé' })}
+          {...register('name')}
           aria-describedby={errors.name ? 'name-error' : undefined}
           aria-invalid={errors.name ? 'true' : 'false'}
         />
@@ -235,7 +291,7 @@ export default function HeightMeasurementCDCForm() {
               disabled={isPending}
               type="radio"
               value={1}
-              {...register('gender', { required: 'Vui lòng chọn giới tính' })}
+              {...register('gender')}
             />
             <span className="text-xs sm:text-sm text-grayscale-90">Nam</span>
           </label>
@@ -297,7 +353,7 @@ export default function HeightMeasurementCDCForm() {
             id="birthDate"
             placeholder="Nhập ngày sinh"
             type="date"
-            {...register('birthDate', { required: 'Vui lòng chọn ngày sinh' })}
+            {...register('birthDate')}
             aria-describedby={errors.birthDate ? 'birthDate-error' : undefined}
             aria-invalid={errors.birthDate ? 'true' : 'false'}
           />
