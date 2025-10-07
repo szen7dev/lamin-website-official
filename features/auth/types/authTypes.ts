@@ -1,6 +1,5 @@
 // Types for auth feature
 export interface User {
-  id: string;
   _id?: string; // Backend ID
   name: string;
   email?: string;
