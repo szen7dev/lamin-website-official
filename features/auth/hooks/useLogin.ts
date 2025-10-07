@@ -35,10 +35,9 @@ export const useLogin = (params?: UseLoginParams) => {
         // Call error callback if provided
         if (onError) onError();
       } else {
-        if (response.token && response.user && response.user.contacts) {
+        if (response.token && response.user) {
           const userData = {
             ...response.user,
-            id: response.user.contacts[0]._id || '',
             _id: response.user._id || '',
           };
 

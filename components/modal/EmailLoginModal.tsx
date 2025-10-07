@@ -5,18 +5,15 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import Image from 'next/image';
-import { X } from 'lucide-react';
+import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 
-import { useAuth } from '@/hooks/useAuth';
 import { useLogin } from '@/features/auth/hooks/useLogin';
-
 import {
   Dialog,
   DialogContent,
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
@@ -46,7 +43,6 @@ export function EmailLoginModal({
   open,
   onOpenChange,
 }: EmailLoginModalProps) {
-
   const {
     register,
     handleSubmit,
@@ -101,11 +97,11 @@ export function EmailLoginModal({
             <div className="flex justify-center mb-6">
               <div className="relative">
                 <Image
-                  src="/images/Authentication 3.svg"
                   alt="Authentication"
-                  width={180}
-                  height={180}
                   className="w-45 h-45"
+                  height={180}
+                  src="/images/Authentication 3.svg"
+                  width={180}
                 />
               </div>
             </div>
@@ -118,45 +114,45 @@ export function EmailLoginModal({
             </div>
 
             <form
-              onSubmit={handleSubmit(onSubmit)}
+              noValidate
               className="space-y-6"
-              noValidate>
+              onSubmit={handleSubmit(onSubmit)}>
               <div className="space-y-2">
                 <label
-                  htmlFor="email"
-                  className="block text-sm font-medium text-gray-900">
+                  className="block text-sm font-medium text-gray-900"
+                  htmlFor="email">
                   Email
                 </label>
                 <Input
-                  id="email"
-                  type="email"
-                  placeholder="Nhập email tại đây"
                   className={cn(
                     'h-14 rounded-full border-2 px-6 text-base placeholder:text-gray-400 focus:border-cyan-400 focus-visible:ring-0 focus-visible:ring-offset-0',
                     errors.email
                       ? 'border-red-300 focus:border-red-400 focus-visible:ring-0'
                       : 'border-gray-200',
                   )}
+                  id="email"
+                  placeholder="Nhập email tại đây"
+                  type="email"
                   {...register('email')}
                 />
               </div>
 
               <div className="space-y-2">
                 <label
-                  htmlFor="password"
-                  className="block text-sm font-medium text-gray-900">
+                  className="block text-sm font-medium text-gray-900"
+                  htmlFor="password">
                   Mật khẩu
                 </label>
                 <Input
-                  id="password"
-                  type="password"
-                  placeholder="Nhập mật khẩu tại đây"
                   className={cn(
                     'h-14 rounded-full border-2 px-6 text-base placeholder:text-gray-400 focus:border-cyan-400 focus-visible:ring-0 focus-visible:ring-offset-0',
                     errors.password
                       ? 'border-red-300 focus:border-red-400 focus-visible:ring-0'
                       : 'border-gray-200',
                   )}
+                  id="password"
+                  placeholder="Nhập mật khẩu tại đây"
+                  type="password"
                   {...register('password')}
                 />
               </div>
@@ -170,9 +166,9 @@ export function EmailLoginModal({
               )}
 
               <Button
-                type="submit"
+                className="w-full h-14 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-medium text-base transition-colors disabled:opacity-50"
                 disabled={isLoading}
-                className="w-full h-14 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-medium text-base transition-colors disabled:opacity-50">
+                type="submit">
                 {isLoading ? 'Đang đăng nhập...' : 'Đăng nhập'}
               </Button>
             </form>

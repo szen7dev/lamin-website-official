@@ -43,21 +43,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           apiClient.setToken(token as string);
 
           // Get user data from localStorage
-          const userId = localStorage.getItem('user_id') || '';
           const userRealId = localStorage.getItem('user_real_id') || '';
           const userName = localStorage.getItem('user_name') || '';
           const userPhone = localStorage.getItem('user_phone') || '';
           const userEmail = localStorage.getItem('user_email') || '';
           const userImage = localStorage.getItem('user_image') || '';
           const userFullname = localStorage.getItem('user_fullname') || '';
-          const userLoyaltyPoints =
-            localStorage.getItem('user_loyalty_points') || '';
           const userGender = localStorage.getItem('user_gender') || '';
           const userBirthDay = localStorage.getItem('user_birthDay') || '';
 
           // Try to reconstruct user object from localStorage
           setUser({
-            id: userId,
             _id: userRealId,
             name: userName,
             phone: userPhone,
@@ -66,7 +62,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             fullname: userFullname,
             gender: parseInt(userGender) as 1 | 2 | 3,
             birthDay: userBirthDay,
-            contacts: [{ remainLoyaltyPoints: parseInt(userLoyaltyPoints) }],
           });
         }
       } catch (error) {
@@ -85,14 +80,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // Clear all user data from localStorage and cookies
   const clearUserData = () => {
     deleteCookie('auth-token');
-    localStorage.removeItem('user_id');
     localStorage.removeItem('user_real_id');
     localStorage.removeItem('user_name');
     localStorage.removeItem('user_phone');
     localStorage.removeItem('user_email');
     localStorage.removeItem('user_image');
     localStorage.removeItem('user_fullname');
-    localStorage.removeItem('user_loyalty_points');
     localStorage.removeItem('user_gender');
     localStorage.removeItem('user_birthDay');
     // Add any other user properties that were stored
@@ -100,7 +93,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // Store user data in localStorage
   const storeUserData = useCallback((userData: User) => {
-    if (userData.id) localStorage.setItem('user_id', userData.id);
     if (userData._id) localStorage.setItem('user_real_id', userData._id);
     if (userData.name) localStorage.setItem('user_name', userData.name);
     if (userData.phone) localStorage.setItem('user_phone', userData.phone);
@@ -109,12 +101,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (userData.image) localStorage.setItem('user_image', userData.image);
     if (userData.fullname)
       localStorage.setItem('user_fullname', userData.fullname);
-    if (userData.contacts && userData.contacts[0].remainLoyaltyPoints) {
-      localStorage.setItem(
-        'user_loyalty_points',
-        userData.contacts[0].remainLoyaltyPoints.toString(),
-      );
-    }
     if (userData.gender)
       localStorage.setItem('user_gender', userData.gender.toString());
     if (userData.birthDay)
@@ -135,11 +121,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         apiClient.setToken(response.token);
 
         // Store user data
-        if (response.user && response.user.contacts) {
+        if (response.user) {
           // Make sure to map _id to id and create a new object
           const userData = {
             ...response.user,
-            id: response.user.contacts[0]._id || '',
             _id: response.user._id || '',
           };
 
