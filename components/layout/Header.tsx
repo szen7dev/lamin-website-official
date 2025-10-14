@@ -21,7 +21,6 @@ import MegaMenu from '@/features/menu/components/MegaMenu';
 import { CartDropdown } from '@/features/cart/components/cart-dropdown/CartDropdown';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { useCart } from '@/features/cart/contexts/CartContext';
-import { LoginModal } from '@/components/modal/LoginModal';
 import { EmailLoginModal } from '@/components/modal/EmailLoginModal';
 import { useContactInfo } from '@/hooks/useContactInfo';
 import { CartIcon, UserIcon } from '@/components/icons';
@@ -85,13 +84,18 @@ export function Header() {
     await logout();
   };
 
-  const handleClickKeyword = (keyword: string) => {
-    setSelectedKeyword(keyword);
-    updateKeyword(keyword);
-  };
+  // const handleClickKeyword = (keyword: string) => {
+  //   setSelectedKeyword(keyword);
+  //   updateKeyword(keyword);
+  // };
 
   const handleClearSearch = () => {
     setSelectedKeyword('');
+  };
+
+  const handleLoginModalOpen = () => {
+    setEmailLoginModalOpen(true);
+    setMobileMenuOpen(false);
   };
 
   // User profile component that shows when logged in
@@ -473,7 +477,7 @@ export function Header() {
                 <Button
                   className="rounded-full bg-white px-3 md:px-6 text-primary hover:bg-white/90 text-xs md:text-sm"
                   variant="secondary"
-                  onClick={() => setLoginModalOpen(true)}>
+                  onClick={handleLoginModalOpen}>
                   <span className="font-medium text-sm">Đăng Nhập</span>
                 </Button>
               </>
