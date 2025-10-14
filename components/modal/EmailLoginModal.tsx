@@ -87,37 +87,39 @@ export function EmailLoginModal({
         <DialogTitle>Đăng nhập</DialogTitle>
       </VisuallyHidden>
       <DialogContent
-        className="sm:max-w-xl w-full mx-4 rounded-3xl border-0 p-0 overflow-hidden bg-white"
+        className="sm:max-w-xl w-[calc(100%-2rem)] sm:w-full mx-auto sm:mx-4 rounded-2xl sm:rounded-3xl border-0 p-0 overflow-hidden bg-white"
         onPointerDownOutside={e => {
           e.preventDefault();
           handleClose();
         }}>
         <div className="relative">
-          <div className="px-8 py-8 space-y-6">
-            <div className="flex justify-center mb-6">
-              <div className="relative">
+          <div className="px-4 sm:px-8 py-6 sm:py-8 space-y-4 sm:space-y-6">
+            <div className="flex justify-center mb-4 sm:mb-6">
+              <div className="relative w-32 h-32 sm:w-45 sm:h-45">
                 <Image
+                  fill
+                  priority
                   alt="Authentication"
-                  className="w-45 h-45"
-                  height={180}
+                  className="object-contain w-full h-full"
                   src="/images/Authentication 3.svg"
-                  width={180}
                 />
               </div>
             </div>
 
-            <div className="text-center space-y-3">
-              <h2 className="text-2xl font-bold text-gray-900">Đăng nhập</h2>
-              <p className="text-gray-600 text-base leading-relaxed px-2">
+            <div className="text-center space-y-2 sm:space-y-3">
+              <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
+                Đăng nhập
+              </h2>
+              <p className="text-sm sm:text-base text-gray-600 leading-relaxed px-1 sm:px-2">
                 Vui lòng đăng nhập để hưởng những đặc quyền dành cho thành viên.
               </p>
             </div>
 
             <form
               noValidate
-              className="space-y-6"
+              className="space-y-4 sm:space-y-6"
               onSubmit={handleSubmit(onSubmit)}>
-              <div className="space-y-2">
+              <div className="space-y-1.5 sm:space-y-2">
                 <label
                   className="block text-sm font-medium text-gray-900"
                   htmlFor="email">
@@ -125,7 +127,7 @@ export function EmailLoginModal({
                 </label>
                 <Input
                   className={cn(
-                    'h-14 rounded-full border-2 px-6 text-base placeholder:text-gray-400 focus:border-cyan-400 focus-visible:ring-0 focus-visible:ring-offset-0',
+                    'h-12 sm:h-14 rounded-2xl sm:rounded-full border-2 px-4 sm:px-6 text-sm sm:text-base placeholder:text-gray-400 focus:border-cyan-400 focus-visible:ring-0 focus-visible:ring-offset-0',
                     errors.email
                       ? 'border-red-300 focus:border-red-400 focus-visible:ring-0'
                       : 'border-gray-200',
@@ -137,7 +139,7 @@ export function EmailLoginModal({
                 />
               </div>
 
-              <div className="space-y-2">
+              <div className="space-y-1.5 sm:space-y-2">
                 <label
                   className="block text-sm font-medium text-gray-900"
                   htmlFor="password">
@@ -145,7 +147,7 @@ export function EmailLoginModal({
                 </label>
                 <Input
                   className={cn(
-                    'h-14 rounded-full border-2 px-6 text-base placeholder:text-gray-400 focus:border-cyan-400 focus-visible:ring-0 focus-visible:ring-offset-0',
+                    'h-12 sm:h-14 rounded-2xl sm:rounded-full border-2 px-4 sm:px-6 text-sm sm:text-base placeholder:text-gray-400 focus:border-cyan-400 focus-visible:ring-0 focus-visible:ring-offset-0',
                     errors.password
                       ? 'border-red-300 focus:border-red-400 focus-visible:ring-0'
                       : 'border-gray-200',
@@ -158,7 +160,7 @@ export function EmailLoginModal({
               </div>
 
               {(errors.email || errors.password || errors.root) && (
-                <div className="text-red-500 text-sm text-left">
+                <div className="text-red-500 text-sm sm:text-base text-left px-1">
                   {errors.email && <p>{errors.email.message}</p>}
                   {errors.password && <p>{errors.password.message}</p>}
                   {errors.root && <p>{errors.root.message}</p>}
@@ -166,7 +168,7 @@ export function EmailLoginModal({
               )}
 
               <Button
-                className="w-full h-14 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-medium text-base transition-colors disabled:opacity-50"
+                className="w-full h-12 sm:h-14 rounded-2xl sm:rounded-full bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm sm:text-base transition-colors disabled:opacity-50"
                 disabled={isLoading}
                 type="submit">
                 {isLoading ? 'Đang đăng nhập...' : 'Đăng nhập'}
