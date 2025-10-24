@@ -3,13 +3,14 @@ import type { HeightMeasurementFormData } from '../types/heightMeasurementTypes'
 
 import { z } from 'zod';
 import { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { AlertCircle } from 'lucide-react';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { useHeightMeasurementMutation } from '../hooks/usePostHeightMeasurement';
 
 import { Button } from '@/components/ui/button';
+import { DateInput } from '@/components/ui/date-input';
 import { CDCResultModal } from '@/components/modal/CDCResultModal';
 import { useAuth } from '@/hooks';
 
@@ -133,6 +134,7 @@ export default function HeightMeasurementCDCForm() {
     handleSubmit,
     reset,
     setError,
+    control,
     formState: { errors },
   } = useForm<FormValues>({
     resolver: zodResolver(heightMeasurementSchema),
@@ -159,7 +161,6 @@ export default function HeightMeasurementCDCForm() {
         // date: new Date()
       } as HeightMeasurementFormData);
     } catch (err) {
-      console.error('🖥️ Form Component: Error processing form data:', err);
       setError('root', {
         type: 'manual',
         message: 'Có lỗi xảy ra khi xử lý dữ liệu. Vui lòng thử lại.',
@@ -347,15 +348,22 @@ export default function HeightMeasurementCDCForm() {
             </span>
             Ngày sinh
           </label>
-          <input
-            className={`w-full rounded-lg border ${errors.birthDate ? 'border-error-5' : 'border-grayscale-20'} bg-white px-3 sm:px-4 py-2 sm:py-3 text-sm text-grayscale-90 focus:border-primary-5 focus:outline-none focus:ring-1 focus:ring-primary-5 disabled:opacity-70`}
-            disabled={isPending}
-            id="birthDate"
-            placeholder="Nhập ngày sinh"
-            type="date"
-            {...register('birthDate')}
-            aria-describedby={errors.birthDate ? 'birthDate-error' : undefined}
-            aria-invalid={errors.birthDate ? 'true' : 'false'}
+          <Controller
+            control={control}
+            name="birthDate"
+            render={({ field }) => (
+              <DateInput
+                className={`w-full rounded-lg border ${errors.birthDate ? 'border-error-5' : 'border-grayscale-20'} bg-white px-3 sm:px-4 py-2 sm:py-3 text-sm text-grayscale-90 focus:border-primary-5 focus:outline-none focus:ring-1 focus:ring-primary-5 disabled:opacity-70`}
+                disabled={isPending}
+                id="birthDate"
+                value={field.value}
+                onChange={field.onChange}
+                aria-describedby={
+                  errors.birthDate ? 'birthDate-error' : undefined
+                }
+                aria-invalid={errors.birthDate ? 'true' : 'false'}
+              />
+            )}
           />
           {errors.birthDate && (
             <p className="text-xs sm:text-sm text-error" id="birthDate-error">
@@ -422,15 +430,20 @@ export default function HeightMeasurementCDCForm() {
             htmlFor="boneAge">
             Ngày tuổi xương
           </label>
-          <input
-            aria-describedby={errors.boneAge ? 'boneAge-error' : undefined}
-            aria-invalid={errors.boneAge ? 'true' : 'false'}
-            className={`w-full rounded-lg border ${errors.boneAge ? 'border-error-5' : 'border-grayscale-20'} bg-white px-3 sm:px-4 py-2 sm:py-3 text-sm text-grayscale-90 focus:border-primary-5 focus:outline-none focus:ring-1 focus:ring-primary-5 disabled:opacity-70`}
-            disabled={isPending}
-            id="boneAge"
-            placeholder="Nhập ngày tuổi xương"
-            type="date"
-            {...register('boneAge')}
+          <Controller
+            control={control}
+            name="boneAge"
+            render={({ field }) => (
+              <DateInput
+                className={`w-full rounded-lg border ${errors.boneAge ? 'border-error-5' : 'border-grayscale-20'} bg-white px-3 sm:px-4 py-2 sm:py-3 text-sm text-grayscale-90 focus:border-primary-5 focus:outline-none focus:ring-1 focus:ring-primary-5 disabled:opacity-70`}
+                disabled={isPending}
+                id="boneAge"
+                value={field.value}
+                onChange={field.onChange}
+                aria-describedby={errors.boneAge ? 'boneAge-error' : undefined}
+                aria-invalid={errors.boneAge ? 'true' : 'false'}
+              />
+            )}
           />
           {errors.boneAge && (
             <p className="text-xs sm:text-sm text-error" id="boneAge-error">
@@ -445,17 +458,22 @@ export default function HeightMeasurementCDCForm() {
             htmlFor="pubertyOnsetDate">
             Ngày dậy thì
           </label>
-          <input
-            aria-describedby={
-              errors.pubertyOnsetDate ? 'pubertyOnsetDate-error' : undefined
-            }
-            aria-invalid={errors.pubertyOnsetDate ? 'true' : 'false'}
-            className={`w-full rounded-lg border ${errors.pubertyOnsetDate ? 'border-error-5' : 'border-grayscale-20'} bg-white px-3 sm:px-4 py-2 sm:py-3 text-sm text-grayscale-90 focus:border-primary-5 focus:outline-none focus:ring-1 focus:ring-primary-5 disabled:opacity-70`}
-            disabled={isPending}
-            id="pubertyOnsetDate"
-            placeholder="Nhập ngày dậy thì"
-            type="date"
-            {...register('pubertyOnsetDate')}
+          <Controller
+            control={control}
+            name="pubertyOnsetDate"
+            render={({ field }) => (
+              <DateInput
+                className={`w-full rounded-lg border ${errors.pubertyOnsetDate ? 'border-error-5' : 'border-grayscale-20'} bg-white px-3 sm:px-4 py-2 sm:py-3 text-sm text-grayscale-90 focus:border-primary-5 focus:outline-none focus:ring-1 focus:ring-primary-5 disabled:opacity-70`}
+                disabled={isPending}
+                id="pubertyOnsetDate"
+                value={field.value}
+                onChange={field.onChange}
+                aria-describedby={
+                  errors.pubertyOnsetDate ? 'pubertyOnsetDate-error' : undefined
+                }
+                aria-invalid={errors.pubertyOnsetDate ? 'true' : 'false'}
+              />
+            )}
           />
           {errors.pubertyOnsetDate && (
             <p

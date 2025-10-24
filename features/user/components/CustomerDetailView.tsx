@@ -22,6 +22,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { DateInput } from '@/components/ui/date-input';
 import AddContactModal from '@/components/modal/AddContactModal';
 
 const customerFormSchema = z.object({
@@ -153,13 +154,10 @@ export function CustomerDetailView({
                     </FormLabel>
                     <FormControl>
                       <div className="relative">
-                        <Input
+                        <DateInput
                           className="w-full pr-10"
-                          max={new Date().toISOString().split('T')[0]}
-                          min="1900-01-01"
-                          type="date"
                           value={field.value || ''}
-                          onChange={e => field.onChange(e.target.value)}
+                          onChange={field.onChange}
                         />
                       </div>
                     </FormControl>

@@ -7,6 +7,7 @@ import { AlertCircle } from 'lucide-react';
 import { useNutritionCheckMutation } from '../hooks/useNutritionCheckMutation';
 
 import { Button } from '@/components/ui/button';
+import { DateInput } from '@/components/ui/date-input';
 
 const foodOptions = [
   { id: 'egg', label: 'Trứng' },
@@ -108,14 +109,23 @@ export default function NutritionCheckForm() {
             </span>
             <span className="sr-only">(bắt buộc)</span>
           </label>
-          <input
-            className={`w-full border-b ${errors.birthDate ? 'border-error-5' : 'border-grayscale-20'} bg-transparent px-0 py-2 text-sm text-grayscale-90 focus:border-primary-5 focus:outline-none disabled:opacity-70`}
-            disabled={isPending}
-            id="birthDate"
-            type="date"
-            {...register('birthDate', { required: 'Vui lòng chọn ngày sinh' })}
-            aria-describedby={errors.birthDate ? 'birthDate-error' : undefined}
-            aria-invalid={errors.birthDate ? 'true' : 'false'}
+          <Controller
+            control={control}
+            name="birthDate"
+            render={({ field }) => (
+              <DateInput
+                aria-describedby={
+                  errors.birthDate ? 'birthDate-error' : undefined
+                }
+                aria-invalid={errors.birthDate ? 'true' : 'false'}
+                className={`w-full border-b ${errors.birthDate ? 'border-error-5' : 'border-grayscale-20'} bg-transparent px-0 py-2 text-sm text-grayscale-90 focus:border-primary-5 focus:outline-none disabled:opacity-70`}
+                disabled={isPending}
+                id="birthDate"
+                value={field.value}
+                onChange={field.onChange}
+              />
+            )}
+            rules={{ required: 'Vui lòng chọn ngày sinh' }}
           />
           {errors.birthDate && (
             <p className="mt-1 text-xs text-error-5" id="birthDate-error">

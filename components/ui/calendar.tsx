@@ -22,11 +22,17 @@ function Calendar({
         months: 'flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0',
         month: 'space-y-4',
         caption: 'flex justify-center pt-1 relative items-center',
-        caption_label: 'text-sm font-medium',
+        caption_label: 'hidden',
+        caption_dropdowns: 'flex justify-center gap-2',
+        vhidden: 'sr-only',
+        dropdown_month: 'relative inline-flex',
+        dropdown_year: 'relative inline-flex',
+        dropdown:
+          'appearance-none bg-transparent px-3 py-1.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-0 cursor-pointer border border-primary rounded-md hover:bg-grayscale-20 hover:text-grayscale-90 inline-flex items-center justify-center disabled:pointer-events-none disabled:opacity-50',
+        dropdown_icon: 'hidden',
         nav: 'space-x-1 flex items-center',
         nav_button: cn(
-          buttonVariants({ variant: 'outline' }),
-          'h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100',
+          'h-7 w-7 rounded-md bg-transparent p-0 hover:bg-grayscale-20 hover:text-grayscale-90 inline-flex items-center justify-center disabled:pointer-events-none disabled:opacity-50 transition-colors',
         ),
         nav_button_previous: 'absolute left-1',
         nav_button_next: 'absolute right-1',
@@ -42,7 +48,7 @@ function Calendar({
         ),
         day_range_end: 'day-range-end',
         day_selected:
-          'bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground',
+          'bg-primary text-white hover:bg-primary hover:text-white focus:bg-primary focus:text-white',
         day_today: 'bg-accent text-accent-foreground',
         day_outside:
           'day-outside text-muted-foreground aria-selected:bg-accent/50 aria-selected:text-muted-foreground',

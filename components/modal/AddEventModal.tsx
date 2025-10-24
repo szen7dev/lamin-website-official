@@ -24,6 +24,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { DateInput } from '@/components/ui/date-input';
 import { Textarea } from '@/components/ui/textarea';
 
 interface AddEventModalProps {
@@ -146,7 +147,7 @@ export function AddEventModal({
                 <FormItem>
                   <FormLabel>Ngày tổ chức</FormLabel>
                   <FormControl>
-                    <Input type="date" {...field} />
+                    <DateInput value={field.value} onChange={field.onChange} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
