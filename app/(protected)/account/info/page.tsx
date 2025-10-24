@@ -1,12 +1,13 @@
 'use client';
 
 import { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 
 import { useAuth } from '@/hooks';
 import { Button } from '@/components/ui/button';
+import { DateInput } from '@/components/ui/date-input';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { apiClient } from '@/services';
 import { genderOptions } from '@/utils';
@@ -70,6 +71,7 @@ export default function PersonalInfoPage() {
     register,
     handleSubmit,
     formState: { errors },
+    control,
     reset,
   } = useForm<PersonalInfoForm>({
     resolver: zodResolver(personalInfoSchema),
@@ -263,12 +265,18 @@ export default function PersonalInfoPage() {
               </span>
               Ngày sinh
             </label>
-            <input
-              {...register('birthDay')}
-              required
-              className={`px-3 py-2 border rounded-md ${errors.birthDay ? 'border-red-500' : ''}`}
-              id="birthDay"
-              type="date"
+            <Controller
+              name="birthDay"
+              control={control}
+              rules={{ required: true }}
+              render={({ field }) => (
+                <DateInput
+                  className={`px-3 py-2 border rounded-md ${errors.birthDay ? 'border-red-500' : ''}`}
+                  id="birthDay"
+                  value={field.value}
+                  onChange={field.onChange}
+                />
+              )}
             />
             {errors.birthDay && (
               <p className="text-sm text-red-500">{errors.birthDay.message}</p>

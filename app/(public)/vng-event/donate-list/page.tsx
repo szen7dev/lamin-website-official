@@ -1,12 +1,13 @@
 'use client';
 import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { formatDate } from 'date-fns';
 import Link from 'next/link';
 
 import { useCreateFund } from '@/features/vng-event/hooks/useCreateFund';
 import { useGetEventList } from '@/features/vng-event/hooks/useGetEventList';
 import { Input } from '@/components/ui/input';
+import { DateInput } from '@/components/ui/date-input';
 import { PageHeader } from '@/features/vng-event/components/PageHeader';
 import { Button } from '@/components/ui/button';
 import {
@@ -39,8 +40,8 @@ import { formatNumber } from '@/utils';
 
 const DonateListPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const { register, handleSubmit, reset, setValue } = useForm<FundUpsertParams>(
-    {
+  const { register, handleSubmit, reset, setValue, control } =
+    useForm<FundUpsertParams>({
       defaultValues: {
         date: '',
         name: '',
@@ -157,11 +158,18 @@ const DonateListPage = () => {
           <TableBody>
             <TableRow className="hover:bg-gray-50">
               <TableCell className="py-2 px-4">
-                <Input
-                  className="w-full text-sm min-h-9 sm:min-h-0"
-                  placeholder="Nhập ngày"
-                  type="date"
-                  {...register('date', { required: true })}
+                <Controller
+                  name="date"
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field }) => (
+                    <DateInput
+                      className="w-full text-sm min-h-9 sm:min-h-0"
+                      placeholder="Nhập ngày"
+                      value={field.value}
+                      onChange={field.onChange}
+                    />
+                  )}
                 />
               </TableCell>
               <TableCell className="py-2 px-4">

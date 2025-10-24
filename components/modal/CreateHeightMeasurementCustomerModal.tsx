@@ -13,6 +13,7 @@ import {
   FormMessage,
 } from '../ui/form';
 import { Input } from '../ui/input';
+import { DateInput } from '../ui/date-input';
 import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
 
 import { useHeightMeasurementMutation } from '@/features/height-measurement/hooks/usePostHeightMeasurement';
@@ -204,12 +205,11 @@ const CreateHeightMeasurementCustomerModal = ({
                       Ngày sinh
                     </FormLabel>
                     <FormControl>
-                      <Input
+                      <DateInput
                         className={`w-full rounded-lg border ${form.formState.errors.birthday ? 'border-error-5' : 'border-grayscale-20'} bg-white px-3 sm:px-4 py-2 sm:py-3 text-sm text-grayscale-90 focus:border-primary-5 focus:outline-none focus:ring-1 focus:ring-primary-5 disabled:opacity-70`}
                         disabled={isPending}
-                        placeholder="Nhập ngày sinh"
-                        type="date"
-                        {...field}
+                        value={field.value}
+                        onChange={field.onChange}
                       />
                     </FormControl>
                     <FormMessage />
@@ -275,12 +275,11 @@ const CreateHeightMeasurementCustomerModal = ({
                       Ngày tuổi xương
                     </FormLabel>
                     <FormControl>
-                      <Input
+                      <DateInput
                         className={`w-full rounded-lg border ${form.formState.errors.boneAge ? 'border-error-5' : 'border-grayscale-20'} bg-white px-3 sm:px-4 py-2 sm:py-3 text-sm text-grayscale-90 focus:border-primary-5 focus:outline-none focus:ring-1 focus:ring-primary-5 disabled:opacity-70`}
                         disabled={isPending}
-                        placeholder="Nhập ngày tuổi xương"
-                        type="date"
-                        {...field}
+                        value={field.value}
+                        onChange={field.onChange}
                       />
                     </FormControl>
                     <FormMessage />
@@ -297,12 +296,11 @@ const CreateHeightMeasurementCustomerModal = ({
                       Ngày dậy thì
                     </FormLabel>
                     <FormControl>
-                      <Input
+                      <DateInput
                         className={`w-full rounded-lg border ${form.formState.errors.pubertyOnsetDate ? 'border-error-5' : 'border-grayscale-20'} bg-white px-3 sm:px-4 py-2 sm:py-3 text-sm text-grayscale-90 placeholder:text-grayscale-40 focus:border-primary-5 focus:outline-none focus:ring-1 focus:ring-primary-5 disabled:opacity-70`}
                         disabled={isPending}
-                        placeholder="Nhập ngày dậy thì"
-                        type="date"
-                        {...field}
+                        value={field.value}
+                        onChange={field.onChange}
                       />
                     </FormControl>
                     <FormMessage />

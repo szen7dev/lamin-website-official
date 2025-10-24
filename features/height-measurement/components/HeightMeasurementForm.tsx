@@ -1,12 +1,13 @@
 'use client';
 import type { HeightMeasurementFormData } from '../types/heightMeasurementTypes';
 
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { AlertCircle } from 'lucide-react';
 
 import { useHeightMeasurementMutation } from '../hooks/usePostHeightMeasurement';
 
 import { Button } from '@/components/ui/button';
+import { DateInput } from '@/components/ui/date-input';
 import { useAuth } from '@/hooks';
 
 export default function HeightMeasurementForm() {
@@ -25,6 +26,7 @@ export default function HeightMeasurementForm() {
     handleSubmit,
     reset,
     setError,
+    control,
     formState: { errors },
   } = useForm<HeightMeasurementFormData>({
     defaultValues: {
@@ -368,13 +370,20 @@ export default function HeightMeasurementForm() {
             </span>
             Ngày đo
           </label>
-          <input
-            aria-describedby="date-description"
-            className="w-full rounded-lg border border-grayscale-20 bg-grayscale-5 px-3 sm:px-4 py-2 sm:py-3 text-sm text-grayscale-90"
-            id="date"
-            type="date"
-            {...register('date', { required: 'Vui lòng chọn ngày đo' })}
-            aria-invalid={errors.date ? 'true' : 'false'}
+          <Controller
+            name="date"
+            control={control}
+            rules={{ required: 'Vui lòng chọn ngày đo' }}
+            render={({ field }) => (
+              <DateInput
+                className="w-full rounded-lg border border-grayscale-20 bg-grayscale-5 px-3 sm:px-4 py-2 sm:py-3 text-sm text-grayscale-90"
+                id="date"
+                value={field.value}
+                onChange={field.onChange}
+                aria-describedby="date-description"
+                aria-invalid={errors.date ? 'true' : 'false'}
+              />
+            )}
           />
           {errors.date && (
             <p className="text-xs sm:text-sm text-error" id="date-error">
@@ -393,15 +402,21 @@ export default function HeightMeasurementForm() {
             </span>
             Ngày sinh
           </label>
-          <input
-            className={`w-full rounded-lg border ${errors.birthDate ? 'border-error-5' : 'border-grayscale-20'} bg-white px-3 sm:px-4 py-2 sm:py-3 text-sm text-grayscale-90 focus:border-primary-5 focus:outline-none focus:ring-1 focus:ring-primary-5 disabled:opacity-70`}
-            disabled={isPending}
-            id="birthDate"
-            placeholder="Nhập ngày sinh"
-            type="date"
-            {...register('birthDate', { required: 'Vui lòng chọn ngày sinh' })}
-            aria-describedby={errors.birthDate ? 'birthDate-error' : undefined}
-            aria-invalid={errors.birthDate ? 'true' : 'false'}
+          <Controller
+            name="birthDate"
+            control={control}
+            rules={{ required: 'Vui lòng chọn ngày sinh' }}
+            render={({ field }) => (
+              <DateInput
+                className={`w-full rounded-lg border ${errors.birthDate ? 'border-error-5' : 'border-grayscale-20'} bg-white px-3 sm:px-4 py-2 sm:py-3 text-sm text-grayscale-90 focus:border-primary-5 focus:outline-none focus:ring-1 focus:ring-primary-5 disabled:opacity-70`}
+                disabled={isPending}
+                id="birthDate"
+                value={field.value}
+                onChange={field.onChange}
+                aria-describedby={errors.birthDate ? 'birthDate-error' : undefined}
+                aria-invalid={errors.birthDate ? 'true' : 'false'}
+              />
+            )}
           />
           {errors.birthDate && (
             <p className="text-xs sm:text-sm text-error" id="birthDate-error">

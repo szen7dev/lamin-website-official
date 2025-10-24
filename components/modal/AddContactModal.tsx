@@ -27,6 +27,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { DateInput } from '@/components/ui/date-input';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 
 interface AddContactModalProps {
@@ -162,12 +163,10 @@ const AddContactModal = ({
                   <FormLabel>Ngày sinh</FormLabel>
                   <FormControl>
                     <div className="relative">
-                      <Input
+                      <DateInput
                         className="w-full pr-10"
-                        max={new Date().toISOString().split('T')[0]}
-                        min="1900-01-01"
-                        type="date"
-                        {...field}
+                        value={field.value}
+                        onChange={field.onChange}
                       />
                     </div>
                   </FormControl>
