@@ -74,10 +74,10 @@ const heightMeasurementSchema = z
       }),
     gender: z.union([z.string(), z.number()]).transform(val => Number(val)),
     boneAge: z
-      .union([z.string(), z.date()])
+      .union([z.string(), z.number()])
       .transform(val => {
-        if (typeof val === 'string' && val !== '') {
-          return new Date(val);
+        if (typeof val === 'string') {
+          return val === '' ? undefined : Number(val);
         }
 
         return val;
@@ -430,20 +430,15 @@ export default function HeightMeasurementCDCForm() {
             htmlFor="boneAge">
             Ngày tuổi xương
           </label>
-          <Controller
-            control={control}
-            name="boneAge"
-            render={({ field }) => (
-              <DateInput
-                className={`w-full rounded-lg border ${errors.boneAge ? 'border-error-5' : 'border-grayscale-20'} bg-white px-3 sm:px-4 py-2 sm:py-3 text-sm text-grayscale-90 focus:border-primary-5 focus:outline-none focus:ring-1 focus:ring-primary-5 disabled:opacity-70`}
-                disabled={isPending}
-                id="boneAge"
-                value={field.value}
-                onChange={field.onChange}
-                aria-describedby={errors.boneAge ? 'boneAge-error' : undefined}
-                aria-invalid={errors.boneAge ? 'true' : 'false'}
-              />
-            )}
+          <input
+            className={`w-full rounded-lg border ${errors.boneAge ? 'border-error-5' : 'border-grayscale-20'} bg-white px-3 sm:px-4 py-2 sm:py-3 text-sm text-grayscale-90 placeholder:text-grayscale-40 focus:border-primary-5 focus:outline-none focus:ring-1 focus:ring-primary-5 disabled:opacity-70`}
+            disabled={isPending}
+            id="boneAge"
+            type="number"
+            placeholder="Nhập ngày tuổi xương"
+            {...register('boneAge')}
+            aria-describedby={errors.boneAge ? 'boneAge-error' : undefined}
+            aria-invalid={errors.boneAge ? 'true' : 'false'}
           />
           {errors.boneAge && (
             <p className="text-xs sm:text-sm text-error" id="boneAge-error">
