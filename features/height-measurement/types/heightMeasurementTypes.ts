@@ -16,7 +16,7 @@ export interface HeightMeasurementFormData {
   date?: Date | string;
   desiredHeight?: string | number;
   routine?: string;
-  boneAge?: string | Date;
+  boneAge?: string | number;
   pubertyOnsetDate?: string | Date;
 }
 

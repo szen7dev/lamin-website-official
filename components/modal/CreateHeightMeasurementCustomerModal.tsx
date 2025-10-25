@@ -97,7 +97,7 @@ const CreateHeightMeasurementCustomerModal = ({
       gender: data.gender,
       height: Number(data.height),
       weight: Number(data.weight),
-      boneAge: data.boneAge ? new Date(data.boneAge) : '',
+      boneAge: data.boneAge ? Number(data.boneAge) : '',
       pubertyOnsetDate: data.pubertyOnsetDate
         ? new Date(data.pubertyOnsetDate)
         : '',
@@ -275,11 +275,12 @@ const CreateHeightMeasurementCustomerModal = ({
                       Ngày tuổi xương
                     </FormLabel>
                     <FormControl>
-                      <DateInput
-                        className={`w-full rounded-lg border ${form.formState.errors.boneAge ? 'border-error-5' : 'border-grayscale-20'} bg-white px-3 sm:px-4 py-2 sm:py-3 text-sm text-grayscale-90 focus:border-primary-5 focus:outline-none focus:ring-1 focus:ring-primary-5 disabled:opacity-70`}
+                      <Input
+                        className={`w-full rounded-lg border ${form.formState.errors.boneAge ? 'border-error-5' : 'border-grayscale-20'} bg-white px-3 sm:px-4 py-2 sm:py-3 text-sm text-grayscale-90 placeholder:text-grayscale-40 focus:border-primary-5 focus:outline-none focus:ring-1 focus:ring-primary-5 disabled:opacity-70`}
                         disabled={isPending}
-                        value={field.value}
-                        onChange={field.onChange}
+                        type="number"
+                        placeholder="Nhập ngày tuổi xương"
+                        {...field}
                       />
                     </FormControl>
                     <FormMessage />
