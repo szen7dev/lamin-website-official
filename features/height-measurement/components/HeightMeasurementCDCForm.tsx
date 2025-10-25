@@ -428,14 +428,14 @@ export default function HeightMeasurementCDCForm() {
           <label
             className="flex items-center text-xs sm:text-sm text-grayscale-90"
             htmlFor="boneAge">
-            Ngày tuổi xương
+            Tuổi xương thực
           </label>
           <input
             className={`w-full rounded-lg border ${errors.boneAge ? 'border-error-5' : 'border-grayscale-20'} bg-white px-3 sm:px-4 py-2 sm:py-3 text-sm text-grayscale-90 placeholder:text-grayscale-40 focus:border-primary-5 focus:outline-none focus:ring-1 focus:ring-primary-5 disabled:opacity-70`}
             disabled={isPending}
             id="boneAge"
             type="number"
-            placeholder="Nhập ngày tuổi xương"
+            placeholder="Nhập tuổi xương thực"
             {...register('boneAge')}
             aria-describedby={errors.boneAge ? 'boneAge-error' : undefined}
             aria-invalid={errors.boneAge ? 'true' : 'false'}

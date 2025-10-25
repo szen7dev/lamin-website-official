@@ -574,7 +574,7 @@ export default function HeightMeasureHistoryPage() {
                     Cân nặng (kg)
                   </TableHead>
                   <TableHead className="text-white font-medium text-center">
-                    Ngày tuổi xương
+                    Tuổi xương thực
                   </TableHead>
                   <TableHead className="text-white font-medium text-center">
                     Ngày dậy thì

@@ -272,14 +272,14 @@ const CreateHeightMeasurementCustomerModal = ({
                 render={({ field }) => (
                   <FormItem className="space-y-1 sm:space-y-2">
                     <FormLabel className="flex items-center text-xs sm:text-sm text-grayscale-90">
-                      Ngày tuổi xương
+                      Tuổi xương thực
                     </FormLabel>
                     <FormControl>
                       <Input
                         className={`w-full rounded-lg border ${form.formState.errors.boneAge ? 'border-error-5' : 'border-grayscale-20'} bg-white px-3 sm:px-4 py-2 sm:py-3 text-sm text-grayscale-90 placeholder:text-grayscale-40 focus:border-primary-5 focus:outline-none focus:ring-1 focus:ring-primary-5 disabled:opacity-70`}
                         disabled={isPending}
                         type="number"
-                        placeholder="Nhập ngày tuổi xương"
+                        placeholder="Nhập tuổi xương thực"
                         {...field}
                       />
                     </FormControl>
