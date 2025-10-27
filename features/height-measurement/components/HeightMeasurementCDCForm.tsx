@@ -86,8 +86,8 @@ const heightMeasurementSchema = z
     pubertyOnsetDate: z
       .union([z.string(), z.date()])
       .transform(val => {
-        if (typeof val === 'string' && val !== '') {
-          return new Date(val);
+        if (typeof val === 'string') {
+          return val === '' ? undefined : new Date(val);
         }
 
         return val;
@@ -148,7 +148,7 @@ export default function HeightMeasurementCDCForm() {
       gender: '1',
       boneAge: '',
       note: 'Đo chiều cao từ website',
-      pubertyOnsetDate: '',
+      pubertyOnsetDate: undefined,
       parentName: '',
     } as unknown as FormValues,
   });
@@ -353,15 +353,15 @@ export default function HeightMeasurementCDCForm() {
             name="birthDate"
             render={({ field }) => (
               <DateInput
+                aria-describedby={
+                  errors.birthDate ? 'birthDate-error' : undefined
+                }
+                aria-invalid={errors.birthDate ? 'true' : 'false'}
                 className={`w-full rounded-lg border ${errors.birthDate ? 'border-error-5' : 'border-grayscale-20'} bg-white px-3 sm:px-4 py-2 sm:py-3 text-sm text-grayscale-90 focus:border-primary-5 focus:outline-none focus:ring-1 focus:ring-primary-5 disabled:opacity-70`}
                 disabled={isPending}
                 id="birthDate"
                 value={field.value}
                 onChange={field.onChange}
-                aria-describedby={
-                  errors.birthDate ? 'birthDate-error' : undefined
-                }
-                aria-invalid={errors.birthDate ? 'true' : 'false'}
               />
             )}
           />
@@ -434,8 +434,8 @@ export default function HeightMeasurementCDCForm() {
             className={`w-full rounded-lg border ${errors.boneAge ? 'border-error-5' : 'border-grayscale-20'} bg-white px-3 sm:px-4 py-2 sm:py-3 text-sm text-grayscale-90 placeholder:text-grayscale-40 focus:border-primary-5 focus:outline-none focus:ring-1 focus:ring-primary-5 disabled:opacity-70`}
             disabled={isPending}
             id="boneAge"
+            placeholder="Nhập ngày tuổi xương"
             type="number"
-            placeholder="Nhập tuổi xương thực"
             {...register('boneAge')}
             aria-describedby={errors.boneAge ? 'boneAge-error' : undefined}
             aria-invalid={errors.boneAge ? 'true' : 'false'}
@@ -458,15 +458,15 @@ export default function HeightMeasurementCDCForm() {
             name="pubertyOnsetDate"
             render={({ field }) => (
               <DateInput
+                aria-describedby={
+                  errors.pubertyOnsetDate ? 'pubertyOnsetDate-error' : undefined
+                }
+                aria-invalid={errors.pubertyOnsetDate ? 'true' : 'false'}
                 className={`w-full rounded-lg border ${errors.pubertyOnsetDate ? 'border-error-5' : 'border-grayscale-20'} bg-white px-3 sm:px-4 py-2 sm:py-3 text-sm text-grayscale-90 focus:border-primary-5 focus:outline-none focus:ring-1 focus:ring-primary-5 disabled:opacity-70`}
                 disabled={isPending}
                 id="pubertyOnsetDate"
                 value={field.value}
                 onChange={field.onChange}
-                aria-describedby={
-                  errors.pubertyOnsetDate ? 'pubertyOnsetDate-error' : undefined
-                }
-                aria-invalid={errors.pubertyOnsetDate ? 'true' : 'false'}
               />
             )}
           />
