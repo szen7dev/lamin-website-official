@@ -485,6 +485,28 @@ export default function HeightMeasurementResult({
     return { years, months, days };
   };
 
+  // Tính thời gian từ ngày dậy thì
+  const calculateTimeSincePuberty = (pubertyDate: string | Date) => {
+    const today = new Date();
+    const puberty = new Date(pubertyDate);
+
+    if (isNaN(puberty.getTime())) {
+      console.error('Invalid puberty date:', pubertyDate);
+
+      return null;
+    }
+
+    const diffTime = Math.abs(today.getTime() - puberty.getTime());
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    const diffMonths = Math.floor(diffDays / 30);
+
+    if (diffMonths > 0) {
+      return `${diffMonths} tháng`;
+    }
+
+    return `${diffDays} ngày`;
+  };
+
   const age = calculateAge(processedData.birthDate);
 
   return (
@@ -600,6 +622,18 @@ export default function HeightMeasurementResult({
             {processedData.gender === 1 ? 'Nam' : 'Nữ'}), sinh ngày{' '}
             {new Date(processedData.birthDate).toLocaleDateString('vi-VN')} -{' '}
             {age.years} tuổi, {age.months} tháng, {age.days} ngày
+            {response?.boneAge && Number(response.boneAge) > 0 && (
+              <span className="text-red-500">
+                <span className="text-black">.</span> Tuổi xương thực:{' '}
+                {response.boneAge}
+              </span>
+            )}
+            {response?.pubertyOnsetDate && (
+              <span className="text-red-500">
+                <span className="text-black">.</span> Đã dậy thì:{' '}
+                {calculateTimeSincePuberty(response.pubertyOnsetDate)}
+              </span>
+            )}
           </p>
           <p className="border-b border-grayscale-100" id="test-text">
             • Chiều cao:{' '}

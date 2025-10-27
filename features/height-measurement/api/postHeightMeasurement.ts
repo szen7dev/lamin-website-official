@@ -29,6 +29,12 @@ export const postHeightMeasurement = async (
       gender: params.gender,
       height: Number(params.height) || 0,
       weight: Number(params.weight) || 0,
+      boneAge: params.boneAge ? Number(params.boneAge) : undefined,
+      pubertyOnsetDate: params.pubertyOnsetDate
+        ? params.pubertyOnsetDate instanceof Date
+          ? params.pubertyOnsetDate.toISOString()
+          : params.pubertyOnsetDate
+        : undefined,
     };
 
     const response = await apiClient.post('/api/crm/grow_track', queryParams);
