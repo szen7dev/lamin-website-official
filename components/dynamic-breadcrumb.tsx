@@ -23,7 +23,7 @@ const vietnameseTextMap: Record<string, string> = {
   'chuyen-trang-suc-khoe': 'Chuyên trang sức khỏe',
   'he-thong-cua-hang': 'Hệ thống cửa hàng',
   'lien-he': 'Liên hệ',
-  'san-pham': 'Sản phẩm',
+  'san-pham': 'Tất cả sản phẩm',
   'tin-tuc': 'Tin tức',
   'gioi-thieu': 'Giới thiệu',
   'dang-nhap': 'Đăng nhập',
@@ -33,6 +33,10 @@ const vietnameseTextMap: Record<string, string> = {
   'tim-kiem': 'Tìm kiếm',
   'cho-nha-ban-hang': 'Cho nhà bán hàng',
   'do-cao-khach-hang': 'Đo cao khách hàng',
+  'ket-qua-kiem-nghiem': 'Kết quả kiểm nghiệm',
+  'bang-chung-lam-sang-r&d': 'Bảng chứng lâm sàng R&D',
+  'doi-tac': 'Đối tác',
+  'cau-chuyen-thuong-hieu': 'Câu chuyện thương hiệu',
 
   // Sub-sections
   'ket-qua': 'Kết quả',
@@ -53,7 +57,6 @@ const vietnameseTextMap: Record<string, string> = {
 export function DynamicBreadcrumb({ name }: { name?: string }) {
   const pathname = usePathname();
 
-  // Skip rendering breadcrumbs on homepage
   if (pathname === '/') {
     return null;
   }

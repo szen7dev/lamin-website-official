@@ -3,11 +3,11 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { Loader2 } from 'lucide-react';
 
 import { Skeleton } from '@/components/ui/skeleton';
 import { useCart } from '@/hooks';
 import { Button } from '@/components/ui/button';
-import { Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 interface ProductUnit {

@@ -50,8 +50,7 @@ const DonateListPage = () => {
         eventID: '',
         note: '',
       },
-    },
-  );
+    });
 
   const { createFund, isLoading } = useCreateFund();
 
@@ -159,9 +158,8 @@ const DonateListPage = () => {
             <TableRow className="hover:bg-gray-50">
               <TableCell className="py-2 px-4">
                 <Controller
-                  name="date"
                   control={control}
-                  rules={{ required: true }}
+                  name="date"
                   render={({ field }) => (
                     <DateInput
                       className="w-full text-sm min-h-9 sm:min-h-0"
@@ -170,6 +168,7 @@ const DonateListPage = () => {
                       onChange={field.onChange}
                     />
                   )}
+                  rules={{ required: true }}
                 />
               </TableCell>
               <TableCell className="py-2 px-4">

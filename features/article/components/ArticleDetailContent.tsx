@@ -95,8 +95,8 @@ export default function ArticleDetailContent({ article }: { article: any }) {
   };
 
   return (
-    <div className="flex justify-center article-detail-content bg-white rounded-2xl px-4 py-6 sm:px-0 sm:py-0">
-      <div className="max-w-screen-md md:my-6">
+    <div className="article-detail-content bg-white rounded-2xl px-4 py-6 sm:px-0 sm:py-0">
+      <div className="px-6 md:my-6">
         {/* Article Title */}
         <h1 className="mb-4 text-3xl font-medium text-grayscale-90 sm:text-3xl">
           {article?.title}

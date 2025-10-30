@@ -7,9 +7,8 @@ import {
   CircleIcon,
   PointCoinIcon,
   QuestionMarkIcon,
-  SuccessIcon,
 } from '@/components/icons';
-import { formatCurrency, formattedDeliveryDate } from '@/utils/format';
+import { formatCurrency } from '@/utils/format';
 import {
   getPaymentMethodIcon,
   getPaymentMethodText,

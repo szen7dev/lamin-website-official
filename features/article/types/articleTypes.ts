@@ -101,6 +101,7 @@ export interface ArticleListParams {
   menuSlug?: string;
   lastestID?: string;
   option?: number;
+  categoryID?: string;
 }
 
 export interface ArticleProperty {

@@ -3,7 +3,7 @@ import type { Voucher } from '../types/voucherTypes';
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ChevronRight, HelpCircle } from 'lucide-react';
+import { HelpCircle } from 'lucide-react';
 import Image from 'next/image';
 
 import { PromotionModal } from './PromotionModal';

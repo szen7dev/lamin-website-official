@@ -9,7 +9,8 @@ export const getOrderById = async (orderId: string): Promise<Order> => {
   };
   const { data: order } = await apiClient.get<Order>(
     '/api/store/orders',
-    queryParams
+    queryParams,
   );
+
   return order;
 };

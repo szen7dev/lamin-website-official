@@ -58,9 +58,7 @@ export default function SellerLoginPage() {
   const onSubmit = async (data: SellerRegistrationForm) => {
     setIsSubmitting(true);
     try {
-      console.log('Seller registration data:', data);
-      // TODO: Implement actual registration API call
-      await new Promise(resolve => setTimeout(resolve, 2000)); // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 2000));
       alert('Đăng ký thành công!');
     } catch (error) {
       console.error('Registration error:', error);

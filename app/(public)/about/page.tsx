@@ -66,7 +66,7 @@ export default async function AboutPage() {
             {/* Popular Articles */}
             <section
               aria-labelledby="popular-articles"
-              className="mb-6 sm:mb-8 rounded-2xl bg-white shadow-sm">
+              className="mb-6 sm:mb-8 rounded-2xl bg-white shadow-sm border">
               <h2
                 className="mb-3 sm:mb-4 text-lg sm:text-xl font-semibold text-primary p-4 sm:p-6 !pb-0"
                 id="popular-articles">

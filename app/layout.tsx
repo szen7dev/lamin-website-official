@@ -31,7 +31,7 @@ export default function RootLayout({
       <body
         suppressHydrationWarning
         className={clsx(
-          'bg-background text-foreground antialiased',
+          'bg-white text-foreground antialiased',
           fontSans.variable,
         )}>
         <Providers themeProps={{ attribute: 'class', defaultTheme: 'light' }}>

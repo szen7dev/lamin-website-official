@@ -19,7 +19,9 @@ export const useGetGoodsList = (params: GoodsListParams = {}) => {
       !!params.keyword ||
       !!params.categoryID ||
       !!params.menuSlug ||
-      !!params.lastestID,
+      !!params.lastestID ||
+      !!params.usage ||
+      !!params.optionSeller,
   });
 
   return {

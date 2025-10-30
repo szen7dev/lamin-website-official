@@ -1,7 +1,6 @@
 import { Metadata } from 'next';
 
 import { generateMetadata as generateSeoMetadata } from '@/utils/seo';
-import { getGoodsInfoBySlug } from '@/features/product/api/getGoodsInfoBySlug';
 import ProductList from '@/features/product/components/ProductList';
 
 export async function generateMetadata({

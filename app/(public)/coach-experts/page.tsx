@@ -40,7 +40,7 @@ export default function CoachExpertsPage() {
       </section>
 
       {/* Info Grid Section */}
-      <section className="px-20 mb-12 bg-[#eaeffb]">
+      <section className="px-20 mb-12 bg-white">
         <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
           <div className="flex items-start gap-4 p-4">
             <div className="shrink-0">
@@ -58,7 +58,8 @@ export default function CoachExpertsPage() {
                 Giàu kinh nghiệm
               </h3>
               <p className="text-sm text-grayscale-60">
-                Đội ngũ chuyên gia (bác sỹ, dược sỹ) giàu kinh nghiệm trong lĩnh vực chăm sóc sức khỏe chủ động.
+                Đội ngũ chuyên gia (bác sỹ, dược sỹ) giàu kinh nghiệm trong lĩnh
+                vực chăm sóc sức khỏe chủ động.
               </p>
             </div>
           </div>
@@ -79,7 +80,9 @@ export default function CoachExpertsPage() {
                 Nghiệp vụ chuyên môn cao
               </h3>
               <p className="text-sm text-grayscale-60">
-                Các bác sĩ, dược sĩ tập trung chuyên môn sâu với các giải pháp và sản phẩm có nguồn gốc từ dược liệu (đặc biệt là Nam dược-dược liệu quý tại Việt Nam) và vi sinh
+                Các bác sĩ, dược sĩ tập trung chuyên môn sâu với các giải pháp
+                và sản phẩm có nguồn gốc từ dược liệu (đặc biệt là Nam dược-dược
+                liệu quý tại Việt Nam) và vi sinh
               </p>
             </div>
           </div>
@@ -100,7 +103,9 @@ export default function CoachExpertsPage() {
                 Tâm huyết và tận tâm
               </h3>
               <p className="text-sm text-grayscale-60">
-                Phục vụ mà không đặt nặng quyền lợi, chỉ đơn giản là thực sự muốn làm điều tốt nhất cho khách hàng như chính người thân của mình
+                Phục vụ mà không đặt nặng quyền lợi, chỉ đơn giản là thực sự
+                muốn làm điều tốt nhất cho khách hàng như chính người thân của
+                mình
               </p>
             </div>
           </div>

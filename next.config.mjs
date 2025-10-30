@@ -3,9 +3,6 @@ import withBundleAnalyzer from '@next/bundle-analyzer';
 
 const nextConfig = {
   output: 'standalone',
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
   typescript: {
     ignoreBuildErrors: true,
   },
@@ -116,11 +113,6 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'cdn.nhathuoclongchau.com.vn',
       },
-      // Thêm một pattern chung cho tất cả các hostname
-      // {
-      //   protocol: 'https',
-      //   hostname: '**',
-      // },
     ],
   },
 };

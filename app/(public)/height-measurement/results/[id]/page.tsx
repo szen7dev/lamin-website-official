@@ -13,7 +13,7 @@ interface PageProps {
 }
 
 export const metadata: Metadata = generateSeoMetadata({
-  title: 'Lamin-Kết quả đo cao',
+  title: 'Kết quả đo cao',
   description: 'Xem kết quả đo cao và nhận tư vấn về chiều cao',
 });
 
@@ -30,7 +30,7 @@ export default async function HeightMeasurementResultsPage({
   }
 
   return (
-    <div className="min-h-screen bg-background pb-8 sm:pb-12 pt-4 sm:pt-6">
+    <div className="min-h-screen bg-white pb-8 sm:pb-12 pt-4 sm:pt-6">
       <DynamicBreadcrumb />
       <HeightMeasurementResultClient resultId={resultId} />
     </div>

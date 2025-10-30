@@ -44,7 +44,7 @@ export default function ArticleTagList({
           </p>
         </div>
       ) : (
-        <div className="space-y-6 mb-10 bg-[#f1f4fd]">
+        <div className="space-y-6 mb-10 bg-white">
           {articlesTags.map((article, index) => (
             <Link
               key={`${article._id}-${index}`}

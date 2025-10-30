@@ -50,8 +50,7 @@ const DonateHistoryPage = () => {
         eventID: '',
         note: '',
       },
-    },
-  );
+    });
 
   const onSubmit = (data: FundUpsertParams) => {
     createFund({
@@ -149,9 +148,8 @@ const DonateHistoryPage = () => {
             <TableRow className="hover:bg-gray-50">
               <TableCell className="py-2 px-4">
                 <Controller
-                  name="date"
                   control={control}
-                  rules={{ required: true }}
+                  name="date"
                   render={({ field }) => (
                     <DateInput
                       className="w-full text-sm min-h-9 sm:min-h-0"
@@ -160,6 +158,7 @@ const DonateHistoryPage = () => {
                       onChange={field.onChange}
                     />
                   )}
+                  rules={{ required: true }}
                 />
               </TableCell>
               <TableCell className="py-2 px-4">

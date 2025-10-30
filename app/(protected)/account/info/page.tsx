@@ -266,9 +266,8 @@ export default function PersonalInfoPage() {
               Ngày sinh
             </label>
             <Controller
-              name="birthDay"
               control={control}
-              rules={{ required: true }}
+              name="birthDay"
               render={({ field }) => (
                 <DateInput
                   className={`px-3 py-2 border rounded-md ${errors.birthDay ? 'border-red-500' : ''}`}
@@ -277,6 +276,7 @@ export default function PersonalInfoPage() {
                   onChange={field.onChange}
                 />
               )}
+              rules={{ required: true }}
             />
             {errors.birthDay && (
               <p className="text-sm text-red-500">{errors.birthDay.message}</p>

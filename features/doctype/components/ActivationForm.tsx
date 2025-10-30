@@ -88,7 +88,8 @@ const ActivationForm = ({
           <div>
             <p className="text-3xl text-white">KÍCH HOẠT ĐIỆN TỬ</p>
             <p className="text-xl text-[#DCDFEA]">
-              Kênh chăm sóc khách hàng chính thức của Lamin giúp Lamin chăm sóc khách hàng được tốt hơn
+              Kênh chăm sóc khách hàng chính thức của Lamin giúp Lamin chăm sóc
+              khách hàng được tốt hơn
             </p>
           </div>
         </div>
@@ -110,7 +111,8 @@ const ActivationForm = ({
               </svg>
             </div>
             <p className="text-gray-700 text-base">
-              1 điểm tích tích lũy (đủ 5 điểm tặng 01 hộp LaminGrow cho đơn tiếp theo)
+              1 điểm tích tích lũy (đủ 5 điểm tặng 01 hộp LaminGrow cho đơn tiếp
+              theo)
             </p>
           </div>
           <div className="flex items-start gap-3 mb-4">

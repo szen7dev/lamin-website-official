@@ -30,7 +30,7 @@ export default function ProductDetail({
   isLoading,
 }: ProductDetailProps) {
   return (
-    <div className="min-h-screen bg-background pb-8 sm:pb-12 pt-4 sm:pt-6">
+    <div className="min-h-screen bg-white pb-8 sm:pb-12 pt-4 sm:pt-6">
       <div className="container mx-auto sm:px-4">
         {/* Breadcrumb */}
         <nav aria-label="Breadcrumb">

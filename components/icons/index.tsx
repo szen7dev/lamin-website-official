@@ -81,9 +81,9 @@ export const UserIcon: React.FC<IconSvgProps> = ({
 );
 
 export const SearchIcon: React.FC<IconSvgProps> = ({
-  size,
-  width,
-  height,
+  size = '18',
+  width = '18',
+  height = '18',
   ...props
 }) => (
   <svg
@@ -92,14 +92,29 @@ export const SearchIcon: React.FC<IconSvgProps> = ({
     viewBox="0 0 18 18"
     width={width || size}
     xmlns="http://www.w3.org/2000/svg"
+    xmlnsXlink="http://www.w3.org/1999/xlink"
     {...props}>
-    <path
-      d="M16.5 16.5L11.5 11.5M1.5 7.33333C1.5 8.09938 1.65088 8.85792 1.94404 9.56565C2.23719 10.2734 2.66687 10.9164 3.20854 11.4581C3.75022 11.9998 4.39328 12.4295 5.10101 12.7226C5.80875 13.0158 6.56729 13.1667 7.33333 13.1667C8.09938 13.1667 8.85792 13.0158 9.56565 12.7226C10.2734 12.4295 10.9164 11.9998 11.4581 11.4581C11.9998 10.9164 12.4295 10.2734 12.7226 9.56565C13.0158 8.85792 13.1667 8.09938 13.1667 7.33333C13.1667 6.56729 13.0158 5.80875 12.7226 5.10101C12.4295 4.39328 11.9998 3.75022 11.4581 3.20854C10.9164 2.66687 10.2734 2.23719 9.56565 1.94404C8.85792 1.65088 8.09938 1.5 7.33333 1.5C6.56729 1.5 5.80875 1.65088 5.10101 1.94404C4.39328 2.23719 3.75022 2.66687 3.20854 3.20854C2.66687 3.75022 2.23719 4.39328 1.94404 5.10101C1.65088 5.80875 1.5 6.56729 1.5 7.33333Z"
-      stroke="currentColor"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth="1.5"
+    <rect
+      fill="url(#pattern0_7633_35113)"
+      height={height || size}
+      width={width || size}
     />
+    <defs>
+      <pattern
+        height="1"
+        id="pattern0_7633_35113"
+        patternContentUnits="objectBoundingBox"
+        width="1">
+        <use transform="scale(0.01)" xlinkHref="#image0_7633_35113" />
+      </pattern>
+      <image
+        height="100"
+        id="image0_7633_35113"
+        preserveAspectRatio="none"
+        width="100"
+        xlinkHref="data:image/png;base64,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"
+      />
+    </defs>
   </svg>
 );
 export const QRCodeImg: React.FC<IconSvgProps> = ({
@@ -265,6 +280,27 @@ export const ZaloIcon: React.FC<IconSvgProps> = ({
     <path
       d="M27.804 21.517L27.8747 21.4399C27.9116 22.8408 27.7602 24.3026 27.0727 25.5493C26.2732 27.0122 24.823 28.0984 23.1918 28.4463C22.277 28.6354 21.3383 28.6772 20.4062 28.6656C17.5391 28.6667 14.6718 28.6656 11.8047 28.6667C10.9802 28.6531 10.1538 28.6917 9.33181 28.6487C8.46325 27.6285 7.45331 26.7414 6.56674 25.7395C5.94298 25.078 5.28789 24.4479 4.67383 23.7775C5.88115 23.8771 7.09735 23.6367 8.19989 23.1466C10.3562 24.5521 12.9189 25.2161 15.4616 25.4348C18.0043 25.6283 20.5953 25.3627 23.0144 24.5385C24.8094 23.9128 26.5269 22.9458 27.804 21.517Z"
       fill="#005BE0"
+    />
+  </svg>
+);
+
+export const MessengerIcon: React.FC<IconSvgProps> = ({
+  size,
+  width = '29',
+  height = '28',
+  ...props
+}) => (
+  <svg
+    fill="none"
+    height={height || size}
+    viewBox="0 0 28 29"
+    width={width || size}
+    xmlns="http://www.w3.org/2000/svg"
+    {...props}>
+    <circle cx="14" cy="14.5" fill="#0084FF" r="14" />
+    <path
+      d="M14 7.5C10.13 7.5 7 10.39 7 14C7 15.82 7.84 17.44 9.16 18.57V21.5L11.96 19.9C12.61 20.07 13.29 20.16 14 20.16C17.87 20.16 21 17.27 21 13.66C21 10.05 17.87 7.16 14 7.16V7.5ZM15.12 16.08L13.31 14.13L9.76 16.08L13.67 11.92L15.54 13.87L19.03 11.92L15.12 16.08Z"
+      fill="white"
     />
   </svg>
 );
@@ -1317,6 +1353,252 @@ export const PersonGroupIcon: React.FC<IconSvgProps> = ({
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth="2"
+    />
+  </svg>
+);
+
+export const LocationIcon: React.FC<IconSvgProps> = ({
+  size = '18',
+  width = '18',
+  height = '18',
+  ...props
+}) => (
+  <svg
+    fill="none"
+    height={height || size}
+    viewBox="0 0 18 18"
+    width={width || size}
+    xmlns="http://www.w3.org/2000/svg"
+    xmlnsXlink="http://www.w3.org/1999/xlink"
+    {...props}>
+    <rect
+      fill="url(#pattern0_7633_35116)"
+      height={height || size}
+      width={width || size}
+    />
+    <defs>
+      <pattern
+        height="1"
+        id="pattern0_7633_35116"
+        patternContentUnits="objectBoundingBox"
+        width="1">
+        <use transform="scale(0.01)" xlinkHref="#image0_7633_35116" />
+      </pattern>
+      <image
+        height="100"
+        id="image0_7633_35116"
+        preserveAspectRatio="none"
+        width="100"
+        xlinkHref="data:image/png;base64,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"
+      />
+    </defs>
+  </svg>
+);
+
+export const UserLoginIcon: React.FC<IconSvgProps> = ({
+  size = '19',
+  width = '19',
+  height = '19',
+  ...props
+}) => (
+  <svg
+    fill="none"
+    height={height || size}
+    viewBox="0 0 19 19"
+    width={width || size}
+    xmlns="http://www.w3.org/2000/svg"
+    {...props}>
+    <path
+      d="M9.08789 18.1758C14.0713 18.1758 18.1846 14.0625 18.1846 9.08789C18.1846 4.11328 14.0625 0 9.0791 0C4.10449 0 0 4.11328 0 9.08789C0 14.0625 4.11328 18.1758 9.08789 18.1758ZM9.0791 10.5205C7.35645 10.5117 6.02051 9.07031 6.02051 7.16309C6.00293 5.37012 7.36523 3.87598 9.0791 3.87598C10.793 3.87598 12.1377 5.37012 12.1377 7.16309C12.1377 9.07031 10.8018 10.5381 9.0791 10.5205ZM9.0791 16.6729C7.11035 16.6729 5.01855 15.8555 3.69141 14.4316C4.70215 12.9199 6.70605 12.041 9.0791 12.041C11.4258 12.041 13.4473 12.9023 14.4668 14.4316C13.1396 15.8555 11.0479 16.6729 9.0791 16.6729Z"
+      fill="#0052A4"
+    />
+  </svg>
+);
+
+export const WhiteCartIcon: React.FC<IconSvgProps> = ({
+  size = '16',
+  width = '16',
+  height = '18',
+  ...props
+}) => (
+  <svg
+    fill="none"
+    height={height || size}
+    viewBox="0 0 18 16"
+    width={width || size}
+    xmlns="http://www.w3.org/2000/svg"
+    {...props}>
+    <path
+      d="M0 0.715681C0 1.10742 0.331473 1.4389 0.708147 1.4389H3.06613L4.23382 9.40932C4.39955 10.5469 5.00223 11.24 6.15485 11.24H14.9238C15.2779 11.24 15.6018 10.9612 15.6018 10.5619C15.6018 10.1702 15.2779 9.89146 14.9238 9.89146H6.32812C5.96652 9.89146 5.74051 9.64286 5.68778 9.25865L5.56724 8.47517H14.9841C16.1367 8.47517 16.7469 7.77455 16.9127 6.62946L17.4777 2.85519C17.4927 2.75725 17.5078 2.62919 17.5078 2.54632C17.5078 2.10184 17.1989 1.8005 16.6791 1.8005H4.61049L4.48996 0.986886C4.39202 0.331473 4.12835 0 3.29213 0H0.708147C0.331473 0 0 0.331473 0 0.715681ZM5.45424 13.7034C5.45424 14.4342 6.04185 15.0218 6.7726 15.0218C7.50335 15.0218 8.09096 14.4342 8.09096 13.7034C8.09096 12.9727 7.50335 12.385 6.7726 12.385C6.04185 12.385 5.45424 12.9727 5.45424 13.7034ZM12.4076 13.7034C12.4076 14.4342 13.0028 15.0218 13.7335 15.0218C14.4643 15.0218 15.0444 14.4342 15.0444 13.7034C15.0444 12.9727 14.4643 12.385 13.7335 12.385C13.0028 12.385 12.4076 12.9727 12.4076 13.7034Z"
+      fill="#FCFCFD"
+    />
+  </svg>
+);
+
+export const WhiteFacebookIcon: React.FC<IconSvgProps> = ({
+  size = '20',
+  width = '11',
+  height = '20',
+  ...props
+}) => (
+  <svg
+    fill="none"
+    height={height || size}
+    viewBox="0 0 11 20"
+    width={width || size}
+    xmlns="http://www.w3.org/2000/svg"
+    {...props}>
+    <path
+      d="M7.09024 4.50662V7.32632H10.5773L10.0252 11.1246H7.09024V19.8757C6.5018 19.9574 5.89977 20 5.28867 20C4.58327 20 3.89056 19.9438 3.21599 19.8349V11.1246H0V7.32632H3.21599V3.8763C3.21599 1.7359 4.95047 0 7.09115 0V0.00181567C7.09749 0.00181567 7.10293 0 7.10928 0H10.5782V3.28497H8.31154C7.63787 3.28497 7.09115 3.83186 7.09115 4.50572L7.09024 4.50662Z"
+      fill="#FCFCFD"
+    />
+  </svg>
+);
+
+export const WhiteTiktokIcon: React.FC<IconSvgProps> = ({
+  size = '20',
+  width = '18',
+  height = '20',
+  ...props
+}) => (
+  <svg
+    fill="none"
+    height={height || size}
+    viewBox="0 0 18 20"
+    width={width || size}
+    xmlns="http://www.w3.org/2000/svg"
+    {...props}>
+    <path
+      d="M17.3229 4.84268V8.28984C16.7206 8.231 15.938 8.09415 15.0723 7.77693C13.9419 7.3625 13.1005 6.79586 12.5494 6.35712V13.3244L12.5353 13.3026C12.5443 13.4408 12.5494 13.5815 12.5494 13.7235C12.5494 17.1834 9.73491 20 6.27469 20C2.81447 20 0 17.1834 0 13.7235C0 10.2635 2.81447 7.44564 6.27469 7.44564C6.61355 7.44564 6.94603 7.4725 7.27082 7.52494V10.9222C6.95881 10.8109 6.62378 10.7508 6.27469 10.7508C4.63665 10.7508 3.30294 12.0837 3.30294 13.7235C3.30294 15.3633 4.63665 16.6961 6.27469 16.6961C7.91274 16.6961 9.24644 15.362 9.24644 13.7235C9.24644 13.6621 9.24517 13.6007 9.24133 13.5393V0H12.6849C12.6977 0.291635 12.7092 0.585833 12.722 0.877468C12.745 1.45178 12.9496 2.00307 13.3064 2.45459C13.7245 2.98542 14.3422 3.60194 15.2091 4.0944C16.0211 4.55359 16.7832 4.75185 17.3229 4.84523V4.84268Z"
+      fill="#FCFCFD"
+    />
+  </svg>
+);
+
+export const WhiteYoutubeIcon: React.FC<IconSvgProps> = ({
+  size = '20',
+  width = '21',
+  height = '14',
+  ...props
+}) => (
+  <svg
+    fill="none"
+    height={height || size}
+    viewBox="0 0 21 14"
+    width={width || size}
+    xmlns="http://www.w3.org/2000/svg"
+    {...props}>
+    <path
+      d="M19.9025 3.75301C19.7792 2.56259 19.5139 1.24663 18.5374 0.555059C17.781 0.0187623 16.7869 -0.00106412 15.8589 3.71011e-05C13.8971 3.71011e-05 11.9341 0.00334508 9.97234 0.0044463C8.0854 0.00664875 6.19845 0.00774863 4.31151 0.00995108C3.52326 0.00995108 2.75703 -0.0506176 2.02493 0.290762C1.39632 0.583688 0.904216 1.14091 0.608073 1.7609C0.197437 2.62316 0.111571 3.59995 0.0620306 4.55361C-0.0293442 6.29024 -0.0194361 8.03127 0.0895531 9.7668C0.169919 11.0332 0.373582 12.4329 1.35228 13.2401C2.21979 13.9548 3.44399 13.99 4.56911 13.9911C8.14044 13.9944 11.7129 13.9977 15.2853 13.9999C15.7433 14.001 16.2211 13.9922 16.6878 13.9416C17.606 13.8424 18.4812 13.5792 19.0713 12.8987C19.6669 12.2126 19.8199 11.2579 19.9102 10.3538C20.1304 8.16012 20.1282 5.94555 19.9025 3.75301ZM7.90705 10.0752V3.92481L13.231 6.99942L7.90705 10.0752Z"
+      fill="#FCFCFD"
+    />
+  </svg>
+);
+
+export const VerifyIcon: React.FC<IconSvgProps> = ({
+  size = '20',
+  width = '21',
+  height = '14',
+  ...props
+}) => (
+  <svg
+    fill="none"
+    height="24"
+    viewBox="0 0 24 24"
+    width="24"
+    xmlns="http://www.w3.org/2000/svg"
+    xmlnsXlink="http://www.w3.org/1999/xlink"
+    {...props}>
+    <rect fill="url(#pattern0_7660_35310)" height="24" width="24" />
+    <defs>
+      <pattern
+        height="1"
+        id="pattern0_7660_35310"
+        patternContentUnits="objectBoundingBox"
+        width="1">
+        <use transform="scale(0.0104167)" xlinkHref="#image0_7660_35310" />
+      </pattern>
+      <image
+        height="96"
+        id="image0_7660_35310"
+        preserveAspectRatio="none"
+        width="96"
+        xlinkHref="data:image/png;base64,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"
+      />
+    </defs>
+  </svg>
+);
+
+export const BasketIcon: React.FC<IconSvgProps> = ({
+  size = '20',
+  width = '21',
+  height = '14',
+  ...props
+}) => (
+  <svg
+    fill="none"
+    height="24"
+    viewBox="0 0 24 24"
+    width="24"
+    xmlns="http://www.w3.org/2000/svg"
+    xmlnsXlink="http://www.w3.org/1999/xlink"
+    {...props}>
+    <rect fill="url(#pattern0_8442_37628)" height="24" width="24" />
+    <defs>
+      <pattern
+        height="1"
+        id="pattern0_8442_37628"
+        patternContentUnits="objectBoundingBox"
+        width="1">
+        <use transform="scale(0.01)" xlinkHref="#image0_8442_37628" />
+      </pattern>
+      <image
+        height="100"
+        id="image0_8442_37628"
+        preserveAspectRatio="none"
+        width="100"
+        xlinkHref="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAAACXBIWXMAAAsTAAALEwEAmpwYAAAEtklEQVR4nO2cbeieUxzHz2aeF4Uhy/JQEktieSh7hUbLljKMRlliXnhBLBPJyDz8i0x4My22hIySrJR5gRoKjWi8IMoiMQ/zsP0/Ov+dF4v97/O77+u6zvld5/w+dd7d9+98f+d73ec+13lyzjAMwzAMwzAMwxADTAEWAk8BzwDXAwfKIxitAewLvMr/+Qw4Jre+6gAeZXLeA6bl1lgNwPnAOINZkVtnFQCHAl8T52/gzNx6iwd4DjmfAgfk1lwswKUMzwO5dRcJcCSwbQRDdgFzc+svDuA1RucrYHruHIoBuIHmrM6dRxEAJwDbWzDED5Mvyp1PrwH2Ad4RNvg/gs9844fNufPqLcAKoRnrgNuFn12bO69eApwO/CVo4O+Aw4CpwNtCUy7LnV+vAPYHPhH+L1y8x/eOF/7f/AAclTfLHgE8InzSH9/Ld5cJv/tKnux6BnAesFPQoF/u7d0irJG8LjRlSZ4sewIwPTS0ZER19oA4M4GfBHF+BmalzbJHsHvVT8I9glhLhLHe9L+qNBn2iLAUK+FDv1oojPmiKCLc1H2GPQKYAXwvaLgdwKlDxD1CGPd34KRus+wRwEvCJ/nmEWIvEMZ+188MuNoBlnbd1wNrhXUsdzUDHAf80vVoCPmy75/Aaa5GwlTHW8In9+pEGyM8HwH7udoAbhOa8XKLdT4hrPM+VxPAKWHEFGObX7ptsd6DgC+avngWhe8OQrcQYxyY30H95wqnZj73BrrSAVYh40kFGh5zWvDT02FIurzFcq/w6dwFrGy57j3L3WEjnUTH/S3XvXTobhi4CvhN+BQZw/MrsFhqxhzhU2w0Y6doqyvwbMOKDDnx9f0wm2qk4X2JIRsTiTHgDYkhd+VWWRF3Sgw5K7fKipgjnfT7MRLoD+ADKwwqvo1iW5GmRg0JpjwvMMROu06CPyQUViEHsX6YgNcR5wJxwMoALhS037XDBJwpWDt4qNOsegzwcKTtxoc+ug1siQT9uLOMeo5vm9bbDhhr3WVjdIB5tNkPGq2MFGJDt3UNqzGGQTCNIh9LG80BbhV0W3ZbQiqA2QJD7E6RlISDkoPYlFRQ7QBrIob4telDcuusBuAKQbe1wFUA8EKknJNCxOFh9wW135JAnEWphGyOCNnqKgBFhvg9UjFOdIWDIkPmCsQsc4WDIkOmhTMag9jgCgcthgQxGyJitksPY/YVlBlyo0BQ0Te3ocwQf/wsxkpXMGgyJAjaGhG02RUMCg1ZHRHkXyBnuEJBoSGXCERd6QoFhYYcHI4OD2KNKxS0GRJEbYqI+rbUy1xQasgdAmGzXYGg1JAzBMJucQWCUkOmCK783ugKBI2GBGH+WtZB7NB2xpvdC0jqGTW5awSx5zlFULghRws2Y485RVCyIcINxVucIqjAkAcF8ZOdWHJmyMT9U2pwZsjEdeCxVcRkuNoNCUk+jRKcGTKR5LGCw41JcLJ7shY1LDHGmtbRyJCQ6GLhXYad4hKg9k19khfF2LR8p7g0efbDEA9wctiZEtt22gkuTY79MeQ/b/GXh8M+q1IVlya3/hlSMpghujBDlGGGKMMMUYYZogwzRBlmiDLMEGWYIcowQ5RhhjhdpDDkX5asfYCaALryAAAAAElFTkSuQmCC"
+      />
+    </defs>
+  </svg>
+);
+
+export const HexagonIcon: React.FC<IconSvgProps> = ({
+  size = '20',
+  width = '21',
+  height = '14',
+  ...props
+}) => (
+  <svg
+    width="110"
+    height="127"
+    viewBox="0 0 110 127"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    {...props}>
+    <path
+      d="M0 31.4503L27.1233 15.7257C42.0913 7.11218 54.5479 0.00103994 54.9498 0.00103994C55.4521 -0.099117 68.0091 7.01202 110 31.4503V95.5507L99.653 101.56C94.0274 104.765 85.79 109.573 81.3699 112.077C76.9498 114.681 71.1233 117.986 68.3105 119.488C65.5982 121.091 61.4795 123.394 55.2511 127L0.502283 95.5507L0 31.4503Z"
+      fill="#FCFDFD"
+    />
+  </svg>
+);
+
+export const BlueShop: React.FC<IconSvgProps> = ({
+  size = '20',
+  width = '21',
+  height = '14',
+  ...props
+}) => (
+  <svg
+    width="18"
+    height="18"
+    viewBox="0 0 18 18"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    {...props}>
+    <path
+      d="M12.0195 9.0498C12.7833 9.84303 13.8269 10.3496 15.0371 10.3496C15.4606 10.3496 15.8642 10.2862 16.2432 10.1699V14.3994C16.2432 16.3877 14.6225 18 12.623 18H5.38184C3.38247 17.9998 1.76172 16.3876 1.76172 14.3994V10.1699C2.14084 10.2862 2.54504 10.3496 2.96875 10.3496C4.17892 10.3496 5.22164 9.843 5.98535 9.0498C6.7491 9.84303 7.79269 10.3496 9.00293 10.3496C10.213 10.3495 11.2558 9.84297 12.0195 9.0498ZM6.62305 12.9131C6.29719 12.7288 5.88266 12.842 5.69727 13.166C5.5119 13.49 5.62534 13.9026 5.95117 14.0869C7.0553 14.7115 8.00477 15.0771 9.00488 15.0752C10.0037 15.0733 10.9511 14.7044 12.0508 14.0879C12.3774 13.9048 12.4937 13.4927 12.3096 13.168C12.1255 12.8433 11.7113 12.7291 11.3848 12.9121C10.3554 13.4892 9.65289 13.7234 9.00195 13.7246C8.35242 13.7257 7.65107 13.4946 6.62305 12.9131ZM13.3164 0C14.9613 0 16.4409 1.12062 17.0518 2.8291L17.7373 4.74707C17.945 5.32787 18.089 5.95012 17.9375 6.54785C17.5787 7.96329 16.4144 9 15.0342 9C13.368 8.99984 12.0176 7.48889 12.0176 5.625C12.0176 7.48899 10.6663 9 9 9C7.33392 8.99977 5.9834 7.48884 5.9834 5.625C5.9834 7.48881 4.63284 8.99972 2.9668 9C1.58654 9 0.422324 7.96327 0.0634766 6.54785C-0.0879963 5.95012 0.0550208 5.32787 0.262695 4.74707L0.949219 2.8291C1.56012 1.12062 3.03967 0 4.68457 0H13.3164Z"
+      fill="#0052A4"
     />
   </svg>
 );
