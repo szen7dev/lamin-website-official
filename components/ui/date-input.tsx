@@ -1,7 +1,6 @@
 'use client';
 
 import * as React from 'react';
-import { format } from 'date-fns';
 import { Calendar as CalendarIcon } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
@@ -19,7 +18,17 @@ export interface DateInputProps
 }
 
 const DateInput = React.forwardRef<HTMLInputElement, DateInputProps>(
-  ({ className, value, onChange, disabled, placeholder = 'dd/mm/yyyy', ...props }, ref) => {
+  (
+    {
+      className,
+      value,
+      onChange,
+      disabled,
+      placeholder = 'dd/mm/yyyy',
+      ...props
+    },
+    ref,
+  ) => {
     const [displayValue, setDisplayValue] = React.useState('');
     const [selectedDate, setSelectedDate] = React.useState<Date | undefined>();
     const [month, setMonth] = React.useState<Date | undefined>();
@@ -31,6 +40,7 @@ const DateInput = React.forwardRef<HTMLInputElement, DateInputProps>(
         setDisplayValue('');
         setSelectedDate(undefined);
         setMonth(undefined);
+
         return;
       }
 
@@ -42,6 +52,7 @@ const DateInput = React.forwardRef<HTMLInputElement, DateInputProps>(
         const day = String(dateObj.getDate()).padStart(2, '0');
         const month = String(dateObj.getMonth() + 1).padStart(2, '0');
         const year = dateObj.getFullYear();
+
         setDisplayValue(`${day}/${month}/${year}`);
       }
     }, [value]);
@@ -69,6 +80,7 @@ const DateInput = React.forwardRef<HTMLInputElement, DateInputProps>(
       // Parse and validate the date when complete
       if (input.length === 10) {
         const parts = input.split('/');
+
         if (parts.length === 3) {
           const day = parseInt(parts[0], 10);
           const month = parseInt(parts[1], 10);
@@ -94,7 +106,9 @@ const DateInput = React.forwardRef<HTMLInputElement, DateInputProps>(
               setSelectedDate(dateObj);
               setMonth(dateObj);
               const isoDate = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+
               onChange?.(isoDate);
+
               return;
             }
           }
@@ -115,6 +129,7 @@ const DateInput = React.forwardRef<HTMLInputElement, DateInputProps>(
         const month = String(date.getMonth() + 1).padStart(2, '0');
         const day = String(date.getDate()).padStart(2, '0');
         const isoDate = `${year}-${month}-${day}`;
+
         setDisplayValue(`${day}/${month}/${year}`);
         onChange?.(isoDate);
       } else {
@@ -128,20 +143,20 @@ const DateInput = React.forwardRef<HTMLInputElement, DateInputProps>(
       <div className="relative">
         <input
           ref={ref}
-          type="text"
           className={cn(className)}
+          disabled={disabled}
+          placeholder={placeholder}
+          type="text"
           value={displayValue}
           onChange={handleInputChange}
-          placeholder={placeholder}
-          disabled={disabled}
           {...props}
         />
         <Popover open={isOpen} onOpenChange={setIsOpen}>
           <PopoverTrigger asChild>
             <button
-              type="button"
               className="absolute right-3 top-1/2 -translate-y-1/2 text-grayscale-40 hover:text-grayscale-90 transition-colors disabled:opacity-50"
               disabled={disabled}
+              type="button"
               onClick={() => setIsOpen(!isOpen)}>
               <CalendarIcon className="h-4 w-4" />
             </button>

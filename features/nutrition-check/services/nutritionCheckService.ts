@@ -11,7 +11,6 @@ export class NutritionCheckRealService implements NutritionCheckService {
     data: NutritionCheckFormData,
   ): Promise<NutritionCheckResult> {
     try {
-
       // Chuyển đổi dữ liệu form sang định dạng API theo tài liệu
       const apiData = {
         optionSeller: DEFAULT_OPTION_SELLER,

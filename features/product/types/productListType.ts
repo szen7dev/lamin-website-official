@@ -1,4 +1,3 @@
-import { Thumbnail } from '@/types';
 import { ComboProduct } from '@/features/homepage/types/comboTypes';
 
 export interface Product extends ComboProduct {}

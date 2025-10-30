@@ -48,7 +48,7 @@ export default function MegaMenuColumn({
             <Link
               key={product.id}
               className="flex items-center gap-3 rounded-lg bg-white p-3 shadow-02 transition-shadow hover:shadow-md decoration-transparent"
-              href={menuTypeConfig.getLevel3Url(product.slug)}
+              href={menuTypeConfig.getUrl(product.slug)}
               style={{ textDecoration: 'none' }}>
               <Image
                 alt={product.name}

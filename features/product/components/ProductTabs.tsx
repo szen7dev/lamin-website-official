@@ -274,7 +274,9 @@ export default function ProductTabs({ product }: ProductTabsProps) {
                   Cách dùng {product.name}
                 </h2>
                 <p
-                  dangerouslySetInnerHTML={{ __html: product.instructions || '' }}
+                  dangerouslySetInnerHTML={{
+                    __html: product.instructions || '',
+                  }}
                   className="mb-2 text-gray-700"
                 />
               </section>

@@ -70,7 +70,7 @@ export default function MegaMenuItem({
       onMouseLeave={handleMouseLeave}>
       <Link
         className={cn(
-          'flex items-center gap-1 text-[15px] font-medium text-grayscale-90 hover:text-primary-50 decoration-transparent',
+          'flex items-center gap-1 text-[14px] lg:text-[15px] font-medium text-grayscale-90 hover:text-primary-50 decoration-transparent whitespace-nowrap',
           isActive && 'text-primary-50',
         )}
         href={href}

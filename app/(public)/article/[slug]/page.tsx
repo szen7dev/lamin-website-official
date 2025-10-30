@@ -135,8 +135,11 @@ export default async function ArticleDetailPage({
 }: {
   params: { slug: string };
 }) {
+  const resolvedParams = await Promise.resolve(params);
+  const { slug } = resolvedParams;
+
   const article = await getArticleDetail({
-    slug: params.slug,
+    slug,
     populates: {
       path: 'author category thumbnail userUpdate position tags name',
       select: '_id name fullname image path size note position slug',

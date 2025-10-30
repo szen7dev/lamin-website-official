@@ -13,6 +13,7 @@ export interface Config {
   hotline3: string;
   youtube: string;
   facebook: string;
+  tiktok: string;
   zalo: string;
   modifyAt: string;
   createAt: string;

@@ -12,7 +12,7 @@ export const getTrustedStore = async (
     const queryParams = {
       optionSeller: DEFAULT_OPTION_SELLER,
       select:
-        params.select || 'name sign location address rating numberOfRating',
+        params.select || 'name sign location address rating numberOfRating phone',
       option: 1,
       ...(params.populates && {
         populates: Array.isArray(params.populates)

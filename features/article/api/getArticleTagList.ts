@@ -21,6 +21,7 @@ export const getArticleTagList = async (
       ...(params.lastestID && { lastestID: params.lastestID }),
       ...(params.limit !== undefined && { limit: params.limit }),
       ...(params.option !== undefined && { option: params.option }),
+      ...(params.categoryID && { categoryID: params.categoryID }),
     };
 
     const { data: articles, pagination } = await apiClient.get<Article[]>(

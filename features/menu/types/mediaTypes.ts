@@ -60,13 +60,11 @@ export type MediaMenuResponse =
 
 export enum MenuItemType {
   CATEGORY = 1,
-  HEALTH_NEWS = 2,
+  NEWS = 2,
   DEFAULT = 3,
 }
 
 export interface MenuItemTypeConfig {
   hasContentArea: boolean;
-  getLevel1Url?: (slug: string) => string;
-  getLevel2Url: (slug: string) => string;
-  getLevel3Url: (slug: string) => string;
+  getUrl: (slug: string, level?: number, type?: number) => string;
 }

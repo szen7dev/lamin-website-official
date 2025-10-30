@@ -15,17 +15,12 @@ export async function generateMetadata({
   params: { slug: string };
 }): Promise<Metadata> {
   const { slug } = await Promise.resolve(params);
-
-  // Format the slug for display (convert hyphens to spaces and capitalize)
-  const formattedTag = slug
-    .split('-')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ');
+  const menuInfo = await getMenuBySlug({ slug });
 
   return generateSeoMetadata({
-    title: `${formattedTag} - Bài viết sức khỏe`,
-    description: `Khám phá các bài viết về chủ đề ${formattedTag} tại Elela. Cập nhật thông tin mới nhất về sức khỏe và dinh dưỡng.`,
-    keywords: ['sức khỏe', formattedTag, 'bài viết', 'tư vấn sức khỏe'],
+    title: `${menuInfo.name}`,
+    description: `Khám phá các bài viết về chủ đề ${menuInfo.name} tại Elela. Cập nhật thông tin mới nhất về sức khỏe và dinh dưỡng.`,
+    keywords: ['sức khỏe', menuInfo.name, 'bài viết', 'tư vấn sức khỏe'],
   });
 }
 

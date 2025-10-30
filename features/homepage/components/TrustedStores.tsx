@@ -1,18 +1,12 @@
 'use client';
 
 import Link from 'next/link';
-import { Star, ChevronRight, AlertCircle } from 'lucide-react';
+import { ChevronRight, AlertCircle } from 'lucide-react';
 
 import { useGetTrustedStore } from '../hooks/stores/useGetTrustedStore';
 
 import { Button } from '@/components/ui/button';
-import {
-  ClockIcon,
-  PillIcon,
-  ShieldIcon,
-  StoreIcon,
-  CarIcon,
-} from '@/components/icons';
+import { ClockIcon, PillIcon, ShieldIcon, CarIcon } from '@/components/icons';
 
 const benefits = [
   {
@@ -124,7 +118,7 @@ export default function TrustedStores() {
       ) : error ? (
         renderError()
       ) : (
-        <section></section>
+        <section />
         // <section
         //   aria-labelledby="trusted-stores-heading"
         //   className="sm:rounded-2xl bg-gradient-primary p-3 sm:p-4 md:p-6">

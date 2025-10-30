@@ -7,9 +7,7 @@ import {
   getPaymentMethodText,
 } from '@/features/checkout/utils/paymentMethods';
 import { useOrder } from '@/contexts/OrderContext';
-import { SuccessIcon } from '@/components/icons';
 import { useGetOrderById } from '@/features/checkout/hooks/useGetOrderById';
-import { formattedDeliveryDate } from '@/utils';
 
 export default function CheckoutSuccessPage() {
   const router = useRouter();

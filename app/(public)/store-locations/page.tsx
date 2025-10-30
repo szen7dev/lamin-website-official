@@ -2,16 +2,25 @@ import type { Metadata } from 'next';
 
 import { Suspense } from 'react';
 
+import StoreLocationsClient from './client';
+
 import { DynamicBreadcrumb } from '@/components/dynamic-breadcrumb';
 import { generateMetadata as generateSeoMetadata } from '@/utils/seo';
-import StoreList from '@/features/trusted-shop/components/StoreList';
 import Loading from '@/app/loading';
 
 export function generateMetadata(): Metadata {
   return generateSeoMetadata({
     title: 'Hệ thống cửa hàng trên toàn quốc',
-    description: 'Hệ thống cửa hàng trên toàn quốc',
-    keywords: ['cửa hàng', 'dịch vụ', 'vị trí'],
+    description:
+      'Tìm kiếm hệ thống nhà thuốc Lamin trên toàn quốc. Hotline 24/7 hỗ trợ tư vấn, mở cửa từ 8h-22h kể cả CN và lễ tết.',
+    keywords: [
+      'cửa hàng',
+      'nhà thuốc',
+      'hệ thống cửa hàng',
+      'Lamin',
+      'vị trí cửa hàng',
+      'hotline',
+    ],
   });
 }
 
@@ -23,18 +32,8 @@ export default function StoreLocationsPage() {
         <DynamicBreadcrumb />
       </div>
 
-      {/* Banner Section */}
-      <section className="container mx-auto mb-12">
-        <div className="flex items-center gap-2 mb-6">
-          <div className="h-6 w-1 bg-primary" />
-          <h2 className="text-lg font-semibold text-black">
-            Hệ thống cửa hàng trên toàn quốc
-          </h2>
-        </div>
-      </section>
-
       <Suspense fallback={<Loading />}>
-        <StoreList />
+        <StoreLocationsClient />
       </Suspense>
     </section>
   );

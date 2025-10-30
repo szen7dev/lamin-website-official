@@ -3,7 +3,6 @@
 import type React from 'react';
 
 import { useEffect, useRef, useState } from 'react';
-import Image from 'next/image';
 import { AlertCircle } from 'lucide-react';
 
 interface OTPVerificationProps {

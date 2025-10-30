@@ -1,51 +1,54 @@
-'use client';
-
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { useGetMediasHomepage } from '../hooks/banner/useGetMediasHomepage';
+interface SimpleBannerProps {
+  blogHref: string;
+}
 
-import { apiClient } from '@/services/api/apiClient';
-import { Skeleton } from '@/components/ui/skeleton';
-
-export default function SimpleBanner() {
-  const { banners, isLoading } = useGetMediasHomepage({
-    type: 1,
-    limit: 1,
-  });
-
-  const banner = banners && banners.length > 0 ? banners[0] : null;
-  const bannerLink = banner?.slug ? banner.slug : '#';
-
-  const BannerComponent = () => (
-    <div className="w-full">
-      <Image
-        priority
-        alt={banner?.name || 'Hero Banner'}
-        blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwMCIgaGVpZ2h0PSI0MDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmVyc2lvbj0iMS4xIi8+"
-        className="w-full object-cover md:h-auto h-[172px]"
-        height={400}
-        loading="eager"
-        placeholder="blur"
-        quality={80}
-        sizes="(max-width: 640px) 95vw, (max-width: 768px) 90vw, (max-width: 1536px) 90vw, 1200px"
-        src={apiClient.getFileUrl(banner?.thumbnail?.path || '')}
-        width={1200}
-      />
-    </div>
-  );
-
+export default function SimpleBanner({ blogHref }: SimpleBannerProps) {
   return (
-    <section className="w-full bg-background">
-      {isLoading ? (
-        <Skeleton className="w-full h-[400px] md:h-[300px]" />
-      ) : bannerLink && bannerLink !== '#' ? (
-        <Link href={bannerLink}>
-          <BannerComponent />
-        </Link>
-      ) : (
-        <BannerComponent />
-      )}
+    <section className="w-full bg-[#00ADED] overflow-hidden">
+      <div className="container mx-auto px-4 py-12 md:py-16 lg:py-20">
+        <div className="flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-16 max-w-[1440px] mx-auto">
+          {/* Left Content */}
+          <div className="flex-shrink-0 text-white text-center max-w-[600px] w-full mx-auto">
+            <h1 className="text-3xl md:text-4xl lg:text-[42px] xl:text-[48px] font-bold mb-6 leading-[1.5] lg:leading-[1.4] text-center">
+              TẬN TÂM KIẾN TẠO CHIỀU CAO CHÍNH TRỰC NUÔI DƯỠNG TƯƠNG LAI
+            </h1>
+
+            <p className="text-base md:text-lg mb-8 leading-relaxed text-center">
+              LaminGrow tin rằng mọi trẻ em xứng đáng phát triển chiều cao khoa
+              học, tự nhiên và đúng thời điểm. Không chạy theo hiệu quả tức thì,
+              Lamin kiên định cá nhân hoá giải pháp, kết hợp với vi chất – hành
+              vi – công nghệ, đồng hành minh bạch và tận tâm cùng phụ huynh.
+            </p>
+
+            <div className="flex justify-center">
+              <Link
+                className="inline-block bg-[#FF8C00] hover:bg-[#FF7A00] text-white font-semibold px-8 py-3 rounded-lg transition-colors duration-200 text-base md:text-lg"
+                href={blogHref}>
+                Tìm giải pháp cho con tôi
+              </Link>
+            </div>
+          </div>
+
+          {/* Right Image */}
+          <div className="flex-shrink-0 w-full max-w-[500px] lg:max-w-[600px]">
+            <Image
+              priority
+              alt="Lamin Family"
+              className="w-full h-auto"
+              height={500}
+              loading="eager"
+              quality={90}
+              sizes="(max-width: 768px) 100vw, (max-width: 1440px) 600px, 600px"
+              src="/images/hero-image.png"
+              style={{ height: 'auto' }}
+              width={600}
+            />
+          </div>
+        </div>
+      </div>
     </section>
   );
 }

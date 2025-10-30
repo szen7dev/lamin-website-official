@@ -45,9 +45,7 @@ export default function SellerLoginPage() {
   const onSubmit = async (data: SellerRegistrationForm) => {
     setIsSubmitting(true);
     try {
-      console.log('Seller login data:', data);
-      // TODO: Implement actual login API call
-      await new Promise(resolve => setTimeout(resolve, 2000)); // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 2000));
 
       router.push('/seller/');
     } catch (error) {

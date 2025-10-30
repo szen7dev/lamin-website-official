@@ -1,31 +1,26 @@
-'use client'; ////
+'use client';
 
 import Link from 'next/link';
 import Image from 'next/image';
-import {
-  ChevronDown,
-  Download,
-  LogOut,
-  Menu,
-  Phone,
-  ShoppingCart,
-  User,
-  X,
-} from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { ChevronDown, Download, LogOut, Phone } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
-import SearchBar from '@/features/search/components/SearchBar';
 import MegaMenu from '@/features/menu/components/MegaMenu';
-import { CartDropdown } from '@/features/cart/components/cart-dropdown/CartDropdown';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { useCart } from '@/features/cart/contexts/CartContext';
 import { EmailLoginModal } from '@/components/modal/EmailLoginModal';
 import { useContactInfo } from '@/hooks/useContactInfo';
-import { CartIcon, UserIcon } from '@/components/icons';
+import {
+  WhiteFacebookIcon,
+  WhiteTiktokIcon,
+  WhiteYoutubeIcon,
+  SearchIcon,
+  LocationIcon,
+  UserLoginIcon,
+  WhiteCartIcon,
+} from '@/components/icons';
 // import { useGetSearchKeywordList } from '@/features/search/hooks/keyword/useGetSearchKeywordList';
-import { useUpdateSearchKeyword } from '@/features/search/hooks/keyword/useUpdateSearchKeyword';
 import { useAuth } from '@/hooks/useAuth';
 import { apiClient } from '@/services/api/apiClient';
 import {
@@ -37,22 +32,11 @@ import {
 } from '@/components/ui/dropdown-menu';
 
 export function Header() {
-  // Get top search keywords
-  // const { keywords } = useGetSearchKeywordList();
-
-  // Update keyword popularity when user searches
-  const router = useRouter();
-  const { updateKeyword } = useUpdateSearchKeyword();
-
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  // Add a state for controlling the login modal visibility
-  const [loginModalOpen, setLoginModalOpen] = useState(false);
   const [emailLoginModalOpen, setEmailLoginModalOpen] = useState(false);
   const isMobile = useMediaQuery('(max-width: 768px)');
   const { totalItems } = useCart();
   const { user, isAuthenticated, logout } = useAuth();
-
-  const [selectedKeyword, setSelectedKeyword] = useState('');
 
   // Inside the Header component, add the hook call before the return statement
   const { data: contactInfo, isLoading: isContactInfoLoading } =
@@ -60,16 +44,23 @@ export function Header() {
 
   const getHotline = () => {
     if (isContactInfoLoading) return 'Đang tải...';
-    if (
-      contactInfo &&
-      Array.isArray(contactInfo) &&
-      contactInfo.length > 0 &&
-      contactInfo[0]?.hotline1
-    ) {
-      return contactInfo[0].hotline1;
+    if (contactInfo?.hotline1) {
+      return contactInfo.hotline1;
     }
 
-    return '1800646970'; //
+    return '1800.646.970';
+  };
+
+  const getFacebookLink = () => {
+    return contactInfo?.facebook || '#';
+  };
+
+  const getTiktokLink = () => {
+    return contactInfo?.tiktok || '#';
+  };
+
+  const getYoutubeLink = () => {
+    return contactInfo?.youtube || '#';
   };
 
   // Close mobile menu when screen size changes to desktop
@@ -82,15 +73,6 @@ export function Header() {
   // Handle logout
   const handleLogout = async () => {
     await logout();
-  };
-
-  // const handleClickKeyword = (keyword: string) => {
-  //   setSelectedKeyword(keyword);
-  //   updateKeyword(keyword);
-  // };
-
-  const handleClearSearch = () => {
-    setSelectedKeyword('');
   };
 
   const handleLoginModalOpen = () => {
@@ -171,264 +153,209 @@ export function Header() {
     </DropdownMenu>
   );
 
-  // Mobile user profile component
-  const MobileUserProfile = () => (
-    <Button
-      className="rounded-full bg-primary-blue px-4 text-white hover:bg-primary-blue/90 text-xs h-8"
-      variant="default"
-      onClick={() => setMobileMenuOpen(true)}>
-      <div className="flex items-center gap-2">
-        <div className="relative h-5 w-5 overflow-hidden rounded-full bg-gray-200">
-          <Image
-            fill
-            alt={user?.name || 'User'}
-            className="object-cover"
-            sizes="20px"
-            src={
-              user?.image
-                ? apiClient.getUserImageUrl(user.image)
-                : '/images/default-avatar.png'
-            }
-          />
-        </div>
-        <span className="font-medium">
-          {user?.fullname?.split(' ').pop() ||
-            user?.name?.split(' ').pop() ||
-            'Tài khoản'}
-        </span>
-      </div>
-    </Button>
-  );
-
-  const redirectForSeller = () => {
-    router.push('/auth/login/seller');
-  };
-
   return (
     <header className="w-full bg-gradient-primary">
-      {/* Top Bar */}
-      <div className="container mx-auto px-4 py-2">
-        <div className="flex flex-col md:flex-row md:justify-between md:gap-8 max-w-screen-2xl mx-auto">
-          <div className="flex flex-col grow justify-between md:h-auto max-w-full md:max-w-[calc(100%-160px)]">
-            {/* Top Row with Logo, Actions and Auth */}
-            <div className="flex flex-col space-y-4 sm:flex-row sm:space-y-0 h-max items-start sm:items-center justify-between">
-              {/* Mobile Menu Button and Logo - Only visible on small screens */}
-              {/* <div className="flex w-full justify-between items-center sm:hidden"> */}
-              <div className="grid grid-cols-3 items-center w-full sm:hidden">
-                <button
-                  aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
-                  className="col-span-1 text-white"
-                  onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
-                  {mobileMenuOpen ? (
-                    <X className="h-7 w-7" />
-                  ) : (
-                    <Menu className="h-7 w-7" />
-                  )}
-                </button>
-                <Link
-                  aria-label="Lamin"
-                  className="col-span-1 mx-auto flex items-end gap-2"
-                  href="/">
-                  <Image
-                    alt="Logo"
-                    className="h-20 w-auto"
-                    height={80}
-                    src="/images/KhaiTruongWinggo.svg"
-                    style={{ width: 'auto' }}
-                    width={80}
-                  />
-                </Link>
-                <div className="col-span-1 ml-auto flex gap-2">
-                  <div className=" relative p-1 bg-primary-50 w-10 h-10 flex items-center justify-center rounded-full">
-                    {/* <CartIcon
-                      className="text-grayscale-5"
-                      fill="#F9F9FB"
-                      height={23}
-                      width={23}
-                    />
-                    {totalItems > 0 && (
-                      <span className="absolute left-6 top-2 flex h-3 w-3 items-center justify-center rounded-full bg-[#F37021] font-bold text-white text-[8px]">
-                        {totalItems}
-                      </span>
-                    )} */}
-
-                    <div
-                      className={`relative ${totalItems > 0 ? 'group' : ''}`}>
-                      <Link
-                        aria-label="Giỏ hàng"
-                        className="hover:no-underline h-10 w-10 flex items-center justify-center gap-2 rounded-full bg-primary px-3 md:px-6 py-2 text-white hover:bg-primary/70 text-xs md:text-sm relative"
-                        href="/cart">
-                        <CartIcon
-                          className="text-grayscale-5"
-                          fill="#F9F9FB"
-                          height={23}
-                          width={23}
-                        />
-                        {totalItems > 0 && (
-                          <span className="absolute left-6 top-2 flex h-3 w-3 items-center justify-center rounded-full bg-[#F37021] font-bold text-white text-[8px]">
-                            {totalItems}
-                          </span>
-                        )}
-                      </Link>
-                    </div>
-                  </div>
-                  <div className="rounded-sm p-1 bg-white w-10 h-10 relative overflow-hidden">
-                    <Image
-                      alt="QR Code"
-                      className="object-contain absolute inset-0"
-                      height={40}
-                      loading="lazy"
-                      priority={false}
-                      sizes="40px"
-                      src="/images/qrCode.jpg"
-                      width={40}
-                      onError={e => {
-                        const target = e.target as HTMLImageElement;
-
-                        target.onerror = null;
-                        target.src = '/images/fallback-qr.png';
-                      }}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex items-center sm:flex justify-items-start gap-4 flex-shrink-0">
-                {/* Logo */}
-                <Link
-                  aria-label="Lamin"
-                  className="flex items-end gap-2"
-                  href="/">
-                  <Image
-                    alt="Logo"
-                    className="h-20 w-auto hidden sm:block"
-                    height={40}
-                    src="/images/KhaiTruongWinggo.svg"
-                    style={{ width: 'auto' }}
-                    width={40}
-                  />
-                </Link>
-
-                {/* Contact and Download - Hidden on mobile, visible on medium screens */}
-                <div className="hidden md:flex items-end gap-4 ml-4 text-sm">
-                  <div className="flex items-end gap-2">
-                    <Phone className="h-5 w-5 text-white" />
-                    <div className="text-white">
-                      <span className="mr-1">Tư vấn ngay:</span>
-                      <span className="font-normal">{getHotline()}</span>
-                    </div>
-                  </div>
-                  {/* <div className="h-5">
-                    <Separator
-                      className="h-full bg-white"
-                      orientation="vertical"
-                    />
-                  </div> */}
-                  {/* <div className="flex items-end gap-2 text-white">
-                    <PhoneIcon height={20} width={12} />
-                    <span>Tải ứng dụng</span>
-                  </div> */}
-                </div>
-              </div>
-
-              {/* Auth and Cart */}
-              <div className="hidden sm:flex items-center gap-2 md:gap-4 mt-4 sm:mt-0 flex-shrink-0 ml-auto">
-                {/* Conditionally show user profile or login button */}
-                {isAuthenticated ? (
-                  <UserProfile />
-                ) : (
-                  <Button
-                    className="rounded-full bg-white px-3 md:px-6 text-primary hover:bg-white/90 text-xs md:text-sm"
-                    variant="secondary"
-                    onClick={() => setEmailLoginModalOpen(true)}>
-                    <UserIcon height={24} width={24} />
-                    <span className="font-medium">Đăng Nhập</span>
-                  </Button>
-                )}
-
-                <CartButton />
-              </div>
+      {/* Mobile Top Bar - Promotional Banner */}
+      <div className="md:hidden bg-[#0052A4]">
+        <div className="container mx-auto px-4">
+          {/* Promo Text Row */}
+          {/* <div className="flex items-center justify-between py-3 border-b border-white/10">
+            <div className="flex items-center gap-2 text-white text-sm font-medium flex-1">
+              <span>Chương trình Kích hoạt điện tử nhận quà</span>
             </div>
+            <Link
+              className="underline hover:text-white/80 text-white text-sm font-medium flex-shrink-0 ml-2"
+              href="/activate-product">
+              XEM THÊM
+            </Link>
+          </div> */}
 
-            {/* Search Bar Section */}
-            <div className="flex gap-4 sm:py-3 sm:mt-0 w-full">
-              <div className="w-full max-w-4xl">
-                <SearchBar
-                  selectedKeyword={selectedKeyword}
-                  onClearSearch={handleClearSearch}
-                />
-              </div>
-            </div>
+          {/* Hotline and Social Media Row */}
+          <div className="flex items-center justify-between py-3">
+            {/* Hotline */}
+            <Link
+              className="flex items-center gap-2 text-white text-sm font-medium"
+              href={`tel:${getHotline()}`}>
+              <Phone className="h-5 w-5" />
+              <span>Hotline: {getHotline()}</span>
+            </Link>
 
-            {/* <div
-              className={`flex flex-wrap gap-x-4 gap-y-1 pb-1 ${isMobile ? 'pt-3' : ''}`}>
-              <span className="text-sm text-white/80">Tìm kiếm phổ biến:</span>
-              {keywords?.map(keyword => (
-                <button
-                  key={keyword._id}
-                  className="text-sm text-white decoration-white underline underline-offset-4 hover:text-white/90"
-                  onClick={() => handleClickKeyword(keyword.keyword)}>
-                  {keyword.keyword}
-                </button>
-              ))}
-            </div> */}
-          </div>
-
-          {/* QR Code Section - Hidden on mobile */}
-          <div className="hidden md:flex w-[143px] flex-shrink-0 flex-col items-center justify-center rounded-xl bg-[#B33F00] self-center h-fit ml-auto border border-white/30 shadow-md">
-            <div className="text-center text-white p-1">
-              <div className="text-sm font-bold leading-tight py-1 tracking-tight">
-                Quan tâm Zalo OA Trung tâm CSKH Lamin
-              </div>
-            </div>
-            <div className="bg-white p-1 rounded-b-xl w-full flex items-center justify-center relative overflow-hidden">
-              <Image
-                priority
-                alt="QR Code Zalo OA"
-                blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOTAiIGhlaWdodD0iOTAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjkwIiBoZWlnaHQ9IjkwIiBmaWxsPSIjZjFmMWYxIi8+PC9zdmc+"
-                className="object-contain w-[90px] h-[90px]"
-                height={90}
-                placeholder="blur"
-                sizes="90px"
-                src="/images/qrCode.jpg"
-                width={90}
-                onError={e => {
-                  const target = e.currentTarget;
-
-                  target.onerror = null;
-                  target.src = '/images/fallback-qr.png';
-                }}
-              />
+            {/* Social Media Links */}
+            <div className="flex items-center gap-2">
+              <Link
+                aria-label="Facebook"
+                className="flex items-center justify-center w-9 h-9 rounded-full border-2 border-white hover:bg-white/10 transition-all"
+                href={getFacebookLink()}
+                rel="noopener noreferrer"
+                target="_blank">
+                <WhiteFacebookIcon height={18} width={18} />
+              </Link>
+              <Link
+                aria-label="Tiktok"
+                className="flex items-center justify-center w-9 h-9 rounded-full border-2 border-white hover:bg-white/10 transition-all"
+                href={getTiktokLink()}
+                rel="noopener noreferrer"
+                target="_blank">
+                <WhiteTiktokIcon height={18} width={18} />
+              </Link>
+              <Link
+                aria-label="Youtube"
+                className="flex items-center justify-center w-9 h-9 rounded-full border-2 border-white hover:bg-white/10 transition-all"
+                href={getYoutubeLink()}
+                rel="noopener noreferrer"
+                target="_blank">
+                <WhiteYoutubeIcon height={18} width={18} />
+              </Link>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Mobile Auth and Cart - Only visible on small screens */}
-      <div className="hidden justify-between items-center px-4 py-2 bg-white/10">
-        {/* Conditionally show mobile user profile or login button */}
-        {isAuthenticated ? (
-          <MobileUserProfile />
-        ) : (
-          <Button
-            className="rounded-full bg-white px-4 text-primary hover:bg-white/90 text-xs h-8"
-            variant="secondary"
-            onClick={() => setLoginModalOpen(true)}>
-            <User className="mr-1 h-3 w-3" />
-            <span className="font-medium">Đăng Nhập</span>
-          </Button>
-        )}
-        <Link
-          className="flex items-center gap-2 rounded-full bg-primary px-4 py-1 text-white hover:bg-primary/90 text-xs h-8 relative"
-          href="/cart">
-          <ShoppingCart className="mr-1 h-3 w-3" />
-          <span className="font-medium">Giỏ Hàng</span>
-          {totalItems > 0 && (
-            <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-error-5 text-xs font-bold text-white">
-              {totalItems}
-            </span>
-          )}
-        </Link>
+      {/* Desktop Top Bar - Hotline and Social Media */}
+      <div className="hidden md:block bg-[#0052A4] border-b border-white/10">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-between py-2 max-w-[1440px] mx-auto">
+            {/* Hotline */}
+            <div className="flex items-center gap-2 text-white text-xs lg:text-sm">
+              <Phone className="h-4 w-4" />
+              <span>Hotline: {getHotline()}</span>
+            </div>
+
+            {/* Promo Text */}
+            {/* <div className="flex items-center gap-2 text-white text-xs lg:text-sm font-bold">
+              <span>Chương trình Kích hoạt điện tử nhận quà</span>
+              <Link
+                className="underline hover:text-white/80 text-white"
+                href="/activate-product">
+                XEM THÊM
+              </Link>
+            </div> */}
+
+            {/* Social Media Links */}
+            <div className="flex items-center gap-2 lg:gap-3">
+              <Link
+                aria-label="Facebook"
+                className="flex items-center justify-center w-8 h-8 rounded-full border-2 border-white hover:bg-white/10 transition-all"
+                href={getFacebookLink()}
+                rel="noopener noreferrer"
+                target="_blank">
+                <WhiteFacebookIcon height={16} width={16} />
+              </Link>
+              <Link
+                aria-label="Tiktok"
+                className="flex items-center justify-center w-8 h-8 rounded-full border-2 border-white hover:bg-white/10 transition-all"
+                href={getTiktokLink()}
+                rel="noopener noreferrer"
+                target="_blank">
+                <WhiteTiktokIcon height={16} width={16} />
+              </Link>
+              <Link
+                aria-label="Youtube"
+                className="flex items-center justify-center w-8 h-8 rounded-full border-2 border-white hover:bg-white/10 transition-all"
+                href={getYoutubeLink()}
+                rel="noopener noreferrer"
+                target="_blank">
+                <WhiteYoutubeIcon height={16} width={16} />
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Header with Menu */}
+      <div className="bg-white border-b">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-between max-w-[1440px] mx-auto py-3 md:py-2 lg:py-3">
+            {/* Logo */}
+            <Link
+              aria-label="Lamin"
+              className="flex items-center flex-shrink-0"
+              href="/">
+              <Image
+                alt="Logo"
+                className="h-8 md:h-7 w-auto"
+                height={40}
+                src="/images/LogoLamin_Blue.webp"
+                style={{ width: 'auto' }}
+                width={80}
+              />
+            </Link>
+
+            {/* Desktop Navigation Menu */}
+            <div className="hidden md:block flex-1 mx-4 lg:mx-6 xl:mx-8">
+              <MegaMenu />
+            </div>
+
+            {/* Icon Buttons */}
+            <div className="flex items-center gap-2 md:gap-3 lg:gap-4 flex-shrink-0">
+              {/* Search Icon */}
+              {/* <button
+                aria-label="Search"
+                className="text-primary hover:opacity-80 transition-opacity p-1">
+                <SearchIcon />
+              </button> */}
+
+              {/* Location Icon */}
+              <Link
+                aria-label="Store Locations"
+                className="text-primary hover:opacity-80 transition-opacity p-1"
+                href="/he-thong-cua-hang">
+                <LocationIcon />
+              </Link>
+
+              {/* Login Icon */}
+              {isAuthenticated ? (
+                <div className="hidden md:block">
+                  <UserProfile />
+                </div>
+              ) : (
+                <button
+                  aria-label="Login"
+                  className="text-primary hover:opacity-80 transition-opacity p-1"
+                  onClick={() => setEmailLoginModalOpen(true)}>
+                  <UserLoginIcon />
+                </button>
+              )}
+
+              {/* Cart Icon with Badge */}
+              <Link
+                aria-label="Cart"
+                className="relative hover:opacity-90 transition-opacity"
+                href="/cart">
+                <div className="bg-primary rounded-full w-12 h-12 md:w-auto md:h-auto md:px-4 md:py-2 flex items-center justify-center md:justify-start md:gap-2">
+                  <WhiteCartIcon />
+                  <span className="hidden md:inline text-white font-medium text-xs lg:text-sm">
+                    Giỏ Hàng
+                  </span>
+                  {totalItems > 0 && (
+                    <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-[#F37021] text-xs font-bold text-white">
+                      {totalItems}
+                    </span>
+                  )}
+                </div>
+              </Link>
+
+              {/* Mobile Menu Button - visible on mobile only */}
+              <button
+                aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
+                className="md:hidden bg-primary rounded-full w-12 h-12 flex items-center justify-center text-white hover:opacity-90 transition-opacity"
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+                <svg
+                  className="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  viewBox="0 0 24 24">
+                  <line x1="3" x2="21" y1="12" y2="12" />
+                  <line x1="3" x2="21" y1="6" y2="6" />
+                  <line x1="3" x2="21" y1="18" y2="18" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Navigation Menu - Toggle on Mobile */}
@@ -444,41 +371,23 @@ export function Header() {
       {/* Mobile Navigation - Now using transform and transitions instead of conditional rendering */}
       <nav
         aria-label="Mobile Navigation"
-        className={`fixed w-[80vw] h-[100vh] flex flex-col justify-between top-0 left-0 bottom-0 z-50 border-t border-white/10 bg-white transform transition-transform duration-300 ease-in-out ${
+        className={`fixed w-[80vw] h-[100vh] flex flex-col justify-between top-0 left-0 bottom-0 z-50 bg-white transform transition-transform duration-300 ease-in-out ${
           mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
         }`}>
-        <div className="">
-          <div className="bg-primary-50 flex justify-between container">
-            <Link aria-label="Lamin" className="col-span-1" href="/">
-              <Image
-                alt="Logo"
-                className="h-20 w-auto"
-                height={80}
-                src="/images/KhaiTruongWinggo.svg"
-                style={{ width: 'auto' }}
-                width={80}
-              />
-            </Link>
-            <button
-              aria-label="Close menu"
-              className="col-span-1 text-white"
-              onClick={() => setMobileMenuOpen(false)}>
-              <X className="h-7 w-7" />
-            </button>
-          </div>
+        <div>
           <div className="container bg-gradient-primary py-3">
             {isAuthenticated ? (
               <UserProfile />
             ) : (
               <>
-                <p className="text-grayscale-5 text-base font-normal mb-3">
-                  Đăng nhập để hưởng những đặc quyền dành riêng cho thành viên
-                </p>
                 <Button
                   className="rounded-full bg-white px-3 md:px-6 text-primary hover:bg-white/90 text-xs md:text-sm"
                   variant="secondary"
                   onClick={handleLoginModalOpen}>
-                  <span className="font-medium text-sm">Đăng Nhập</span>
+                  <UserLoginIcon />
+                  <span className="font-medium text-sm">
+                    Đăng Nhập - Đăng Ký
+                  </span>
                 </Button>
               </>
             )}
@@ -507,86 +416,10 @@ export function Header() {
         </div>
       </nav>
 
-      {/* Desktop Navigation */}
-      <nav
-        aria-label="Desktop Navigation"
-        className={`hidden md:block flex-col justify-between top-0 bottom-0 z-50 border-t border-white/10 bg-white w-full`}>
-        <div className="container mx-auto px-4">
-          <div className="max-w-screen-2xl mx-auto">
-            <MegaMenu />
-          </div>
-        </div>
-      </nav>
-
-      {/* Login Modal */}
-      {/* <LoginModal
-        isOpen={loginModalOpen}
-        onClose={() => setLoginModalOpen(false)}
-        onLoginForSeller={() => redirectForSeller()}
-      /> */}
       <EmailLoginModal
         open={emailLoginModalOpen}
         onOpenChange={() => setEmailLoginModalOpen(false)}
       />
     </header>
-  );
-}
-
-function CartButton() {
-  const {
-    totalItems,
-    isCartDropdownVisible,
-    cartAnimationFlag,
-    showCartDropdown,
-    hideCartDropdown,
-  } = useCart();
-
-  const debounceTimer = useRef<NodeJS.Timeout | null>(null);
-
-  const handleMouseEnter = () => {
-    if (debounceTimer.current) {
-      clearTimeout(debounceTimer.current);
-    }
-
-    showCartDropdown();
-  };
-
-  const handleMouseLeave = () => {
-    if (debounceTimer.current) {
-      clearTimeout(debounceTimer.current);
-    }
-
-    debounceTimer.current = setTimeout(() => {
-      hideCartDropdown();
-    }, 300);
-  };
-
-  return (
-    <div
-      className="relative"
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}>
-      <Link
-        className="hover:no-underline h-10 flex items-center gap-2 rounded-full bg-primary px-3 md:px-6 py-2 text-white hover:bg-primary/70 text-xs md:text-sm border border-white"
-        href="/cart">
-        <CartIcon height={15} width={17} />
-        <span className="font-medium">Giỏ Hàng</span>
-        {totalItems > 0 && (
-          <span className="absolute left-8 top-1 flex h-4 w-4 items-center justify-center rounded-full bg-error-30 text-xs font-bold text-white">
-            {totalItems}
-          </span>
-        )}
-      </Link>
-
-      {/* Dropdown content */}
-      {isCartDropdownVisible && totalItems > 0 && (
-        <div
-          className={`absolute right-0 top-full z-50 mt-1 w-[400px] p-0 bg-white rounded-md shadow-lg transition-all duration-300 ${
-            cartAnimationFlag ? 'opacity-100 visible' : 'opacity-0 invisible'
-          }`}>
-          <CartDropdown />
-        </div>
-      )}
-    </div>
   );
 }

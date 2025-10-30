@@ -110,8 +110,6 @@ const AddContactModal = ({
 
     createContactMutate(params, {
       onSuccess: data => {
-        console.log('Contact created successfully:', data);
-
         if (metadata?.callback) {
           metadata.callback(data);
         }
