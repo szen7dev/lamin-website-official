@@ -57,7 +57,7 @@ export default function VideoWithSponsors() {
                 allowFullScreen
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 className="absolute left-0 top-0 h-full w-full"
-                src="https://www.youtube.com/embed/ndvkCjB_KNw"
+                src="https://www.youtube.com/embed/oi17t9sGxzk"
                 title="Hành trình tăng chiều cao của bé sử dụng LaminGrow"
               />
             </div>
