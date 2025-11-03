@@ -69,7 +69,7 @@ export default function ProductDetail({
         </section>
 
         {/* FAQ Section */}
-        <section className="mt-12 bg-white p-6 rounded-none sm:rounded-lg">
+        {/* <section className="mt-12 bg-white p-6 rounded-none sm:rounded-lg">
           <h2 className="text-xl font-bold text-grayscale-90 mb-6">
             Câu hỏi thường gặp
           </h2>
@@ -78,15 +78,15 @@ export default function ProductDetail({
             product={adaptedProduct}
             questions={questionList}
           />
-        </section>
+        </section> */}
 
         {/* Related Products Section */}
-        <section className="mt-12 bg-white p-6 rounded-none sm:rounded-lg ">
+        {/* <section className="mt-12 bg-white p-6 rounded-none sm:rounded-lg ">
           <h2 className="text-xl font-bold text-grayscale-90">
             Sản phẩm liên quan
           </h2>
           <RelatedProducts products={relatedProductList} />
-        </section>
+        </section> */}
 
         {/* Reviews Section */}
         <section className="mt-12 bg-white p-6 rounded-lg">
