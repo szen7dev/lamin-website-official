@@ -66,7 +66,7 @@ export default function TestimonialsSection() {
               className="group block cursor-pointer no-underline decoration-transparent transition-all duration-300 hover:no-underline"
               href={`/bai-viet/${testimonial.slug}`}>
               {/* Image */}
-              <div className="relative h-64 w-full overflow-hidden rounded-3xl bg-gray-200 sm:h-72">
+              <div className="relative aspect-[6/4] w-full overflow-hidden rounded-3xl bg-gray-200">
                 {testimonial.thumbnail?.path ? (
                   <Image
                     fill

@@ -45,7 +45,7 @@ export default function ArticleProperty() {
                     <Link
                       className="decoration-transparent block"
                       href={`/bai-viet/${post.slug}`}>
-                      <div className="aspect-video overflow-hidden rounded-lg mb-3">
+                      <div className="aspect-[6/4] overflow-hidden rounded-lg mb-3">
                         <Image
                           alt={post.title}
                           className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-105"
@@ -107,7 +107,7 @@ export default function ArticleProperty() {
                 <Link
                   className="decoration-transparent block"
                   href={`/bai-viet/${post.slug}`}>
-                  <div className="relative aspect-video overflow-hidden rounded-lg mb-3">
+                  <div className="relative aspect-[6/4] overflow-hidden rounded-lg mb-3">
                     <div className="absolute top-0 left-0 bg-gray-100 text-gray-700 text-xs font-medium px-2 py-1 rounded-br-lg z-10">
                       Dinh dưỡng
                     </div>

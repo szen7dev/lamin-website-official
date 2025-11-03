@@ -166,6 +166,14 @@ export function Footer() {
               </div>
               {aboutUs?.map(item => renderFooterLink(item))}
               {aboutUs?.map(item => renderMobileFooterLink(item, 'about'))}
+              <Image
+                alt="Logo Lamin"
+                className="h-12 w-auto"
+                height={48}
+                src="/images/bo-cong-thuong.png"
+                style={{ width: 'auto' }}
+                width={120}
+              />
             </div>
 
             {/* Policies Column */}

@@ -36,7 +36,7 @@ export default function ScientificEvidence() {
             <Link
               href={`/bai-viet/${article.slug}`}
               key={index}
-              className="group relative aspect-[4/3] w-full overflow-visible cursor-pointer">
+              className="group relative aspect-[6/4] w-full overflow-visible cursor-pointer">
               <div className="absolute inset-0 rounded-lg overflow-hidden">
                 <Image
                   fill
