@@ -272,20 +272,25 @@ export default function BrandingStoryClient() {
                 <li className="flex items-start">
                   <span className="mr-2">•</span>
                   <span>
-                    Nghiên cứu cận lâm sàng tại Đại học Y Dược - Đại học Quốc
-                    gia Hà Nội
+                    Nghiên cứu cận lâm sàng tại Glanbia (2019)
                   </span>
                 </li>
                 <li className="flex items-start">
                   <span className="mr-2">•</span>
                   <span>
-                    Công bố trên Tạp chí Y Dược Cổ Truyền Việt Nam (2019)
+                    Nghiên cứu độ ổn định được Công bố trên tạp chí Molecules 24.5 (2019)
                   </span>
                 </li>
                 <li className="flex items-start">
                   <span className="mr-2">•</span>
                   <span>
-                    Được thẩm định bởi các chuyên gia hàng đầu trong lĩnh vực
+                    Nghiên cứu cận lâm sàng và lâm sàng được Công bố trên tạp chí Biol Trace Elem Res (2007)
+                  </span>
+                </li>
+                <li className="flex items-start">
+                  <span className="mr-2">•</span>
+                  <span>
+                    Nghiên cứu cận lâm sàng tại Viện Công nghệ sinh học - Viện Hàn Lâm Khoa học công nghệ Việt Nam
                   </span>
                 </li>
               </ul>
