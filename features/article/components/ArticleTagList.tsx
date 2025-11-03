@@ -53,13 +53,14 @@ export default function ArticleTagList({
               <div className="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-all hover:shadow-md">
                 <div className="flex flex-col md:flex-row">
                   {/* Article Image */}
-                  <div className="relative h-48 md:h-auto md:w-1/4 p-3">
+                  <div className="relative h-full md:w-1/4 p-3">
                     <div className="relative h-full w-full overflow-hidden rounded-lg">
                       {article.thumbnail ? (
                         <Image
-                          fill
                           alt={article.title || 'Article thumbnail'}
-                          className="object-cover transition-transform duration-300 group-hover:scale-105 aspect-[6/4]"
+                          width={600}
+                          height={600}
+                          className="object-cover transition-transform duration-300 group-hover:scale-105 aspect-6/4"
                           src={apiClient.getFileUrl(article.thumbnail.path)}
                         />
                       ) : (
