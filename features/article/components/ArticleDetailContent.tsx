@@ -177,16 +177,17 @@ export default function ArticleDetailContent({ article }: { article: any }) {
         <div className="mb-6 sm:mb-8">
           {/* Featured Image */}
           <figure className="mb-4 sm:mb-6 overflow-hidden rounded-lg">
-            <div className="relative aspect-[16/9]">
+            <div className="relative w-full">
               {article?.thumbnail ? (
                 <Image
-                  fill
                   priority
                   alt={article.title || 'Thumbnail'}
-                  className="object-cover"
+                  className="object-contain w-full h-auto"
+                  height={article.thumbnail.size?.height || 600}
                   itemProp="image"
                   sizes="(max-width: 768px) 100vw, 80vw"
                   src={apiClient.getFileUrl(article.thumbnail.path)}
+                  width={article.thumbnail.size?.width || 800}
                 />
               ) : (
                 <div className="w-full h-full">

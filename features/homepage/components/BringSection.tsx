@@ -59,9 +59,9 @@ export default function BringSection({ blogHref }: BringSectionProps) {
       </div>
 
       <div className="container relative z-10 mx-auto flex h-full min-h-[600px] items-center px-4 py-8 sm:px-6 lg:min-h-0 lg:px-8 lg:py-12">
-        <div className="grid w-full grid-cols-1 items-center gap-6 lg:grid-cols-2 lg:gap-8 xl:gap-10">
+        <div className="grid w-full grid-cols-1 items-center gap-6 lg:grid-cols-2 lg:gap-8 xl:gap-10 max-w-full overflow-hidden">
           {/* Left Column - Image */}
-          <div className="flex items-center justify-center lg:justify-start">
+          <div className="flex items-center justify-center lg:justify-start min-w-0">
             <div className="relative h-[350px] w-[350px] sm:h-[400px] sm:w-[400px] lg:h-[450px] lg:w-[450px] xl:h-[500px] xl:w-[500px]">
               <Image
                 fill
@@ -74,7 +74,7 @@ export default function BringSection({ blogHref }: BringSectionProps) {
           </div>
 
           {/* Right Column - Content */}
-          <div className="flex flex-col justify-center text-white xl:pr-8">
+          <div className="flex flex-col justify-center text-white min-w-0">
             {/* Heading */}
             <h2 className="mb-2 text-2xl font-bold leading-tight sm:text-3xl lg:text-[38px] xl:text-[42px]">
               LaminGrow mang lại điều gì cho con và cha mẹ?
@@ -91,11 +91,10 @@ export default function BringSection({ blogHref }: BringSectionProps) {
               {benefits.map((benefit, index) => (
                 <div key={index} className="flex gap-2.5">
                   {/* Icon */}
-                  <div className="flex-shrink-0 pt-0.5">
+                  <div className="shrink-0 pt-0.5">
                     <VerifyIcon
                       className="text-green-400"
                       height="16"
-                      size="16"
                       width="16"
                     />
                   </div>

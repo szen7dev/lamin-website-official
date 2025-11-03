@@ -85,7 +85,7 @@ export function Header() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
-          className="rounded-full bg-primary-blue px-3 md:px-4 text-white hover:bg-primary-blue/90 text-xs md:text-sm"
+          className="!p-0 rounded-full bg-primary-blue px-3 md:px-4 text-white hover:bg-primary-blue/90 text-xs md:text-sm"
           variant="default">
           <div className="flex items-center gap-2">
             <div className="relative h-8 w-8 overflow-hidden rounded-full bg-gray-200">
@@ -101,15 +101,15 @@ export function Header() {
                 }
               />
             </div>
-            <div className="flex flex-col items-start text-left">
+            {/* <div className="flex flex-col items-start text-left">
               <span className="font-semibold text-sm leading-tight">
                 {user?.fullname || user?.name || 'Anh A'}
               </span>
               <span className="text-xs leading-tight">
                 {user?.phone || '0123456789'}
               </span>
-            </div>
-            <ChevronDown className="h-4 w-4" />
+            </div> */}
+            {/* <ChevronDown className="h-4 w-4" /> */}
           </div>
         </Button>
       </DropdownMenuTrigger>
@@ -217,8 +217,12 @@ export function Header() {
           <div className="flex items-center justify-between py-2 max-w-[1440px] mx-auto">
             {/* Hotline */}
             <div className="flex items-center gap-2 text-white text-xs lg:text-sm">
-              <Phone className="h-4 w-4" />
-              <span>Hotline: {getHotline()}</span>
+              <Link
+                className="flex items-center gap-2 text-white text-sm font-medium"
+                href={`tel:${getHotline()}`}>
+                <Phone className="h-4 w-4" />
+                <span>Hotline: {getHotline()}</span>
+              </Link>
             </div>
 
             {/* Promo Text */}

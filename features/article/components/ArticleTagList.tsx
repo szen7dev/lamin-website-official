@@ -59,7 +59,7 @@ export default function ArticleTagList({
                         <Image
                           fill
                           alt={article.title || 'Article thumbnail'}
-                          className="object-cover transition-transform duration-300 group-hover:scale-105"
+                          className="object-cover transition-transform duration-300 group-hover:scale-105 aspect-[6/4]"
                           src={apiClient.getFileUrl(article.thumbnail.path)}
                         />
                       ) : (

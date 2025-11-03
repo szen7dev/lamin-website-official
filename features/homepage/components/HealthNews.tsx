@@ -117,7 +117,7 @@ export default function HealthNews({
             <Link
               className="decoration-transparent group block"
               href={getArticleUrl(mainArticle)}>
-              <figure className="relative mb-4 aspect-[16/9] overflow-hidden rounded-lg">
+              <figure className="relative mb-4 aspect-[6/4] overflow-hidden rounded-lg">
                 <Image
                   fill
                   priority
@@ -158,7 +158,7 @@ export default function HealthNews({
                 <Link
                   className="decoration-transparent flex gap-3"
                   href={getArticleUrl(article)}>
-                  <figure className="relative h-20 w-32 flex-shrink-0 overflow-hidden rounded-lg">
+                  <figure className="relative h-20 w-32 flex-shrink-0 overflow-hidden rounded-lg aspect-[6/4]">
                     <Image
                       fill
                       alt={article.title}
