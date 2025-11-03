@@ -14,20 +14,21 @@ export default function BrandingStoryClient() {
     <div className="bg-white">
       {/* Hero Section */}
       <section className="relative w-full overflow-hidden">
-        <div className="relative h-[400px] sm:h-[500px] md:h-[600px] w-full">
+        <div className="relative w-full">
           <Image
             alt="LaminGrow - Cho một đại trạng khỏe mạnh"
-            className="object-cover"
-            fill
+            className="w-full h-auto"
+            width={1440}
+            height={500}
             priority
             quality={100}
-            src="/images/brand-story/brand-story-background.png"
+            src="/images/Artboard_6.jpg"
           />
         </div>
       </section>
 
       {/* Origin Story Section */}
-      <section className="py-12 sm:py-16 md:py-20">
+      <section className="py-12 sm:py-16 md:py-20 bg-[#F5F5F5]">
         <div className="container">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
             <div className="order-2 md:order-1">
@@ -68,83 +69,78 @@ export default function BrandingStoryClient() {
       </section>
 
       {/* New Discovery Section */}
-      <section className="py-12 sm:py-16 md:py-20 bg-gradient-to-b from-blue-50 to-white">
+      <section className="py-12 sm:py-16 md:py-20 bg-white">
         <div className="container">
           <h2 className="text-3xl sm:text-4xl font-bold text-center text-primary mb-3 sm:mb-4">
-            Đột phá khoa học: Synbiotic bản địa
+            Tinh chất sữa hướng đích xương giúp trẻ cao lớn vượt chuẩn
           </h2>
 
           {/* 4 Icons Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 mt-8 sm:mt-12">
             {/* Synbiotic Card */}
-            <div className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow">
+            <div className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow border border-gray-200">
               <div className="flex justify-center mb-4">
-                <div className="relative w-20 h-20">
-                  <Image
-                    alt="Lợi khuẩn bản địa"
-                    className="object-contain"
-                    fill
-                    src="/images/brand-story/symbiotic.png"
-                  />
-                </div>
+                <Image
+                  alt="Lợi khuẩn bản địa"
+                  className="w-20 h-20"
+                  width={80}
+                  height={80}
+                  src="/images/Artboard_2.jpg"
+                />
               </div>
               <h3 className="text-center font-semibold text-grayscale-90 mb-2">
-                Lợi khuẩn bản địa (Lactobacillus casei) được tuyển chọn từ đại
-                trạng người Việt
+                Nguyên liệu được nhập từ các thương hiệu hàng đầu thế giới
               </h3>
             </div>
 
             {/* Chemistry Card */}
-            <div className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow">
+            <div className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow border border-gray-200">
               <div className="flex justify-center mb-4">
-                <div className="relative w-20 h-20">
-                  <Image
-                    alt="Công nghệ Micap"
-                    className="object-contain"
-                    fill
-                    src="/images/brand-story/chemistry.png"
-                  />
-                </div>
+                <Image
+                  alt="Công nghệ Micap"
+                  className="w-20 h-20"
+                  width={80}
+                  height={80}
+                  src="/images/Artboard_3.jpg"
+                />
               </div>
               <h3 className="text-center font-semibold text-grayscale-90 mb-2">
-                Công nghệ Micap hướng dịch bảo vệ lợi khuẩn với tỷ lệ sống sót
-                {'>'}90%
+                Bổ sung đầy đủ vi chất cho trẻ: D3, K2, Canxi và hệ khoáng chất
+                (Canxi hướng đích xương)
               </h3>
             </div>
 
             {/* Lab Card */}
-            <div className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow">
+            <div className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow border border-gray-200">
               <div className="flex justify-center mb-4">
-                <div className="relative w-20 h-20">
-                  <Image
-                    alt="Thảo dược truyền thống"
-                    className="object-contain"
-                    fill
-                    src="/images/brand-story/lab.png"
-                  />
-                </div>
+                <Image
+                  alt="Thảo dược truyền thống"
+                  className="w-20 h-20"
+                  width={80}
+                  height={80}
+                  src="/images/Artboard_4.jpg"
+                />
               </div>
               <h3 className="text-center font-semibold text-grayscale-90 mb-2">
-                Thảo dược truyền thống như cao lá mơ tam thế và L-Theanin từ trà
-                xanh
+                Kết quả kiểm nghiệm 30 tháng (gần hết vòng đời sử dụng của sản
+                phẩm) đạt yêu cầu
               </h3>
             </div>
 
             {/* DNA Card */}
-            <div className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow">
+            <div className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow border border-gray-200">
               <div className="flex justify-center mb-4">
-                <div className="relative w-20 h-20">
-                  <Image
-                    alt="Prebiotic"
-                    className="object-contain"
-                    fill
-                    src="/images/brand-story/DNA.png"
-                  />
-                </div>
+                <Image
+                  alt="Prebiotic"
+                  className="w-20 h-20"
+                  width={80}
+                  height={80}
+                  src="/images/Artboard_5.jpg"
+                />
               </div>
               <h3 className="text-center font-semibold text-grayscale-90 mb-2">
-                Prebiotic tự nhiên (FOS, maltodextrin kháng) nuôi dưỡng lợi
-                khuẩn
+                Nhiều trẻ đã có kết quả chiều cao vượt mong đợi của ba mẹ nhờ áp
+                dụng sản phẩm và giải pháp của LaminGrow
               </h3>
             </div>
           </div>
@@ -156,8 +152,8 @@ export default function BrandingStoryClient() {
         <div className="container">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
             {/* Vision */}
-            <div className="text-center md:text-left">
-              <div className="inline-block mb-6">
+            <div className="flex items-center justify-center gap-4 md:text-left">
+              <div className="inline-block">
                 <div className="relative w-32 h-32">
                   <Hexagon
                     className="w-full h-full text-white/20"
@@ -176,17 +172,15 @@ export default function BrandingStoryClient() {
               </div>
               <div className="space-y-3">
                 <p className="text-white/90 leading-relaxed">
-                  Phát triển Lamin thành thương hiệu hàng đầu trong lĩnh vực
-                  thực phẩm bảo vệ sức khỏe đại trạng, ứng dụng nguồn thảo dược
-                  Việt Nam kết hợp công nghệ sinh học tiên tiến, góp phần nâng
-                  tầm ngành dược Việt Nam trên bản đồ thế giới.
+                  LaminGrow sẽ là thương hiệu “Top of Mind” trong tâm trí khách
+                  hàng về giải pháp tăng cao trong vòng 5 năm.
                 </p>
               </div>
             </div>
 
             {/* Mission */}
-            <div className="text-center md:text-left">
-              <div className="inline-block mb-6">
+            <div className="flex text-center items-center gap-4 justify-center md:text-left">
+              <div className="inline-block">
                 <div className="relative w-32 h-32">
                   <Hexagon
                     className="w-full h-full text-white/20"
@@ -203,17 +197,16 @@ export default function BrandingStoryClient() {
               </div>
               <div className="space-y-3">
                 <p className="text-white/90 leading-relaxed">
-                  Kế thừa thành tựu y học bản địa và tinh hoa thảo dược Việt
-                  Nam, kết hợp ứng dụng công nghệ hướng dịch hiện đại để mang
-                  lại giải pháp hỗ trợ chăm sóc đại trạng an toàn, hiệu quả và
-                  phù hợp với thể trạng người Việt.
+                  Tiên phong nâng tầm vóc trẻ Việt theo chuẩn WHO, bằng mô hình
+                  chăm sóc chiều cao kết hợp dinh dưỡng, vận động và giấc ngủ
+                  chuẩn khoa học
                 </p>
               </div>
             </div>
 
             {/* Core Value */}
-            <div className="text-center md:text-left">
-              <div className="inline-block mb-6">
+            <div className="flex text-center items-center gap-4 justify-center md:text-left">
+              <div className="inline-block">
                 <div className="relative w-32 h-32">
                   <Hexagon
                     className="w-full h-full text-white/20"
@@ -232,8 +225,8 @@ export default function BrandingStoryClient() {
               </div>
               <div className="space-y-3">
                 <p className="text-white/90 leading-relaxed">
-                  Lãnh tính tự nhiên. Hỗ trợ dựa trên bằng chứng khoa học. Công
-                  nghệ tiên tiến bản địa
+                  An toàn, lành tính tự nhiên, không gây tác dụng phụ. Giải pháp
+                  dựa trên chuẩn khoa học
                 </p>
               </div>
             </div>
@@ -241,13 +234,14 @@ export default function BrandingStoryClient() {
         </div>
       </section>
 
-      <div className="relative w-full h-[300px] sm:h-[400px]">
+      <div className="relative w-full">
         <Image
           alt="LaminGrow - Viên lợi khuẩn bản địa"
-          className="object-cover"
-          fill
+          className="w-full h-auto"
+          width={1440}
+          height={400}
           quality={100}
-          src="/images/brand-story/background-2.png"
+          src="/images/Artboard_1.jpg"
         />
       </div>
 
@@ -271,14 +265,14 @@ export default function BrandingStoryClient() {
                   />
                 </div>
               </div>
-              <h3 className="text-xl font-bold text-grayscale-90 mb-4">
+              <h3 className="text-xl font-bold text-black mb-4">
                 Nghiên cứu khoa học uy tín
               </h3>
-              <ul className="text-left text-grayscale-70 space-y-2">
+              <ul className="text-left text-black space-y-2">
                 <li className="flex items-start">
                   <span className="mr-2">•</span>
                   <span>
-                    Nghiên cứu căn lâm sàng tại Đại học Y Dược - Đại học Quốc
+                    Nghiên cứu cận lâm sàng tại Đại học Y Dược - Đại học Quốc
                     gia Hà Nội
                   </span>
                 </li>
@@ -309,15 +303,14 @@ export default function BrandingStoryClient() {
                   />
                 </div>
               </div>
-              <h3 className="text-xl font-bold text-grayscale-90 mb-4">
+              <h3 className="text-xl font-bold text-black mb-4">
                 Sản xuất đạt chuẩn quốc tế
               </h3>
-              <ul className="text-left text-grayscale-70 space-y-2">
+              <ul className="text-left text-black space-y-2">
                 <li className="flex items-start">
                   <span className="mr-2">•</span>
                   <span>
-                    Sản xuất tại cơ sở đạt chuẩn GMP (Good Manufacturing
-                    Practice)
+                    Sản xuất tại cơ sở đạt chuẩn GMP (Nhà máy Dược Khoa)
                   </span>
                 </li>
                 <li className="flex items-start">
@@ -349,10 +342,10 @@ export default function BrandingStoryClient() {
                   />
                 </div>
               </div>
-              <h3 className="text-xl font-bold text-grayscale-90 mb-4">
+              <h3 className="text-xl font-bold text-black mb-4">
                 Minh bạch thông tin
               </h3>
-              <ul className="text-left text-grayscale-70 space-y-2">
+              <ul className="text-left text-black space-y-2">
                 <li className="flex items-start">
                   <span className="mr-2">•</span>
                   <span>Công khai đầy đủ thành phần và hàm lượng</span>
