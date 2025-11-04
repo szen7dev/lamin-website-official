@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef, type ChangeEvent } from 'react';
-import { Search, Star, MapPin } from 'lucide-react';
+import { Search, MapPin } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -10,6 +10,7 @@ import { useGetTrustedStore } from '@/features/homepage';
 import apiClient from '@/services/api/apiClient';
 import { BlueShop } from '@/components/icons';
 import { cn } from '@/lib/utils';
+import { StoreMap, MapPlaceholder } from '@/components/maps/StoreMap';
 
 interface Store {
   _id: string;
@@ -43,8 +44,6 @@ export default function StoreLocationsClient() {
   const [searchTerm, setSearchTerm] = useState('');
   const [submittedSearchTerm, setSubmittedSearchTerm] = useState('');
   const [selectedStore, setSelectedStore] = useState<Store | null>(null);
-  const [selectedCity, setSelectedCity] = useState('');
-  const [selectedDistrict, setSelectedDistrict] = useState('');
   const debounceSearch = useRef<NodeJS.Timeout | null>(null);
 
   const { trustedStore, isLoading } = useGetTrustedStore({
@@ -58,6 +57,7 @@ export default function StoreLocationsClient() {
     keyword: submittedSearchTerm,
     internal: 2,
   });
+  console.log('selectedStore', selectedStore);
 
   // Set first store as selected by default
   useEffect(() => {
@@ -93,7 +93,7 @@ export default function StoreLocationsClient() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Store Icon */}
             <div className="flex items-center gap-4">
-              <div className="w-16 h-16 rounded-full bg-primary flex items-center justify-center flex-shrink-0">
+              <div className="w-16 h-16 rounded-full bg-primary flex items-center justify-center shrink-0">
                 <Image
                   alt="Hệ thống nhà thuốc"
                   height={32}
@@ -109,7 +109,7 @@ export default function StoreLocationsClient() {
 
             {/* Hotline Icon */}
             <div className="flex items-center gap-4">
-              <div className="w-16 h-16 rounded-full bg-primary flex items-center justify-center flex-shrink-0">
+              <div className="w-16 h-16 rounded-full bg-primary flex items-center justify-center shrink-0">
                 <Image
                   alt="Hotline 24/07"
                   height={32}
@@ -125,7 +125,7 @@ export default function StoreLocationsClient() {
 
             {/* Clock Icon */}
             <div className="flex items-center gap-4">
-              <div className="w-16 h-16 rounded-full bg-primary flex items-center justify-center flex-shrink-0">
+              <div className="w-16 h-16 rounded-full bg-primary flex items-center justify-center shrink-0">
                 <Image
                   alt="Mở cửa 8-22h"
                   height={32}
@@ -239,9 +239,29 @@ export default function StoreLocationsClient() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-0">
                     {/* Left - Map */}
                     <div className="bg-gray-200 h-64 md:h-auto relative">
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <MapPin className="w-12 h-12 text-primary" />
-                      </div>
+                      {(() => {
+                        // Parse location string to get coordinates
+                        const locationString = selectedStore.location;
+                        if (locationString) {
+                          const coords = locationString
+                            .split(',')
+                            .map(coord => parseFloat(coord.trim()));
+                          if (
+                            coords.length === 2 &&
+                            !isNaN(coords[0]) &&
+                            !isNaN(coords[1])
+                          ) {
+                            return (
+                              <StoreMap
+                                latitude={coords[0]}
+                                longitude={coords[1]}
+                                storeName={selectedStore.name}
+                              />
+                            );
+                          }
+                        }
+                        return <MapPlaceholder />;
+                      })()}
                     </div>
 
                     {/* Right - Store Info */}
@@ -261,19 +281,11 @@ export default function StoreLocationsClient() {
                             .join(', ')}
                         </p>
 
-                        <p className="text-gray-700 mb-2 text-sm">
-                          Điện thoại: {selectedStore.phone || '0123 456 789'}
-                        </p>
-
-                        <div className="flex items-center gap-2 mb-4">
-                          <Star className="h-5 w-5 fill-[#FFB200] text-[#FFB200]" />
-                          <span className="font-semibold text-lg">
-                            {selectedStore.rating?.toFixed(1) || '5.0'}
-                          </span>
-                          <span className="text-sm text-primary">
-                            ({selectedStore.numberOfRating || 100} đánh giá)
-                          </span>
-                        </div>
+                        {selectedStore.phone && (
+                          <p className="text-gray-700 mb-4 text-sm">
+                            Điện thoại: {selectedStore.phone}
+                          </p>
+                        )}
                       </div>
 
                       {/* Action Buttons */}
@@ -284,11 +296,13 @@ export default function StoreLocationsClient() {
                           target="_blank">
                           Xem chỉ đường
                         </Link>
-                        <Link
-                          className="text-sm border-2 border-[#00BBF2] bg-[#E5F8FE] text-[#00BBF2] px-6 py-3 rounded-full font-semibold hover:bg-blue-50 transition-colors text-center decoration-transparent"
-                          href={`tel:${selectedStore.phone || '0123456789'}`}>
-                          Gọi tư vấn
-                        </Link>
+                        {selectedStore.phone && (
+                          <Link
+                            className="text-sm border-2 border-[#00BBF2] bg-[#E5F8FE] text-[#00BBF2] px-6 py-3 rounded-full font-semibold hover:bg-blue-50 transition-colors text-center decoration-transparent"
+                            href={`tel:${selectedStore.phone}`}>
+                            Gọi tư vấn
+                          </Link>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -323,7 +337,7 @@ export default function StoreLocationsClient() {
                             .map((image, index) => (
                               <div
                                 key={image._id}
-                                className="relative aspect-[4/3] rounded-xl overflow-hidden">
+                                className="relative aspect-4/3 rounded-xl overflow-hidden">
                                 <Image
                                   alt={`${selectedStore.name} - ${index + 1}`}
                                   className="object-cover"
@@ -344,7 +358,7 @@ export default function StoreLocationsClient() {
                         : [1, 2, 3].map(index => (
                             <div
                               key={index}
-                              className="relative aspect-[4/3] rounded-xl overflow-hidden">
+                              className="relative aspect-4/3 rounded-xl overflow-hidden">
                               {selectedStore.thumbnail?.path ? (
                                 <Image
                                   alt={selectedStore.name}

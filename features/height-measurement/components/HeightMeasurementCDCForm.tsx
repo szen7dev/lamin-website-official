@@ -112,20 +112,16 @@ const heightMeasurementSchema = z
 type FormValues = z.infer<typeof heightMeasurementSchema>;
 
 export default function HeightMeasurementCDCForm() {
-  const { user, isAuthenticated } = useAuth();
+  const { isAuthenticated } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleOpemModal = () => {
+  const handleOpenModal = () => {
     setIsModalOpen(true);
   };
 
-  const mutationOptions =
-    isAuthenticated && user?.contacts?.[0]?._id
-      ? {
-          contactID: user.contacts[0]._id,
-          onSuccess: isAuthenticated ? undefined : handleOpemModal,
-        }
-      : { onSuccess: isAuthenticated ? undefined : handleOpemModal };
+  const mutationOptions = {
+    onSuccess: isAuthenticated ? undefined : handleOpenModal,
+  };
 
   const { createHeightMeasurement, isPending, error } =
     useHeightMeasurementMutation(mutationOptions);

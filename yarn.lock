@@ -1449,6 +1449,11 @@
   resolved "https://registry.yarnpkg.com/@types/estree/-/estree-1.0.8.tgz#958b91c991b1867ced318bedea0e215ee050726e"
   integrity sha512-dWHzHa2WqEXI/O1E9OjrocMTKJl2mSrEolh1Iomrv6U+JuNwaHXsXx9bLu5gG7BUWFIN0skIQJQ/L1rIex4X6w==
 
+"@types/google.maps@^3.58.1":
+  version "3.58.1"
+  resolved "https://registry.yarnpkg.com/@types/google.maps/-/google.maps-3.58.1.tgz#71ce3dec44de1452f56641d2c87c7dd8ea964b4d"
+  integrity sha512-X9QTSvGJ0nCfMzYOnaVs/k6/4L+7F5uCS+4iUmkLEls6J9S/Phv+m/i3mDeyc49ZBgwab3EFO1HEoBY7k98EGQ==
+
 "@types/json-schema@^7.0.15":
   version "7.0.15"
   resolved "https://registry.yarnpkg.com/@types/json-schema/-/json-schema-7.0.15.tgz#596a1747233694d50f6ad8a7869fcb6f56cf5841"
@@ -2420,7 +2425,7 @@ electron-to-chromium@^1.5.73:
   integrity sha512-refir3NlutEZqlKaBLK0tzlVLe5P2wDKS7UQt/3SpibizgsRAPOsqQC3ffw1nlv3ze5gjRQZYHoPymgVZkplFA==
 
 "elela@file:.":
-  version "1.0.0"
+  version "1.0.1"
   dependencies:
     "@hookform/resolvers" latest
     "@radix-ui/react-accordion" "^1.2.2"
@@ -2459,7 +2464,7 @@ electron-to-chromium@^1.5.73:
     cmdk "1.0.4"
     cookies-next "^5.1.0"
     date-fns "4.1.0"
-    elela "file:../../Library/Caches/Yarn/v6/npm-elela-1.0.0-a3e6cc1d-911f-4edb-8437-d1033aff6090-1761988754792/node_modules/elela"
+    elela "file:../../Library/Caches/Yarn/v6/npm-elela-1.0.1-48a5d8e1-ae03-4fd6-b9a1-e265ee967a1a-1762244662336/node_modules/elela"
     embla-carousel-react "8.5.1"
     framer-motion "^12.7.2"
     html2canvas "^1.4.1"

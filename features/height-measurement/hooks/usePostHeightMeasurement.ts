@@ -11,7 +11,6 @@ import { useRouter } from 'next/navigation';
 import { postHeightMeasurement } from '../api/postHeightMeasurement';
 
 interface HeightMeasurementMutationOptions {
-  contactID?: string;
   onSuccess?: (data: HeightMeasurementResultData) => void;
 }
 
@@ -25,14 +24,9 @@ export function useHeightMeasurementMutation(
       formData: HeightMeasurementFormData,
     ): Promise<HeightMeasurementResultData> => {
       try {
-        // Add contactID to formData if it exists in options
         const dataToSubmit: HeightMeasurementFormData = {
           ...formData,
         };
-
-        if (options?.contactID) {
-          dataToSubmit.contactID = options.contactID;
-        }
 
         const result = await postHeightMeasurement(dataToSubmit);
 

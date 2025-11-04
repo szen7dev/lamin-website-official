@@ -10,7 +10,6 @@ export const postHeightMeasurement = async (
 ): Promise<HeightMeasurementResultData> => {
   try {
     const queryParams = {
-      contactID: params.contactID || '',
       optionSeller: params.optionSeller || DEFAULT_OPTION_SELLER,
       parentName: params.parentName || '',
       fatherHeight: Number(params.fatherHeight) || 0,

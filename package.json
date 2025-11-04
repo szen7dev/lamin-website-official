@@ -77,9 +77,10 @@
   "devDependencies": {
     "@next/bundle-analyzer": "16.0.1",
     "@next/eslint-plugin-next": "16.0.1",
-    "@tailwindcss/postcss": "^4.1.16",
     "@react-types/shared": "3.25.0",
+    "@tailwindcss/postcss": "^4.1.16",
     "@tanstack/react-query-devtools": "latest",
+    "@types/google.maps": "^3.58.1",
     "@types/node": "^22",
     "@types/react": "19.2.2",
     "@types/react-dom": "19.2.2",
