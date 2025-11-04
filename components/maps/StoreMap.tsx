@@ -9,6 +9,74 @@ interface StoreMapProps {
   storeName?: string;
 }
 
+// Global flag to track if the Google Maps script is currently loading
+let isLoadingGoogleMaps = false;
+// Queue to store callbacks waiting for Google Maps to load
+const loadCallbacks: Array<() => void> = [];
+
+// Function to ensure Google Maps is loaded only once
+function loadGoogleMapsScript(apiKey: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    // If already loaded, resolve immediately
+    if (window.google?.maps) {
+      resolve();
+      return;
+    }
+
+    // If currently loading, add to callback queue
+    if (isLoadingGoogleMaps) {
+      loadCallbacks.push(() => resolve());
+      return;
+    }
+
+    // Check if script already exists in DOM (prevent duplicates)
+    const existingScript = document.querySelector(
+      'script[src*="maps.googleapis.com/maps/api"]'
+    );
+
+    if (existingScript) {
+      // Script exists but not loaded yet, wait for it
+      isLoadingGoogleMaps = true;
+      const checkLoaded = setInterval(() => {
+        if (window.google?.maps) {
+          clearInterval(checkLoaded);
+          isLoadingGoogleMaps = false;
+          resolve();
+          // Execute all queued callbacks
+          loadCallbacks.forEach(cb => cb());
+          loadCallbacks.length = 0;
+        }
+      }, 100);
+      return;
+    }
+
+    // Start loading the script
+    isLoadingGoogleMaps = true;
+    const script = document.createElement('script');
+    script.id = 'google-maps-script';
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`;
+    script.async = true;
+    script.defer = true;
+
+    script.onload = () => {
+      isLoadingGoogleMaps = false;
+      resolve();
+      // Execute all queued callbacks
+      loadCallbacks.forEach(cb => cb());
+      loadCallbacks.length = 0;
+    };
+
+    script.onerror = () => {
+      isLoadingGoogleMaps = false;
+      reject(new Error('Failed to load Google Maps script'));
+      // Reject all queued callbacks
+      loadCallbacks.length = 0;
+    };
+
+    document.head.appendChild(script);
+  });
+}
+
 export function StoreMap({ latitude, longitude, storeName }: StoreMapProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
@@ -25,27 +93,16 @@ export function StoreMap({ latitude, longitude, storeName }: StoreMapProps) {
       return;
     }
 
-    // Check if Google Maps script is already loaded
-    if (window.google?.maps) {
-      initializeMap();
-      return;
-    }
-
-    // Load Google Maps script
-    const script = document.createElement('script');
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`;
-    script.async = true;
-    script.defer = true;
-    script.onload = () => {
-      initializeMap();
-    };
-    script.onerror = () => {
-      console.error('Failed to load Google Maps script');
-      setHasError(true);
-      setIsLoading(false);
-    };
-
-    document.head.appendChild(script);
+    // Load Google Maps script using the centralized function
+    loadGoogleMapsScript(apiKey)
+      .then(() => {
+        initializeMap();
+      })
+      .catch((error) => {
+        console.error('Error loading Google Maps:', error);
+        setHasError(true);
+        setIsLoading(false);
+      });
 
     return () => {
       // Cleanup marker when component unmounts

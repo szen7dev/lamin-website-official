@@ -221,9 +221,12 @@ export default function StoreLocationsClient() {
                         .filter(Boolean)
                         .join(', ')}
                     </p>
-                    <p className="text-xs text-gray-600">
-                      <span className="font-medium">Hotline:</span> 1800 646 458
-                    </p>
+                    {store.phone && (
+                      <p className="text-xs text-gray-600">
+                        <span className="font-medium">Hotline:</span>{' '}
+                        {store.phone}
+                      </p>
+                    )}
                   </button>
                 ))
               )}
