@@ -36,7 +36,8 @@ export default function SimpleBanner({ blogHref }: SimpleBannerProps) {
           <div className="shrink-0 w-full max-w-[500px] lg:max-w-[600px]">
             <Image
               priority
-              alt="Lamin Family"
+              fetchPriority="high"
+              alt="Gia đình Lamin - Giải pháp tăng chiều cao cho trẻ"
               className="w-full h-auto"
               height={500}
               loading="eager"
