@@ -57,7 +57,6 @@ export default function StoreLocationsClient() {
     keyword: submittedSearchTerm,
     internal: 2,
   });
-  console.log('selectedStore', selectedStore);
 
   // Set first store as selected by default
   useEffect(() => {
