@@ -92,9 +92,11 @@ export function FloatingChat() {
         whileTap={{ scale: 0.95 }}
         onClick={() => setIsOpen(!isOpen)}>
         <Image
-          alt="Chat Support"
+          priority
+          alt="Hỗ trợ trực tuyến Lamin"
           className="rounded-full object-cover"
           height={56}
+          sizes="56px"
           src="/images/logo.jpg"
           width={56}
         />

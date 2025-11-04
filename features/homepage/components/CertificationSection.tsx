@@ -41,6 +41,7 @@ export default function CertificationSection() {
                     fill
                     alt="Giấy chứng nhận GMP-WHO"
                     className="h-full w-full object-contain p-4"
+                    sizes="(max-width: 768px) 100vw, 380px"
                     src={slides[currentSlide].leftImage}
                   />
                 </div>
@@ -54,6 +55,7 @@ export default function CertificationSection() {
                   fill
                   alt="Nhà máy Dược phẩm DK"
                   className="h-full w-full object-cover"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 600px"
                   src={slides[currentSlide].rightImage}
                   style={{ objectPosition: 'center 40%' }}
                 />

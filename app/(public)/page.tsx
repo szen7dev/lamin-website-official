@@ -1,6 +1,11 @@
 import type { Metadata } from 'next';
 
 import { generateMetadata as generateSeoMetadata } from '@/utils/seo';
+import {
+  getOrganizationSchema,
+  getWebsiteSchema,
+} from '@/utils/structuredData';
+import { SchemaMarkup } from '@/components/seo/SchemaMarkup';
 import HeroWithBringSection from '@/features/homepage/components/HeroWithBringSection';
 import TestimonialsSection from '@/features/homepage/components/TestimonialsSection';
 import VideoWithSponsors from '@/features/homepage/components/VideoWithSponsors';
@@ -18,11 +23,16 @@ export const metadata: Metadata = generateSeoMetadata({
     'tư vấn sức khỏe',
     'mua thực phẩm bảo vệ sức khỏe online',
   ],
+  url: '/',
 });
 
 export default function HomePage() {
   return (
     <div className="flex min-h-screen flex-col bg-background">
+      {/* Structured Data */}
+      <SchemaMarkup schema={getOrganizationSchema()} />
+      <SchemaMarkup schema={getWebsiteSchema()} />
+
       {/* Hero, Doctor, Pillars, Scientific Evidence, and Bring Sections - Client Component */}
       <HeroWithBringSection />
 

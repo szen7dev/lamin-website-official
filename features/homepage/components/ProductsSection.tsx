@@ -121,6 +121,7 @@ export default function ProductsSection() {
                   <div className="relative aspect-square w-full overflow-hidden bg-white p-4">
                     {/* Add to Cart Button */}
                     <button
+                      aria-label="Add to cart"
                       className="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-primary text-white shadow-md transition-all duration-300 hover:scale-110 hover:bg-primary/90"
                       type="button"
                       onClick={e => handleAddToCart(e, product)}>

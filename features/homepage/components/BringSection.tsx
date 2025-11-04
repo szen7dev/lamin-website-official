@@ -53,6 +53,7 @@ export default function BringSection({ blogHref }: BringSectionProps) {
           priority
           alt="Background"
           className="h-full w-full object-cover object-center opacity-30"
+          sizes="100vw"
           src="/images/bring-background.png"
           style={{ objectPosition: 'center center' }}
         />
@@ -68,6 +69,7 @@ export default function BringSection({ blogHref }: BringSectionProps) {
                 priority
                 alt="LaminGrow - Phát triển chiều cao cho trẻ em"
                 className="h-full w-full object-contain drop-shadow-2xl"
+                sizes="(max-width: 640px) 350px, (max-width: 1024px) 400px, (max-width: 1280px) 450px, 500px"
                 src="/images/lamin-bring.png"
               />
             </div>
@@ -118,7 +120,7 @@ export default function BringSection({ blogHref }: BringSectionProps) {
             {/* CTA Button */}
             <div className="mt-5 lg:mt-6">
               <Link
-                className="inline-block rounded-lg bg-[#FF8C00] px-8 py-3 text-center text-base font-semibold text-white transition-colors duration-200 hover:bg-[#FF7A00] md:text-lg"
+                className="inline-block rounded-lg bg-[#FFA500] px-8 py-3 text-center text-base font-semibold text-gray-900 transition-colors duration-200 hover:bg-[#FF8C00] shadow-lg md:text-lg"
                 href={blogHref}>
                 Khám phá hành trình tăng trưởng cho con bạn
               </Link>

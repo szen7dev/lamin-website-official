@@ -28,10 +28,12 @@ export default function DoctorSection() {
       <div className="absolute inset-0 z-0">
         <Image
           fill
+          priority
           alt=""
           aria-hidden="true"
           className="object-cover"
           quality={90}
+          sizes="100vw"
           src="/images/hero-background.png"
         />
       </div>

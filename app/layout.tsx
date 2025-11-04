@@ -25,10 +25,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html suppressHydrationWarning lang="en">
-      <link href="https://trixgo.com" rel="preconnect" />
-      <link href={process.env.NEXT_PUBLIC_API_URL} rel="preconnect" />
-      <link href={process.env.NEXT_PUBLIC_CLOUDFRONT_URL} rel="preconnect" />
+    <html suppressHydrationWarning lang="vi">
+      <head>
+        <link href="https://trixgo.com" rel="preconnect" />
+        <link href={process.env.NEXT_PUBLIC_API_URL} rel="preconnect" />
+        <link href={process.env.NEXT_PUBLIC_CLOUDFRONT_URL} rel="preconnect" />
+      </head>
       <body
         suppressHydrationWarning
         className={clsx(
@@ -37,7 +39,9 @@ export default function RootLayout({
         )}>
         <Providers themeProps={{ attribute: 'class', defaultTheme: 'light' }}>
           <CartProvider>{children}</CartProvider>
-          <ReactQueryDevtools initialIsOpen={true} />
+          {process.env.NODE_ENV === 'development' && (
+            <ReactQueryDevtools initialIsOpen={false} />
+          )}
         </Providers>
       </body>
     </html>

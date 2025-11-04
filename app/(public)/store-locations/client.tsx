@@ -292,12 +292,26 @@ export default function StoreLocationsClient() {
 
                       {/* Action Buttons */}
                       <div className="flex gap-4">
-                        <Link
-                          className="text-sm bg-primary text-white px-6 py-3 rounded-full font-semibold hover:bg-primary/90 transition-colors text-center decoration-transparent"
-                          href={`https://maps.google.com/?q=${[selectedStore.address, selectedStore?.area1?.name, selectedStore?.area2?.name, selectedStore?.area3?.name].filter(Boolean).join(', ')}`}
-                          target="_blank">
-                          Xem chỉ đường
-                        </Link>
+                        {selectedStore.location && (() => {
+                          const coords = selectedStore.location
+                            .split(',')
+                            .map(coord => parseFloat(coord.trim()));
+                          if (
+                            coords.length === 2 &&
+                            !isNaN(coords[0]) &&
+                            !isNaN(coords[1])
+                          ) {
+                            return (
+                              <Link
+                                className="text-sm bg-primary text-white px-6 py-3 rounded-full font-semibold hover:bg-primary/90 transition-colors text-center decoration-transparent"
+                                href={`https://www.openstreetmap.org/?mlat=${coords[0]}&mlon=${coords[1]}&zoom=16`}
+                                rel="noopener noreferrer"
+                                target="_blank">
+                                Xem chỉ đường
+                              </Link>
+                            );
+                          }
+                        })()}
                         {selectedStore.phone && (
                           <Link
                             className="text-sm border-2 border-[#00BBF2] bg-[#E5F8FE] text-[#00BBF2] px-6 py-3 rounded-full font-semibold hover:bg-blue-50 transition-colors text-center decoration-transparent"

@@ -151,9 +151,9 @@ export function Footer() {
             {/* About Us Column */}
             <div className="border-b pb-4 sm:border-0">
               <div className="flex justify-between items-center">
-                <h4 className="font-bold text-white text-sm mb-4">
+                <h3 className="font-bold text-white text-sm mb-4">
                   VỀ CHÚNG TÔI
-                </h4>
+                </h3>
                 <button
                   aria-expanded={openSections['about'] ? 'true' : 'false'}
                   aria-label="Toggle About Us section"
@@ -179,9 +179,9 @@ export function Footer() {
             {/* Policies Column */}
             <div className="border-b pb-4 sm:border-0">
               <div className="flex justify-between items-center">
-                <h4 className="font-bold text-white text-sm mb-4">
+                <h3 className="font-bold text-white text-sm mb-4">
                   CHÍNH SÁCH
-                </h4>
+                </h3>
                 <button
                   aria-expanded={openSections['category'] ? 'true' : 'false'}
                   aria-label="Toggle Policies section"
@@ -199,9 +199,9 @@ export function Footer() {
             {/* Learn More Column */}
             <div className="border-b pb-4 sm:border-0">
               <div className="flex justify-between items-center">
-                <h4 className="font-bold text-white text-sm mb-4">
+                <h3 className="font-bold text-white text-sm mb-4">
                   TÌM HIỂU THÊM
-                </h4>
+                </h3>
                 <button
                   aria-expanded={openSections['learnMore'] ? 'true' : 'false'}
                   aria-label="Toggle Learn More section"

@@ -139,12 +139,26 @@ export function StoreDetail({ store, isLoading }: StoreDetailProps) {
                 {/* Bottom Section - Contact Buttons */}
                 <div>
                   <div className="flex gap-4">
-                    <Link
-                      className="flex-1 px-6 h-12 inline-flex items-center justify-center bg-primary text-white rounded-full hover:bg-primary-dark transition-colors decoration-transparent"
-                      href={`https://maps.google.com/?q=${address}`}
-                      target="_blank">
-                      <span className="w-max">Xem chỉ đường</span>
-                    </Link>
+                    {store.location && (() => {
+                      const coords = store.location
+                        .split(',')
+                        .map((coord: string) => parseFloat(coord.trim()));
+                      if (
+                        coords.length === 2 &&
+                        !isNaN(coords[0]) &&
+                        !isNaN(coords[1])
+                      ) {
+                        return (
+                          <Link
+                            className="flex-1 px-6 h-12 inline-flex items-center justify-center bg-primary text-white rounded-full hover:bg-primary-dark transition-colors decoration-transparent"
+                            href={`https://www.openstreetmap.org/?mlat=${coords[0]}&mlon=${coords[1]}&zoom=16`}
+                            rel="noopener noreferrer"
+                            target="_blank">
+                            <span className="w-max">Xem chỉ đường</span>
+                          </Link>
+                        );
+                      }
+                    })()}
                     <Link
                       className="flex-1 px-6 h-12 inline-flex items-center justify-center bg-white border border-primary text-primary rounded-full hover:bg-primary hover:text-white transition-colors decoration-transparent"
                       href={`tel:${store.phone || '0123456789'}`}>
