@@ -7,6 +7,7 @@ import 'swiper/css/zoom';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/grid';
+import 'leaflet/dist/leaflet.css';
 
 import { generateMetadata as generateSeoMetadata } from '@/utils/seo';
 import { CartProvider } from '@/features/cart/contexts/CartContext';

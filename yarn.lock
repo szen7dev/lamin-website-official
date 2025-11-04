@@ -1224,6 +1224,11 @@
   resolved "https://registry.yarnpkg.com/@radix-ui/rect/-/rect-1.1.0.tgz#f817d1d3265ac5415dadc67edab30ae196696438"
   integrity sha512-A9+lCBZoaMJlVKcRBz2YByCG+Cp2t6nAnMnNba+XiWxnj6r4JUFqfsgwocMBZU9LPtdxC6wB56ySYpc7LQIoJg==
 
+"@react-leaflet/core@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@react-leaflet/core/-/core-3.0.0.tgz#34ccc280ce7d8ac5c09f2b3d5fffded450bdf1a2"
+  integrity sha512-3EWmekh4Nz+pGcr+xjf0KNyYfC3U2JjnkWsh0zcqaexYqmmB5ZhH37kz41JXGmKzpaMZCnPofBBm64i+YrEvGQ==
+
 "@react-types/shared@3.25.0":
   version "3.25.0"
   resolved "https://registry.yarnpkg.com/@react-types/shared/-/shared-3.25.0.tgz#7223baf72256e918a3c29081bb1ecc6fad4fbf58"
@@ -1449,6 +1454,11 @@
   resolved "https://registry.yarnpkg.com/@types/estree/-/estree-1.0.8.tgz#958b91c991b1867ced318bedea0e215ee050726e"
   integrity sha512-dWHzHa2WqEXI/O1E9OjrocMTKJl2mSrEolh1Iomrv6U+JuNwaHXsXx9bLu5gG7BUWFIN0skIQJQ/L1rIex4X6w==
 
+"@types/geojson@*":
+  version "7946.0.16"
+  resolved "https://registry.yarnpkg.com/@types/geojson/-/geojson-7946.0.16.tgz#8ebe53d69efada7044454e3305c19017d97ced2a"
+  integrity sha512-6C8nqWur3j98U6+lXDfTUWIfgvZU+EumvpHKcYjujKH7woYyLj2sUmff0tRhrqM7BohUw7Pz3ZB1jj2gW9Fvmg==
+
 "@types/google.maps@^3.58.1":
   version "3.58.1"
   resolved "https://registry.yarnpkg.com/@types/google.maps/-/google.maps-3.58.1.tgz#71ce3dec44de1452f56641d2c87c7dd8ea964b4d"
@@ -1463,6 +1473,13 @@
   version "0.0.29"
   resolved "https://registry.yarnpkg.com/@types/json5/-/json5-0.0.29.tgz#ee28707ae94e11d2b827bcbe5270bcea7f3e71ee"
   integrity sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==
+
+"@types/leaflet@^1.9.21":
+  version "1.9.21"
+  resolved "https://registry.yarnpkg.com/@types/leaflet/-/leaflet-1.9.21.tgz#542e8f91250bc444f8a1416d472f5b518d83e979"
+  integrity sha512-TbAd9DaPGSnzp6QvtYngntMZgcRk+igFELwR2N99XZn7RXUdKgsXMR+28bUO0rPsWp8MIu/f47luLIQuSLYv/w==
+  dependencies:
+    "@types/geojson" "*"
 
 "@types/node-fetch@^2.6.4":
   version "2.6.12"
@@ -2464,12 +2481,13 @@ electron-to-chromium@^1.5.73:
     cmdk "1.0.4"
     cookies-next "^5.1.0"
     date-fns "4.1.0"
-    elela "file:../../Library/Caches/Yarn/v6/npm-elela-1.0.1-48a5d8e1-ae03-4fd6-b9a1-e265ee967a1a-1762244662336/node_modules/elela"
+    elela "file:../../Library/Caches/Yarn/v6/npm-elela-1.0.1-aae88d17-49ed-4e8c-9c08-222db625e34c-1762263697792/node_modules/elela"
     embla-carousel-react "8.5.1"
     framer-motion "^12.7.2"
     html2canvas "^1.4.1"
     input-otp "1.4.1"
     js-file-download "0.4.12"
+    leaflet "^1.9.4"
     lucide-react "^0.454.0"
     next "16.0.1"
     next-themes latest
@@ -2480,6 +2498,7 @@ electron-to-chromium@^1.5.73:
     react-day-picker "8.10.1"
     react-dom "19.2.0"
     react-hook-form latest
+    react-leaflet "^5.0.0"
     react-resizable-panels "^2.1.7"
     recharts "2.15.0"
     sonner "^1.7.1"
@@ -3766,6 +3785,11 @@ language-tags@^1.0.9:
   dependencies:
     language-subtag-registry "^0.3.20"
 
+leaflet@^1.9.4:
+  version "1.9.4"
+  resolved "https://registry.yarnpkg.com/leaflet/-/leaflet-1.9.4.tgz#23fae724e282fa25745aff82ca4d394748db7d8d"
+  integrity sha512-nxS1ynzJOmOlHp+iL3FyWqK89GtNL8U8rvlMOsQdTTssxZwCXh8N2NB3GDQOL+YR3XnWyZAxwQixURb+FA74PA==
+
 levn@^0.4.1:
   version "0.4.1"
   resolved "https://registry.yarnpkg.com/levn/-/levn-0.4.1.tgz#ae4562c007473b932a6200d403268dd2fffc6ade"
@@ -4312,6 +4336,13 @@ react-is@^18.3.1:
   version "18.3.1"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-18.3.1.tgz#e83557dc12eae63a99e003a46388b1dcbb44db7e"
   integrity sha512-/LLMVyas0ljjAtoYiPqYiL8VWXzUUdThrmU5+n20DZv+a+ClRoevUzw5JxU+Ieh5/c87ytoTBV9G1FiKfNJdmg==
+
+react-leaflet@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/react-leaflet/-/react-leaflet-5.0.0.tgz#945d40bad13b69e8606278b19446b00bab57376a"
+  integrity sha512-CWbTpr5vcHw5bt9i4zSlPEVQdTVcML390TjeDG0cK59z1ylexpqC6M1PJFjV8jD7CF+ACBFsLIDs6DRMoLEofw==
+  dependencies:
+    "@react-leaflet/core" "^3.0.0"
 
 react-remove-scroll-bar@^2.3.7:
   version "2.3.8"

@@ -10,7 +10,7 @@ import { useGetTrustedStore } from '@/features/homepage';
 import apiClient from '@/services/api/apiClient';
 import { BlueShop } from '@/components/icons';
 import { cn } from '@/lib/utils';
-import { StoreMap, MapPlaceholder } from '@/components/maps/StoreMap';
+import { StoreMap, MapPlaceholder } from '@/components/maps';
 
 interface Store {
   _id: string;
