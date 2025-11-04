@@ -1,31 +1,52 @@
 'use client';
 
-import { Loader2 } from 'lucide-react';
+import { Loader2, ChevronLeft, ChevronRight } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
 import { Article } from '../types/articleTypes';
 
 import { apiClient } from '@/services';
-import { ChevronDoubleDown } from '@/components/icons';
 
 interface ArticleTagListProps {
   articlesTags: Article[];
   isLoading: boolean;
-  isLoadingMore?: boolean;
   error: any;
-  onLoadMore?: () => void;
-  hasMore?: boolean;
+  currentPage: number;
+  totalRecords: number;
+  pageSize: number;
+  onPageChange?: (page: number) => void;
+  hasNextPage?: boolean;
+  hasPrevPage?: boolean;
 }
 
 export default function ArticleTagList({
   articlesTags,
   isLoading,
-  isLoadingMore = false,
   error,
-  onLoadMore,
-  hasMore = false,
+  currentPage,
+  totalRecords,
+  pageSize,
+  onPageChange,
+  hasNextPage = false,
+  hasPrevPage = false,
 }: ArticleTagListProps) {
+  // Calculate the range of articles being displayed
+  const startIndex = (currentPage - 1) * pageSize + 1;
+  const endIndex = Math.min(currentPage * pageSize, totalRecords);
+
+  const handlePrevious = () => {
+    if (hasPrevPage && onPageChange) {
+      onPageChange(currentPage - 1);
+    }
+  };
+
+  const handleNext = () => {
+    if (hasNextPage && onPageChange) {
+      onPageChange(currentPage + 1);
+    }
+  };
+
   return (
     <>
       {/* Articles List */}
@@ -107,22 +128,48 @@ export default function ArticleTagList({
         </div>
       )}
 
-      {/* Loading more indicator */}
-      {isLoadingMore && (
-        <div className="flex justify-center my-4">
-          <Loader2 className="h-6 w-6 animate-spin text-primary-50" />
-        </div>
-      )}
+      {/* Pagination Controls */}
+      {articlesTags.length > 0 && totalRecords > 0 && (
+        <div className="flex items-center justify-between mt-8 mb-4">
+          {/* Range Text */}
+          <div className="text-sm text-grayscale-60">
+            {startIndex}-{endIndex} trong số {totalRecords}
+          </div>
 
-      {/* Load More Button - if needed */}
-      {articlesTags.length > 0 && hasMore && !isLoadingMore && (
-        <div className="flex justify-center my-8">
-          <button
-            className="flex items-center justify-between gap-3 px-6 py-2 rounded-full text-grayscale-50 transition-colors hover:text-primary"
-            onClick={onLoadMore}>
-            <ChevronDoubleDown fill="currentColor" />
-            Xem thêm
-          </button>
+          {/* Navigation Buttons */}
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handlePrevious}
+              disabled={!hasPrevPage || isLoading}
+              className={`
+                flex items-center gap-1 px-4 py-2 rounded-lg text-sm font-medium transition-colors
+                ${
+                  hasPrevPage && !isLoading
+                    ? 'text-primary-50 hover:bg-primary-50/10 cursor-pointer'
+                    : 'text-grayscale-30 cursor-not-allowed'
+                }
+              `}
+              aria-label="Previous page">
+              <ChevronLeft className="h-4 w-4" />
+              <span>Trước</span>
+            </button>
+
+            <button
+              onClick={handleNext}
+              disabled={!hasNextPage || isLoading}
+              className={`
+                flex items-center gap-1 px-4 py-2 rounded-lg text-sm font-medium transition-colors
+                ${
+                  hasNextPage && !isLoading
+                    ? 'text-primary-50 hover:bg-primary-50/10 cursor-pointer'
+                    : 'text-grayscale-30 cursor-not-allowed'
+                }
+              `}
+              aria-label="Next page">
+              <span>Tiếp</span>
+              <ChevronRight className="h-4 w-4" />
+            </button>
+          </div>
         </div>
       )}
     </>

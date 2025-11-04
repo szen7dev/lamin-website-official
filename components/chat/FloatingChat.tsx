@@ -9,7 +9,7 @@ import {
   getConversation,
   saveConversation,
   LocalMessage,
-} from '@/utils/ai/openai-service';
+} from '@/utils/ai/conversation-storage';
 
 export function FloatingChat() {
   const [isOpen, setIsOpen] = useState(false);

@@ -1,10 +1,9 @@
 'use client';
 
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense, useState } from 'react';
 
 import Loading from '@/app/loading';
 import ArticleTagList from '@/features/article/components/ArticleTagList';
-import { Article } from '@/features/article/types/articleTypes';
 import { useGetArticleTagList } from '@/features/article/hooks/useGetArticleTagList';
 
 interface ClientArticleTagListProps {
@@ -12,58 +11,56 @@ interface ClientArticleTagListProps {
 }
 
 export function ClientArticleTagList({ slug }: ClientArticleTagListProps) {
+  const PAGE_SIZE = 5;
+  const [currentPage, setCurrentPage] = useState<number>(1);
   const [lastestID, setLastestID] = useState<string>('');
-  const [allArticles, setAllArticles] = useState<Article[]>([]);
-  const [hasMore, setHasMore] = useState<boolean>(true);
+  const [pageHistory, setPageHistory] = useState<string[]>(['']); // Track lastestID for each page
+
   const { articlesTags, pagination, isLoading, error } = useGetArticleTagList({
-    limit: 5,
+    limit: PAGE_SIZE,
     menuSlug: slug,
     lastestID,
   });
 
-  // Initialize or update articles when data is fetched
-  useEffect(() => {
-    if (articlesTags && articlesTags.length > 0) {
-      if (lastestID === '') {
-        // First load - replace all articles
-        setAllArticles(articlesTags);
-      } else {
-        // Load more - append new articles
-        setAllArticles(prev => [...prev, ...articlesTags]);
-      }
+  // Handle page change
+  const handlePageChange = (newPage: number) => {
+    if (newPage < 1) return;
 
-      // Check if there are more articles to load
+    if (newPage > currentPage) {
+      // Moving forward - use nextCursor from pagination
       if (pagination?.nextCursor) {
-        setHasMore(true);
-      } else {
-        setHasMore(false);
+        setPageHistory(prev => {
+          const updated = [...prev];
+          updated[newPage - 1] = pagination.nextCursor;
+          return updated;
+        });
+        setLastestID(pagination.nextCursor);
+        setCurrentPage(newPage);
       }
-    } else if (articlesTags && articlesTags.length === 0) {
-      setHasMore(false);
-    }
-  }, [articlesTags, pagination, lastestID]);
-
-  // Function to handle loading more articles
-  const handleLoadMore = () => {
-    if (pagination?.nextCursor) {
-      setLastestID(pagination.nextCursor);
     } else {
-      // Set lastestID to the _id of the last item in articlesTags
-      if (articlesTags.length > 0) {
-        setLastestID(articlesTags[articlesTags.length - 1]._id);
-      }
+      // Moving backward - use stored lastestID from pageHistory
+      const previousLastestID = pageHistory[newPage - 1] || '';
+      setLastestID(previousLastestID);
+      setCurrentPage(newPage);
     }
   };
+
+  const totalRecords = pagination?.totalRecord || 0;
+  const hasNextPage = !!pagination?.nextCursor;
+  const hasPrevPage = currentPage > 1;
 
   return (
     <Suspense fallback={<Loading />}>
       <ArticleTagList
-        articlesTags={allArticles}
+        articlesTags={articlesTags}
         error={error}
-        hasMore={hasMore}
-        isLoading={isLoading && allArticles.length === 0}
-        isLoadingMore={isLoading && allArticles.length > 0}
-        onLoadMore={handleLoadMore}
+        isLoading={isLoading}
+        currentPage={currentPage}
+        totalRecords={totalRecords}
+        pageSize={PAGE_SIZE}
+        onPageChange={handlePageChange}
+        hasNextPage={hasNextPage}
+        hasPrevPage={hasPrevPage}
       />
     </Suspense>
   );
