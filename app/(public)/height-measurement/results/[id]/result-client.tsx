@@ -2,7 +2,7 @@
 
 import { Loader2, Printer } from 'lucide-react';
 import { useState } from 'react';
-import html2canvas from 'html2canvas';
+import html2canvas from 'html2canvas-pro';
 import print from 'print-js';
 
 import { Button } from '@/components/ui/button';
