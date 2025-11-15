@@ -171,7 +171,7 @@ export default function HeightMeasurementCDCForm() {
   return (
     <form
       aria-labelledby="height-measurement-form-title"
-      className="space-y-4 sm:space-y-6"
+      className="space-y-4 sm:space-y-6 [&_input]:text-base sm:[&_input]:text-sm"
       onSubmit={handleSubmit(onSubmit)}>
       {error && (
         <div
