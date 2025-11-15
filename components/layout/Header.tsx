@@ -397,7 +397,7 @@ export function Header() {
             )}
           </div>
           <div className="container mx-auto px-4">
-            <MegaMenu />
+            <MegaMenu onLinkClick={() => setMobileMenuOpen(false)} />
           </div>
         </div>
         <div className="container py-5 border-t">

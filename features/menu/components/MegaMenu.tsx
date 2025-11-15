@@ -20,7 +20,11 @@ function formatMenuData(mediaItems: MediaItem[]): MediaItem[] {
   return [...mediaItems].sort((a, b) => (a.order || 0) - (b.order || 0));
 }
 
-export default function MegaMenu() {
+interface MegaMenuProps {
+  onLinkClick?: () => void;
+}
+
+export default function MegaMenu({ onLinkClick }: MegaMenuProps) {
   const {
     mediaItems,
     isLoading: isLoadingMenu,
@@ -202,7 +206,8 @@ export default function MegaMenu() {
                         item.slug,
                         item.level,
                         item.type,
-                      )}>
+                      )}
+                      onClick={onLinkClick}>
                       <span className="text-[15px] font-medium">
                         {item.name}
                       </span>
@@ -243,7 +248,8 @@ export default function MegaMenu() {
                                 child.slug,
                                 child.level,
                                 child.type,
-                              )}>
+                              )}
+                              onClick={onLinkClick}>
                               {child.thumbnail && (
                                 <Image
                                   alt=""
