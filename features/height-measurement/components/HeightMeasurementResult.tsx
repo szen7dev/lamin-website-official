@@ -7,6 +7,7 @@ import Chart from 'chart.js/auto';
 import { useGetHeightMeasurementInfo } from '../hooks/useGetHeightMeasurementInfo';
 
 import { useMediaQuery } from '@/hooks/useMediaQuery';
+import { useAuth } from '@/hooks/useAuth';
 import { CheckIcon } from '@/components/icons';
 import { fallbackData, percentiles } from '@/data/chart';
 
@@ -22,6 +23,7 @@ export default function HeightMeasurementResult({
   const chartRef = useRef<HTMLCanvasElement>(null);
   const chartInstance = useRef<Chart | null>(null);
   const isMobile = useMediaQuery('(max-width: 768px)');
+  const { user } = useAuth();
 
   // Lấy dữ liệu từ API qua React Query
   const { response, growTrack, isLoading, error } =
@@ -100,7 +102,7 @@ export default function HeightMeasurementResult({
         predictedHeight,
         growthRate: 36, // Giá trị mặc định
         analysisDate: response.createAt || new Date().toISOString(),
-        coach: 'Chuyên gia Lamin',
+        coach: user?.fullname || 'Chuyên gia Lamin',
         recommendations: [
           'Ngủ trước 10h tối',
           'Chơi các môn thể thao kéo dãn như Bơi, Xà, Nhảy Dây',

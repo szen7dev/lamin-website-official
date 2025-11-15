@@ -6,6 +6,7 @@ import { Chart } from 'chart.js';
 
 import { useGetHeightMeasurementInfo } from '@/features/height-measurement';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
+import { useAuth } from '@/hooks/useAuth';
 import { fallbackData, percentiles } from '@/data/chart';
 import { useTabContext } from '@/contexts/TabContext';
 
@@ -17,6 +18,7 @@ const TabContent = ({ data }: TabContentProps) => {
   const chartRef = useRef<HTMLCanvasElement>(null);
   const chartInstance = useRef<Chart | null>(null);
   const isMobile = useMediaQuery('(max-width: 768px)');
+  const { user } = useAuth();
   const [processedData, setProcessedData] = useState<
     typeof fallbackData | null
   >(null);
@@ -116,7 +118,7 @@ const TabContent = ({ data }: TabContentProps) => {
         predictedHeight,
         growthRate: 36, // Giá trị mặc định
         analysisDate: response.createAt || new Date().toISOString(),
-        coach: 'Chuyên gia Lamin',
+        coach: user?.fullname || 'Chuyên gia Lamin',
         recommendations: [
           'Ngủ trước 10h tối',
           'Chơi các môn thể thao kéo dãn như Bơi, Xà, Nhảy Dây',
