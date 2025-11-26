@@ -3,7 +3,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { Check, ChevronsUpDown } from 'lucide-react';
-
+import { CheckCircleIcon } from 'lucide-react';
 import { useGetDoctype } from '../hooks/useGetDoctype';
 
 import {
@@ -78,8 +78,21 @@ const ActivationForm = ({
         </div>
         <p className="font-semibold text-xl">Kích hoạt điện tử</p>
         <p className="font-normal text-sm text-grayscale-40">
-          Quý khách vui lòng nhập thông tin để kích hoạt phục vụ cho nhận các ưu
-          đãi tích luỹ:{' '}
+          Quý khách vui lòng nhập thông tin để kích hoạt phục vụ việc Chăm sóc khách hàng{' '}
+        </p>
+      </div>
+      <div className="bg-[#059550] rounded-xl p-6 w-full max-w-3xl mx-auto mb-4 flex flex-col items-center m-6">
+        <div className="flex items-center gap-2">
+          <p className="text-white uppercase text-2xl font-semibold underline">
+            Sản phẩm chính hãng
+          </p>
+          <CheckCircleIcon className="h-6 w-6 text-white" />
+        </div>
+        <p className="text-white text-sm font-semibold">
+          Sản phẩm được phân phối và chịu trách nhiệm bởi
+        </p>
+        <p className="text-white text-sm font-semibold">
+          CÔNG TY CỔ PHẦN DƯỢC PHẨM LAMIN
         </p>
       </div>
       <div className="flex flex-col items-center bg-white justify-between w-full max-w-3xl mx-auto mt-4">
@@ -93,7 +106,7 @@ const ActivationForm = ({
             </p>
           </div>
         </div>
-        <div className="bg-[#E5F1FF] p-6 w-full">
+        {/* <div className="bg-[#E5F1FF] p-6 w-full">
           <div className="flex items-start gap-3 mb-4">
             <div className="flex-shrink-0 w-7 h-7 bg-[#0051a5] rounded-full flex items-center justify-center mt-0.5">
               <svg
@@ -135,7 +148,7 @@ const ActivationForm = ({
               1 Sổ tay LaminGrow-Nhật ký cao lớn
             </p>
           </div>
-          {/* <div className="flex items-start gap-3">
+          <div className="flex items-start gap-3">
             <div className="flex-shrink-0 w-7 h-7 bg-[#0051a5] rounded-full flex items-center justify-center mt-0.5">
               <svg
                 className="h-5 w-5 text-white"
@@ -154,8 +167,8 @@ const ActivationForm = ({
             <p className="text-gray-700 text-base">
               Ưu đãi đặc biệt cho các đơn hàng tiếp theo
             </p>
-          </div> */}
-        </div>
+          </div>
+        </div> */}
         <div className="bg-white p-6 w-full">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -578,7 +591,7 @@ const ActivationForm = ({
                 className="w-full bg-[#0051a5] text-white font-medium py-3 px-4 rounded-md hover:bg-[#004490] transition-colors"
                 disabled={isActivating}
                 type="submit">
-                {isActivating ? 'Đang xử lý...' : 'Nhận điểm và tài liệu ngay'}
+                {isActivating ? 'Đang xử lý...' : 'Kích hoạt ngay'}
               </button>
             </form>
           </Form>
