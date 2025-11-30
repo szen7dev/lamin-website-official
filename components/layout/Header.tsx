@@ -138,6 +138,13 @@ export function Header() {
         <DropdownMenuItem asChild>
           <Link
             className="decoration-transparent cursor-pointer"
+            href="/tai-khoan/do-cao-khach-hang">
+            Đo cao khách hàng
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link
+            className="decoration-transparent cursor-pointer"
             href="/tai-khoan/lich-su-do-cao">
             Lịch sử đo cao
           </Link>
