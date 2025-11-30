@@ -22,6 +22,7 @@ export default function HeightMeasurementResult({
 }: HeightMeasurementResultProps) {
   const chartRef = useRef<HTMLCanvasElement>(null);
   const chartInstance = useRef<Chart | null>(null);
+  const logoImgRef = useRef<HTMLImageElement | null>(null);
   const isMobile = useMediaQuery('(max-width: 768px)');
   const { user } = useAuth();
 
@@ -32,6 +33,26 @@ export default function HeightMeasurementResult({
   const [processedData, setProcessedData] = useState<
     typeof fallbackData | null
   >(null);
+
+  useEffect(() => {
+    const logoImg = new Image();
+    logoImg.src = '/images/LogoLamin_Blue.webp';
+    
+    logoImg.onload = () => {
+      logoImgRef.current = logoImg;
+      if (chartInstance.current) {
+        chartInstance.current.update();
+      }
+    };
+    
+    logoImg.onerror = () => {
+      console.error('Failed to load logo image');
+    };
+    
+    if (logoImg.complete) {
+      logoImgRef.current = logoImg;
+    }
+  }, []);
 
   // Xử lý dữ liệu từ API
   useEffect(() => {
@@ -351,11 +372,9 @@ export default function HeightMeasurementResult({
           id: 'logoWatermark',
           afterDraw(chart) {
             const { ctx, chartArea } = chart;
-            const logoImg = new Image();
+            const logoImg = logoImgRef.current;
 
-            logoImg.src = '/images/LogoLamin_Blue.webp';
-
-            if (logoImg.complete) {
+            if (logoImg && logoImg.complete && logoImg.naturalWidth > 0) {
               const logoHeight = isMobile ? 25 : 40;
               const aspectRatio = logoImg.naturalWidth / logoImg.naturalHeight;
               const logoWidth = logoHeight * aspectRatio;
