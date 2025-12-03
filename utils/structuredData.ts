@@ -13,7 +13,7 @@ export function getOrganizationSchema() {
       '@type': 'ContactPoint',
       contactType: 'Customer Service',
       telephone: '1800646970',
-      email: 'info@lamin.com.vn',
+      email: 'contact.laminpharma@gmail.com',
       areaServed: 'VN',
       availableLanguage: ['Vietnamese'],
     },
