@@ -66,7 +66,7 @@ export default function NutritionCheckForm() {
             <p>
               {error instanceof Error
                 ? error.message
-                : 'Có lỗi xảy ra. Vui lòng thử lại.'}
+                : 'Có lỗi xảy ra. Vui lòng thử lại | Bạn không có quyền thực hiện.'}
             </p>
           </div>
         )}

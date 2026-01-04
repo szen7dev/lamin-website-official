@@ -181,7 +181,7 @@ export default function HeightMeasurementCDCForm() {
             aria-hidden="true"
             className="h-4 w-4 sm:h-5 sm:w-5 shrink-0 mt-0.5"
           />
-          <p className="text-sm">Có lỗi xảy ra. Vui lòng thử lại.</p>
+          <p className="text-sm">Có lỗi xảy ra. Vui lòng thử lại | Bạn không có quyền thực hiện.</p>
         </div>
       )}
 
