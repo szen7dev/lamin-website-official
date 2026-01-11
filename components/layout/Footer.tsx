@@ -138,6 +138,9 @@ export function Footer() {
               <p className="text-white/80 text-sm leading-relaxed ml-6 mt-6">
                 Email: <span className='text-yellow-400'>{contactInfo?.email}</span>
               </p>
+              <p className="text-white/80 text-sm leading-relaxed ml-6 mt-6">
+                Zalo/Chăm sóc khách hàng: <span className='text-yellow-400'>{contactInfo?.phone}</span>
+              </p>
             </div>
 
             {/* Phone Button */}
