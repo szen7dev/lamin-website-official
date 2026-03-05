@@ -18,6 +18,7 @@ const heightMeasurementSchema = z
   .object({
     name: z.string().min(1, 'Vui lòng nhập tên bé'),
     parentName: z.string().min(1, 'Vui lòng nhập tên bố/mẹ'),
+    email: z.string().optional(),
     phone: z
       .string()
       .min(1, 'Vui lòng nhập số điện thoại')
@@ -74,6 +75,26 @@ const heightMeasurementSchema = z
       }),
     gender: z.union([z.string(), z.number()]).transform(val => Number(val)),
     boneAge: z
+      .union([z.string(), z.number()])
+      .transform(val => {
+        if (typeof val === 'string') {
+          return val === '' ? undefined : Number(val);
+        }
+
+        return val;
+      })
+      .optional(),
+    fatherHeight: z
+      .union([z.string(), z.number()])
+      .transform(val => {
+        if (typeof val === 'string') {
+          return val === '' ? undefined : Number(val);
+        }
+
+        return val;
+      })
+      .optional(),
+    motherHeight: z
       .union([z.string(), z.number()])
       .transform(val => {
         if (typeof val === 'string') {
@@ -141,6 +162,7 @@ export default function HeightMeasurementCDCForm() {
       weight: '',
       height: '',
       phone: '',
+      email: '',
       gender: '1',
       boneAge: '',
       note: 'Đo chiều cao từ website',
@@ -153,7 +175,7 @@ export default function HeightMeasurementCDCForm() {
     try {
       createHeightMeasurement({
         ...formData,
-        note: formData.note || 'Đo chiều cao từ website',
+        note: formData.note || 'Đo chiều cao từ Website lamin.com.vn',
         // date: new Date()
       } as HeightMeasurementFormData);
     } catch (err) {
@@ -221,7 +243,7 @@ export default function HeightMeasurementCDCForm() {
           <span aria-hidden="true" className="text-error mr-1">
             *
           </span>
-          Số điện thoại
+          Điện thoại bố/mẹ
         </label>
         <input
           className={`w-full rounded-lg border ${errors.phone ? 'border-error-5' : 'border-grayscale-20'} bg-white px-3 sm:px-4 py-2 sm:py-3 text-sm text-grayscale-90 placeholder:text-grayscale-40 focus:border-primary-5 focus:outline-none focus:ring-1 focus:ring-primary-5 disabled:opacity-70`}
@@ -236,6 +258,29 @@ export default function HeightMeasurementCDCForm() {
         {errors.phone && (
           <p className="text-xs sm:text-sm text-error" id="phone-error">
             {errors.phone.message}
+          </p>
+        )}
+      </div>
+
+      <div className="space-y-1 sm:space-y-2">
+        <label
+          className="flex items-center text-xs sm:text-sm text-grayscale-90"
+          htmlFor="email">
+          Email bố/mẹ
+        </label>
+        <input
+          className={`w-full rounded-lg border ${errors.email ? 'border-error-5' : 'border-grayscale-20'} bg-white px-3 sm:px-4 py-2 sm:py-3 text-sm text-grayscale-90 placeholder:text-grayscale-40 focus:border-primary-5 focus:outline-none focus:ring-1 focus:ring-primary-5 disabled:opacity-70`}
+          disabled={isPending}
+          id="email"
+          placeholder="Nhập email"
+          type="tel"
+          {...register('email')}
+          aria-describedby={errors.email ? 'phone-email' : undefined}
+          aria-invalid={errors.email ? 'true' : 'false'}
+        />
+        {errors.email && (
+          <p className="text-xs sm:text-sm text-error" id="email-error">
+            {errors.email.message}
           </p>
         )}
       </div>
@@ -446,6 +491,52 @@ export default function HeightMeasurementCDCForm() {
         <div className="space-y-1 sm:space-y-2">
           <label
             className="flex items-center text-xs sm:text-sm text-grayscale-90"
+            htmlFor="fatherHeight">
+            Chiều cao ba (cm)
+          </label>
+          <input
+            className={`w-full rounded-lg border ${errors.fatherHeight ? 'border-error-5' : 'border-grayscale-20'} bg-white px-3 sm:px-4 py-2 sm:py-3 text-sm text-grayscale-90 placeholder:text-grayscale-40 focus:border-primary-5 focus:outline-none focus:ring-1 focus:ring-primary-5 disabled:opacity-70`}
+            disabled={isPending}
+            id="fatherHeight"
+            placeholder="Nhập chiều cao của ba"
+            type="text"
+            {...register('fatherHeight')}
+            aria-describedby={errors.fatherHeight ? 'fatherHeight-error' : undefined}
+            aria-invalid={errors.fatherHeight ? 'true' : 'false'}
+          />
+          {errors.fatherHeight && (
+            <p className="text-xs sm:text-sm text-error" id="fatherHeight-error">
+              {errors.fatherHeight.message}
+            </p>
+          )}
+        </div>
+
+        <div className="space-y-1 sm:space-y-2">
+          <label
+            className="flex items-center text-xs sm:text-sm text-grayscale-90"
+            htmlFor="motherHeight">
+            Chiều cao mẹ (cm)
+          </label>
+          <input
+            className={`w-full rounded-lg border ${errors.motherHeight ? 'border-error-5' : 'border-grayscale-20'} bg-white px-3 sm:px-4 py-2 sm:py-3 text-sm text-grayscale-90 placeholder:text-grayscale-40 focus:border-primary-5 focus:outline-none focus:ring-1 focus:ring-primary-5 disabled:opacity-70`}
+            disabled={isPending}
+            id="motherHeight"
+            placeholder="Nhập chiều cao của mẹ"
+            type="text"
+            {...register('motherHeight')}
+            aria-describedby={errors.motherHeight ? 'motherHeight-error' : undefined}
+            aria-invalid={errors.motherHeight ? 'true' : 'false'}
+          />
+          {errors.motherHeight && (
+            <p className="text-xs sm:text-sm text-error" id="motherHeight-error">
+              {errors.motherHeight.message}
+            </p>
+          )}
+        </div>
+
+        <div className="space-y-1 sm:space-y-2">
+          <label
+            className="flex items-center text-xs sm:text-sm text-grayscale-90"
             htmlFor="pubertyOnsetDate">
             Ngày dậy thì
           </label>
@@ -474,6 +565,7 @@ export default function HeightMeasurementCDCForm() {
             </p>
           )}
         </div>
+
       </div>
 
       <div className="flex flex-col sm:flex-row sm:justify-end gap-2 sm:gap-3 pt-2 sm:pt-4">
