@@ -144,12 +144,12 @@ export function Footer() {
             </div>
 
             {/* Phone Button */}
-            <Link
+            {/* <Link
               className="hidden sm:inline-flex items-center gap-2 px-6 py-3 border-2 border-yellow-400 text-yellow-400 rounded-full hover:bg-yellow-400 hover:text-[#0052A4] transition-all font-medium"
               href={`tel:${contactInfo?.hotline1}`}>
               <Phone className="w-5 h-5" />
               <span>Tổng đài miễn cước: {contactInfo?.hotline1}</span>
-            </Link>
+            </Link> */}
           </div>
 
           {/* Middle Section - Links */}
