@@ -724,7 +724,7 @@ export default function HeightMeasurementResult({
             những thói quen sinh hoạt xấu
           </p>
           <p className="border-b border-grayscale-100 text-grayscale-90">
-            • Con có thể tăng thêm 7-15cm so với dự đoán khi trưởng thành với Tăng cao Đa Mô Thức cùng Lamin
+            • Con có cơ hội tăng trưởng 7-15cm so với dự đoán khi thay đổi được các thói quen Dinh dưỡng - Giấc ngủ - Vận động một cách tích cực
           </p>
           <ul
             aria-label="Khuyến nghị"
