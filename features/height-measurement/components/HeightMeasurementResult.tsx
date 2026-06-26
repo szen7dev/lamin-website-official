@@ -724,8 +724,7 @@ export default function HeightMeasurementResult({
             những thói quen sinh hoạt xấu
           </p>
           <p className="border-b border-grayscale-100 text-grayscale-90">
-            • Con có thể tăng thêm 7-15cm so với dự đoán khi trưởng thành nếu bố
-            mẹ giúp con áp dụng giải pháp tăng chiều cao LaminGrow
+            • Con có thể tăng thêm 7-15cm so với dự đoán khi trưởng thành với Tăng cao Đa Mô Thức cùng Lamin
           </p>
           <ul
             aria-label="Khuyến nghị"
