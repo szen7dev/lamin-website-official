@@ -169,7 +169,7 @@ export default function HeightMeasurementHistoryPage({
             Chi tiết thông tin đo cao
           </h1>
           <p className="mb-4 sm:mb-6 text-sm text-grayscale-60">
-            Đánh giá và phân tích chi tiết đo cao của bé {displayName}
+            Biểu đồ dự đoán chiều cao theo CDC của bé {displayName}
           </p>
         </div>
 
