@@ -21,6 +21,9 @@ Recent platform work already landed: **Next 15 → 16** (which renamed `middlewa
 - [x] OpenAI assistant moved server-side (`app/api/ai/laminGPT` + `utils/ai/openai-service.ts`)
 - [x] GitOps deploy — GitHub → `trixgo-builds` → ghcr → ArgoCD Image Updater → cluster `prod-trixgo-01`
 - [x] Project context for Claude Code — `CLAUDE.md`, `.claude/rules/`, this `docs/` set (2026-08-16)
+- [x] Trang nhận ưu đãi qua mã QR tại sự kiện — `/uu-dai/[token]` + cầu nối server `/api/uu-dai/[token]`
+      (branch `feat/qr-uu-dai`, 2026-08-16). **Chưa chạy thử trên trình duyệt thật** — cần token do
+      s7-data-hub cấp, mà backend còn ở nhánh chưa merge.
 
 ## Open — needs an owner decision
 
@@ -34,6 +37,8 @@ Nothing below has been changed. Each is detailed with evidence in [`findings.md`
       `.gitlab-ci.yml`, plus a plaintext JWT in the GitOps repo. Rotation is the owner's call.
 - [ ] **#4 🟠 Mock mode on production.** Five feature factories serve mock data. Intended or not?
 - [ ] **#6 🟡 Two build pipelines.** Decide whether `.gitlab-ci.yml` is legacy (delete) or real (document).
+- [ ] **#12 🟠 `yarn lint` hỏng hoàn toàn.** Script dùng cú pháp ESLint 8 (`-c .eslintrc.json --ext`), còn
+      flat config thiếu `@eslint/compat`. Sửa nhỏ nhưng đụng tooling dùng chung nên chờ bạn gật.
 
 ## Next — safe to do without a decision
 

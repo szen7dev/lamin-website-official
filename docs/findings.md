@@ -155,8 +155,40 @@ it in a dedicated commit, or leave it clearly labelled.
 
 ---
 
+## 🟠 12. `yarn lint` is completely broken — two independent failures
+
+**Verified 2026-08-16** by running it.
+
+```
+$ yarn lint
+TypeError [ERR_IMPORT_ATTRIBUTE_MISSING]: Module ".eslintrc.json" needs an import attribute of "type: json"
+```
+
+1. `package.json` runs `eslint . --ext .ts,.tsx -c .eslintrc.json --fix`. ESLint 9 is flat-config only: it
+   tries to `import()` the path given to `-c` as a module, and a `.json` file needs an import attribute.
+   `--ext` is also gone in ESLint 9.
+2. Falling back to the flat config does not work either — `eslint.config.mjs` imports **`@eslint/compat`,
+   which is not in `devDependencies`**:
+   ```
+   Error [ERR_MODULE_NOT_FOUND]: Cannot find package '@eslint/compat'
+   ```
+
+So the repo has **no working linter at all**, on top of no tests and a build that ignores type errors
+(#11). Every `.eslintrc.json` rule documented in `CLAUDE.md` §8 — import ordering, JSX prop sorting,
+unused-import removal — is currently unenforced.
+
+Consequence for anyone working here: **new code cannot be linted.** Say so rather than implying it passed.
+
+Fix is small — add `@eslint/compat` and point the script at the flat config — but it changes shared tooling
+for everyone, so it needs the owner's go-ahead rather than a drive-by edit.
+
+---
+
 ## 🟡 11. No tests, and type errors do not fail the build
 
 **Verified.** `next.config.mjs:7` sets `typescript.ignoreBuildErrors: true`; there is no test script, no
 test runner, and no test files. A green build carries no correctness signal — every change needs manual
 browser verification.
+
+Measured 2026-08-16: `npx tsc --noEmit` reports **74 pre-existing type errors** across the repo. None of
+them fail the build, and nobody sees them unless they run `tsc` by hand.
