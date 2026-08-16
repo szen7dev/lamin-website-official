@@ -7,6 +7,50 @@ Format: `## YYYY-MM-DD HH:MM — <what>` then what changed, and what was verifie
 
 ---
 
+## 2026-08-16 — Trang nhận ưu đãi qua mã QR tại sự kiện (`/uu-dai/[token]`)
+
+Branch `feat/qr-uu-dai`. Phần khách của một tính năng trải ba repo — backend + màn quản trị đã xong ở
+nhánh `wt/qr-uu-dai` bên `s7-data-hub` và `s7-hub-webapp`.
+
+**Bối cảnh:** công ty đi đo chiều cao cho trẻ tại trường học, trong trường **không được bán hàng**. Mẹ quét
+mã QR dán ở bàn đo → điền số điện thoại + tên → nhận mã voucher "Mua 2 tặng 1"; đội sale gọi lại sau.
+
+**Đã thêm:**
+
+- `app/uu-dai/[token]/page.tsx` + `client.tsx` — trang khách, mobile-first, `robots: noindex`.
+- `app/api/uu-dai/[token]/route.ts` — cầu nối server-side sang s7-data-hub (GET + POST).
+- `S7_API_URL` trong `.env` và `.env.production`.
+
+**Ba quyết định thiết kế:**
+
+1. **Đặt NGOÀI route group `(public)`** — `(public)` bọc `PublicLayout` (header + mega menu + giỏ hàng +
+   footer). Người dùng là phụ huynh đang xếp hàng giữa sân trường, mở bằng 4G, chỉ có một việc cần làm.
+2. **KHÔNG khai trong `proxy.ts`** — `/uu-dai/...` vốn đã là tiếng Việt, không có gì để dịch. Luật hai
+   chiều ở `.claude/rules/vietnamese-urls.md` áp cho trang có thư mục tên tiếng Anh. Rơi xuống nhánh mặc
+   định của proxy nên vẫn nhận đủ header bảo mật.
+3. **Đi vòng qua route server thay vì gọi thẳng s7-data-hub từ trình duyệt** — tránh CORS, không lộ địa chỉ
+   hệ thống quản trị, và giữ nguyên luật "một API client" ở phía client. `S7_API_URL` cố ý KHÔNG có tiền tố
+   `NEXT_PUBLIC_`, kèm giá trị mặc định viết cứng vì finding #2 (chưa rõ `.env.production` có sống sót vào
+   ảnh standalone không) — biến rỗng mà không có mặc định thì trang chết im lặng đúng lúc đang dùng thật.
+
+**Đã kiểm chứng:**
+
+- `yarn build` xanh (48s); `/uu-dai/[token]` và `/api/uu-dai/[token]` đều lên đúng dạng ƒ (dynamic).
+- `grep "app.szen7.com" .next/static` → **0 file**: địa chỉ backend KHÔNG lọt vào bundle client, đúng như
+  thiết kế server-only nhắm tới.
+- `npx tsc --noEmit` → **0 lỗi trong file mới** (74 lỗi còn lại là có sẵn của repo, xem finding #11).
+
+**KHÔNG kiểm chứng được — nói thẳng:**
+
+- **Chưa chạy thử trên trình duyệt thật.** Cần một token sự kiện thật do s7-data-hub cấp, mà backend đang
+  nằm ở nhánh chưa merge.
+- **Không lint được.** `yarn lint` hỏng hoàn toàn (finding #12 mới) — cả script lẫn flat config đều lỗi,
+  nên không có công cụ nào soi code mới.
+
+**Phát hiện mới:** finding #12 (`yarn lint` hỏng), và số đo cụ thể cho #11 (74 lỗi type có sẵn).
+
+---
+
 ## 2026-08-16 — Project context set up (CLAUDE.md + rules + docs)
 
 **Changed** — documentation only, no application code touched:
