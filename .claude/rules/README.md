@@ -1,0 +1,26 @@
+# Rules
+
+One concern per file. Each rule is the **short, citable** form of a project constraint; the long-form
+rationale lives in `CLAUDE.md` and `docs/`. These apply **by default** — you should not need reminding.
+
+Every rule below is grounded in something verifiable in this repo (a file + line, a grep result, a
+measurement). If you find one that no longer matches the code, fix the rule in the same change.
+
+| Rule | One-liner |
+|------|-----------|
+| [`env-build-time.md`](env-build-time.md) | **IMPORTANT** — `NEXT_PUBLIC_*` is inlined as a string literal at **build** time. Setting it on the pod does nothing. Measured: `api.szen7.com` sits hard-baked in 8 `.next` chunks. This already caused a live mismatch — k8s says `api.lamin.com.vn`, the browser calls `api.trixgo.com`. Changing an API host means **rebuilding an image**, not editing `values.yaml`. |
+| [`repo-identity.md`](repo-identity.md) | **IMPORTANT** — production runs from `lamin-website-official`, NOT `lamin-website-branding`. Proof: prod image tag pins commit `18e7367`, which resolves here and fails there. A fix landed only in `branding` ships nothing. The two repos have diverged (Tailwind v3 vs v4, different env layout) — never copy files across without reading both sides. |
+| [`one-api-client.md`](one-api-client.md) | The whole app goes through **one** axios instance, `services/api/apiClient.ts`. `services/api.ts` is a second, **dead** client that reads a non-existent `API_URL` and would throw on import. Nothing imports it (grep = 0 hits). Don't import it, don't "repair" it — delete it or leave it alone. |
+| [`vietnamese-urls.md`](vietnamese-urls.md) | Vietnamese URLs are canonical (users + SEO); English paths are internal folders. A route needs an entry in **BOTH** maps in `proxy.ts` — 26 redirects EN→VI and 26 rewrites VI→EN. One alone half-breaks the page. `proxy.ts` is the Next 16 rename of `middleware.ts`. |
+| [`secrets.md`](secrets.md) | **IMPORTANT** — never commit a credential. Three files already contain live ones (`.env`, `.env.production`, `.gitlab-ci.yml`): two OpenAI keys and two JWTs. Anything prefixed `NEXT_PUBLIC_` is **shipped to the browser** — a secret with that prefix is public by construction. Rotating a leaked key is the owner's call; flag, don't silently paper over. |
+| [`tailwind-v4.md`](tailwind-v4.md) | This repo is on **Tailwind v4** (`@tailwindcss/postcss`). Config lives in CSS (`styles/globals.css`), not in a JS config. `tailwind.config.js.backup` is an inert leftover from the v3→v4 migration — editing it changes nothing. v3 snippets (from the `branding` repo, or from most web answers) do not transfer. |
+| [`verify-in-browser.md`](verify-in-browser.md) | **IMPORTANT** — `next.config.mjs:7` sets `ignoreBuildErrors: true` and there is **no test suite**. A green `yarn build` proves nothing about types or behavior. "Done" means: ran it, clicked it, watched the network tab. Say plainly when you could not verify something. |
+| [`deploy-gitops.md`](deploy-gitops.md) | Pushing code is **not** deploying. `trigger.yml` → `trixgo-builds` → `ghcr.io/szen7dev/lamin-website:<branch>-<run>-<sha7>` → the tag is pinned in `trixgo-kubenetes-prod` → ArgoCD syncs. The builder passes **no build-args**, so the image bakes the committed `.env.production`. Verify a release by the SHA in the running tag, not by "the push succeeded". |
+| [`mock-mode.md`](mock-mode.md) | `NEXT_PUBLIC_API_MODE` defaults to `'mock'` and is `mock` in every environment file including production. `isMockApi()` silently swaps **5 feature factories** (`product`, `menu`, `order`, `user`, `nutrition-check`) to mock services. Before debugging "the API returns wrong data", check which side you are actually on. |
+| [`no-invented-facts.md`](no-invented-facts.md) | **IMPORTANT** — this repo has several things that look one way and behave another (dead client, inert Tailwind config, unreachable auth guard, ineffective pod env). Conclusions must carry evidence: file + line, a grep result, a command's real output. "Probably" and "should" are not findings — label them as unverified or go check. |
+| [`tone-vietnamese.md`](tone-vietnamese.md) | **Standing rule** — trả lời tiếng Việt, tự xưng **"mình"**, gọi chủ dự án là **"bạn"**; bỏ rào đón, xin lỗi thừa, khen lấy lòng, nói vòng. Sai thì nói sai, không biết thì nói không biết — nhưng kết luận nào cũng phải kèm bằng chứng, và vẫn giải thích cho người không đọc mã nguồn. |
+| [`propose-before-build.md`](propose-before-build.md) | **Standing rule** — mọi việc đi theo 4 bước: **PHÂN TÍCH** (đọc mã/cấu hình thật) → **TÓM TẮT** bằng ngôn ngữ nghiệp vụ → **ĐỀ XUẤT** 2–3 phương án kèm đánh đổi và một khuyến nghị rõ ràng → **CHỜ GẬT** rồi mới sửa file đầu tiên. Giao việc ≠ đã duyệt phương án. |
+| [`task-checklist.md`](task-checklist.md) | **Standing rule** — việc từ 3 bước trở lên phải có **checklist tick dần** hiện ra trước khi làm. Một mục = một kết quả kiểm chứng được; chỉ tick khi thật sự xong và đã kiểm; việc phát sinh thì thêm mục mới, không nhét lặng vào mục cũ. |
+
+To make a rule **auto-enforced** rather than merely documented, wire a hook in `.claude/settings.json`
+(see [`../README.md`](../README.md)) or encode it as a lint rule / CI check.
