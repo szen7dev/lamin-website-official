@@ -15,9 +15,10 @@ build-docker-staging:
       NEXT_PUBLIC_CLOUDFRONT_URL=https://dntdurzwr12tp.cloudfront.net
       NEXT_PUBLIC_IMAGE_PREFIX=https://dntdurzwr12tp.cloudfront.net
       NEXT_PUBLIC_DEFAULT_TOKEN=$NEXT_PUBLIC_DEFAULT_TOKEN
-      OPENAI_API_KEY=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
-      ASSISTANT_ID=asst_hVS5WE1WMNBcScTa7eNd4sld
-      VECTOR_STORE_ID=vs_69057fbff868819197c1d14a3342e1df
+      OPENAI_API_KEY=$OPENAI_API_KEY
+      ASSISTANT_ID=$ASSISTANT_ID
+      VECTOR_STORE_ID=$VECTOR_STORE_ID
+      S7_API_URL=${S7_API_URL:-https://app.szen7.com}
       ANALYZE=false
       EOF
   tags:
@@ -39,9 +40,10 @@ build-docker-prod:
       NEXT_PUBLIC_CLOUDFRONT_URL=https://dntdurzwr12tp.cloudfront.net
       NEXT_PUBLIC_IMAGE_PREFIX=https://dntdurzwr12tp.cloudfront.net
       NEXT_PUBLIC_DEFAULT_TOKEN=$NEXT_PUBLIC_DEFAULT_TOKEN
-      OPENAI_API_KEY=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
-      ASSISTANT_ID=asst_hVS5WE1WMNBcScTa7eNd4sld
-      VECTOR_STORE_ID=vs_69057fbff868819197c1d14a3342e1df
+      OPENAI_API_KEY=$OPENAI_API_KEY
+      ASSISTANT_ID=$ASSISTANT_ID
+      VECTOR_STORE_ID=$VECTOR_STORE_ID
+      S7_API_URL=${S7_API_URL:-https://app.szen7.com}
       ANALYZE=false
       EOF
   tags:
