@@ -25,10 +25,23 @@ if (!OPENAI_API_KEY) {
   console.error('CRITICAL: OpenAI API key is not configured. Set OPENAI_API_KEY environment variable.');
 }
 
-// Server-side OpenAI client (no dangerouslyAllowBrowser needed)
-const openai = new OpenAI({
-  apiKey: OPENAI_API_KEY,
-});
+// Server-side OpenAI client (no dangerouslyAllowBrowser needed).
+//
+// ⚠️ KHỞI TẠO TRỄ, cố ý. `new OpenAI({ apiKey })` NÉM LỖI ngay khi khoá rỗng — mà trước đây nó chạy ở
+// tầng module, tức là ngay lúc `import`. Next thu thập dữ liệu trang cho `/api/ai/laminGPT` **trong lúc
+// build**, nên module được nạp và cả bản build đổ vỡ với "Failed to collect page data" — chỉ vì một biến
+// môi trường mà máy build không cần biết.
+//
+// Đó là điều bắt buộc kể từ khi khoá chuyển sang k8s (`extraSecrets`): khoá chỉ có mặt LÚC CHẠY, còn máy
+// build thì không có. Tạo client ở lần gọi đầu tiên thì build không đụng tới nó, và nếu prod thiếu khoá
+// thật thì lỗi nổ ra ở đúng chỗ có ý nghĩa — một yêu cầu chat hỏng — chứ không phải cả website không
+// build được.
+let openaiClient: OpenAI | null = null;
+const openaiOf = (): OpenAI => {
+  if (!openaiClient) openaiClient = new OpenAI({ apiKey: OPENAI_API_KEY });
+
+  return openaiClient;
+};
 
 const DEFAULT_MODELS = {
   premium: 'gpt-4',
@@ -38,7 +51,9 @@ const DEFAULT_MODELS = {
   vision: 'gpt-4o-mini',
 };
 
-export default openai;
+// Trước đây xuất mặc định chính đối tượng client. Bỏ đi vì KHÔNG NƠI NÀO import nó (`app/api/ai/laminGPT`
+// chỉ lấy `chatWithOpenAI`), và giữ lại thì phải dựng client ngay lúc nạp module — đúng cái vừa làm hỏng
+// bản build. Cần client thô thì gọi `openaiOf()`.
 
 function cleanupExpiredThreads() {
   const now = new Date();
@@ -46,7 +61,7 @@ function cleanupExpiredThreads() {
 
   expiredThreads.forEach(async thread => {
     try {
-      await openai.beta.threads.del(thread.threadId);
+      await openaiOf().beta.threads.del(thread.threadId);
       console.log(`Deleted expired thread: ${thread.threadId}`);
     } catch (error) {
       console.error(`Failed to delete thread ${thread.threadId}:`, error);
@@ -69,7 +84,7 @@ async function getOrCreateThreadForUser(userId: string): Promise<string> {
 
     return existingThread.threadId;
   }
-  const thread = await openai.beta.threads.create();
+  const thread = await openaiOf().beta.threads.create();
 
   threadStorage.push({
     threadId: thread.id,
@@ -165,14 +180,14 @@ async function handleAssistantWithFileSearch(
     const threadId = await getOrCreateThreadForUser(userId);
 
     if (VECTOR_STORE_ID && ASSISTANT_ID) {
-      await openai.beta.assistants.update(ASSISTANT_ID, {
+      await openaiOf().beta.assistants.update(ASSISTANT_ID, {
         tool_resources: {
           file_search: { vector_store_ids: [VECTOR_STORE_ID] },
         },
       });
     }
 
-    await openai.beta.threads.messages.create(threadId, {
+    await openaiOf().beta.threads.messages.create(threadId, {
       role: 'user',
       content: userMessage,
     });
@@ -183,11 +198,11 @@ async function handleAssistantWithFileSearch(
       };
     }
 
-    const run = await openai.beta.threads.runs.create(threadId, {
+    const run = await openaiOf().beta.threads.runs.create(threadId, {
       assistant_id: ASSISTANT_ID,
     });
 
-    let runStatus = await openai.beta.threads.runs.retrieve(threadId, run.id);
+    let runStatus = await openaiOf().beta.threads.runs.retrieve(threadId, run.id);
 
     while (
       runStatus.status !== 'completed' &&
@@ -195,7 +210,7 @@ async function handleAssistantWithFileSearch(
       runStatus.status !== 'expired'
     ) {
       await new Promise(resolve => setTimeout(resolve, 1000));
-      runStatus = await openai.beta.threads.runs.retrieve(threadId, run.id);
+      runStatus = await openaiOf().beta.threads.runs.retrieve(threadId, run.id);
     }
 
     if (runStatus.status !== 'completed') {
@@ -204,7 +219,7 @@ async function handleAssistantWithFileSearch(
       };
     }
 
-    const messages_response = await openai.beta.threads.messages.list(threadId);
+    const messages_response = await openaiOf().beta.threads.messages.list(threadId);
 
     const assistantMessages = messages_response.data.filter(
       msg => msg.role === 'assistant',
@@ -364,7 +379,7 @@ async function handleRegularChatCompletion(
       content: msg.content,
     }));
 
-    const response = await openai.chat.completions.create({
+    const response = await openaiOf().chat.completions.create({
       model: DEFAULT_MODELS.standard,
       messages: typedMessages,
       temperature: 0.7,
