@@ -166,9 +166,16 @@ Hạ tầng cho đường `sign` vẫn được giữ (`dat-hang` nhận `produc
 là đường chính, `sign` là lưới an toàn cho giỏ hàng cũ còn nằm trong `localStorage` của khách (hạn 1
 ngày) với id của backend cũ.
 
-⚠️ **Hệ quả còn lại:** khách nào đang có giỏ hàng cũ sẽ thấy *"Sản phẩm không còn bán"* khi đặt, vì món
-trong giỏ mang id trixgo. Tự hết sau 24 giờ kể từ khi bật. Nếu muốn êm hơn thì phải xoá giỏ hàng phía
-khách lúc phát hiện món không hợp lệ — **chưa làm**.
+**Hệ quả với giỏ hàng cũ — đã xử lý.** Giỏ nằm trong `localStorage` khách với hạn 1 ngày, nên ngay sau
+khi bật, món trong giỏ vẫn mang id trixgo. `features/cart/hooks/useDonGioHangCu.ts` bỏ những món gian hàng
+không còn bán và hiện dải thông báo kể tên chúng ngay trong trang giỏ hàng.
+
+Hai chốt an toàn, đã thử tay cả hai — **đừng bỏ khi sửa lại**:
+
+1. Gian hàng chưa cấu hình / s7 không với tới được → **không đụng vào giỏ** (website vẫn chạy backend cũ
+   nên giỏ cũ hợp lệ)
+2. Danh mục **rỗng** → cũng không đụng (rỗng là vấn đề cấu hình; lấy nó làm căn cứ xoá thì mọi khách mất
+   sạch giỏ chỉ vì chưa ai bật `on_web`)
 
 ---
 
@@ -268,7 +275,7 @@ Chưa cấu hình token thì cả ba route trả `503 store_unconfigured` — h�
 
 ---
 
-## 7. Bốn cái bẫy đã vấp, đừng vấp lại
+## 7. Bảy cái bẫy đã vấp, đừng vấp lại
 
 **🔴 Gỡ biến môi trường khỏi source làm VỠ BẢN BUILD.** Vấp 2026-08-17, suýt đưa lên prod.
 `utils/ai/openai-service.ts` tạo `new OpenAI({ apiKey })` ở **tầng module** — hàm này **ném lỗi** khi khoá
@@ -294,6 +301,21 @@ rỗng riêng trước khi hỏi `checkPhone`. Có test khoá.
 **ESLint của repo website đang hỏng** — thiếu package `@eslint/compat`, `npx eslint` không chạy được.
 Và typecheck: repo có sẵn ~70 lỗi type từ trước (`User.id`, `OrderProduct._id`, `CartItemsProps`…).
 Khi kiểm, **so số lỗi trước/sau** thay đổi của mình, đừng kỳ vọng bảng sạch.
+
+**`CartContext.removeItem` không gọi được liên tiếp.** Nó tính danh sách mới từ biến `items` bắt được
+trong closure (`features/cart/contexts/CartContext.tsx:150`), nên hai lần gọi trong cùng một nhịp thì lần
+sau **ghi đè** lần trước và chỉ đúng một món bị bỏ. Muốn bỏ nhiều món thì xoá **mỗi lần một món** rồi để
+`items.length` đổi kéo effect chạy lại. Cùng bẫy đó áp cho mọi `setState` đọc giá trị cũ từ closure — dùng
+hàm cập nhật (`setX(truoc => …)`).
+
+**React StrictMode huỷ kết quả của effect bất đồng bộ.** Dev mount → unmount → mount lại. Nếu dùng cờ
+"component còn sống" để bỏ kết quả sau `await` **cộng với** một cờ `đã chạy` để chống chạy hai lần, thì
+lần mount đầu đặt cờ rồi bị dọn, lần hai thoát sớm, và **việc không bao giờ xảy ra**. Với thao tác tác
+động lên `localStorage`/context dùng chung thì đừng bỏ kết quả — nó vẫn cần xảy ra dù người dùng đã rời
+trang.
+
+**`toast` không hiện ở trang giỏ hàng** (đo 2026-08-17): `ToastViewport` có mount nhưng rỗng, không lỗi nào
+ở console — **chưa lần ra nguyên nhân**. Nếu cần báo cho khách ở đó, dùng dải thông báo trong trang.
 
 **Xoá worktree có thể xoá luôn `node_modules` gốc.** 2026-08-17 `s7-data-hub/node_modules` được tìm thấy
 **rỗng hoàn toàn**; hai worktree của repo dùng **junction** trỏ vào đó, và xoá junction bằng `rm -rf` sẽ
