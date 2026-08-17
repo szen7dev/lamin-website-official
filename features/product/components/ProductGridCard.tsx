@@ -24,6 +24,7 @@ export default function ProductGridCard({ product }: ProductGridCardProps) {
     try {
       addItem({
         id: product._id,
+        sign: product.sign,
         name: product.name,
         price: product.sellingUnitprice,
         originalPrice: product.listedUnitprice || product.sellingUnitprice,

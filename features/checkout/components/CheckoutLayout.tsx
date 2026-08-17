@@ -5,9 +5,8 @@ import type { Voucher } from '@/features/cart/types/voucherTypes';
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-import { useCreateOrder } from '../hooks/useCreateOrder';
-import { IPaymentData } from '../types/paymentTypes';
-import { paymentService } from '../services/paymentService';
+import { createStoreOrder } from '../api/createStoreOrder';
+import { getPaymentMethodText } from '../utils/paymentMethods';
 
 import {
   CheckoutForm,
@@ -23,12 +22,14 @@ import { useCart } from '@/features/cart/contexts/CartContext';
 import { useAuth } from '@/hooks';
 import { useToast } from '@/hooks/use-toast';
 import { useGetContactByPhone } from '@/features/contact/hooks/useGetContactByPhone';
-import { CreateOrderData } from '@/features/order/types/orderTypes';
+import {
+  clearStoreCheckout,
+  readStoreCheckout,
+} from '@/features/cart/utils/storeCheckout';
 
 export function CheckoutLayout() {
   const router = useRouter();
   const { items, removeItem, updateQuantity, updateUnit } = useCart();
-  const { createOrder } = useCreateOrder();
   const { user } = useAuth();
   const { toast } = useToast();
   const { setOrderInfo } = useOrder();
@@ -164,149 +165,75 @@ export function CheckoutLayout() {
         pointsDiscount +
         shippingFee;
 
-      const submitData: CreateOrderData = {
-        optionSeller: 1,
-        outin: 1,
-        type: 5,
-        paymentMethod: formValues.paymentMethod,
-        name: `Đơn hàng ${formValues.customerName || 'Khách hàng'}`,
-        note: formValues.note || '',
-        total: totalPrice,
-        salesoff: directDiscount,
-        offer: voucherDiscount,
-        credit: pointsDiscount, // Use the pointsDiscount here
-        shippingFee: shippingFee,
-        recipientAddress: formValues.address || '123 Main St, Anytown',
-        areaID: formValues.ward || '',
-        buyerName: formValues.customerName || 'Khách hàng',
-        buyerPhone: formValues.customerPhone || '1234567890',
-        buyerEmail: formValues.customerEmail || 'customer@example.com',
-        recipientName:
-          formValues.receiverName || formValues.customerName || 'Khách hàng',
-        recipientPhone:
-          formValues.receiverPhone || formValues.customerPhone || '1234567890',
-        products: selectedProducts.map(product => ({
-          productID: product.id,
-          quantity: product.quantity,
-          unitPrice: product.price,
-          listedUnitprice: product.originalPrice || product.price,
-          name: product.name,
-          note: '',
+      // ─── GỬI SANG s7-data-hub ────────────────────────────────────────────────────────────────────
+      // Thay cho `POST /api/store/orders/insert-full` bên api.trixgo.com (chốt của chủ dự án 2026-08-17).
+      //
+      // ⚠️ Kết quả là ĐƠN CHỜ DUYỆT, KHÔNG phải đơn đã chốt. Sale Admin xem rồi mới lên đơn và giao. Câu
+      // chữ dưới đây cố ý nói "đã nhận yêu cầu đặt hàng" chứ không phải "đặt hàng thành công" như trước —
+      // khách tưởng mua xong mà hàng không tới là mất khách thật.
+      //
+      // KHÔNG gửi tiền: s7-data-hub tra lại giá từ `products.sale_price` và bỏ qua mọi con số tiền từ
+      // trình duyệt. Mọi tính toán ở trên chỉ để HIỂN THỊ cho khách ước lượng.
+      const saved = readStoreCheckout();
+
+      // Những thứ luồng cũ có mà đơn báo không có cột riêng (email, phường/xã, hình thức thanh toán, tích
+      // điểm) đi vào ghi chú thay vì bị bỏ đi — Sale Admin cần chúng lúc lên đơn, và mất dữ liệu khách đã
+      // gõ là lỗi không sửa lại được.
+      const note = [
+        formValues.note || '',
+        formValues.customerEmail ? `Email: ${formValues.customerEmail}` : '',
+        formValues.ward ? `Khu vực: ${formValues.ward}` : '',
+        `Thanh toán: ${getPaymentMethodText(formValues.paymentMethod)}`,
+        pointsDiscount > 0 ? `Khách muốn dùng ${pointsDiscount} điểm tích luỹ` : '',
+        formValues.receiverName && formValues.receiverName !== formValues.customerName
+          ? `Người nhận: ${formValues.receiverName} - ${formValues.receiverPhone || ''}`
+          : '',
+      ].filter(Boolean).join(' · ');
+
+      const intake = await createStoreOrder({
+        customer_name: formValues.customerName || 'Khách hàng',
+        customer_phone: formValues.customerPhone || '',
+        ship_address: formValues.address || '',
+        items: selectedProducts.map(product => ({
+          // Gửi CẢ HAI: `sign` là khoá nối thật (id hai hệ thống khác nhau), còn `product_id` để phòng khi
+          // sau này danh mục cũng chuyển hẳn sang s7 — lúc đó id trùng nhau và nó thành đường chính xác
+          // nhất. s7 ưu tiên `product_id`, không khớp thì rơi sang `sign`.
+          product_id: product.id,
+          sign: product.sign,
+          qty: product.quantity,
         })),
-      };
-
-      // Prioritize user ID if logged in, otherwise use found contact ID
-      if (user?.id) {
-        submitData.customerID = user.id;
-      } else if (contactID) {
-        submitData.customerID = contactID;
-      }
-
-      if (voucherId) {
-        submitData.voucherID = voucherId;
-      }
-
-      // Use the mutation function from useCreateOrder
-      await new Promise<void>((resolve, reject) => {
-        createOrder(submitData, {
-          onSuccess: async response => {
-            // Add proper error handling for the response
-            const data = response || {};
-
-            setIsSubmitting(false);
-            toast({
-              title: 'Đặt hàng thành công',
-              description: 'Đơn hàng của bạn đã được đặt thành công!',
-            });
-
-            // Clear cart
-            selectedItems.forEach(itemId => {
-              removeItem(itemId);
-            });
-
-            // Store order information in context instead of URL parameters
-            const orderInfo = {
-              orderId: data?._id,
-              total: data?.total,
-              subtotal: subtotal,
-              directDiscount: directDiscount,
-              voucherDiscount: submitData.offer || data.offer,
-              pointsDiscount: pointsDiscount,
-              shippingFee: data?.shippingFee || submitData.shippingFee,
-              savedAmount:
-                submitData.salesoff + submitData.offer || 0 + pointsDiscount,
-              loyaltyPoints: submitData.credit,
-            };
-
-            // Set the order info in context
-            setOrderInfo(orderInfo);
-
-            // Redirect based on payment method - now without query parameters
-
-            switch (submitData.paymentMethod) {
-              case '1':
-                router.push('/checkout/success');
-                break;
-              case '2':
-                const paymentData: IPaymentData = {
-                  orderID: data?._id || '',
-                  orderDescription: `Đơn hàng ${data?.name || ''}`,
-                  amount: data?.total || 0,
-                  callbackURL: `${window.location.origin}/checkout/confirmation`,
-                  userID: user?.id,
-                };
-
-                const paymentResponse =
-                  await paymentService.getPaymentUrl(paymentData);
-
-                if (paymentResponse && paymentResponse.neo_ResponseData) {
-                  const {
-                    qrData,
-                    bankAccount,
-                    bankAccountName,
-                    bankName,
-                    remark,
-                  } = paymentResponse.neo_ResponseData;
-
-                  const params = new URLSearchParams({
-                    txId: paymentResponse.txId,
-                    total: data?.total?.toString() || '',
-                    orderId: data?._id || '',
-                    paymentMethod: submitData.paymentMethod,
-                    customerName: submitData.buyerName || '',
-                    qrData,
-                    bankAccount,
-                    bankAccountName,
-                    bankName,
-                    remark,
-                  });
-
-                  router.push(`/checkout/confirmation?${params.toString()}`);
-                } else {
-                  toast({
-                    title: 'Lỗi',
-                    description: 'Không thể lấy URL thanh toán',
-                    variant: 'destructive',
-                  });
-                }
-                break;
-              default:
-                break;
-            }
-
-            resolve();
-          },
-          onError: error => {
-            setIsSubmitting(false);
-            toast({
-              title: 'Đặt hàng thất bại',
-              description: error.message || 'Đã xảy ra lỗi khi đặt hàng.',
-              variant: 'destructive',
-            });
-            reject(error);
-          },
-        });
+        note,
+        // Mã ưu đãi khách đã chọn ở trang giỏ hàng. Server kiểm lại lần nữa và TỪ CHỐI cả đơn nếu mã hỏng
+        // — khách đã nhìn thấy số tiền được giảm nên không được lặng lẽ bỏ qua.
+        voucher_code: saved.voucher?.code || undefined,
       });
+
+      setIsSubmitting(false);
+      toast({
+        title: 'Đã nhận yêu cầu đặt hàng',
+        description:
+          'Lamin sẽ gọi lại để xác nhận đơn và thông tin giao hàng trong thời gian sớm nhất.',
+      });
+
+      // Dọn giỏ + xoá ưu đãi đã chọn của lần mua này.
+      selectedItems.forEach(itemId => {
+        removeItem(itemId);
+      });
+      clearStoreCheckout();
+
+      setOrderInfo({
+        orderId: intake.id,
+        total: totalPrice,
+        subtotal: subtotal,
+        directDiscount: directDiscount,
+        voucherDiscount: voucherDiscount,
+        pointsDiscount: pointsDiscount,
+        shippingFee: shippingFee,
+        savedAmount: directDiscount + voucherDiscount + pointsDiscount,
+        loyaltyPoints: pointsDiscount,
+      });
+
+      router.push('/checkout/success');
     } catch (error) {
       console.error('Error submitting order:', error);
       toast({

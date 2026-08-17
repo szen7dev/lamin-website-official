@@ -2,6 +2,10 @@ import { Thumbnail } from '@/types';
 
 export interface ComboProduct {
   _id: string;
+  // Mã sản phẩm. `ProductDetail` đã khai trường này từ trước, các danh sách thì chưa — nên bổ sung ở đây
+  // chứ không phải phát minh ra trường mới. Cần cho việc đặt hàng qua s7-data-hub: id sản phẩm hai hệ
+  // thống khác nhau, `sign` là khoá nối duy nhất giống nhau ở cả hai bên.
+  sign?: string;
   category?: {
     _id: string;
     name: string;

@@ -6,7 +6,10 @@ import { useRouter } from 'next/navigation';
 import { HelpCircle } from 'lucide-react';
 import Image from 'next/image';
 
+import type { StoreVoucher } from '../types/storeVoucherTypes';
+
 import { PromotionModal } from './PromotionModal';
+import { StoreVoucherBox } from './StoreVoucherBox';
 
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
@@ -39,6 +42,9 @@ export function CartSummary({
   const [usePoints, setUsePoints] = useState(false);
   const [isPromoModalOpen, setIsPromoModalOpen] = useState(false);
   const [appliedVoucher, setAppliedVoucher] = useState<Voucher | null>(null);
+  // Ưu đãi từ s7-data-hub. Giữ RIÊNG với `appliedVoucher` (voucher của api.trixgo.com) vì hai bên có hình
+  // dạng khác hẳn nhau; gộp một biến là sớm muộn cũng có chỗ đọc nhầm trường tiền của bên kia.
+  const [storeVoucher, setStoreVoucher] = useState<StoreVoucher | null>(null);
 
   // Memoized summary calculation
   const summary = useMemo(() => {
@@ -64,9 +70,11 @@ export function CartSummary({
         ? user?.contacts[0].remainLoyaltyPoints
         : 0;
 
-    let voucherDiscount = 0;
+    // Ưu đãi s7 thắng nếu có: mức giảm do CHÍNH SERVER tính (đã chặn trần `max_amount`, đã kiểm đơn tối
+    // thiểu), nên không tính lại ở đây — tính lại là tạo ra một công thức thứ hai để hai bên lệch nhau.
+    let voucherDiscount = storeVoucher ? storeVoucher.discount : 0;
 
-    if (appliedVoucher) {
+    if (!storeVoucher && appliedVoucher) {
       if (appliedVoucher.salesoffAmount > 0) {
         voucherDiscount = appliedVoucher.salesoffAmount;
       } else if (appliedVoucher.salesoffRate > 0) {
@@ -89,7 +97,7 @@ export function CartSummary({
       rewardPoints,
       savedAmount,
     };
-  }, [items, selectedItems, usePoints, appliedVoucher, user]);
+  }, [items, selectedItems, usePoints, appliedVoucher, storeVoucher, user]);
 
   // Side effect: notify parent of points discount
   useEffect(() => {
@@ -135,14 +143,10 @@ export function CartSummary({
 
   return (
     <div className="bg-white rounded-lg shadow p-4 space-y-4">
-      {/* <button
-        aria-label="Áp dụng ưu đãi"
-        className="flex w-full items-center justify-between bg-cart-promo-bg rounded-md text-blue-600 font-medium text-sm cursor-pointer border-none p-3"
-        type="button"
-        onClick={() => setIsPromoModalOpen(true)}>
-        <span>Áp dụng ưu đãi để được giảm giá</span>
-        <ChevronRight className="w-4 h-4" />
-      </button> */}
+      {/* Ưu đãi từ s7-data-hub. Thay cho nút mở `PromotionModal` (đã tắt từ trước): modal đó lấy voucher
+          theo `user.contacts[0]._id` nên chỉ chạy khi khách ĐĂNG NHẬP, mà phần lớn khách mua lẻ thì không.
+          Ô này hỏi số điện thoại — thứ khách nào cũng có — nên dùng được cho cả khách vãng lai. */}
+      <StoreVoucherBox subtotal={summary.subtotal} onVoucherChange={setStoreVoucher} />
 
       {user?.contacts && (
         <div className="flex items-center justify-between py-2">

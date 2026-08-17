@@ -1,0 +1,58 @@
+// CẦU NỐI sang s7-data-hub cho GIAN HÀNG (danh mục · voucher · đặt hàng).
+//
+// Cùng lý do với `app/api/uu-dai/[token]/route.ts` — CORS, không lộ địa chỉ backend nội bộ, và giữ luật
+// MỘT API CLIENT (`.claude/rules/one-api-client.md`): phía trình duyệt vẫn chỉ có `apiClient` trỏ về một
+// nơi, backend thứ hai chỉ tồn tại ở phía server. Gom vào đây thay vì chép lại trong từng route vì lần
+// này có tới bốn đầu API, và `forward` chép bốn lần là bốn cơ hội để chúng lệch nhau.
+//
+// ⚠️ HAI biến, CẢ HAI đều KHÔNG có tiền tố NEXT_PUBLIC_ — cố ý. Biến có tiền tố đó bị nướng cứng vào
+// bundle lúc build và lộ ra trình duyệt (`.claude/rules/env-build-time.md`). Với `S7_STORE_TOKEN` thì lộ
+// nghĩa là ai cũng đặt hàng được dưới danh nghĩa tổ chức mình, nên đây là điều kiện bắt buộc chứ không
+// phải cho gọn.
+
+const S7_API_URL = (process.env.S7_API_URL || 'https://app.szen7.com').replace(/\/$/, '');
+
+// ⚠️ KHÔNG có giá trị mặc định — khác hẳn `S7_API_URL`. Địa chỉ backend đoán sai thì chỉ là gọi nhầm chỗ,
+// còn token thì không có giá trị nào "đoán đúng" được: viết cứng một token vào mã nguồn là đưa chìa khoá
+// gian hàng lên GitHub. Thiếu biến thì để trang hỏng to và rõ, hơn là hỏng âm thầm.
+const STORE_TOKEN = process.env.S7_STORE_TOKEN || '';
+
+export const storeBase = (path: string) =>
+  `${S7_API_URL}/api/v1/public/cua-hang/${encodeURIComponent(STORE_TOKEN)}${path}`;
+
+export const hasStoreToken = () => Boolean(STORE_TOKEN);
+
+// Gian hàng chưa được cấu hình. Nói thẳng ở log cho người vận hành, còn với khách thì vẫn là một câu
+// bình thường — họ không cần biết chuyện cấu hình của chúng ta.
+export const notConfigured = () => {
+  console.error('[cua-hang] Thiếu S7_STORE_TOKEN — gian hàng không hoạt động.');
+
+  return jsonError('store_unconfigured', 'Cửa hàng đang tạm nghỉ, mời bạn quay lại sau ít phút.', 503);
+};
+
+export const jsonError = (code: string, message: string, status: number) =>
+  Response.json({ error: { code, message } }, { status });
+
+// Chuyển tiếp NGUYÊN VẸN cả body lẫn mã trạng thái của s7-data-hub. Không dịch lại, không gộp lỗi: phía
+// client đọc `error.code` để hiện đúng câu (mã sai · chưa đủ đơn tối thiểu · hết hàng), nuốt mất mã là
+// khách chỉ còn nhìn thấy "có lỗi xảy ra".
+export async function forward(res: Response) {
+  const text = await res.text();
+  try {
+    return Response.json(JSON.parse(text), { status: res.status });
+  } catch {
+    // s7-data-hub trả thứ không phải JSON (proxy chen vào, backend sập) — đừng để nó vỡ thành lỗi parse
+    // khó hiểu ở client.
+    return jsonError(
+      'upstream_error',
+      'Hệ thống đang bận, vui lòng thử lại sau ít phút.',
+      res.status >= 400 ? res.status : 502,
+    );
+  }
+}
+
+export const unreachable = (e: unknown, what: string) => {
+  console.error(`[cua-hang] ${what} upstream failed:`, e);
+
+  return jsonError('upstream_unreachable', 'Không kết nối được hệ thống, vui lòng thử lại.', 502);
+};
