@@ -22,6 +22,14 @@ export interface StoreProduct {
   doses_per_month: number;
 }
 
+/** Bỏ dấu + hạ chữ thường, để so khớp từ khoá "lamin grow" với "LaminGrow" và "sữa" với "sua". */
+const khongDau = (s: string) =>
+  s.normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/đ/g, 'd')
+    .replace(/Đ/g, 'D')
+    .toLowerCase();
+
 /** Sinh đường dẫn từ tên khi người vận hành chưa khai `slug`. Bỏ dấu tiếng Việt để URL đọc được. */
 const slugify = (s: string) =>
   s.normalize('NFD')
@@ -102,6 +110,43 @@ export async function getStoreCatalog(): Promise<Goods[] | null> {
   const rows = await fetchStore();
 
   return rows ? rows.map(toGoods) : null;
+}
+
+/**
+ * Danh sách có LỌC — dùng cho trang "Tất cả sản phẩm", ô tìm kiếm, `ProductList` và mục sản phẩm liên
+ * quan (cả bốn đi qua cùng một hook `useGetGoodsList`).
+ *
+ * Lọc ở PHÍA TRÌNH DUYỆT, không gọi lại server: gian hàng trả tối đa 200 mặt hàng trong một lượt và danh
+ * mục Lamin nhỏ hơn thế nhiều, nên tải một lần rồi lọc là đủ — mà lại tìm được ngay khi gõ, không phải
+ * chờ một vòng mạng cho mỗi ký tự.
+ *
+ * Trả `null` (→ nơi gọi rơi về nguồn cũ) trong hai trường hợp:
+ *  1. Gian hàng chưa cấu hình / s7 không với tới được — như mọi hàm khác ở đây.
+ *  2. **Có `categoryID` hoặc `menuSlug`.** s7 KHÔNG có khái niệm danh mục để bày hàng (`parent_id` là cây
+ *     danh mục nội bộ của sổ sản phẩm, không phải phân loại cho web). Bỏ qua tham số rồi trả cả danh mục
+ *     sẽ khiến trang "Danh mục X" hiện đủ mọi thứ — sai mà trông như đúng, kiểu hỏng khó phát hiện nhất.
+ *     Thà để nguyên nguồn cũ cho tới khi s7 có phân loại thật.
+ */
+export async function getStoreGoodsList(
+  params: { keyword?: string; limit?: number; categoryID?: string; menuSlug?: string } = {},
+): Promise<{ data: Goods[]; pagination: null } | null> {
+  if (params.categoryID || params.menuSlug) return null;
+  const rows = await fetchStore();
+  if (!rows) return null;
+
+  const kw = khongDau((params.keyword || '').trim());
+  // Khớp trên cả TÊN và MÃ: nhân viên tư vấn qua điện thoại thường đọc mã, khách thì gõ tên.
+  const hits = kw
+    ? rows.filter((p) => khongDau(`${p.name} ${p.sign || ''}`).includes(kw))
+    : rows;
+
+  return {
+    data: (params.limit ? hits.slice(0, params.limit) : hits).map(toGoods),
+    // s7 chưa phân trang danh mục công khai (200 mặt hàng là đủ cho một lượt). `null` chứ không dựng một
+    // đối tượng phân trang giả — chỗ hiển thị đã xử lý được `null`, còn số giả thì sinh ra nút "trang sau"
+    // bấm vào không có gì.
+    pagination: null,
+  };
 }
 
 /** Lấy danh mục thô. Gom một chỗ vì cả danh sách lẫn trang chi tiết đều gọi. */
