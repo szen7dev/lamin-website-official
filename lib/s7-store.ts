@@ -51,6 +51,31 @@ export async function forward(res: Response) {
   }
 }
 
+// Danh mục gian hàng, gọi TỪ PHÍA SERVER (generateMetadata, sitemap…).
+//
+// Vì sao không dùng lại `getStoreCatalog` bên `features/product/api/storeCatalog.ts`: hàm đó `fetch` một
+// đường dẫn TƯƠNG ĐỐI (`/api/cua-hang/san-pham`) — hợp lệ trong trình duyệt, nhưng ở phía server thì không
+// có gốc để nối, `fetch` sẽ ném lỗi. Ở đây gọi thẳng s7, bỏ qua luôn lớp cầu nối: cầu nối tồn tại để phục
+// vụ TRÌNH DUYỆT (CORS, giấu địa chỉ backend), còn mã chạy trên server thì vốn đã ở phía trong.
+//
+// `null` = chưa cấu hình token / s7 không với tới được → nơi gọi giữ nguồn cũ.
+export async function fetchStoreProductsOnServer(): Promise<
+  Array<{ id: string; sign: string | null; name: string; sale_price: number; images: string[]; description: string; slug: string }> | null
+> {
+  if (!hasStoreToken()) return null;
+  try {
+    const res = await fetch(storeBase('/san-pham'), { cache: 'no-store' });
+    if (!res.ok) return null;
+    const j = await res.json();
+
+    return Array.isArray(j?.data) ? j.data : null;
+  } catch (e) {
+    console.error('[cua-hang] đọc danh mục phía server thất bại:', e);
+
+    return null;
+  }
+}
+
 export const unreachable = (e: unknown, what: string) => {
   console.error(`[cua-hang] ${what} upstream failed:`, e);
 

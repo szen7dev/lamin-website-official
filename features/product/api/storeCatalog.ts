@@ -31,7 +31,7 @@ const khongDau = (s: string) =>
     .toLowerCase();
 
 /** Sinh đường dẫn từ tên khi người vận hành chưa khai `slug`. Bỏ dấu tiếng Việt để URL đọc được. */
-const slugify = (s: string) =>
+export const slugify = (s: string) =>
   s.normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
     .replace(/đ/g, 'd')
