@@ -11,16 +11,32 @@ về `s7-data-hub`. Đây là hồ sơ ghi *đã làm tới đâu*, *vì sao là
 
 | # | Tính năng | Đang gọi | Bên s7 | Tình trạng |
 |---|---|---|---|---|
+| # | Tính năng | Đang gọi | Bên s7 | Tình trạng |
+|---|---|---|---|---|
 | 1 | Giỏ hàng · đặt hàng | `/api/store/*` | `OrderIntake`, `PromoVoucher` | ✅ **xong** (BE + FE) |
-| 2 | Danh sách sản phẩm | `/api/item/goods`, `/api/menu/*`, `/api/crm/combo` | `Product` | 🟡 **BE xong, FE chưa nối** |
+| 2 | Danh sách sản phẩm | `/api/item/goods` | `Product` | ✅ **xong** (BE + FE), đã vào `main` |
 | 3 | Đo cao CDC | `/api/crm/grow_track`, `/api/crm/survey_result` | — | ⬜ **s7 chưa có gì** |
 | 4 | Bài viết | `/api/medias/*` | — | ⬜ **s7 chưa có gì** |
+
+**Combo** (`/api/crm/combo`, best-seller) và **menu** (`/api/menu/*`): chủ dự án chốt 2026-08-17 **không
+dùng nữa**, giữ nguyên nguồn cũ, không chuyển và không dựng bên s7.
 
 ⚠️ **Đừng nhầm:** s7 có `src/models/measure.js` nhưng đó là **chỉ số OKR**, không phải số đo chiều cao
 của bé. Đã kiểm: không model nào trong s7 lưu chiều cao/cân nặng. Tính năng #3 phải dựng mới.
 
-**Thứ tự đã chốt:** #2 → #3 → #4. Lý do: #2 ngắn nhất (backend đã xong) và **nó gỡ nút thắt cho #1** —
-xem mục 4.
+**Thứ tự đã chốt:** #2 → #3 → #4. #2 đã xong; nó cũng **gỡ nút thắt cho #1** — xem mục 4.
+
+### Bảy điểm đọc sản phẩm — tất cả đã chuyển
+
+| Màn | Nguồn |
+|---|---|
+| Trang chủ — mục Sản phẩm (`useGetProducts`) | ✅ s7 |
+| Chi tiết theo slug (`useGetGoodsInfoBySlug`) | ✅ s7 |
+| Tất cả sản phẩm · tìm kiếm · `ProductList` · sản phẩm liên quan | ✅ s7 — **cùng một hook** `useGetGoodsList` |
+| Thẻ SEO trang sản phẩm (`generateMetadata`) | ✅ s7 |
+
+`features/product/services/productService.ts` vẫn trỏ về trixgo nhưng **không nơi nào import** — code
+chết, để nguyên.
 
 ---
 
@@ -122,9 +138,12 @@ Thay cho nút mở `PromotionModal` **vốn đã bị comment out từ trước*
 
 ---
 
-## 4. 🔴 Nút thắt hiện tại — đọc kỹ trước khi làm tiếp
+## 4. ✅ Nút thắt khoá nối sản phẩm — ĐÃ GỠ, giữ lại vì sao
 
-**Luồng đặt hàng CHƯA chạy được với dữ liệu thật.** Không phải lỗi code.
+> **Trạng thái:** đã giải bằng tính năng #2 (danh mục về chung một nguồn → id hai bên là một).
+> Giữ mục này để người sau hiểu vì sao kiến trúc lại như hiện nay, và **đừng thử lại ba đường đã tắc**.
+
+Trước khi chuyển danh mục, **luồng đặt hàng không chạy được với dữ liệu thật** — không phải lỗi code.
 
 Website gửi `product_id` là id của **trixgo**; id đó không tồn tại trong s7. Nên s7 trả
 *"Sản phẩm không còn bán"* cho mọi đơn.
@@ -140,11 +159,16 @@ Website gửi `product_id` là id của **trixgo**; id đó không tồn tại t
 `ProductDetail` trong repo *khai* `sign: string` — nhưng dữ liệu thật không trả về. **Type nói một đằng,
 API làm một nẻo.** Đừng tin type ở đây.
 
-**Cách giải đã chốt: chuyển hẳn danh mục sang s7** (tính năng #2). Khi đó id hai bên là một, hết chuyện
-ánh xạ. Đó là lý do #2 phải làm trước #3 và #4.
+**Cách giải đã chốt và đã làm: chuyển hẳn danh mục sang s7** (tính năng #2). Id hai bên là một, hết
+chuyện ánh xạ. Đó là lý do #2 phải làm trước #3 và #4.
 
-Hạ tầng cho đường `sign` vẫn được giữ (`dat-hang` nhận `product_id` **hoặc** `sign`) — nó thành đường
-chính xác nhất khi danh mục về chung một nguồn.
+Hạ tầng cho đường `sign` vẫn được giữ (`dat-hang` nhận `product_id` **hoặc** `sign`) — giờ `product_id`
+là đường chính, `sign` là lưới an toàn cho giỏ hàng cũ còn nằm trong `localStorage` của khách (hạn 1
+ngày) với id của backend cũ.
+
+⚠️ **Hệ quả còn lại:** khách nào đang có giỏ hàng cũ sẽ thấy *"Sản phẩm không còn bán"* khi đặt, vì món
+trong giỏ mang id trixgo. Tự hết sau 24 giờ kể từ khi bật. Nếu muốn êm hơn thì phải xoá giỏ hàng phía
+khách lúc phát hiện món không hợp lệ — **chưa làm**.
 
 ---
 
@@ -165,12 +189,56 @@ chính xác nhất khi danh mục về chung một nguồn.
 Chỗ khai: **s7-hub-webapp → Danh mục → Sản phẩm → khối "Bán trên website"**
 (`src/components/ProductWebFields.tsx`).
 
-### Còn lại của #2
+### Phía website — cách nối
 
-* Nối UI website vào `/api/cua-hang/san-pham`
-* Ánh xạ `{id,sign,name,unit,sale_price,images,description,slug}` của s7 sang kiểu của web
-  (`price`, `originalPrice`, `category`, `slug`, `image`) — **hai bên không trùng tên trường nào**
-* Trang chi tiết theo `slug`; danh mục/phân loại thì s7 chưa có khái niệm tương đương `category` của web
+Toàn bộ chỗ dịch nằm ở **`features/product/api/storeCatalog.ts`**, đúng một chỗ. Nguyên tắc: **đổi NGUỒN,
+giữ nguyên HÌNH DẠNG**. `Goods` và `Product` xuất hiện ở hàng chục màn — đổi kiểu là sửa từng màn một và
+mỗi chỗ sửa là một chỗ có thể sai; giữ hình dạng thì giao diện không cần biết dữ liệu đến từ đâu.
+
+Hai bên **không trùng tên trường nào**: s7 dùng `sale_price` / `images: string[]`, web dùng
+`sellingUnitprice` / `images: FileInfo[]` + `thumbnail`.
+
+Ba điều dễ làm sai, đã xử lý:
+
+* **`listedUnitprice` = `sale_price`**, không phải 0. Giao diện lấy hiệu hai số ra "tiết kiệm được"; để 0
+  là hiện số âm.
+* **Lọc theo `categoryID`/`menuSlug` thì GIỮ NGUỒN CŨ.** s7 không có khái niệm danh mục để bày hàng
+  (`parent_id` là cây danh mục nội bộ của sổ sản phẩm). Bỏ qua tham số rồi trả cả danh mục sẽ khiến trang
+  "Danh mục X" hiện đủ mọi thứ — sai mà trông như đúng.
+* **Thẻ SEO phải dùng hàm riêng.** `generateMetadata` chạy phía **server**, mà hàm client `fetch` đường
+  dẫn tương đối — phía server không có gốc để nối, `fetch` sẽ ném lỗi. Dùng `fetchStoreProductsOnServer()`
+  trong `lib/s7-store.ts`, gọi thẳng s7 (bỏ qua cầu nối — cầu nối tồn tại để phục vụ trình duyệt, mã chạy
+  trên server thì vốn đã ở phía trong).
+
+Lọc từ khoá làm ở **phía trình duyệt**: gian hàng trả tối đa 200 mặt hàng một lượt và danh mục Lamin nhỏ
+hơn nhiều, nên tải một lần rồi lọc là đủ — mà lại tìm được ngay khi gõ. Khớp trên cả **tên và mã**: nhân
+viên tư vấn qua điện thoại đọc mã, khách thì gõ tên.
+
+---
+
+## 5b. 🚦 THỨ TỰ BẬT TRÊN PROD — làm sai thứ tự là trang sản phẩm trống
+
+Công tắc bật/tắt của cả đợt chuyển đổi **chính là việc có cấu hình `S7_STORE_TOKEN` hay không**. Ba trạng
+thái:
+
+| Trạng thái | Prod hiển thị |
+|---|---|
+| Chưa cấp `S7_STORE_TOKEN` | y như cũ — lấy từ `api.trixgo.com`. Không rủi ro |
+| Cấp token **nhưng chưa bật `on_web`** | ⚠️ **danh sách RỖNG** — cố ý KHÔNG lùi về nguồn cũ |
+| Cấp token **và** đã bật `on_web` | ✅ sản phẩm từ s7 |
+
+Trạng thái giữa là chủ ý: danh mục rỗng nghĩa là chưa ai khai dữ liệu — một vấn đề cần **nhìn thấy**,
+không nên che bằng cách lặng lẽ hiện hàng cũ. Nhưng nó cũng có nghĩa **phải khai trước khi bật**.
+
+**Thứ tự đúng:**
+
+1. **Bật `on_web`** + khai ảnh/mô tả cho sản phẩm Lamin thật — hub-webapp → Danh mục → Sản phẩm → khối
+   "Bán trên website"
+2. **Cấp token**: `POST /api/v1/store/token` trên s7 (app `sale_b2c`)
+3. Thêm `S7_STORE_TOKEN` vào **k8s** `values.yaml` → `extraSecrets`, rồi push repo `trixgo-kubenetes-prod`
+4. Build + deploy website
+
+Đảo bước 1 và 2 thì có một khoảng trang sản phẩm trống.
 
 ---
 
@@ -200,7 +268,23 @@ Chưa cấu hình token thì cả ba route trả `503 store_unconfigured` — h�
 
 ---
 
-## 7. Hai cái bẫy đã vấp, đừng vấp lại
+## 7. Bốn cái bẫy đã vấp, đừng vấp lại
+
+**🔴 Gỡ biến môi trường khỏi source làm VỠ BẢN BUILD.** Vấp 2026-08-17, suýt đưa lên prod.
+`utils/ai/openai-service.ts` tạo `new OpenAI({ apiKey })` ở **tầng module** — hàm này **ném lỗi** khi khoá
+rỗng. Next nạp module đó khi thu thập dữ liệu trang cho `/api/ai/laminGPT` **trong lúc build**, nên từ khi
+`OPENAI_API_KEY` chuyển sang k8s (máy build không còn khoá) cả bản build đổ vỡ:
+
+```
+Error: Failed to collect page data for /api/ai/laminGPT
+```
+
+`main` đã ở trạng thái không build được suốt mấy commit mà **không ai biết**, vì GitHub Actions đang bị
+chặn nên không ai build lại. Đã sửa bằng khởi tạo trễ (`openaiOf()`).
+
+**Bài học chung:** biến môi trường chỉ có lúc chạy thì **mọi thứ dùng nó phải khởi tạo trễ**. Và **luôn
+chạy `npm run build` trước khi đẩy lên `main`** — typecheck sạch không chứng minh được build chạy, vì lỗi
+này xảy ra lúc *thực thi* module chứ không phải lúc kiểm kiểu.
 
 **`checkPhone` coi số RỖNG là hợp lệ** (`{ ok: true, phone: null }`). Đúng cho danh bạ nói chung (khách
 chỉ có Facebook), **sai chết người** ở đầu API công khai: `phone: null` lọt xuống truy vấn sẽ khớp trúng
@@ -210,6 +294,11 @@ rỗng riêng trước khi hỏi `checkPhone`. Có test khoá.
 **ESLint của repo website đang hỏng** — thiếu package `@eslint/compat`, `npx eslint` không chạy được.
 Và typecheck: repo có sẵn ~70 lỗi type từ trước (`User.id`, `OrderProduct._id`, `CartItemsProps`…).
 Khi kiểm, **so số lỗi trước/sau** thay đổi của mình, đừng kỳ vọng bảng sạch.
+
+**Xoá worktree có thể xoá luôn `node_modules` gốc.** 2026-08-17 `s7-data-hub/node_modules` được tìm thấy
+**rỗng hoàn toàn**; hai worktree của repo dùng **junction** trỏ vào đó, và xoá junction bằng `rm -rf` sẽ
+xoá xuyên qua tới thư mục đích. Triệu chứng: BE `:3001` chết, và full test suite báo 193/231 fail với
+`ERR_MODULE_NOT_FOUND` — **lỗi môi trường, không phải lỗi code**. Chữa: `npm ci` (3 giây từ cache).
 
 ---
 
@@ -222,5 +311,28 @@ Khi kiểm, **so số lỗi trước/sau** thay đổi của mình, đừng kỳ
 * Repo k8s `trixgo-kubenetes-prod` còn một thay đổi chưa push (thêm `OPENAI_API_KEY`/`ASSISTANT_ID`/
   `VECTOR_STORE_ID`/`S7_API_URL` vào `values.yaml`) — sửa luôn `findings.md #2`: pod nhiều khả năng
   **chưa bao giờ** nhận được các biến OpenAI, chat AI hỏng im lặng
-* GitHub Actions của repo website từng bị chặn vì **billing** — build prod dispatch sang
-  `szen7dev/trixgo-builds` (repo public, Actions miễn phí) nên có thể kích hoạt tay khi cần
+* GitHub Actions của repo website từng bị chặn vì **billing**, và tới 2026-08-17 thì `gh run list` trả
+  **404** — có vẻ Actions đã tắt hẳn. Nghĩa là **push lên `main` không tự build/deploy nữa**. Build prod
+  vẫn kích hoạt tay được vì nó dispatch sang `szen7dev/trixgo-builds` (repo **public**, Actions miễn phí):
+
+  ```bash
+  gh workflow run website.yml --repo szen7dev/trixgo-builds \
+     -f REF=<sha đầy đủ> -f IMAGE_TAG=main-<run_id>-<sha7>
+  ```
+
+  Rồi cập nhật `webapp.image.tag` trong `trixgo-kubenetes-prod` →
+  `apps/prod/trixgo-lamin-webapp/.argocd-source-*.yaml` để ArgoCD sync.
+
+---
+
+## 9. Nhật ký các mốc
+
+| Ngày | Việc |
+|---|---|
+| 2026-08-17 | Tính năng #1 (giỏ hàng · voucher · đặt hàng) xong BE + FE |
+| 2026-08-17 | `Product` bên s7 mang nội dung bán hàng; ô khai trong hub-webapp |
+| 2026-08-17 | Tính năng #2 (danh sách sản phẩm) xong cả 7 điểm đọc, **đã merge vào `main`** |
+| 2026-08-17 | Sửa bản build vỡ do `OPENAI_API_KEY` — xem bẫy đầu mục 7 |
+
+**Nhánh liên quan** (đã push): `feat/store-product-sign` (s7-data-hub) · `feat/product-web-fields`
+(s7-hub-webapp) · `feat/cua-hang-s7` (website, **đã merge `main`**).
