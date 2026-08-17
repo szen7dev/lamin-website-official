@@ -11,8 +11,6 @@ về `s7-data-hub`. Đây là hồ sơ ghi *đã làm tới đâu*, *vì sao là
 
 | # | Tính năng | Đang gọi | Bên s7 | Tình trạng |
 |---|---|---|---|---|
-| # | Tính năng | Đang gọi | Bên s7 | Tình trạng |
-|---|---|---|---|---|
 | 1 | Giỏ hàng · đặt hàng | `/api/store/*` | `OrderIntake`, `PromoVoucher` | ✅ **xong** (BE + FE) |
 | 2 | Danh sách sản phẩm | `/api/item/goods` | `Product` | ✅ **xong** (BE + FE), đã vào `main` |
 | 3 | Đo cao CDC | `/api/crm/grow_track`, `/api/crm/survey_result` | — | ⬜ **s7 chưa có gì** |
