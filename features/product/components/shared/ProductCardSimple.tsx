@@ -18,6 +18,7 @@ interface ProductUnit {
 interface ProductCardSimpleProps {
   product: {
     id?: number | string;
+    sign?: string;   // mã sản phẩm — khoá nối sang s7-data-hub khi đặt hàng
     slug: string;
     image?: string;
     name: string;
@@ -64,6 +65,7 @@ export default function ProductCardSimple({ product }: ProductCardSimpleProps) {
     try {
       addItem({
         id: `${product.id}`,
+        sign: product.sign,
         name: product.name || '',
         slug: product.slug,
         price: Number(product?.price) || 0,

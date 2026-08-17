@@ -208,6 +208,7 @@ export default function DealSlider() {
     try {
       addItem({
         id: `${product._id}`,
+        sign: product.sign,
         name: product.name || '',
         slug: product.slug,
         price: product?.sellingUnitprice || 0,

@@ -23,6 +23,7 @@ export default function ProductsSection() {
     e: React.MouseEvent,
     product: {
       _id: string;
+      sign?: string;   // mã sản phẩm — khoá nối sang s7-data-hub khi đặt hàng
       name: string;
       sellingUnitprice: number;
       listedUnitprice?: number;
@@ -36,6 +37,7 @@ export default function ProductsSection() {
     try {
       addItem({
         id: product._id,
+        sign: product.sign,
         name: product.name,
         price: product.sellingUnitprice,
         originalPrice: product.listedUnitprice || product.sellingUnitprice,
