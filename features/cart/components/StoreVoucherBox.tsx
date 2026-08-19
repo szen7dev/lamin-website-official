@@ -135,6 +135,23 @@ export function StoreVoucherBox({ subtotal, onVoucherChange }: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [subtotal]);
 
+  // Bấm chọn một ưu đãi trong danh sách "của số này". KHÔNG dùng thẳng `v` (mục trong `mine`) — `mine` chỉ
+  // được tải lại lúc gắn vào cây HOẶC lúc rời khỏi ô SĐT, không có gì đồng bộ nó với `subtotal`. Bug thật
+  // đã bắt được: `loadMine` tự chạy lúc khôi phục SĐT từ trang uu-dai/phiên trước, đúng lúc `subtotal` từ
+  // component cha CÒN LÀ 0 (giỏ hàng đọc qua React Query, lần render đầu `data` luôn `undefined`) — cả danh
+  // sách mang sẵn `discount: 0` và không bao giờ tự sửa lại, nên bấm chọn là dính thẳng số 0 đó. Gọi lại
+  // đúng API tính giảm (`checkStoreVoucherCode`) ngay lúc bấm — dùng `subtotal` CỦA THỜI ĐIỂM BẤM, luôn
+  // đúng — thay vì tin con số đã nằm sẵn trong `mine` từ trước.
+  const selectMine = useCallback(async (v: StoreVoucher) => {
+    if (applied?.id === v.id) { apply(null); return; }
+    setErr('');
+    try {
+      apply(await checkStoreVoucherCode(v.code, subtotal));
+    } catch (e) {
+      setErr(e instanceof Error ? e.message : 'Không dùng được ưu đãi này.');
+    }
+  }, [applied, apply, subtotal]);
+
   const applyTypedCode = useCallback(async () => {
     if (!code.trim()) return;
     setChecking(true);
@@ -194,7 +211,7 @@ export function StoreVoucherBox({ subtotal, onVoucherChange }: Props) {
                 applied?.id === v.id ? 'border-blue-500 ring-1 ring-blue-500' : 'border-gray-200'
               }`}
               type="button"
-              onClick={() => apply(applied?.id === v.id ? null : v)}>
+              onClick={() => selectMine(v)}>
               <span>
                 <span className="font-medium">{v.name || v.code}</span>
                 <span className="block text-xs text-gray-500">Mã: {v.code}</span>
