@@ -5,6 +5,7 @@ import {
   GetDetailCoachParams,
 } from '@/features/homepage/types/coachTypes';
 import { getDetailCoach } from '@/features/coach-experts/api/getDetailCoach';
+import { getStoreTeamMember } from '@/features/coach-experts/api/storeTeam';
 
 /**
  * Hook for fetching detailed coach information
@@ -14,7 +15,13 @@ import { getDetailCoach } from '@/features/coach-experts/api/getDetailCoach';
 export const useGetDetailCoach = (params: GetDetailCoachParams) => {
   return useQuery<Coach, Error>({
     queryKey: ['GET_COACH_DETAIL', params.contactID],
-    queryFn: () => getDetailCoach(params),
+    queryFn: async () => {
+      // Gian hàng s7 TRƯỚC — `null` gồm cả hai trường hợp (chưa cấu hình gian hàng, HOẶC id này không có
+      // bên s7) đều rơi về nguồn cũ như nhau, đúng cách `getStoreProductBySlug` đã làm cho sản phẩm.
+      const fromStore = await getStoreTeamMember(params.contactID);
+
+      return fromStore ?? getDetailCoach(params);
+    },
     enabled: !!params.contactID,
     staleTime: 5 * 60 * 1000, // 5 minutes
     refetchOnWindowFocus: false,
