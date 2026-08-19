@@ -2,7 +2,7 @@
 
 import type { StoreVoucher } from '../types/storeVoucherTypes';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Check, Loader2, Ticket, X } from 'lucide-react';
 
 import { checkStoreVoucherCode, getStoreVouchersByPhone } from '../api/storeVoucher';
@@ -39,6 +39,13 @@ export function StoreVoucherBox({ subtotal, onVoucherChange }: Props) {
   const [checking, setChecking] = useState(false);
   const [err, setErr] = useState('');
 
+  // Ý ĐỊNH của khách — mã nào khách MUỐN dùng — TÁCH RIÊNG khỏi `applied` (mã có đang giảm được tiền
+  // ngay bây giờ không). Một mã có `min_order_amount` sẽ hợp lệ rồi lại không hợp lệ khi khách tăng/giảm
+  // số lượng quanh ngưỡng đó; nếu chỉ có `applied` thì một lần rớt xuống dưới ngưỡng sẽ XOÁ SẠCH ý định,
+  // và khách tăng số lượng lên đủ lại về sau sẽ không có gì tự châm lại — mã coi như mất hẳn dù khách
+  // chẳng bấm "Bỏ ưu đãi" bao giờ. Ref vì đây không phải thứ cần vẽ lại giao diện, chỉ để effect dưới đọc.
+  const wantedCode = useRef<string | null>(null);
+
   // Khôi phục lựa chọn cũ khi khách quay lại giỏ hàng từ bước thanh toán — HOẶC khi mang SĐT sang từ
   // trang nhận ưu đãi sự kiện (`/uu-dai/[token]`). Tự tra ngay ở đây thay vì chờ `onBlur`: mẹ vừa gõ SĐT
   // một lần rồi, bắt gõ hoặc chạm lại để "kích hoạt" tra cứu là mất đúng thứ nút "Đặt hàng ngay" hứa hẹn.
@@ -49,6 +56,7 @@ export function StoreVoucherBox({ subtotal, onVoucherChange }: Props) {
       if (looksLikePhone(saved.phone)) loadMine(saved.phone);
     }
     if (saved.voucher) {
+      wantedCode.current = saved.voucher.code;
       setApplied(saved.voucher);
       onVoucherChange(saved.voucher);
     }
@@ -75,6 +83,7 @@ export function StoreVoucherBox({ subtotal, onVoucherChange }: Props) {
   }, [subtotal]);
 
   const apply = useCallback((v: StoreVoucher | null) => {
+    wantedCode.current = v?.code || null;
     setApplied(v);
     setErr('');
     onVoucherChange(v);
@@ -87,28 +96,42 @@ export function StoreVoucherBox({ subtotal, onVoucherChange }: Props) {
   // áp mã 33% (giảm đúng 33% của 1 hộp), sau đó tăng lên 3 hộp — giỏ hàng hiện tổng tiền x3 nhưng số tiền
   // giảm đứng yên ở mức tính cho 1 hộp, nhìn như sai phần trăm. Server luôn tính lại đúng cho một `subtotal`
   // bất kỳ (`discountOf`), nên chỗ sửa là gọi lại đúng API đó mỗi khi `subtotal` đổi, không tính tay ở đây.
+  //
+  // ĐỌC `wantedCode.current`, KHÔNG đọc `applied.code` — bug thứ hai bắt được ngay khi thử tay: mã có
+  // `min_order_amount` (VD "Trạm trường học" cần đơn ≥ 1.050.000đ) rớt qua lại quanh ngưỡng đó khi khách
+  // bấm tăng số lượng liên tiếp (350k → 700k → 1.050k). Ở mốc 700k mã bị server từ chối, nếu khi đó xoá
+  // luôn `applied` VÀ để effect chỉ chạy tiếp "nếu đang có applied" thì tới mốc 1.050k (đã đủ điều kiện)
+  // không còn gì kích hoạt việc thử lại — mã coi như mất vĩnh viễn dù khách chẳng bấm bỏ ưu đãi. Tách hẳn
+  // "khách muốn dùng mã nào" ra khỏi "mã có đang giảm được tiền không" thì mỗi lần subtotal đổi đều thử
+  // lại đúng mã khách muốn, bất kể lần thử liền trước có qua được hay không.
   useEffect(() => {
-    if (!applied) return;
+    const code = wantedCode.current;
+    if (!code) return;
     let alive = true;
     (async () => {
       try {
-        const fresh = await checkStoreVoucherCode(applied.code, subtotal);
+        const fresh = await checkStoreVoucherCode(code, subtotal);
         if (!alive) return;
         setApplied(fresh);
+        setErr('');
         onVoucherChange(fresh);
         persist(phone, fresh);
-      } catch {
-        // Mã hết hạn/hết lượt đúng lúc giỏ hàng đổi — bỏ áp dụng thay vì giữ số giảm cũ sai theo subtotal mới.
+      } catch (e) {
+        // KHÔNG xoá `wantedCode` — khách vẫn muốn mã này, chỉ là chưa đủ điều kiện ở subtotal hiện tại
+        // (hoặc mã vừa hết hạn/hết lượt). Đổi subtotal lần sau (thêm hàng, đổi số lượng) sẽ tự thử lại.
         if (!alive) return;
         setApplied(null);
+        setErr(e instanceof Error ? e.message : 'Không dùng được ưu đãi với giỏ hàng hiện tại.');
         onVoucherChange(null);
         persist(phone, null);
       }
     })();
 
     return () => { alive = false; };
-    // Cố ý CHỈ phụ thuộc `subtotal` — thêm `applied` vào đây sẽ gọi lại API ngay sau mỗi lần chọn mã,
-    // dư một vòng mạng cho chính giá trị vừa nhận được từ server.
+    // Cố ý CHỈ phụ thuộc `subtotal` — đọc `wantedCode.current` trực tiếp trong thân effect, không đưa nó
+    // vào deps: đây là ref, đổi giá trị không kích hoạt render/effect, và đó chính là điều ta muốn — chỉ
+    // subtotal đổi mới cần thử lại, còn phát hiện "khách vừa chọn mã khác" đã có nhánh gọi API riêng trong
+    // chính `apply`/`applyTypedCode`.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [subtotal]);
 
