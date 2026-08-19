@@ -31,6 +31,17 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
+// Chữ cái đầu tên khách để thay avatar mặc định — phần lớn khách chưa từng tải ảnh đại diện lên, ảnh
+// placeholder xám ngắt trông như tài khoản lỗi. Lấy chữ đầu TỪ ĐẦU + chữ đầu TỪ CUỐI (kiểu "Nguyễn Hữu
+// Hiệp" → "NH"), khớp cách các app quen thuộc (Gmail, Slack…) rút gọn tên hiển thị.
+const initialsOf = (name?: string) => {
+  const words = (name || '').trim().split(/\s+/).filter(Boolean);
+  if (!words.length) return '?';
+  if (words.length === 1) return words[0][0].toUpperCase();
+
+  return (words[0][0] + words[words.length - 1][0]).toUpperCase();
+};
+
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [emailLoginModalOpen, setEmailLoginModalOpen] = useState(false);
@@ -88,19 +99,23 @@ export function Header() {
           className="!p-0 rounded-full bg-primary-blue px-3 md:px-4 text-white hover:bg-primary-blue/90 text-xs md:text-sm"
           variant="default">
           <div className="flex items-center gap-2">
-            <div className="relative h-8 w-8 overflow-hidden rounded-full bg-gray-200">
-              <Image
-                fill
-                alt={user?.name || 'User'}
-                className="object-cover"
-                sizes="32px"
-                src={
-                  user?.image
-                    ? apiClient.getUserImageUrl(user.image)
-                    : '/images/default-avatar.png'
-                }
-              />
-            </div>
+            {user?.image ? (
+              <div className="relative h-8 w-8 overflow-hidden rounded-full bg-gray-200">
+                <Image
+                  fill
+                  alt={user?.name || 'User'}
+                  className="object-cover"
+                  sizes="32px"
+                  src={apiClient.getUserImageUrl(user.image)}
+                />
+              </div>
+            ) : (
+              <div
+                aria-label={user?.fullname || user?.name || 'User'}
+                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white text-xs font-semibold text-primary-blue">
+                {initialsOf(user?.fullname || user?.name)}
+              </div>
+            )}
             {/* <div className="flex flex-col items-start text-left">
               <span className="font-semibold text-sm leading-tight">
                 {user?.fullname || user?.name || 'Anh A'}
