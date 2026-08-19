@@ -10,16 +10,20 @@ import type { Product as ProductDetail } from '@/features/product/types/productT
 // Hai bên KHÔNG trùng tên trường nào: s7 dùng `sale_price`/`images: string[]`, web dùng
 // `sellingUnitprice`/`images: FileInfo[]` + `thumbnail`. Toàn bộ chỗ dịch nằm ở đây, đúng một chỗ.
 
+// `images`/`description`/`slug`/`doses_per_month` khai optional CHỦ Ý — `Product` bên s7-data-hub chưa có
+// các trường này (tài liệu cũ ghi "đã xong" là sai), và `/cua-hang/san-pham` thật chỉ trả
+// `{id, name, unit, sale_price}`. Khai bắt buộc từng khiến type "nói dối" runtime, và `.map` không phòng
+// thủ trên `images` từng ném lỗi ngay sản phẩm đầu tiên, kéo sập cả trang "Tất cả sản phẩm" về rỗng.
 export interface StoreProduct {
   id: string;
   sign: string | null;
   name: string;
   unit: string | null;
   sale_price: number;
-  images: string[];
-  description: string;
-  slug: string;
-  doses_per_month: number;
+  images?: string[];
+  description?: string;
+  slug?: string;
+  doses_per_month?: number;
 }
 
 /** Bỏ dấu + hạ chữ thường, để so khớp từ khoá "lamin grow" với "LaminGrow" và "sữa" với "sua". */
@@ -53,9 +57,12 @@ export const toGoods = (p: StoreProduct): Goods => ({
   // s7 CHƯA có khái niệm "giá niêm yết trước giảm" — chỉ có một giá bán. Để bằng giá bán chứ không để 0:
   // giao diện tính `originalPrice - price` ra số tiền tiết kiệm, để 0 là hiện "tiết kiệm -500.000đ".
   listedUnitprice: p.sale_price,
-  images: p.images.map((url, i) => ({ _id: `${p.id}-${i}`, url, path: url })),
+  // `images` KHÔNG có trong response thật của `/cua-hang/san-pham` (Product bên s7 chưa có trường này —
+  // tài liệu cũ nói đã xong là SAI). `p.images.map` không phòng thủ từng làm ném TypeError ngay sản phẩm
+  // đầu tiên, kéo sập cả danh sách "Tất cả sản phẩm" về rỗng dù API trả đủ hàng.
+  images: (p.images || []).map((url, i) => ({ _id: `${p.id}-${i}`, url, path: url })),
   // Ảnh đầu là ảnh đại diện. Không có ảnh thì để trống — chỗ hiển thị đã có sẵn ảnh thay thế.
-  thumbnail: p.images[0] ? { _id: `${p.id}-0`, path: p.images[0], name: p.name } : undefined,
+  thumbnail: p.images?.[0] ? { _id: `${p.id}-0`, path: p.images[0], name: p.name } : undefined,
   status: 1,
 });
 
@@ -74,8 +81,8 @@ export const toProduct = (p: StoreProduct): ProductDetail => ({
   slug: p.slug || slugify(p.name),
   name: p.name,
   description: p.description || '',
-  images: p.images.map((url, i) => ({ _id: `${p.id}-${i}`, path: url, size: 0, alt: p.name })),
-  thumbnail: p.images[0],
+  images: (p.images || []).map((url, i) => ({ _id: `${p.id}-${i}`, path: url, size: 0, alt: p.name })),
+  thumbnail: p.images?.[0],
   // s7 chưa có khái niệm danh mục cho gian hàng web (`parent_id` là cây danh mục nội bộ của sổ sản phẩm,
   // không phải phân loại để bày hàng). Để rỗng — chỗ hiển thị tự bỏ qua.
   category: { _id: '', name: '', slug: '' },
