@@ -11,6 +11,11 @@ export interface Position {
 }
 
 export interface Coach {
+  // Cờ nội bộ — KHÔNG phải trường của API nào, chỉ `storeCatalog`-tương-đương (`storeTeam.ts`) tự gắn khi
+  // ánh xạ từ s7. s7 chưa có dữ liệu "quá trình công tác/đào tạo" (đó là hồ sơ CV, khác hồ sơ CRM/nhân sự
+  // của Contact) — cờ này để trang chi tiết BIẾT lúc nào KHÔNG được gọi API tài liệu của backend cũ nữa,
+  // tránh gửi id kiểu s7 sang một hệ khác rồi nhận nhầm/lỗi dữ liệu.
+  __s7?: boolean;
   _id: string;
   isDefault: number;
   childs: any[];

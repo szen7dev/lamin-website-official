@@ -103,10 +103,13 @@ export function CoachDetail({
     );
   }
 
-  // Get image URL
-  const imageUrl = coach.image
-    ? apiClient.getContactImageUrl(coach.image)
-    : '/placeholder.svg';
+  // Get image URL — ảnh từ s7 (`coach.__s7`) đã là URL CDN đầy đủ, dùng thẳng; ảnh từ backend cũ là đường
+  // dẫn tương đối, phải ghép qua `getContactImageUrl`. Xem CoachesList.tsx cho lý do đầy đủ.
+  const imageUrl = !coach.image
+    ? '/placeholder.svg'
+    : coach.__s7
+      ? coach.image
+      : apiClient.getContactImageUrl(coach.image);
 
   // Format field display
   const fieldDisplay = coach.field
