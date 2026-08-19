@@ -39,15 +39,20 @@ export function StoreVoucherBox({ subtotal, onVoucherChange }: Props) {
   const [checking, setChecking] = useState(false);
   const [err, setErr] = useState('');
 
-  // Khôi phục lựa chọn cũ khi khách quay lại giỏ hàng từ bước thanh toán.
+  // Khôi phục lựa chọn cũ khi khách quay lại giỏ hàng từ bước thanh toán — HOẶC khi mang SĐT sang từ
+  // trang nhận ưu đãi sự kiện (`/uu-dai/[token]`). Tự tra ngay ở đây thay vì chờ `onBlur`: mẹ vừa gõ SĐT
+  // một lần rồi, bắt gõ hoặc chạm lại để "kích hoạt" tra cứu là mất đúng thứ nút "Đặt hàng ngay" hứa hẹn.
   useEffect(() => {
     const saved = readStoreCheckout();
-    if (saved.phone) setPhone(saved.phone);
+    if (saved.phone) {
+      setPhone(saved.phone);
+      if (looksLikePhone(saved.phone)) loadMine(saved.phone);
+    }
     if (saved.voucher) {
       setApplied(saved.voucher);
       onVoucherChange(saved.voucher);
     }
-    // Chỉ chạy một lần lúc gắn vào cây — thêm onVoucherChange vào deps là nạp lại mỗi lần cha vẽ lại.
+    // Chỉ chạy một lần lúc gắn vào cây — thêm deps là nạp lại mỗi lần cha vẽ lại.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

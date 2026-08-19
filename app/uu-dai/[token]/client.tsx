@@ -1,7 +1,9 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
+
+import { writeStoreCheckout } from '@/features/cart/utils/storeCheckout';
 
 // Giao diện MỘT VIỆC: mẹ điền số điện thoại + tên, nhận mã ưu đãi. Thiết kế cho điện thoại cầm một tay,
 // mạng 4G ở sân trường, và cho người đang xếp hàng nên mỗi giây chờ đều thật.
@@ -51,6 +53,7 @@ function Card({ children }: { children: React.ReactNode }) {
 export function UuDaiClient() {
   const params = useParams<{ token: string }>();
   const token = params?.token;
+  const router = useRouter();
 
   const [info, setInfo] = useState<OfferInfo | null>(null);
   const [loading, setLoading] = useState(true);
@@ -112,6 +115,19 @@ export function UuDaiClient() {
       setSubmitting(false);
     }
   }, [phone, name, consent, token]);
+
+  // Mang SĐT mẹ vừa gõ sang giỏ hàng — `StoreVoucherBox` đọc lại từ đây và tự hiện đúng voucher vừa nhận,
+  // mẹ không phải nhớ hay gõ lại mã. KHÔNG mang theo `voucher` (để null): mã ưu đãi "mua 2 tặng 1" ở đây
+  // không giảm giá được (xem event_voucher.js) — để trống thì `StoreVoucherBox` tự tra qua SĐT và hiện
+  // đúng mã kiểu giảm % / giảm tiền nếu mẹ có, không hiện nhầm mã "mua 2 tặng 1" vào ô chỉ hiểu được số tiền.
+  const goOrder = () => {
+    if (!claimed) return;
+    // Cùng cách chuẩn hoá với chính ô SĐT trong `StoreVoucherBox` (chỉ giữ chữ số) — mẹ có thể đã gõ
+    // "090 123 4567" có khoảng trắng, để nguyên thì `looksLikePhone` bên giỏ hàng không khớp và không tự
+    // tra được ưu đãi.
+    writeStoreCheckout({ phone: phone.replace(/[^\d]/g, '').slice(0, 10), voucher: null });
+    router.push('/san-pham');
+  };
 
   const copyCode = async () => {
     if (!claimed) return;
@@ -181,15 +197,25 @@ export function UuDaiClient() {
               )}
             </div>
 
+            {/* CTA chính: mẹ đặt luôn thay vì chờ nhân viên gọi lại. SĐT mang sang giỏ hàng để
+                `StoreVoucherBox` tự hiện đúng ưu đãi này — mẹ không phải nhớ hay gõ lại mã. */}
             <button
-              className="mt-4 w-full rounded-xl border border-primary-30 py-3 text-sm font-semibold text-primary active:bg-primary-5"
+              className="mt-4 w-full rounded-xl bg-primary py-4 text-base font-bold text-white shadow-md shadow-primary-20 active:bg-primary-60"
+              type="button"
+              onClick={goOrder}>
+              Đặt hàng giao tận nhà ngay
+            </button>
+
+            <button
+              className="mt-3 w-full rounded-xl border border-primary-30 py-3 text-sm font-semibold text-primary active:bg-primary-5"
               type="button"
               onClick={copyCode}>
               {copied ? 'Đã sao chép mã' : 'Sao chép mã'}
             </button>
 
             <p className="mt-4 text-sm leading-relaxed text-gray-600">
-              Mẹ chụp lại màn hình này nhé. Nhân viên Lamin sẽ liên hệ để hướng dẫn mẹ dùng ưu đãi.
+              Mẹ chụp lại màn hình này để dùng sau cũng được. Nhân viên Lamin sẽ liên hệ để hướng dẫn mẹ
+              dùng ưu đãi.
             </p>
           </div>
         </Card>
