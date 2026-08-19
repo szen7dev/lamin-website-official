@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { Loader2, ChevronLeft, ChevronRight } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -34,6 +35,13 @@ export default function ArticleTagList({
   // Calculate the range of articles being displayed
   const startIndex = (currentPage - 1) * pageSize + 1;
   const endIndex = Math.min(currentPage * pageSize, totalRecords);
+
+  // Ảnh bài viết đi qua bucket Trixgo `trx-main` — đang bị khoá private sau đợt "fix bảo mật" DO Spaces
+  // (403 AccessDenied, xem s7-data-hub docs/infra.md §2b, 2026-08-19, chưa chốt phương án sửa tận gốc).
+  // `article.thumbnail` vẫn CÓ (bài viết có khai ảnh), chỉ là tải file thật bị chặn — `next/image` không
+  // tự thay ảnh vỡ, nên phải tự bắt lỗi tải rồi đổi sang logo Lamin tạm thời. Theo dõi bằng ID bài viết:
+  // dùng chung một cờ "ảnh lỗi" cho cả danh sách sẽ ẩn nhầm ảnh đang tải tốt của bài khác.
+  const [brokenThumbIds, setBrokenThumbIds] = useState<Set<string>>(new Set());
 
   const handlePrevious = () => {
     if (hasPrevPage && onPageChange) {
@@ -76,14 +84,30 @@ export default function ArticleTagList({
                   {/* Article Image */}
                   <div className="relative h-full md:w-1/4 p-3">
                     <div className="relative h-full w-full overflow-hidden rounded-lg">
-                      {article.thumbnail ? (
+                      {article.thumbnail && !brokenThumbIds.has(article._id) ? (
                         <Image
                           alt={article.title || 'Article thumbnail'}
                           width={600}
                           height={600}
                           className="object-cover transition-transform duration-300 group-hover:scale-105 aspect-6/4"
                           src={apiClient.getFileUrl(article.thumbnail.path)}
+                          onError={() =>
+                            setBrokenThumbIds(prev => new Set(prev).add(article._id))
+                          }
                         />
+                      ) : article.thumbnail ? (
+                        // Ảnh thật bị 403 — hiện logo Lamin tạm thay vì icon ảnh vỡ, tới khi bucket Trixgo
+                        // mở lại quyền đọc công khai cho ảnh bài viết.
+                        <div className="flex h-full w-full items-center justify-center bg-gray-50 rounded-lg p-6">
+                          <Image
+                            alt=""
+                            aria-hidden="true"
+                            width={120}
+                            height={120}
+                            className="object-contain opacity-70"
+                            src="/images/Lamin_Logo_Colored.png"
+                          />
+                        </div>
                       ) : (
                         <div className="flex h-full w-full items-center justify-center bg-gray-100 rounded-lg">
                           <span className="text-gray-400">No image</span>

@@ -42,9 +42,14 @@ export default function MegaMenu({ onLinkClick }: MegaMenuProps) {
     },
   });
 
+  // Tạm ẩn "Thư viện Lamin" (chốt 2026-08-20) — đang chờ xử lý ảnh bài viết/sản phẩm bị 403 (bucket Trixgo
+  // trx-main, xem docs/findings). Ẩn bằng code chứ không tắt bên nguồn menu cũ (api.trixgo.com): mục đó
+  // dùng chung cho cả app khác, tắt tận gốc là ảnh hưởng ngoài phạm vi website này.
+  const HIDDEN_MENU_SLUGS = ['he-thong-cua-hang', 'thu-vien-lamin'];
+
   const menuItems = useMemo(() => {
     const allItems = formatMenuData(mediaItems).filter(
-      item => item.slug !== 'he-thong-cua-hang' && item.status === 1,
+      item => !HIDDEN_MENU_SLUGS.includes(item.slug) && item.status === 1,
     );
 
     allItems.forEach(item => {
