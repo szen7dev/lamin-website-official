@@ -16,6 +16,7 @@ import { useCart } from '@/features/cart/contexts/CartContext';
 import { cn } from '@/utils/helpers';
 import apiClient from '@/services/api/apiClient';
 import { useToast } from '@/hooks/use-toast';
+import { sanitizeHtml } from '@/utils/sanitizeHtml';
 import {
   ClockIcon,
   FacebookBranchIcon,
@@ -317,8 +318,8 @@ export default function ProductInfo({
             <div className="col-span-2 text-[#6B7280]">Thành phần</div>
             <div className="col-span-3 space-y-1">
               <div
-                dangerouslySetInnerHTML={{ __html: product.ingredients }}
                 className="text-[#111827]"
+                dangerouslySetInnerHTML={{ __html: sanitizeHtml(product.ingredients) }}
               />
             </div>
           </>
@@ -328,8 +329,8 @@ export default function ProductInfo({
           <>
             <div className="col-span-2 text-[#6B7280]">Cách dùng</div>
             <div
-              dangerouslySetInnerHTML={{ __html: product.instructions }}
               className="col-span-3 text-[#111827]"
+              dangerouslySetInnerHTML={{ __html: sanitizeHtml(product.instructions) }}
             />
           </>
         )}
@@ -338,8 +339,8 @@ export default function ProductInfo({
           <>
             <div className="col-span-2 text-[#6B7280]">Bảo quản</div>
             <div
-              dangerouslySetInnerHTML={{ __html: product.storage }}
               className="col-span-3 text-[#111827]"
+              dangerouslySetInnerHTML={{ __html: sanitizeHtml(product.storage) }}
             />
           </>
         )}
@@ -347,8 +348,8 @@ export default function ProductInfo({
           <>
             <div className="col-span-2 text-[#6B7280]">Mô tả ngắn</div>
             <div
-              dangerouslySetInnerHTML={{ __html: product.description }}
-              className="col-span-3 text-grayscale-90 line-clamp-3"
+              className="col-span-3 line-clamp-3 text-grayscale-90"
+              dangerouslySetInnerHTML={{ __html: sanitizeHtml(product.description) }}
             />
           </>
         )}
