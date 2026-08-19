@@ -10,6 +10,7 @@ import Image from 'next/image';
 import { cn } from '@/utils/helpers';
 import apiClient from '@/services/api/apiClient';
 import { SuccessIcon } from '@/components/icons';
+import { sanitizeHtml } from '@/utils/sanitizeHtml';
 
 interface ProductTabsProps {
   product: Product;
@@ -210,8 +211,8 @@ export default function ProductTabs({ product }: ProductTabsProps) {
                 {product.name} là gì?
               </h2>
               <div
-                dangerouslySetInnerHTML={{ __html: product.description || '' }}
                 className="mb-4 text-gray-700"
+                dangerouslySetInnerHTML={{ __html: sanitizeHtml(product.description) }}
               />
             </section>
 
@@ -223,10 +224,8 @@ export default function ProductTabs({ product }: ProductTabsProps) {
                 </h2>
                 <div className="mt-4 overflow-hidden border-gray-200">
                   <p
-                    dangerouslySetInnerHTML={{
-                      __html: product.features || '',
-                    }}
                     className="text-gray-700"
+                    dangerouslySetInnerHTML={{ __html: sanitizeHtml(product.features) }}
                   />
                 </div>
               </section>
@@ -249,10 +248,8 @@ export default function ProductTabs({ product }: ProductTabsProps) {
                 </h2>
                 <div className="mt-4 overflow-hidden border-gray-200">
                   <p
-                    dangerouslySetInnerHTML={{
-                      __html: product.ingredients || '',
-                    }}
                     className="text-gray-700"
+                    dangerouslySetInnerHTML={{ __html: sanitizeHtml(product.ingredients) }}
                   />
                 </div>
               </section>
@@ -274,10 +271,8 @@ export default function ProductTabs({ product }: ProductTabsProps) {
                   Cách dùng {product.name}
                 </h2>
                 <p
-                  dangerouslySetInnerHTML={{
-                    __html: product.instructions || '',
-                  }}
                   className="mb-2 text-gray-700"
+                  dangerouslySetInnerHTML={{ __html: sanitizeHtml(product.instructions) }}
                 />
               </section>
             )}
@@ -289,10 +284,8 @@ export default function ProductTabs({ product }: ProductTabsProps) {
                   Tác dụng phụ
                 </h2>
                 <p
-                  dangerouslySetInnerHTML={{
-                    __html: product.sideEffects || '',
-                  }}
                   className="mb-2 text-gray-700"
+                  dangerouslySetInnerHTML={{ __html: sanitizeHtml(product.sideEffects) }}
                 />
               </section>
             ) : (
@@ -314,13 +307,10 @@ export default function ProductTabs({ product }: ProductTabsProps) {
                   <div>
                     <p className="font-medium text-orange-800">Lưu ý</p>
                     {product.warnings ? (
-                      <ul className="mt-2 list-disc space-y-2 pl-5 text-orange-700">
-                        <div
-                          dangerouslySetInnerHTML={{
-                            __html: product.warnings,
-                          }}
-                        />
-                      </ul>
+                      <p
+                        className="mt-2 text-orange-700"
+                        dangerouslySetInnerHTML={{ __html: sanitizeHtml(product.warnings) }}
+                      />
                     ) : (
                       <ul className="mt-2 list-disc space-y-2 pl-5 text-orange-700">
                         <li>Chưa có lưu ý với sản phẩm</li>
@@ -338,10 +328,8 @@ export default function ProductTabs({ product }: ProductTabsProps) {
                   Bảo quản
                 </h2>
                 <p
-                  dangerouslySetInnerHTML={{
-                    __html: product.storage || '',
-                  }}
                   className="text-gray-700"
+                  dangerouslySetInnerHTML={{ __html: sanitizeHtml(product.storage) }}
                 />
               </section>
             ) : (

@@ -10,10 +10,16 @@ import type { Product as ProductDetail } from '@/features/product/types/productT
 // Hai bên KHÔNG trùng tên trường nào: s7 dùng `sale_price`/`images: string[]`, web dùng
 // `sellingUnitprice`/`images: FileInfo[]` + `thumbnail`. Toàn bộ chỗ dịch nằm ở đây, đúng một chỗ.
 
-// `images`/`description`/`slug`/`doses_per_month` khai optional CHỦ Ý — `Product` bên s7-data-hub chưa có
-// các trường này (tài liệu cũ ghi "đã xong" là sai), và `/cua-hang/san-pham` thật chỉ trả
-// `{id, name, unit, sale_price}`. Khai bắt buộc từng khiến type "nói dối" runtime, và `.map` không phòng
-// thủ trên `images` từng ném lỗi ngay sản phẩm đầu tiên, kéo sập cả trang "Tất cả sản phẩm" về rỗng.
+// `images`/`description`/`slug`/`doses_per_month` khai optional CHỦ Ý — `Product` bên s7-data-hub từng
+// không có các trường này (tài liệu cũ ghi "đã xong" là sai), và `.map` không phòng thủ trên `images` từng
+// ném lỗi ngay sản phẩm đầu tiên, kéo sập cả trang "Tất cả sản phẩm" về rỗng.
+//
+// ⚠️ `description`/`features`…`storage` là HTML (admin gõ trong Danh mục → Sản phẩm), KHÔNG PHẢI văn bản
+// đã được kiểm chứng an toàn. MỌI nơi hiển thị các trường này bắt buộc đi qua `sanitizeHtml()`
+// (`utils/sanitizeHtml.ts`) trước khi đưa vào `dangerouslySetInnerHTML` — đưa thẳng dữ liệu thô vào là mở
+// đường XSS: một tài khoản nhân viên bị chiếm chèn được `<script>` chạy trên trình duyệt của mọi khách ghé
+// trang công khai. `sanitizeHtml()` chỉ chạy được ở phía trình duyệt (`DOMParser`), nên gọi nó tại nơi
+// RENDER (component `'use client'`), không gọi ở đây — hàm ở đây chỉ ánh xạ hình dạng, không xử lý nội dung.
 export interface StoreProduct {
   id: string;
   sign: string | null;
@@ -22,6 +28,12 @@ export interface StoreProduct {
   sale_price: number;
   images?: string[];
   description?: string;
+  features?: string;
+  ingredients?: string;
+  instructions?: string;
+  sideEffects?: string;
+  warnings?: string;
+  storage?: string;
   slug?: string;
   doses_per_month?: number;
 }
@@ -81,6 +93,12 @@ export const toProduct = (p: StoreProduct): ProductDetail => ({
   slug: p.slug || slugify(p.name),
   name: p.name,
   description: p.description || '',
+  features: p.features || undefined,
+  ingredients: p.ingredients || undefined,
+  instructions: p.instructions || undefined,
+  sideEffects: p.sideEffects || undefined,
+  warnings: p.warnings || undefined,
+  storage: p.storage || undefined,
   images: (p.images || []).map((url, i) => ({ _id: `${p.id}-${i}`, path: url, size: 0, alt: p.name })),
   thumbnail: p.images?.[0],
   // s7 chưa có khái niệm danh mục cho gian hàng web (`parent_id` là cây danh mục nội bộ của sổ sản phẩm,
