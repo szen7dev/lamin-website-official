@@ -153,10 +153,14 @@ export default function CoachesList() {
                   <div key={`row-${rowIndex}`} className="space-y-6">
                     <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
                       {rowCoaches.map(coach => {
-                        // Get image URL using apiClient.getContactImageUrl
-                        const imageUrl = coach.image
-                          ? apiClient.getContactImageUrl(coach.image)
-                          : '/placeholder.svg';
+                        // Ảnh từ s7 (`coach.__s7`) là URL CDN ĐẦY ĐỦ — dùng thẳng. Ảnh từ backend cũ là
+                        // đường dẫn tương đối, phải ghép qua `getContactImageUrl`. Đưa nhầm URL đầy đủ qua
+                        // hàm đó sẽ ra một đường dẫn hỏng (hàm luôn ghép thêm gốc CDN của backend cũ).
+                        const imageUrl = !coach.image
+                          ? '/placeholder.svg'
+                          : coach.__s7
+                            ? coach.image
+                            : apiClient.getContactImageUrl(coach.image);
 
                         return (
                           <Link
