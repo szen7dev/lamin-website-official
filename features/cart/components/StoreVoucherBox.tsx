@@ -81,6 +81,37 @@ export function StoreVoucherBox({ subtotal, onVoucherChange }: Props) {
     persist(phone, v);
   }, [onVoucherChange, persist, phone]);
 
+  // `applied.discount` là số CHỤP LẠI tại thời điểm áp mã — đổi số lượng/bỏ chọn sản phẩm sau đó đổi
+  // `subtotal` nhưng KHÔNG tự đổi số đã chụp, vì mọi nơi chọn voucher (bấm trong danh sách, gõ mã tay,
+  // khôi phục từ sessionStorage) đều chỉ set `applied` một lần rồi thôi. Bug thật đã gặp: mẹ để 1 hộp lúc
+  // áp mã 33% (giảm đúng 33% của 1 hộp), sau đó tăng lên 3 hộp — giỏ hàng hiện tổng tiền x3 nhưng số tiền
+  // giảm đứng yên ở mức tính cho 1 hộp, nhìn như sai phần trăm. Server luôn tính lại đúng cho một `subtotal`
+  // bất kỳ (`discountOf`), nên chỗ sửa là gọi lại đúng API đó mỗi khi `subtotal` đổi, không tính tay ở đây.
+  useEffect(() => {
+    if (!applied) return;
+    let alive = true;
+    (async () => {
+      try {
+        const fresh = await checkStoreVoucherCode(applied.code, subtotal);
+        if (!alive) return;
+        setApplied(fresh);
+        onVoucherChange(fresh);
+        persist(phone, fresh);
+      } catch {
+        // Mã hết hạn/hết lượt đúng lúc giỏ hàng đổi — bỏ áp dụng thay vì giữ số giảm cũ sai theo subtotal mới.
+        if (!alive) return;
+        setApplied(null);
+        onVoucherChange(null);
+        persist(phone, null);
+      }
+    })();
+
+    return () => { alive = false; };
+    // Cố ý CHỈ phụ thuộc `subtotal` — thêm `applied` vào đây sẽ gọi lại API ngay sau mỗi lần chọn mã,
+    // dư một vòng mạng cho chính giá trị vừa nhận được từ server.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [subtotal]);
+
   const applyTypedCode = useCallback(async () => {
     if (!code.trim()) return;
     setChecking(true);
