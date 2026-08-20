@@ -1,9 +1,9 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 
-import { writeStoreCheckout } from '@/features/cart/utils/storeCheckout';
+import { OrderInline } from './OrderInline';
 
 // Giao diện MỘT VIỆC: mẹ điền số điện thoại + tên, nhận mã ưu đãi. Thiết kế cho điện thoại cầm một tay,
 // mạng 4G ở sân trường, và cho người đang xếp hàng nên mỗi giây chờ đều thật.
@@ -53,7 +53,6 @@ function Card({ children }: { children: React.ReactNode }) {
 export function UuDaiClient() {
   const params = useParams<{ token: string }>();
   const token = params?.token;
-  const router = useRouter();
 
   const [info, setInfo] = useState<OfferInfo | null>(null);
   const [loading, setLoading] = useState(true);
@@ -66,6 +65,7 @@ export function UuDaiClient() {
   const [submitting, setSubmitting] = useState(false);
   const [err, setErr] = useState('');
   const [copied, setCopied] = useState(false);
+  const [ordering, setOrdering] = useState(false);
 
   useEffect(() => {
     if (!token) return;
@@ -116,17 +116,18 @@ export function UuDaiClient() {
     }
   }, [phone, name, consent, token]);
 
-  // Mang SĐT mẹ vừa gõ sang giỏ hàng — `StoreVoucherBox` đọc lại từ đây và tự hiện đúng voucher vừa nhận,
-  // mẹ không phải nhớ hay gõ lại mã. KHÔNG mang theo `voucher` (để null): mã ưu đãi "mua 2 tặng 1" ở đây
-  // không giảm giá được (xem event_voucher.js) — để trống thì `StoreVoucherBox` tự tra qua SĐT và hiện
-  // đúng mã kiểu giảm % / giảm tiền nếu mẹ có, không hiện nhầm mã "mua 2 tặng 1" vào ô chỉ hiểu được số tiền.
+  // ĐẶT HÀNG NGAY TẠI ĐÂY — không rời trang (chủ dự án chốt 2026-08-20).
+  //
+  // Trước đây nút này `router.push('/san-pham')`: mẹ phải đi tiếp danh sách sản phẩm → giỏ hàng → thanh
+  // toán, 6 màn và ~12 ô nhập, trong đó tên + SĐT là hỏi lại đúng thứ mẹ vừa gõ. Ở sân trường với sóng 4G
+  // thì mỗi màn là một chỗ để rơi.
+  //
+  // ⚠️ Đường cũ còn làm MẤT mã vừa nhận: nó cố ý truyền `voucher: null` sang giỏ hàng vì ô ưu đãi bên đó
+  // chỉ hiểu mã giảm % / giảm tiền, không hiểu "mua 2 tặng 1". `OrderInline` gắn thẳng mã vào đơn báo —
+  // `POST /dat-hang` chỉ ghi lại ý định + kiểm mã còn hạn, không tính tiền giảm, nên mã sự kiện vào được.
   const goOrder = () => {
     if (!claimed) return;
-    // Cùng cách chuẩn hoá với chính ô SĐT trong `StoreVoucherBox` (chỉ giữ chữ số) — mẹ có thể đã gõ
-    // "090 123 4567" có khoảng trắng, để nguyên thì `looksLikePhone` bên giỏ hàng không khớp và không tự
-    // tra được ưu đãi.
-    writeStoreCheckout({ phone: phone.replace(/[^\d]/g, '').slice(0, 10), voucher: null });
-    router.push('/san-pham');
+    setOrdering(true);
   };
 
   const copyCode = async () => {
@@ -173,6 +174,23 @@ export function UuDaiClient() {
 
   // ĐÃ NHẬN — màn hình mẹ sẽ chụp lại. Mã to nhất trang, giãn chữ để đọc và đọc lại cho nhân viên qua
   // điện thoại không bị nhầm 0 với O.
+  // Mẹ đã bấm đặt hàng — cùng khung, cùng thẻ trắng, chỉ đổi ruột. Không chuyển trang nên không mất mã
+  // đang hiện và không phải tải lại gì.
+  if (claimed && ordering) {
+    return (
+      <Shell>
+        <Card>
+          <OrderInline
+            name={claimed.customer_name}
+            phone={phone.replace(/[^\d]/g, '').slice(0, 10)}
+            voucherCode={claimed.voucher_code}
+            onBack={() => setOrdering(false)}
+          />
+        </Card>
+      </Shell>
+    );
+  }
+
   if (claimed) {
     return (
       <Shell>
@@ -197,8 +215,8 @@ export function UuDaiClient() {
               )}
             </div>
 
-            {/* CTA chính: mẹ đặt luôn thay vì chờ nhân viên gọi lại. SĐT mang sang giỏ hàng để
-                `StoreVoucherBox` tự hiện đúng ưu đãi này — mẹ không phải nhớ hay gõ lại mã. */}
+            {/* CTA chính: mẹ đặt luôn thay vì chờ nhân viên gọi lại. Mở form ngay tại chỗ (`OrderInline`),
+                tên + SĐT + mã ưu đãi mang thẳng sang — mẹ không phải nhớ hay gõ lại gì. */}
             <button
               className="mt-4 w-full rounded-xl bg-primary py-4 text-base font-bold text-white shadow-md shadow-primary-20 active:bg-primary-60"
               type="button"

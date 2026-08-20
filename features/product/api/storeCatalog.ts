@@ -138,6 +138,21 @@ export async function getStoreCatalog(): Promise<Goods[] | null> {
 }
 
 /**
+ * Danh mục THÔ, đúng hình dạng s7 trả về — dùng cho chỗ cần `sign` và `sale_price` để LÊN ĐƠN, không phải
+ * để bày hàng (hiện là form đặt hàng nhanh ở trang nhận ưu đãi sự kiện, `app/uu-dai/[token]`).
+ *
+ * Vì sao không dùng `getStoreCatalog()`: `toGoods` đổi tên trường sang hình dạng `Goods` của giao diện cũ
+ * (`sellingUnitprice`, `images: FileInfo[]`) và đặt `sign: undefined` khi trống. Đi qua nó rồi dịch ngược
+ * lại để lấy `sign` là hai lần dịch cho một dữ liệu — và `sign` chính là khoá nối duy nhất sang s7 khi
+ * lên đơn, dịch hụt một lần là món hàng rơi mất khỏi đơn mà không có lỗi nào.
+ *
+ * `null` mang đúng nghĩa như mọi hàm khác ở đây: gian hàng chưa cấu hình / s7 không với tới được.
+ */
+export async function getStoreProducts(): Promise<StoreProduct[] | null> {
+  return fetchStore();
+}
+
+/**
  * Danh sách có LỌC — dùng cho trang "Tất cả sản phẩm", ô tìm kiếm, `ProductList` và mục sản phẩm liên
  * quan (cả bốn đi qua cùng một hook `useGetGoodsList`).
  *
