@@ -152,6 +152,10 @@ class ApiClient {
 
   private buildMediaUrl(path: string, subPath = ''): string {
     if (!path) return '';
+    // Ảnh lấy từ s7-data-hub (sản phẩm, bài viết…) đã là ĐỊA CHỈ ĐẦY ĐỦ (s7 lưu URL, không phải tệp
+    // tải lên) — cộng thêm gốc CDN vào trước sẽ ghép ra một URL vỡ (`CLOUDFRONT_URL/https://...`).
+    // Trước đây từng phải né lỗi này tay từng chỗ (`product/[slug]/page.tsx`); sửa một lần ở gốc.
+    if (/^https?:\/\//i.test(path)) return path;
     const sanitizedPath = sanitizeUrl(path);
 
     if (!CLOUDFRONT_URL) return sanitizedPath;

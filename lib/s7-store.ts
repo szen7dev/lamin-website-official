@@ -76,6 +76,52 @@ export async function fetchStoreProductsOnServer(): Promise<
   }
 }
 
+// Bài viết — gọi TỪ PHÍA SERVER (generateMetadata của `article/[slug]/page.tsx`). Cùng lý do và cùng
+// giới hạn với `fetchStoreProductsOnServer`: KHÔNG import file này từ mã chạy ở trình duyệt (client
+// component / hook `'use client'`) — nó đọc `S7_STORE_TOKEN`, biến không tiền tố `NEXT_PUBLIC_`, chỉ có
+// giá trị thật ở tiến trình server.
+//
+// `null` = chưa cấu hình token / s7 không với tới được / không tìm thấy → nơi gọi rơi về nguồn cũ.
+export async function fetchStorePostsOnServer(
+  params: { limit?: number; after?: string } = {},
+): Promise<Array<{ id: string; title: string; slug: string; summary: string; cover_image: string | null; category: string | null; author: string | null; published_at: string | null }> | null> {
+  if (!hasStoreToken()) return null;
+  try {
+    const qs = new URLSearchParams();
+    if (params.limit) qs.set('limit', String(params.limit));
+    if (params.after) qs.set('after', params.after);
+    const suffix = qs.toString() ? `?${qs.toString()}` : '';
+    const res = await fetch(storeBase(`/bai-viet${suffix}`), { cache: 'no-store' });
+    if (!res.ok) return null;
+    const j = await res.json();
+
+    return Array.isArray(j?.data) ? j.data : null;
+  } catch (e) {
+    console.error('[cua-hang] đọc danh sách bài viết phía server thất bại:', e);
+
+    return null;
+  }
+}
+
+export async function fetchStorePostDetailOnServer(slug: string): Promise<{
+  id: string; title: string; slug: string; summary: string; cover_image: string | null;
+  images: string[]; content: string; category: string | null; author: string | null;
+  published_at: string | null; seo_title: string; seo_description: string;
+} | null> {
+  if (!hasStoreToken()) return null;
+  try {
+    const res = await fetch(storeBase(`/bai-viet/${encodeURIComponent(slug)}`), { cache: 'no-store' });
+    if (!res.ok) return null;
+    const j = await res.json();
+
+    return j?.data || null;
+  } catch (e) {
+    console.error('[cua-hang] đọc chi tiết bài viết phía server thất bại:', e);
+
+    return null;
+  }
+}
+
 export const unreachable = (e: unknown, what: string) => {
   console.error(`[cua-hang] ${what} upstream failed:`, e);
 

@@ -6,8 +6,21 @@ import { generateMetadata as generateSeoMetadata } from '@/utils/seo';
 import { DynamicBreadcrumb } from '@/components/dynamic-breadcrumb';
 import { Skeleton } from '@/components/ui/skeleton';
 import { getArticleDetail } from '@/features/article/api/getArticleDetail';
+import { toArticle } from '@/features/article/api/storeArticles';
 import ArticleDetailContent from '@/features/article/components/ArticleDetailContent';
 import { apiClient } from '@/services';
+import { fetchStorePostDetailOnServer } from '@/lib/s7-store';
+
+// Nguồn mới: s7-data-hub (tính năng #4). Gọi TRỰC TIẾP s7 ở đây (bỏ qua cầu nối `/api/cua-hang/*`): cầu
+// nối tồn tại để phục vụ TRÌNH DUYỆT (CORS, giấu địa chỉ backend nội bộ); mã chạy trên server thì vốn đã
+// ở phía trong — giống hệt cách `product/[slug]/page.tsx` gọi `fetchStoreProductsOnServer`.
+// `null` = gian hàng chưa cấu hình / không có bài này → rơi về nguồn cũ api.trixgo.com.
+async function loadArticle(slug: string) {
+  const s7 = await fetchStorePostDetailOnServer(slug);
+  if (s7) return toArticle(s7);
+
+  return getArticleDetail({ slug });
+}
 
 export async function generateMetadata({
   params,
@@ -25,7 +38,7 @@ export async function generateMetadata({
   };
 
   try {
-    const article = await getArticleDetail({ slug });
+    const article = await loadArticle(slug);
 
     if (article) {
       seoData = {
@@ -138,13 +151,7 @@ export default async function ArticleDetailPage({
   const resolvedParams = await Promise.resolve(params);
   const { slug } = resolvedParams;
 
-  const article = await getArticleDetail({
-    slug,
-    populates: {
-      path: 'author category thumbnail userUpdate position tags name',
-      select: '_id name fullname image path size note position slug',
-    },
-  });
+  const article = await loadArticle(slug);
 
   return (
     <section className="md:py-8">
