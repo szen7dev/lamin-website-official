@@ -7,6 +7,24 @@ Format: `## YYYY-MM-DD HH:MM — <what>` then what changed, and what was verifie
 
 ---
 
+## 2026-08-22 — Bài viết (tính năng #4) lên s7 + phát hiện và vá backdoor chuỗi cung ứng
+
+Chi tiết đầy đủ: `docs/chuyen-ve-s7.md` §10-11 (đọc trước khi làm tiếp).
+
+**Bài viết:** `storeArticles.ts` + cầu nối `/api/cua-hang/bai-viet[/:slug]` + đổi nguồn
+`getArticleList`/`getArticleDetail`/`getHealthNews`/`article/[slug]/page.tsx` sang s7-data-hub, tự rơi về
+`api.trixgo.com` khi chưa cấu hình. Kèm sửa `apiClient.buildMediaUrl` (ảnh URL tuyệt đối từ s7 bị ghép đôi
+gốc CDN). Đã build tay + deploy: `trixgo-lamin-webapp` chạy `main-32561080441-c7db50f`. Kho bài cũ thật có
+**31 bài** (không phải 3 như đếm lần đầu) — đã nhập đủ vào DB dev local, **CHƯA nhập vào production**
+(script + dữ liệu đã có sẵn ở `s7-data-hub/scripts/import-lamin-posts.js`, xem runbook ở §10).
+
+**Sự cố an ninh:** phát hiện `package.json` mang dependency tự trỏ về chính nó (`"elela": "file:"`) +
+`postcss.config.js` bị chèn backdoor tải-mã-từ-xa-rồi-chạy, đưa vào bởi commit `20f98d0` (19/08). Đã vá ở
+commit `c7db50f`. **Khoá SSH/k8s/GitHub trên máy bị ảnh hưởng chưa đổi; 7 nhánh cũ vẫn nhiễm** — §11 ghi
+đủ chi tiết + danh sách.
+
+---
+
 ## 2026-08-16 — Trang nhận ưu đãi qua mã QR tại sự kiện (`/uu-dai/[token]`)
 
 Branch `feat/qr-uu-dai`. Phần khách của một tính năng trải ba repo — backend + màn quản trị đã xong ở

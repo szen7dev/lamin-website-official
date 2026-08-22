@@ -14,7 +14,7 @@ về `s7-data-hub`. Đây là hồ sơ ghi *đã làm tới đâu*, *vì sao là
 | 1 | Giỏ hàng · đặt hàng | `/api/store/*` | `OrderIntake`, `PromoVoucher` | ✅ **xong** (BE + FE) |
 | 2 | Danh sách sản phẩm | `/api/item/goods` | `Product` | ✅ **xong** (BE + FE), đã vào `main` |
 | 3 | Đo cao CDC | `/api/crm/grow_track`, `/api/crm/survey_result` | — | ⬜ **s7 chưa có gì** |
-| 4 | Bài viết | `/api/medias/*` | — | ⬜ **s7 chưa có gì** |
+| 4 | Bài viết | `/api/medias/*` | `Post` | ✅ **code xong, đã lên prod** (2026-08-22) — **dữ liệu cũ chưa nhập hết vào prod**, xem mục 10 |
 
 **Combo** (`/api/crm/combo`, best-seller) và **menu** (`/api/menu/*`): chủ dự án chốt 2026-08-17 **không
 dùng nữa**, giữ nguyên nguồn cũ, không chuyển và không dựng bên s7.
@@ -353,6 +353,141 @@ xoá xuyên qua tới thư mục đích. Triệu chứng: BE `:3001` chết, và
 | 2026-08-17 | `Product` bên s7 mang nội dung bán hàng; ô khai trong hub-webapp |
 | 2026-08-17 | Tính năng #2 (danh sách sản phẩm) xong cả 7 điểm đọc, **đã merge vào `main`** |
 | 2026-08-17 | Sửa bản build vỡ do `OPENAI_API_KEY` — xem bẫy đầu mục 7 |
+| 2026-08-22 | Tính năng #4 (bài viết) xong BE + FE, **đã lên production**; phát hiện + vá sự cố an ninh chuỗi cung ứng (mục 11) |
 
 **Nhánh liên quan** (đã push): `feat/store-product-sign` (s7-data-hub) · `feat/product-web-fields`
-(s7-hub-webapp) · `feat/cua-hang-s7` (website, **đã merge `main`**).
+(s7-hub-webapp) · `feat/cua-hang-s7` (website, **đã merge `main`**) · script bài viết trên `main` của
+s7-data-hub (`06d34d1`, `f3646b8`) · code đọc bài viết trên `main` của website (`7ce86b4`, `c7db50f`).
+
+---
+
+## 10. Tính năng #4 (Bài viết) — ĐÃ LÊN PROD, còn thiếu dữ liệu cũ trên production
+
+**Đã xong (2026-08-22), đã kiểm chứng thật:**
+
+- Bên s7-data-hub: model `Post` + API quản trị `/api/v1/posts` + hai đầu công khai
+  `/public/cua-hang/:token/bai-viet[/:slug]` (xem `docs/api.md` §"Bài viết website" của repo đó).
+- Bên website: `features/article/api/storeArticles.ts` (dịch dữ liệu s7 → hình dạng `Article` cũ),
+  cầu nối `/api/cua-hang/bai-viet[/:slug]`, đổi nguồn `getArticleList`/`getArticleDetail`/`getHealthNews` +
+  trang `article/[slug]/page.tsx` — ưu tiên s7, tự rơi về `api.trixgo.com` khi chưa cấu hình/không có dữ
+  liệu (đúng công tắc đã dùng cho sản phẩm — tính năng #2).
+- **Cố ý CHƯA đổi** (giữ nguồn cũ, đúng phạm vi đã chốt): `getArticleTagList.ts`, `getArticleProperty.ts`,
+  `useGetHeroBlogLink.ts`, khối "Bằng chứng khoa học" (`ScientificEvidence.tsx`), trang "Góc Sức Khỏe" —
+  tất cả dùng danh mục kiểu cây (`menuSlug`/`categoryID`) mà s7 chưa có khái niệm tương đương.
+- Đã build tay qua `trixgo-builds` (CI tự động của repo này đang lỗi `401`, việc riêng — xem mục 11) và
+  deploy: `trixgo-lamin-webapp` trên `trixgo-prod` đang chạy ảnh `main-32561080441-c7db50f`, 2/2 pod.
+- `S7_STORE_TOKEN` production **đã có sẵn** (`508f1364147a2c356dff38d8c7992377`, org "Công ty Cổ phần
+  Dược phẩm Lamin", `org_id = 6a78f9cc052597e15c616296`) — cấp từ đợt tính năng #1/#2, dùng chung.
+
+### Kho bài cũ thật — 31 bài, không phải 3
+
+Đếm lần đầu (`type=2`, không lọc danh mục) chỉ ra 3 bài — **SAI**, vì kho cũ phân loại theo `categoryID`
+(cây menu, xem `/api/medias/menu`) và nhiều bài không rơi vào phép lọc `type=2` đó. Đếm lại theo từng danh
+mục ra đúng **31 bài thật**:
+
+| Danh mục (`categoryID`) | Số bài | Loại nội dung |
+|---|---|---|
+| Câu chuyện khách hàng thực tế (`68fae30b5dc81300123414b9`) | 11 | Case study đo chiều cao |
+| Bằng chứng lâm sàng RD (`68fae257b227610012c6e0cf`) | 8 | Kiến thức khoa học/marketing |
+| Quy chế và chính sách (`6822695e2661330013b83154`) | 7 | Trang pháp lý tĩnh (điều khoản, bảo mật, vận chuyển…) |
+| Tin Lamin (`68fae4466b0e2c0012787432`) | 4 | Tin tức |
+| Hồ sơ Lamin (`68098cc84c953500350c9b0a`) | 1 | Giấy phép đăng ký kinh doanh |
+
+Chủ dự án chốt 2026-08-22: **nhập cả 31 bài**, kể cả trang pháp lý.
+
+### Đã nhập vào DB dev local — 31/31, đã tự kiểm chứng
+
+`s7-data-hub/scripts/import-lamin-posts.js` (dry-run mặc định, `--yes` mới ghi thật, idempotent theo
+`(org_id, slug)`, giữ nguyên `published_at` gốc) + `scripts/data/lamin-posts-2026.json` (dữ liệu đầy đủ 31
+bài, lấy qua token khách `NEXT_PUBLIC_DEFAULT_TOKEN` của chính website này). Cả hai đã **push lên `main`
+của s7-data-hub** (`06d34d1`, `f3646b8`).
+
+### ⏳ VIỆC CÒN LẠI — nhập 31 bài vào MongoDB **production**
+
+Production hiện chỉ có **1 bài** (`lamingrow-tran-trong-cam-on-bai-bao-lan-toa-mo-hinh-tram-phat-trien-chieu-cao-vinh-tuong`,
+đăng tay qua màn quản trị s7-hub-webapp ngày 20/8 — **không phải** do script tạo). Script sẽ tự bỏ qua bài
+này (khớp slug), không tạo trùng.
+
+```bash
+# 1. Mở đường hầm SSH tới Mongo production (khoá `sme-do` — ĐANG CHỜ ĐỔI, xem mục 11 §2 trước khi dùng)
+ssh -i <đường-dẫn-khoá> -N -L 27018:10.28.0.5:27017 root@159.65.2.94
+
+# 2. s7-data-hub — sửa TẠM MONGO_URI trong .env trỏ qua đường hầm, có user/pass thật (Mongo prod bật auth,
+#    directConnection suông không đủ). Lấy giá trị từ secret k8s `s7-hub-api` (namespace s7-prod, key
+#    MONGO_URI) hoặc nơi bạn đang lưu — ĐỪNG dán khoá này vào chat/log.
+
+# 3. Xem trước (không ghi gì)
+cd s7-data-hub
+node --env-file=.env scripts/import-lamin-posts.js \
+  --file scripts/data/lamin-posts-2026.json --org 6a78f9cc052597e15c616296
+
+# 4. Ghi thật
+node --env-file=.env scripts/import-lamin-posts.js \
+  --file scripts/data/lamin-posts-2026.json --org 6a78f9cc052597e15c616296 --yes
+
+# 5. Trả MONGO_URI trong .env về giá trị dev local cũ (mongodb://127.0.0.1:27099/...), đóng đường hầm SSH
+
+# 6. Xác minh bằng đúng API công khai khách sẽ gọi
+curl "https://app.szen7.com/api/v1/public/cua-hang/508f1364147a2c356dff38d8c7992377/bai-viet?limit=50"
+# → kỳ vọng 31 bài (hoặc 30 nếu tính cả bài đã có sẵn)
+```
+
+Xong bước này, cả 31 bài lên thẳng `lamin.com.vn` — không cần deploy lại gì thêm (website đọc API theo
+thời gian thực, không cache dài).
+
+### ⚠️ Ảnh của 8 bài "Câu chuyện khách hàng thực tế" gốc bị 403
+
+Ảnh bìa + ảnh trong nội dung của các bài lấy từ CDN cũ (`trx-main.sgp1.cdn.digitaloceanspaces.com`) đang
+trả `403 AccessDenied` — **lỗi có sẵn trên chính production hôm nay**, không phải do di chuyển. Muốn ảnh
+hiện được thì cần re-up ảnh vào kho công khai của s7 (`s7-prod-public`) — việc riêng, chưa làm.
+
+---
+
+## 11. ⚠️ Sự cố an ninh 2026-08-22 — backdoor chuỗi cung ứng, ĐÃ VÁ code, CHƯA đổi khoá
+
+**Phát hiện khi build tay website để deploy tính năng #4.** Không liên quan tới tính năng #4 — phát hiện
+tình cờ vì build lỗi.
+
+**Cơ chế:** `package.json` (đã commit, đã push, đã chạy CI + build thành công ít nhất 2 lần) khai
+`"elela": "file:"` — một "gói" npm tự trỏ về **chính thư mục dự án**. Cài đặt là tự nhân bản đệ quy
+(`node_modules/elela/node_modules/elela/...`), mỗi bản sao mang theo `postcss.config.js` bị chèn ~30KB mã
+JavaScript làm rối: gọi RPC blockchain Ethereum công khai để giải mã ra một địa chỉ, tải mã từ đó về, và
+**thực thi bằng `child_process.spawn('node', ['-e', ...])`** — khuôn mẫu backdoor tải-mã-từ-xa-rồi-chạy
+("elela" là tên gốc/nội bộ của dự án này — kẻ tấn công lợi dụng đúng cái tên quen để giả trang).
+
+**Xác định được:** đưa vào bởi commit `20f98d0` (19/08/2026 23:16 +0700), tác giả `hiepnh.pmi@gmail.com`,
+từ máy `DESKTOP-VM4G2UE` — cùng lúc viết lại gần như toàn bộ ~10 file khác không liên quan (dấu hiệu một
+công cụ/extension trên máy lúc đó đã bị compromise). Đã nằm trong `main` **3 ngày**, được build thành công
+trên GitHub Actions 2 lần (19–20/08) trước khi bị phát hiện.
+
+**Đã làm (commit `c7db50f`, đã push `main`):**
+- Xoá `"elela": "file:"` khỏi `package.json` + entry tương ứng khỏi `yarn.lock`.
+- Khôi phục `postcss.config.js` về đúng 6 dòng cấu hình hợp lệ.
+- Quét lại toàn repo: không còn dấu vết mã làm rối (`_0x...`) ở file nào khác.
+- Kiểm các repo khác trên máy `DESKTOP-VM4G2UE` (`s7-data-hub`, `s7-hub-webapp`, các worktree) — **sạch**.
+- Không thấy repo/gist lạ mới tạo dưới tài khoản GitHub `szen7dev` (một dấu hiệu thường gặp của loại sâu
+  này để rò rỉ khoá đã lấy) — **không loại trừ được** khả năng dữ liệu bị gửi thẳng ra ngoài.
+
+**⚠️ CHƯA làm — khoá cần đổi trước khi tin máy `DESKTOP-VM4G2UE` là sạch:**
+
+| Khoá | Vị trí | Vì sao |
+|---|---|---|
+| SSH `sme-do` (vào thẳng 3 droplet MongoDB production) | `~/.ssh/sme_do_key` trên máy đó | Đã dùng trên máy trong lúc mã độc có thể đang chạy |
+| kubeconfig (vào thẳng cluster K8s production) | `~/.kube/config` trên máy đó | Như trên |
+| Token GitHub CLI (`repo, workflow` toàn org `szen7dev`) | đã đăng nhập trên máy đó | Như trên |
+| `OPENAI_API_KEY` | k8s `extraSecrets` | Site tự ghi "chưa xoay" từ trước, nhân dịp đổi luôn |
+
+Cách đổi SSH key: xoá khoá `sme-do` khỏi DigitalOcean (Settings → Security → SSH Keys) **KHÔNG đủ** — phải
+tạo cặp khoá mới, thêm public key mới vào DO, rồi SSH vào **từng droplet trong 3 droplet**
+(`159.65.2.94` · `152.42.185.176` · `68.183.178.129`) sửa `~/.ssh/authorized_keys` (xoá dòng cũ, thêm dòng
+mới) — xoá ở DO chỉ chặn khoá cũ được gắn vào droplet **mới**, không rút quyền khỏi droplet đang chạy.
+
+**⚠️ CÁC NHÁNH TÍNH NĂNG CŨ VẪN NHIỄM — đừng merge tay khi chưa dọn:**
+`fix/voucher-discount-stale-subtotal` · `fix/voucher-min-order-retry` · `fix/voucher-mine-stale-discount` ·
+`feat/avatar-initials` · `feat/hide-thuvien-article-thumb-fallback` · `feat/product-web-content-fields` ·
+`feat/team-roster-s7` — tất cả tạo ra SAU commit `20f98d0`, đều kế thừa `elela: file:` +
+`postcss.config.js` độc. Merge thẳng bất kỳ nhánh nào trong số này vào `main` sẽ **đưa mã độc trở lại**.
+Phải cherry-pick nội dung thật (bỏ qua `package.json`/`yarn.lock`/`postcss.config.js`) hoặc rebase lên
+`main` hiện tại rồi xoá lại đúng 3 chỗ đó trước khi merge.
+
+**Chưa kiểm:** repo `lamin-website-branding` (không có sẵn trên máy đã điều tra — CHƯA rõ có dính không).

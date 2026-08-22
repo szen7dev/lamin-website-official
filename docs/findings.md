@@ -155,6 +155,24 @@ it in a dedicated commit, or leave it clearly labelled.
 
 ---
 
+## 🔴 11b. Supply-chain backdoor via self-referencing `elela` npm package — CODE FIXED, KEYS NOT ROTATED
+
+**Verified 2026-08-22.** Full write-up: `docs/chuyen-ve-s7.md` §11 (do not duplicate maintenance here,
+read that section for the complete story — mechanism, commit, timeline, and the exact remaining actions).
+
+One-line summary: `package.json` declared `"elela": "file:"` (a self-referencing dependency) and
+`postcss.config.js` carried a ~30KB obfuscated payload that fetches and executes remote code via
+`child_process.spawn('node', ['-e', ...])`. Introduced by commit `20f98d0` (2026-08-19 23:16 +0700), live
+in `main` for 3 days, built successfully by CI twice before discovery. Fixed in commit `c7db50f`
+(`main`, 2026-08-22): `elela` removed from `package.json`/`yarn.lock`, `postcss.config.js` restored clean.
+
+**Still open — read `chuyen-ve-s7.md` §11 before doing anything else on this repo:**
+- SSH key `sme-do`, kubeconfig, GitHub CLI token used on the affected machine are **not yet rotated**.
+- Seven feature branches created after the compromise still carry the poison — **do not merge them as-is**.
+- `lamin-website-branding` not checked.
+
+---
+
 ## 🟠 12. `yarn lint` is completely broken — two independent failures
 
 **Verified 2026-08-16** by running it.
